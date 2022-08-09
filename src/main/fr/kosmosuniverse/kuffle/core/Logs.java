@@ -11,8 +11,8 @@ import java.time.format.DateTimeFormatter;
 import org.bukkit.entity.Player;
 
 public class Logs {
-	private static Logs instanceSystem;
-	private static Logs instanceGame;
+	private static Logs instanceSystem = null;
+	private static Logs instanceGame = null;
 	private String path = "";
 	private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 	
@@ -27,6 +27,14 @@ public class Logs {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static Logs getInstanceSystem() {
+		return instanceSystem;
+	}
+	
+	public static Logs getInstanceGame() {
+		return instanceGame;
 	}
 	
 	public static Logs getInstanceSystem(String pathFile) {

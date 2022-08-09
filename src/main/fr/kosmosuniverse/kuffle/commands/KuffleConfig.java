@@ -9,10 +9,20 @@ import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleConfigException;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class KuffleConfig implements CommandExecutor {
 	private static final String CONFIG_SET = "CONFIG_SET";
 	private static final String CONFIG_NOT_SET = "CONFIG_NOT_SET";
 	
+	/**
+	 * 
+	 * @author KosmosUniverse
+	 *
+	 */
 	private enum ResultType {
 		GOOD,
 		BAD,
@@ -61,6 +71,15 @@ public class KuffleConfig implements CommandExecutor {
 		return true;
 	}
 	
+	/**
+	 * If key exists in config elements, execute setElem to set config value
+	 * 
+	 * @param player	player that call this config change
+	 * @param before	Key that might exist in config keys
+	 * @param current	Value to set for config {before} element
+	 * 
+	 * @return a ResultType
+	 */
 	private ResultType invokeMethod(Player player, String before, String current) {
 		ResultType ret = ResultType.GOOD;
 		

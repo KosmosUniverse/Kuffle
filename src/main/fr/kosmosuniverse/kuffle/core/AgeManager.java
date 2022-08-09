@@ -7,41 +7,70 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class AgeManager {
+	public static List<Age> ages = null;
+	
+	/**
+	 * Private AgeManager constructor
+	 * 
+	 * @throws IllegalStateException
+	 */
 	private AgeManager() {
 		throw new IllegalStateException("Utility class");
     }
 	
-	public static List<Age> getAges(String ageContent) {
-		List<Age> finalList = new ArrayList<>();
+	/**
+	 * Clears the ages list
+	 */
+	public static void clear() {
+		if (ages != null) {
+			ages.clear();
+		}
+	}
+	
+	/**
+	 * Setup ages from string file content
+	 * 
+	 * @param ageContent	The file content
+	 * 
+	 * @throws IllegalArgumentException if ageContent is null
+	 * @throws ParseException if JSONParser.parse fails
+	 */
+	public static void setupAges(String ageContent) throws IllegalArgumentException, ParseException {
+		ages = new ArrayList<>();
 
 		if (ageContent == null) {
-			return null;
+			throw new IllegalArgumentException("Input content is null !");
 		}
 		
 		JSONObject jsonObj;
 		JSONParser parser = new JSONParser();
 		
-		try {
-			jsonObj = (JSONObject) parser.parse(ageContent);
-			
-			for (Object key : jsonObj.keySet()) {
-				JSONObject ageObj = (JSONObject) jsonObj.get(key);
-				
-				finalList.add(new Age((String) key,
-						(Integer) Integer.parseInt(ageObj.get("Number").toString()),
-						(String) ageObj.get("TextColor"),
-						((String) ageObj.get("BoxColor") + "_SHULKER_BOX")));
-			}
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return null;
-		}
+		jsonObj = (JSONObject) parser.parse(ageContent);
 		
-		return finalList;
+		for (Object key : jsonObj.keySet()) {
+			JSONObject ageObj = (JSONObject) jsonObj.get(key);
+			
+			ages.add(new Age((String) key,
+					(Integer) Integer.parseInt(ageObj.get("Number").toString()),
+					(String) ageObj.get("TextColor"),
+					((String) ageObj.get("BoxColor") + "_SHULKER_BOX")));
+		}
 	}
 	
-	public static boolean ageExists(List<Age> ages, String ageName) {
+	/**
+	 * Checks if an age exists from its name
+	 * 
+	 * @param ageName	the Age name to search for
+	 * 
+	 * @return True if Age exists, False instead
+	 */
+	public static boolean ageExists(String ageName) {
 		for (Age age : ages) {
 			if (age.name.equals(ageName)) {
 				return true;
@@ -51,27 +80,46 @@ public class AgeManager {
 		return false;
 	}
 	
-	public static Age getAgeByNumber(List<Age> ages, int ageNumber) {
+	/**
+	 * Get an age exists from its index
+	 * 
+	 * @param ageNumber	Age index
+	 * 
+	 * @return the Age object if exists, null instead
+	 */
+	public static Age getAgeByNumber(int ageNumber) {
 		for (Age age : ages) {
 			if (age.number == ageNumber) {
 				return age;
 			}
 		}
 		
-		return getDefaultAge(ages);
+		return getDefaultAge();
 	}
 	
-	public static Age getAgeByName(List<Age> ages, String ageName) {
+	/**
+	 * Get an age exists from its name
+	 * 
+	 * @param ageName	Age name
+	 * 
+	 * @return the Age object if exists, null instead
+	 */
+	public static Age getAgeByName(String ageName) {
 		for (Age age : ages) {
 			if (age.name.equalsIgnoreCase(ageName)) {
 				return age;
 			}
 		}
 		
-		return getDefaultAge(ages);
+		return getDefaultAge();
 	}
 	
-	public static Age getDefaultAge(List<Age> ages) {
+	/**
+	 * Gets the default Age if exists
+	 * 
+	 * @return the Age object of Default age is exists, null instead
+	 */
+	public static Age getDefaultAge() {
 		for (Age age : ages) {
 			if (age.number == -1) {
 				return age;
@@ -81,7 +129,12 @@ public class AgeManager {
 		return null;
 	}
 	
-	public static int getAgeMaxNumber(List<Age> ages) {
+	/**
+	 * Gets last age index
+	 * 
+	 * @return the index
+	 */
+	public static int getLastAgeIndex() {
 		int max = 0;
 		
 		for (Age age : ages) {

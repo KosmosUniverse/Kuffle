@@ -1,24 +1,29 @@
 package main.fr.kosmosuniverse.kuffle.type;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
-import main.fr.kosmosuniverse.kuffle.core.Age;
 import main.fr.kosmosuniverse.kuffle.core.AgeManager;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftsManager;
 import main.fr.kosmosuniverse.kuffle.core.Game;
-import main.fr.kosmosuniverse.kuffle.core.Level;
 import main.fr.kosmosuniverse.kuffle.core.LevelManager;
 import main.fr.kosmosuniverse.kuffle.core.Logs;
 import main.fr.kosmosuniverse.kuffle.core.ManageTeams;
 import main.fr.kosmosuniverse.kuffle.core.RewardElem;
 import main.fr.kosmosuniverse.kuffle.core.Scores;
+import main.fr.kosmosuniverse.kuffle.core.VersionManager;
 import main.fr.kosmosuniverse.kuffle.crafts.ACrafts;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
 import main.fr.kosmosuniverse.kuffle.utils.FilesConformity;
@@ -39,19 +44,20 @@ public abstract class KuffleType {
 
 	protected Map<String, Game> games = null;
 	protected Map<String, Integer> playerRank = null;
-	protected Map<Integer, String> versions = null;
 	
 	protected List<String> langs = null;
-	protected List<Age> ages = null;
-	protected List<Level> levels = null;
 	
 	public Logs gameLogs = null;
 	public Logs systemLogs = null;
+	public AgeManager ages = null;
+	public LevelManager levels = null;
+	public VersionManager versions = null;
+	
+	public Config config = null;
 	public ManageTeams teams = null;
 	public CraftsManager crafts = null;
 	public Scores scores = null;
 	public Inventory playersHeads = null;
-	public Config config = null;
 	
 	/**
 	 * Setup all type related resources
@@ -63,22 +69,37 @@ public abstract class KuffleType {
 	 * 
 	 * @param plugin	The plugin instance to get the plugin folder
 	 * 
-	 * @throws KuffleFileLoadException if file load fails
+	 * @throws KuffleFileLoadException if files load fails
 	 */
 	public KuffleType(JavaPlugin plugin) throws KuffleFileLoadException {
 		gameLogs = new Logs(plugin.getDataFolder().getPath() + File.separator + "KuffleGamelogs.txt");
 		systemLogs = new Logs(plugin.getDataFolder().getPath() + File.separator + "KuffleSystemlogs.txt");
 		
-		if (((versions = Utils.loadVersions("versions.json")) == null)) {
-			throw new KuffleFileLoadException("KO");
+		try {
+			VersionManager.setupVersions("versions.json");
+		} catch (IllegalArgumentException | ParseException e) {
+			Utils.logException(e);
+			VersionManager.clear();
+			
+			throw new KuffleFileLoadException("Versions load failed !");
 		}
 		
-		if ((ages = AgeManager.getAges(FilesConformity.getContent("ages.json"))) == null) {
-			throw new KuffleFileLoadException("KO");
+		try {
+			AgeManager.setupAges(FilesConformity.getContent("ages.json"));
+		} catch (IllegalArgumentException | ParseException e) {
+			Utils.logException(e);
+			AgeManager.clear();
+			
+			throw new KuffleFileLoadException("Ages load failed !");
 		}
 		
-		if ((levels = LevelManager.getLevels(FilesConformity.getContent("levels.json"))) == null) {
-			throw new KuffleFileLoadException("KO");
+		try {
+			LevelManager.getLevels(FilesConformity.getContent("levels.json"));
+		} catch (IllegalArgumentException | ParseException e) {
+			Utils.logException(e);
+			LevelManager.clear();
+			
+			throw new KuffleFileLoadException("Levels load failed !");
 		}
 	}
 	
@@ -122,9 +143,8 @@ public abstract class KuffleType {
 			langs.clear();
 		}
 
-		if (ages != null) {
-			ages.clear();
-		}
+		AgeManager.clear();
+		LevelManager.clear();
 
 		if (crafts != null) {
 			for (ACrafts craft : crafts.getRecipeList()) {
@@ -203,38 +223,11 @@ public abstract class KuffleType {
 	}
 	
 	/**
-	 * Get all the Minecraft versions available with this plugin
-	 * 
-	 * @return this plugin versions
-	 */
-	public final Map<Integer, String> getVersions() {
-		return versions;
-	}
-	
-	/**
 	 * Get all available langs
 	 * 
 	 * @return the langs list
 	 */
 	public final List<String> getLangs() {
 		return langs;
-	}
-	
-	/**
-	 * Get all Ages
-	 * 
-	 * @return the Ages list
-	 */
-	public final List<Age> getAges() {
-		return ages;
-	}
-	
-	/**
-	 * Get all levels
-	 * 
-	 * @return the levels list
-	 */
-	public final List<Level> getLevels() {
-		return levels;
 	}
 }

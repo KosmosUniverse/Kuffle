@@ -216,9 +216,9 @@ public class Config {
 			configFile.set("game_settings.time_added", 2);
 		}
 
-		if (!configFile.contains("game_settings.last_age") || configFile.getInt("game_settings.last_age") < 1 || configFile.getInt("game_settings.last_age") > (AgeManager.getAgeMaxNumber(KuffleMain.ages) + 1)) {
+		if (!configFile.contains("game_settings.last_age") || configFile.getInt("game_settings.last_age") < 1 || configFile.getInt("game_settings.last_age") > AgeManager.getLastAgeIndex()) {
 			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "max ages"));
-			configFile.set("game_settings.last_age", AgeManager.getAgeMaxNumber(KuffleMain.ages) + 1);
+			configFile.set("game_settings.last_age", AgeManager.getLastAgeIndex());
 		}
 
 		if (!configFile.contains("game_settings.level") || configFile.getInt("game_settings.level") < 0
@@ -340,7 +340,7 @@ public class Config {
 		sb.append("  " + ChatColor.BLUE).append("Start duration: " + ChatColor.GOLD).append(configValues.startTime).append("\n");
 		sb.append("  " + ChatColor.BLUE).append("Added duration: " + ChatColor.GOLD).append(configValues.addedTime).append("\n");
 		sb.append("  " + ChatColor.BLUE).append("Lang: " + ChatColor.GOLD).append(configValues.lang).append("\n");
-		sb.append("  " + ChatColor.BLUE).append("Level: " + ChatColor.GOLD).append(LevelManager.getLevelByNumber(KuffleMain.levels, configValues.level).name).append("\n");
+		sb.append("  " + ChatColor.BLUE).append("Level: " + ChatColor.GOLD).append(LevelManager.getLevelByNumber(configValues.level).name).append("\n");
 		sb.append("  " + ChatColor.BLUE).append("Detect Game End: " + ChatColor.GOLD).append(configValues.gameEnd).append("\n");
 		sb.append("  " + ChatColor.BLUE).append("End game at one: " + ChatColor.GOLD).append(configValues.endOne).append("\n");
 		sb.append("  " + ChatColor.BLUE).append("Passive: " + ChatColor.GOLD).append(configValues.passive).append("\n");
@@ -642,7 +642,7 @@ public class Config {
 	 * @return the first skip age number
 	 */
 	public Age getSkipAge() {
-		return AgeManager.getAgeByNumber(KuffleMain.ages, configValues.skipAge);
+		return AgeManager.getAgeByNumber(configValues.skipAge);
 	}
 
 	/**
@@ -651,7 +651,7 @@ public class Config {
 	 * @return the last age number
 	 */
 	public Age getLastAge() {
-		return AgeManager.getAgeByNumber(KuffleMain.ages, configValues.lastAge);
+		return AgeManager.getAgeByNumber(configValues.lastAge);
 	}
 
 	/**
@@ -660,7 +660,7 @@ public class Config {
 	 * @return the level
 	 */
 	public Level getLevel() {
-		return LevelManager.getLevelByNumber(KuffleMain.levels, configValues.level);
+		return LevelManager.getLevelByNumber(configValues.level);
 	}
 
 	/**
@@ -975,11 +975,11 @@ public class Config {
 	 * @param configLastAge	value used to set last age
 	 */
 	public void setLastAge(String configLastAge) {
-		if (!AgeManager.ageExists(KuffleMain.ages, configLastAge)) {
+		if (!AgeManager.ageExists(configLastAge)) {
 			error = "Unknown Age !";
 			setRet = false;
 		} else {
-			configValues.lastAge = AgeManager.getAgeByName(KuffleMain.ages, configLastAge).number;
+			configValues.lastAge = AgeManager.getAgeByName(configLastAge).number;
 			setRet = true;
 		}
 	}
@@ -990,14 +990,14 @@ public class Config {
 	 * @param configSkipAge	value used to set skip age
 	 */
 	public void setFirstSkip(String configSkipAge) {
-		if (!AgeManager.ageExists(KuffleMain.ages, configSkipAge)) {
+		if (!AgeManager.ageExists(configSkipAge)) {
 			error = "Unknown Age !";
 			setRet = false;
-		} else if (AgeManager.getAgeByName(KuffleMain.ages, configSkipAge).number > configValues.lastAge) {
+		} else if (AgeManager.getAgeByName(configSkipAge).number > configValues.lastAge) {
 			error = "Cannot set the first age for skipping after the last age !";
 			setRet = false;
 		} else {
-			configValues.skipAge = AgeManager.getAgeByName(KuffleMain.ages, configSkipAge).number;
+			configValues.skipAge = AgeManager.getAgeByName(configSkipAge).number;
 			setRet = true;
 		}
 	}
@@ -1008,11 +1008,11 @@ public class Config {
 	 * @param configLevel	value used to set level
 	 */
 	public void setLevel(String configLevel) {
-		if (!LevelManager.levelExists(KuffleMain.levels, configLevel)) {
+		if (!LevelManager.levelExists(configLevel)) {
 			error = "Unknown level !";
 			setRet = false;
 		} else {
-			configValues.level = LevelManager.getLevelByName(KuffleMain.levels, configLevel).number;
+			configValues.level = LevelManager.getLevelByName(configLevel).number;
 			setRet = true;
 		}
 	}

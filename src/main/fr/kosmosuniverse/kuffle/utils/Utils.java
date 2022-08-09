@@ -9,13 +9,12 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -35,6 +34,8 @@ import main.fr.kosmosuniverse.kuffle.core.ItemManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 //import main.fr.kosmosuniverse.kuffle.crafts.activables.Template;
 import main.fr.kosmosuniverse.kuffle.core.Logs;
+import main.fr.kosmosuniverse.kuffle.core.VersionManager;
+import main.fr.kosmosuniverse.kuffle.crafts.activables.Template;
 
 /**
  * 
@@ -45,6 +46,7 @@ public final class Utils {
 	
 	/**
 	 * Private Utils constructor
+	 * 
 	 * @throws IllegalStateException
 	 */
 	private Utils() {
@@ -57,6 +59,7 @@ public final class Utils {
 	 * @param in	InputStream of the file
 	 * 
 	 * @return a String that contains the whole file content
+	 * 
 	 * @throws IOException if InputStream.readLine() fails
 	 */
 	public static String readFileContent(InputStream in) throws IOException {
@@ -110,7 +113,7 @@ public final class Utils {
 		try {
 			Files.delete(Paths.get(path + File.separator + fileName));
 		} catch (IOException e) {
-			KuffleMain.systemLogs.logSystemMsg(e.getMessage());
+			logException(e);
 			return false;
 		}
 		
@@ -125,9 +128,9 @@ public final class Utils {
 	 * @return The file name if found, null instead
 	 */
 	public static String findFileExistVersion(String fileName) {
-		String version = getVersion();
+		String version = VersionManager.getVersion();
 		String file = fileName.replace("%v", version);
-		int versionNb = findVersionNumber(version);
+		int versionNb = VersionManager.findVersionNumber(version);
 
 		if (versionNb == -1) {
 			return null;
@@ -218,7 +221,7 @@ public final class Utils {
 
 			KuffleMain.games.put(player.getName(), tmpGame);
 		} catch (ParseException | IOException e) {
-			e.printStackTrace();
+			logException(e);
 		}
 	}
 	
@@ -288,20 +291,6 @@ public final class Utils {
 
         return item;
     }
-
-	/**
-	 * Get the current Minecraft version
-	 * 
-	 * @return the version as a String
-	 */
-	public static String getVersion() {
-		String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-
-		version = version.split("v")[1];
-		version = version.split("_")[0] + "." + version.split("_")[1];
-
-		return version;
-	}
 
 	/**
 	 * Get ChatColor from a color String
@@ -386,27 +375,27 @@ public final class Utils {
 	 * Setups the template items
 	 */
 	public static void setupTemplates() {
-		/*List<Template> templates = new ArrayList<>();
+		List<Template> templates = new ArrayList<>();
 
-		for (int i = 0; i < KuffleMain.config.getMaxAges(); i++)  {
-			String name = AgeManager.getAgeByNumber(KuffleMain.ages, i).name;
+		for (int i = 0; i < KuffleMain.config.getLastAge().number; i++)  {
+			String name = AgeManager.getAgeByNumber(i).name;
 
 			name = name.replace("_Age", "");
-			templates.add(new Template(name, getMaterials(AgeManager.getAgeByNumber(KuffleMain.ages, i).name)));
+			templates.add(new Template(name, getMaterials(AgeManager.getAgeByNumber(i).name)));
 		}
 
 		for (Template t : templates) {
 			KuffleMain.crafts.addCraft(t);
 			KuffleMain.addRecipe(t.getRecipe());
-		}*/
+		}
 	}
 
 	/**
 	 * Removes the template items
 	 */
 	public static void removeTemplates() {
-		for (int i = 0; i < KuffleMain.config.getMaxAges(); i++)  {
-			String name = AgeManager.getAgeByNumber(KuffleMain.ages, i).name;
+		for (int i = 0; i < KuffleMain.config.getLastAge().number; i++)  {
+			String name = AgeManager.getAgeByNumber(i).name;
 			
 			name = name.replace("_Age", "");
 			name = name + "Template";
@@ -446,7 +435,7 @@ public final class Utils {
 	 * @param age	The Age for the new template
 	 */
 	public static void reloadTemplate(String name, String age) {
-		/*KuffleMain.crafts.removeCraft(name);
+		KuffleMain.crafts.removeCraft(name);
 		KuffleMain.removeRecipe(name);
 
 		String tmp = age;
@@ -460,7 +449,7 @@ public final class Utils {
 
 		KuffleMain.games.forEach((playerName, game) ->
 			game.getPlayer().discoverRecipe(new NamespacedKey(KuffleMain.current, t.getName()))
-		);*/
+		);
 	}
 
 	/**
@@ -494,73 +483,6 @@ public final class Utils {
 	}
 
 	/**
-	 * Compares two items by Material and if true, by name and/or by lore
-	 * 
-	 * @param first				The first item
-	 * @param second			The second item
-	 * @param hasItemMeta		If True, it compares names and/or lores
-	 * @param hasDisplayName	If True, it compares names
-	 * @param hasLore			If True, it compares lores
-	 * 
-	 * @return True if both items are the same, False instead
-	 */
-	public static boolean compareItems(ItemStack first, ItemStack second, boolean hasItemMeta, boolean hasDisplayName, boolean hasLore) {
-		if ((first.getType() != second.getType()) || (first.hasItemMeta() != second.hasItemMeta()) || (first.hasItemMeta() != hasItemMeta)) {
-			return false;
-		}
-
-		if (!hasItemMeta) {
-			return true;
-		}
-
-		ItemMeta firstMeta = first.getItemMeta();
-		ItemMeta secondMeta = second.getItemMeta();
-
-		if (firstMeta.hasDisplayName() != secondMeta.hasDisplayName()) {
-			return false;
-		}
-
-		if (firstMeta.hasDisplayName() != hasDisplayName) {
-			return false;
-		}
-
-		if (!hasDisplayName) {
-			return true;
-		}
-
-		if (!firstMeta.getDisplayName().equals(secondMeta.getDisplayName())) {
-			return false;
-		}
-
-		if (firstMeta.hasLore() != secondMeta.hasLore()) {
-			return false;
-		}
-
-		if (firstMeta.hasLore() != hasLore) {
-			return false;
-		}
-
-		if (!hasLore) {
-			return true;
-		}
-
-		List<String> firstLore = firstMeta.getLore();
-		List<String> secondLore = secondMeta.getLore();
-
-		if (firstLore.size() != secondLore.size()) {
-			return false;
-		}
-
-		for (int i = 0; i < firstLore.size(); i++) {
-			if (!firstLore.get(i).equals(secondLore.get(i))) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	/**
 	 * Get the tag translated in the player's config language
 	 * 
 	 * @param player	The player of whom we take the language
@@ -574,54 +496,6 @@ public final class Utils {
 		} else {
 			return (LangManager.findDisplay(KuffleMain.allLangs, tag, KuffleMain.config.getLang()));
 		}
-	}
-
-	/**
-	 * Loads the file that contains all supported Minecraft versions
-	 * 
-	 * @param file	The file path to load
-	 * 
-	 * @return a map that contains all version as String ordered by key
-	 */
-	public static Map<Integer, String> loadVersions(String file) {
-		Map<Integer, String> versions = null;
-
-		try {
-			InputStream in = KuffleMain.current.getResource(file);
-			String content = Utils.readFileContent(in);
-
-			JSONParser parser = new JSONParser();
-			JSONObject result = ((JSONObject) parser.parse(content));
-
-			in.close();
-
-			versions = new HashMap<>();
-
-			for (Object key : result.keySet()) {
-				versions.put(Integer.parseInt(result.get(key).toString()), (String) key);
-			}
-		} catch (IOException | ParseException e) {
-			e.printStackTrace();
-		}
-
-		return versions;
-	}
-
-	/**
-	 * Finds version key from version value
-	 * 
-	 * @param version	The version value
-	 * 
-	 * @return the key if found, -1 instead
-	 */
-	public static int findVersionNumber(String version) {
-		for (int key : KuffleMain.versions.keySet()) {
-			if (KuffleMain.versions.get(key).equals(version)) {
-				return key;
-			}
-		}
-
-		return -1;
 	}
 
 	/**
@@ -653,8 +527,8 @@ public final class Utils {
 		KuffleMain.games.get(toSend).getPlayer().sendMessage(ChatColor.BLUE + Utils.getLangString(toSend, "TEMPLATE_COUNT").replace("%i", "" + ChatColor.RESET + game.getSbttCount()));
 		KuffleMain.games.get(toSend).getPlayer().sendMessage(ChatColor.BLUE + Utils.getLangString(toSend, "TIME_TAB"));
 
-		for (int i = 0; i < KuffleMain.config.getMaxAges(); i++) {
-			Age age = AgeManager.getAgeByNumber(KuffleMain.ages, i);
+		for (int i = 0; i < KuffleMain.config.getLastAge().number; i++) {
+			Age age = AgeManager.getAgeByNumber(i);
 
 			if (game.getAgeTime(age.name) == -1) {
 				KuffleMain.games.get(toSend).getPlayer().sendMessage(Utils.getLangString(toSend, "FINISH_ABANDON").replace("%s", age.color + age.name.replace("_Age", "") + ChatColor.RESET));
@@ -685,8 +559,8 @@ public final class Utils {
 		sb.append(ChatColor.BLUE + Utils.getLangString(playerName, "TEMPLATE_COUNT").replace("%i", "" + ChatColor.RESET + game.getSbttCount()) + "\n");
 		sb.append(ChatColor.BLUE + Utils.getLangString(playerName, "TIME_TAB") + "\n");
 
-		for (int i = 0; i < KuffleMain.config.getMaxAges(); i++) {
-			Age age = AgeManager.getAgeByNumber(KuffleMain.ages, i);
+		for (int i = 0; i < KuffleMain.config.getLastAge().number; i++) {
+			Age age = AgeManager.getAgeByNumber(i);
 
 			if (game.getAgeTime(age.name) == -1) {
 				sb.append(Utils.getLangString(playerName, "FINISH_ABANDON").replace("%s", age.color + age.name.replace("_Age", "") + ChatColor.RESET) + "\n");
