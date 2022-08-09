@@ -1,0 +1,10 @@
+{
+	"CMD_PERF" : {
+		"en" : "Performed command <#>.",
+		"fr" : "A effectué la commande <#>."
+	},
+	"NOT_ALLOWED" : {
+		"en" : "You are not allowed to do this command.",
+		"fr" : "Vous n'êtes pas autorisé a effectuer cette commande."
+	}
+}

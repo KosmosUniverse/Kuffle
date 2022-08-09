@@ -1,0 +1,33 @@
+game_settings:
+   auto_detect_game_end:
+      enable: false # If True, checks at every game loop if game is ended
+      end_when_one: false # If True, the game ends if only one player remains (do not toggle to true if the game contains only one player), Default: False
+   spreadplayers:
+      enable: false # True: when start the game, spread players., Default: False
+      minimum_distance: 500 # for spreadplayer command, minimum distance between player, Default: 500
+      minimum_radius: 1000 # for spreadplayer command, minimum radius must be > minimum_distance parameter, Default: 1000
+   saturation: false # True: give infinite saturation effect to all players, Default: False
+   rewards: true # True: give reward after each age, Default: True
+   passive: false # True: pvp not enabled and open other player box is disable, Default: False
+   start_time: 4 # minutes, Default: 4
+   time_added: 2 # minutes added to start_time after each age, Default: 2
+   last_age: 6 # infex of last Age to finish the game can be [0, 1, 2, 3, 4, 5, 6, 7], Default : 6
+   target_per_age: 5 # number of target to complete and move to the next age, min: 1, Default: 5
+   lang: "en" # Lang for all players, Default: "en"
+   level: 1 # Number describes game difficulty can be [0, 1, 2, 3, 4], Default: 1
+   skip:
+      enable: true # allow player to skip target if they are after 2nd target of current age, Default: true
+      age: 2 # First age that allow target skipping, Default: 2
+   custom_crafts: true # allow players to use not mandatory custom crafts, Default: true
+   team:
+      enable: false # Define if team are allowed or not, Default: False
+      size: 2 # Size of a team, Default: 2
+   same_mode: false # If true, players will have same target, Default: false
+   double_mode: false # If true, players will be able to choose between two target instead of one, Default: false
+   sbtt_mode:
+      enable: false # If true, players will be able to validate without using there actual target, Default: false
+      amount: 4 # Amount of target randomly selected to make Templates (must be between 1 and 9 included), Default: 4
+   xp_max:
+      end_teleporter: 5 # Amount of xp level needed to use EndTeleporter (must be between 1 and 10 included), Default: 5
+      overworld_teleporter: 10 # Amount of xp level needed to use OverworldTeleporter (must be between 1 and 20 included), Default: 10
+      coral_compass: 20 # Amount of xp level needed to use CoralCompass (must be between 1 and 30 included), Default: 20

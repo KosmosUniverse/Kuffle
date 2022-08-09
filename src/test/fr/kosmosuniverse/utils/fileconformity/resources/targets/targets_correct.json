@@ -1,0 +1,11 @@
+{
+	"Archaic_Age" : {
+		"rock" : [
+			"andesite",
+			"andesite_slab",
+			"andesite_stairs",
+			"andesite_wall",
+			"brick"
+		]
+	}
+}
