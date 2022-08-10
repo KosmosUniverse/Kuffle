@@ -2,7 +2,7 @@ package main.fr.kosmosuniverse.kuffle.type;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import main.fr.kosmosuniverse.kuffle.core.ItemManager;
+import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.RewardManager;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
@@ -30,11 +30,11 @@ public class KuffleBlocks extends KuffleType {
 		
 		langs = LangManager.findAllLangs(allTargetLangs);
 		
-		if ((allTargets = ItemManager.getAllItems(ages, FilesConformity.getContent("blocks_%v.json"), plugin.getDataFolder())) == null) {
+		if ((allTargets = TargetManager.getAllItems(ages, FilesConformity.getContent("blocks_%v.json"), plugin.getDataFolder())) == null) {
 			throw new KuffleFileLoadException("KO");
 		}
 		
-		allTargetInvs = ItemManager.getItemsInvs(allTargets);
+		allTargetInvs = TargetManager.getItemsInvs(allTargets);
 				
 		if ((allRewards = RewardManager.getAllRewards(ages, FilesConformity.getContent("blocks_rewards_%v.json"), plugin.getDataFolder())) == null) {
 			throw new KuffleFileLoadException("KO");

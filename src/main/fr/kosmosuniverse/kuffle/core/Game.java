@@ -239,7 +239,7 @@ public class Game {
 	public void nextAge() {
 		if (KuffleMain.config.getRewards()) {
 			if (age > 0) {
-				RewardManager.managePreviousEffects(KuffleMain.allRewards.get(AgeManager.getAgeByNumber(KuffleMain.ages, age - 1).name), player);
+				RewardManager.removePreviousRewardEffects(KuffleMain.allRewards.get(AgeManager.getAgeByNumber(KuffleMain.ages, age - 1).name), player);
 			}
 
 			RewardManager.givePlayerReward(KuffleMain.allRewards.get(AgeManager.getAgeByNumber(KuffleMain.ages, age).name), player, KuffleMain.ages,  AgeManager.getAgeByNumber(KuffleMain.ages, age).number);

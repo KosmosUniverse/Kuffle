@@ -1,16 +1,11 @@
 package main.fr.kosmosuniverse.kuffle.type;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
@@ -18,11 +13,13 @@ import main.fr.kosmosuniverse.kuffle.core.AgeManager;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftsManager;
 import main.fr.kosmosuniverse.kuffle.core.Game;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LevelManager;
 import main.fr.kosmosuniverse.kuffle.core.Logs;
 import main.fr.kosmosuniverse.kuffle.core.ManageTeams;
 import main.fr.kosmosuniverse.kuffle.core.RewardElem;
 import main.fr.kosmosuniverse.kuffle.core.Scores;
+import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 import main.fr.kosmosuniverse.kuffle.core.VersionManager;
 import main.fr.kosmosuniverse.kuffle.crafts.ACrafts;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
@@ -34,24 +31,12 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  * @author KosmosUniverse
  *
  */
-public abstract class KuffleType {
-	protected Map<String, Map<String, RewardElem>> allRewards = null;
-	protected Map<String, Map<String, String>> allTargetLangs = null;
-	protected Map<String, Map<String, String>> allMsgLangs = null;
-	
-	protected Map<String, List<String>> allTargets = null;
-	protected Map<String, List<Inventory>> allTargetInvs = null;
-
+public abstract class KuffleType {	
 	protected Map<String, Game> games = null;
 	protected Map<String, Integer> playerRank = null;
 	
-	protected List<String> langs = null;
-	
 	public Logs gameLogs = null;
 	public Logs systemLogs = null;
-	public AgeManager ages = null;
-	public LevelManager levels = null;
-	public VersionManager versions = null;
 	
 	public Config config = null;
 	public ManageTeams teams = null;
@@ -76,6 +61,16 @@ public abstract class KuffleType {
 		systemLogs = new Logs(plugin.getDataFolder().getPath() + File.separator + "KuffleSystemlogs.txt");
 		
 		try {
+			LangManager.setupTargetsLangs(FilesConformity.getContent("targets_langs.json"));
+			LangManager.setupMsgsLangs(FilesConformity.getContent("msgs_langs.json"));
+		} catch (IllegalArgumentException | ParseException e) {
+			Utils.logException(e);
+			LangManager.clear();
+			
+			throw new KuffleFileLoadException("Langs load failed !");
+		}
+		
+		try {
 			VersionManager.setupVersions("versions.json");
 		} catch (IllegalArgumentException | ParseException e) {
 			Utils.logException(e);
@@ -94,12 +89,24 @@ public abstract class KuffleType {
 		}
 		
 		try {
-			LevelManager.getLevels(FilesConformity.getContent("levels.json"));
+			LevelManager.setupLevels(FilesConformity.getContent("levels.json"));
 		} catch (IllegalArgumentException | ParseException e) {
 			Utils.logException(e);
 			LevelManager.clear();
 			
 			throw new KuffleFileLoadException("Levels load failed !");
+		}
+		
+		config = new Config(plugin.getConfig());
+		
+		//To be put in KuffleItems.java
+		try {
+			TargetManager.setupTargets(FilesConformity.getContent("items_1.15.json"));
+		} catch (IllegalArgumentException | ParseException e) {
+			Utils.logException(e);
+			TargetManager.clear();
+			
+			throw new KuffleFileLoadException("Items load failed !");
 		}
 	}
 	
@@ -113,24 +120,6 @@ public abstract class KuffleType {
 			allRewards.clear();
 		}
 
-		if (allTargets != null) {
-			allTargets.forEach((k, v) -> v.clear());
-
-			allTargets.clear();
-		}
-
-		if (allTargetLangs != null) {
-			allTargetLangs.forEach((k, v) -> v.clear());
-
-			allTargetLangs.clear();
-		}
-
-		if (allTargetInvs != null) {
-			allTargetInvs.forEach((k, v) -> v.clear());
-
-			allTargetInvs.clear();
-		}
-
 		if (playerRank != null) {
 			playerRank.clear();
 		}
@@ -139,12 +128,10 @@ public abstract class KuffleType {
 			games.clear();
 		}
 
-		if (langs != null) {
-			langs.clear();
-		}
-
+		VersionManager.clear();
 		AgeManager.clear();
 		LevelManager.clear();
+		LangManager.clear();
 
 		if (crafts != null) {
 			for (ACrafts craft : crafts.getRecipeList()) {
@@ -169,42 +156,6 @@ public abstract class KuffleType {
 	}
 	
 	/**
-	 * Get all target langs
-	 * 
-	 * @return the target langs map
-	 */
-	public final Map<String, Map<String, String>> getTargetLangs() {
-		return allTargetLangs;
-	}
-	
-	/**
-	 * Get all messages langs
-	 * 
-	 * @return the messages langs
-	 */
-	public final Map<String, Map<String, String>> getMsgLangs() {
-		return allMsgLangs;
-	}
-	
-	/**
-	 * Get all the targets
-	 * 
-	 * @return the target map
-	 */
-	public final Map<String, List<String>> getTarget() {
-		return allTargets;
-	}
-	
-	/**
-	 * Get all the target inventories
-	 * 
-	 * @return the Inventory map
-	 */
-	public final Map<String, List<Inventory>> getTargetInvs() {
-		return allTargetInvs;
-	}
-	
-	/**
 	 * Get all the games
 	 * 
 	 * @return the games map
@@ -220,14 +171,5 @@ public abstract class KuffleType {
 	 */
 	public final Map<String, Integer> getPlayerRanks() {
 		return playerRank;
-	}
-	
-	/**
-	 * Get all available langs
-	 * 
-	 * @return the langs list
-	 */
-	public final List<String> getLangs() {
-		return langs;
 	}
 }

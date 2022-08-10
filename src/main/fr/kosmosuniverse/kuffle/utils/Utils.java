@@ -30,7 +30,7 @@ import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Age;
 import main.fr.kosmosuniverse.kuffle.core.AgeManager;
 import main.fr.kosmosuniverse.kuffle.core.Game;
-import main.fr.kosmosuniverse.kuffle.core.ItemManager;
+import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 //import main.fr.kosmosuniverse.kuffle.crafts.activables.Template;
 import main.fr.kosmosuniverse.kuffle.core.Logs;
@@ -417,7 +417,7 @@ public final class Utils {
 		List<String> done = new ArrayList<>();
 
 		for (int cnt = 0; cnt < KuffleMain.config.getSBTTAmount(); cnt++) {
-			done.add(ItemManager.newItem(done, KuffleMain.allSbtts.get(age)));
+			done.add(TargetManager.newItem(done, KuffleMain.allSbtts.get(age)));
 		}
 
 		for (String item : done) {

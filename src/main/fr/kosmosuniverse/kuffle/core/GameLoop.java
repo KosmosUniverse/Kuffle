@@ -96,7 +96,7 @@ public class GameLoop {
 			KuffleMain.gameLogs.logSystemMsg("Player : " + game.getPlayer().getName() + " did not found item : " + game.getCurrentItem());
 			newItem(game);
 		} else if (KuffleMain.config.getDouble() && !game.getCurrentItem().contains("/")) {
-			String currentTmp = ItemManager.newItem(game.getAlreadyGot(), KuffleMain.allItems.get(AgeManager.getAgeByNumber(KuffleMain.ages, game.getAge()).name));
+			String currentTmp = TargetManager.newItem(game.getAlreadyGot(), KuffleMain.allItems.get(AgeManager.getAgeByNumber(KuffleMain.ages, game.getAge()).name));
 
 			game.addToAlreadyGot(currentTmp);
 			game.setCurrentItem(game.getCurrentItem() + "/" + currentTmp);
@@ -198,12 +198,12 @@ public class GameLoop {
 		String ret;
 
 		if (KuffleMain.config.getSame()) {
-			Pair tmpPair = ItemManager.nextItem(tmpGame.getAlreadyGot(), KuffleMain.allItems.get(AgeManager.getAgeByNumber(KuffleMain.ages, tmpGame.getAge()).name), tmpGame.getSameIdx());
+			Pair tmpPair = TargetManager.nextItem(tmpGame.getAlreadyGot(), KuffleMain.allItems.get(AgeManager.getAgeByNumber(KuffleMain.ages, tmpGame.getAge()).name), tmpGame.getSameIdx());
 
 			tmpGame.setSameIdx((int) tmpPair.getKey());
 			ret = (String) tmpPair.getValue();
 		} else {
-			ret = ItemManager.newItem(tmpGame.getAlreadyGot(), KuffleMain.allItems.get(AgeManager.getAgeByNumber(KuffleMain.ages, tmpGame.getAge()).name));
+			ret = TargetManager.newItem(tmpGame.getAlreadyGot(), KuffleMain.allItems.get(AgeManager.getAgeByNumber(KuffleMain.ages, tmpGame.getAge()).name));
 		}
 
 		return ret;

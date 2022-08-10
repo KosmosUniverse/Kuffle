@@ -41,7 +41,7 @@ public class LevelManager {
 	 * @throws IllegalArgumentException if content is null
 	 * @throws ParseException if JSONParser.parse fails
 	 */
-	public static void getLevels(String content) throws IllegalArgumentException, ParseException {
+	public static void setupLevels(String content) throws IllegalArgumentException, ParseException {
 		levels = new ArrayList<>();
 
 		if (content == null) {

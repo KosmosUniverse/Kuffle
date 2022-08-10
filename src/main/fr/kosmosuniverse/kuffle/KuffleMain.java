@@ -99,8 +99,8 @@ public class KuffleMain extends JavaPlugin {
 		
 		if (((versions = Utils.loadVersions("versions.json")) == null) ||
 				((ages = AgeManager.getAges(FilesConformity.getContent("ages.json"))) == null) ||
-				((allItems = ItemManager.getAllItems(ages, FilesConformity.getContent("items_%v.json"), plugin.getDataFolder())) == null) ||
-				((allSbtts = ItemManager.getAllItems(ages, FilesConformity.getContent("sbtt_%v.json"), plugin.getDataFolder())) == null)) {
+				((allItems = TargetManager.getAllItems(ages, FilesConformity.getContent("items_%v.json"), plugin.getDataFolder())) == null) ||
+				((allSbtts = TargetManager.getAllItems(ages, FilesConformity.getContent("sbtt_%v.json"), plugin.getDataFolder())) == null)) {
 			
 			return false;
 		}
@@ -128,7 +128,7 @@ public class KuffleMain extends JavaPlugin {
 
 		teams = new ManageTeams();
 		crafts = new CraftsManager();
-		itemsInvs = ItemManager.getItemsInvs(allItems);
+		itemsInvs = TargetManager.getItemsInvs(allItems);
 		scores = new Scores();
 
 		int cnt = 0;

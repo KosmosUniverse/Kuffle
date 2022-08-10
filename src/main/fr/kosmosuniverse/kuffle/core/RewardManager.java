@@ -1,8 +1,5 @@
 package main.fr.kosmosuniverse.kuffle.core;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,66 +21,70 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class RewardManager {
+	private static Map<String, Map<String, RewardElem>> rewards = null;
+	
+	/**
+	 * Private RewardManager constructor
+	 * 
+	 * @throws IllegalStateException
+	 */
 	private RewardManager() {
 		throw new IllegalStateException("Utility class");
 	}
 	
-	public static synchronized Map<String, Map<String, RewardElem>> getAllRewards(List<Age> ages, String rewardsContent, File dataFolder) {
-		Map<String, Map<String, RewardElem>> finalMap = new HashMap<>();
+	/**
+	 * Setup all rewards
+	 * 
+	 * @param rewardsContent	reward file content
+	 * 
+	 * @throws ParseException if JSONParser.parse fails
+	 */
+	public static void setupRewards(String rewardsContent) throws ParseException {
+		rewards = new HashMap<>();
 		
-		int max = AgeManager.getAgeMaxNumber(ages);
+		int max = AgeManager.getLastAgeIndex();
 		
 		for (int ageCnt = 0; ageCnt <= max; ageCnt++) {
-			finalMap.put(AgeManager.getAgeByNumber(ages, ageCnt).name, getAgeRewards(AgeManager.getAgeByNumber(ages, ageCnt).name, rewardsContent, dataFolder));
+			rewards.put(AgeManager.getAgeByNumber(ageCnt).name, setupAgeRewards(AgeManager.getAgeByNumber(ageCnt).name, rewardsContent));
 		}
-		
-		return finalMap;
 	}
 	
-	public static synchronized Map<String, RewardElem> getAgeRewards(String age, String rewardsContent, File dataFolder) {
+	/**
+	 * Setup rewards for a specific Age
+	 * 
+	 * @param age				The specific age
+	 * @param rewardsContent	The String file content
+	 * 
+	 * @return the map that contains age rewards
+	 * 
+	 * @throws ParseException if JSONParser.parse fails
+	 */
+	private static Map<String, RewardElem> setupAgeRewards(String age, String rewardsContent) throws ParseException {
 		Map<String, RewardElem> ageRewards = new HashMap<>();
-		JSONObject rewards;
 		JSONParser jsonParser = new JSONParser();
+		JSONObject rewards = (JSONObject) jsonParser.parse(rewardsContent);
+		JSONObject ageObject = (JSONObject) rewards.get(age);
 		
-		try (FileWriter writer = new FileWriter(dataFolder.getPath() + File.separator + "logs.txt", true)) {
-			rewards = (JSONObject) jsonParser.parse(rewardsContent);
-		
-			JSONObject ageObject = new JSONObject();
-			
-			ageObject = (JSONObject) rewards.get(age);
-			
-			for (Iterator<?> it = ageObject.keySet().iterator(); it.hasNext();) {
-				String key = (String) it.next();
-				JSONObject tmp = (JSONObject) ageObject.get(key);
-				ageRewards.put(key, new RewardElem(key, Integer.parseInt(((Long) tmp.get("Amount")).toString()), (String) tmp.get("Enchant"), Integer.parseInt(((Long) tmp.get("Level")).toString()), (String) tmp.get("Effect")));
-			}
-		
-			StringBuilder sb = new StringBuilder();
-
-			for (String key : ageRewards.keySet()) {
-				sb.append(ageRewards.get(key).toString()).append("\n");
-			}
-			
-			writer.append(sb.toString());
-		} catch (IOException | ParseException e) {
-			e.printStackTrace();
+		for (Iterator<?> it = ageObject.keySet().iterator(); it.hasNext();) {
+			String key = (String) it.next();
+			JSONObject tmp = (JSONObject) ageObject.get(key);
+			ageRewards.put(key, new RewardElem(key, Integer.parseInt(((Long) tmp.get("Amount")).toString()), (String) tmp.get("Enchant"), Integer.parseInt(((Long) tmp.get("Level")).toString()), (String) tmp.get("Effect")));
 		}
 		
 		return ageRewards;
 	}
 	
-	public static synchronized void givePlayerRewardEffect(Map<String, RewardElem> ageReward, Player player) {
-		for (String k : ageReward.keySet()) {
-			if (k.contains("potion")) {				
-				player.addPotionEffect(new PotionEffect(findEffect(ageReward.get(k).getEffect()), 999999, ageReward.get(k).getAmount()));
-			}
-		}
-	}
-	
-	public static synchronized void givePlayerReward(Map<String, RewardElem> ageReward, Player player, List<Age> ages, int age) {
+	/**
+	 * Gives an age rewards to a specific player
+	 * 
+	 * @param ageName	The age name to take rewards from
+	 * @param player	The player that will receive these rewards
+	 */
+	public static void givePlayerReward(String ageName, Player player) {
 		List<ItemStack> items = new ArrayList<>();
+		Map<String, RewardElem> ageReward = rewards.get(ageName);
 		
-		ItemStack container = new ItemStack(AgeManager.getAgeByNumber(ages, age).box);
+		ItemStack container = new ItemStack(AgeManager.getAgeByName(ageName).box);
 		
 		BlockStateMeta containerMeta = (BlockStateMeta) container.getItemMeta();
 		ShulkerBox box = (ShulkerBox) containerMeta.getBlockState();
@@ -93,7 +94,7 @@ public class RewardManager {
 			ItemStack it;
 			
 			if (ageReward.get(k).enchant()) {
-				items.add(giveEnchantedItem(k, ageReward.get(k)));
+				items.add(setupEnchantedItem(k, ageReward.get(k)));
 			} else if (k.contains("potion")) {
 				givePotionEffect(ageReward.get(k), player);
 			} else {
@@ -111,7 +112,7 @@ public class RewardManager {
 		container.setItemMeta(containerMeta);
 		
 		ItemMeta itM = container.getItemMeta();
-		itM.setDisplayName(AgeManager.getAgeByNumber(ages, age).name.replace("_", " "));
+		itM.setDisplayName(AgeManager.getAgeByName(ageName).name.replace("_", " "));
 		container.setItemMeta(itM);
 		
 		Map<Integer, ItemStack> ret = player.getInventory().addItem(container);
@@ -123,7 +124,15 @@ public class RewardManager {
 		}
 	}
 	
-	private static ItemStack giveEnchantedItem(String key, RewardElem elem) {
+	/**
+	 * Setup an enchanted item
+	 * 
+	 * @param key	Item type
+	 * @param elem	RewardElemn object
+	 * 
+	 * @return the ItemStack corresponding to the enchanted item
+	 */
+	private static ItemStack setupEnchantedItem(String key, RewardElem elem) {
 		ItemStack it = new ItemStack(Material.matchMaterial(key), elem.getAmount());
 		
 		if (elem.getEnchant().contains(",")) {
@@ -143,6 +152,12 @@ public class RewardManager {
 		return it;
 	}
 	
+	/**
+	 * Gives potion effects to a player
+	 * 
+	 * @param elem		The potion effect to give as a RewardElem
+	 * @param player	The player that will receive the effects
+	 */
 	private static void givePotionEffect(RewardElem elem, Player player) {
 		if (elem.getEffect().contains(",")) {
 			String[] tmp = elem.getEffect().split(",");
@@ -157,14 +172,13 @@ public class RewardManager {
 		}
 	}
 	
-	public static void managePreviousEffects(Map<String, RewardElem> ageReward, Player player) {
-		for (String key : ageReward.keySet()) {
-			if (key.contains("potion")) {
-				player.removePotionEffect(findEffect(ageReward.get(key).getEffect()));
-			}
-		}
-	}
-	
+	/**
+	 * Gets an enchantment from its name
+	 * 
+	 * @param enchant	the enchantment to get
+	 * 
+	 * @return the Enchantment Object if enchant exists, null instead
+	 */
 	public static Enchantment getEnchantment(String enchant) {
 		for (Enchantment e : Enchantment.values()) {
 			if (e.getKey().toString().split(":")[1].equals(enchant)) {
@@ -174,6 +188,13 @@ public class RewardManager {
 		return null;
 	}
 
+	/**
+	 * Gets a specific effect 
+	 * 
+	 * @param effect	the effect name
+	 * 
+	 * @return The PotionEffectType if effect exists, null instead
+	 */
 	public static PotionEffectType findEffect(String effect) {
 		for (PotionEffectType potion : PotionEffectType.values()) {
 			if (potion.getName().equalsIgnoreCase(effect)) {
@@ -182,5 +203,21 @@ public class RewardManager {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Removes previous reward effects
+	 * 
+	 * @param ageName	The age name of the rewards it may remove
+	 * @param player	The player concerned about this removal
+	 */
+	public static void removePreviousRewardEffects(String ageName, Player player) {
+		Map<String, RewardElem> ageReward = rewards.get(ageName);
+		
+		for (String key : ageReward.keySet()) {
+			if (key.contains("potion")) {
+				player.removePotionEffect(findEffect(ageReward.get(key).getEffect()));
+			}
+		}
 	}
 }
