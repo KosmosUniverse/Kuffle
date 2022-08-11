@@ -46,8 +46,8 @@ public class KuffleMain extends JavaPlugin {
 	public static KuffleMain current;
 	public static GameLoop loop;
 	public static Config config;
-	public static Logs gameLogs;
-	public static Logs systemLogs;
+	public static LogManager gameLogs;
+	public static LogManager systemLogs;
 	public static TeamManager teams;
 	public static CraftManager crafts = null;
 	public static ScoreManager scores;
@@ -94,8 +94,8 @@ public class KuffleMain extends JavaPlugin {
 	private static boolean setup(JavaPlugin plugin) {
 		current = (KuffleMain) plugin;
 		
-		gameLogs = new Logs(plugin.getDataFolder().getPath() + File.separator + "KuffleItemsGamelogs.txt");
-		systemLogs = new Logs(plugin.getDataFolder().getPath() + File.separator + "KuffleItemsSystemlogs.txt");
+		gameLogs = new LogManager(plugin.getDataFolder().getPath() + File.separator + "KuffleItemsGamelogs.txt");
+		systemLogs = new LogManager(plugin.getDataFolder().getPath() + File.separator + "KuffleItemsSystemlogs.txt");
 		
 		if (((versions = Utils.loadVersions("versions.json")) == null) ||
 				((ages = AgeManager.getAges(FilesConformity.getContent("ages.json"))) == null) ||

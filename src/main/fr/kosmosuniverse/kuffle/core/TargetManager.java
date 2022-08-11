@@ -106,7 +106,7 @@ public class TargetManager {
 				finalList.add((String) ageElems.get(target));
 				
 				if (Material.matchMaterial((String) ageElems.get(target)) == null) {
-					Logs.getInstanceSystem("Material [" + (String) ageElems.get(target) + "] does not exists !");
+					LogManager.getInstanceSystem("Material [" + (String) ageElems.get(target) + "] does not exists !");
 				}
 			}
 			

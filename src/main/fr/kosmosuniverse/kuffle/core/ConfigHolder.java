@@ -1,5 +1,10 @@
 package main.fr.kosmosuniverse.kuffle.core;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 class ConfigHolder {
 	public boolean saturation;
 	public boolean spread;

@@ -12,7 +12,7 @@ import java.io.InputStream;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import main.fr.kosmosuniverse.kuffle.core.Logs;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.utils.FilesConformity;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
@@ -38,7 +38,7 @@ class AgeTest {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() {
-		Logs.getInstanceSystem("C:\\Temp\\Kuffle\\unittest\\KuffleSystemlogs.txt");
+		LogManager.getInstanceSystem("C:\\Temp\\Kuffle\\unittest\\KuffleSystemlogs.txt");
 	}
 	
 	/**

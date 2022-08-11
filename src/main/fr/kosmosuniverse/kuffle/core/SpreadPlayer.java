@@ -6,30 +6,40 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class SpreadPlayer {
+	/**
+	 * Private SpreadPlayer constructor
+	 * 
+	 * @throws IllegalStateException
+	 */
 	private SpreadPlayer() {
 		throw new IllegalStateException("Utility class");
 	}
 	
-    public static List<Location> spreadPlayers(Player sender, double distance, long minRadius, List<Player> players) {
-        if (distance < 0.0D) {
+	/**
+	 * Spreads all players to locations that forms circle centered on the sender player
+	 * 
+	 * @param sender	The player that is calling for a spread
+	 * @param distance	The minimum distance between two players
+	 * @param minRadius	The minimum radius from player location (Used if the radius calculated from distance is smaller)
+	 * @param players	The players list it needs to spread
+	 */
+    public static void spreadPlayers(Player sender, double distance, long minRadius, List<Player> players) {
+        if (distance < 0) {
             sender.sendMessage(ChatColor.RED + Utils.getLangString(null, "TOO_SHORT"));
-            return null;
-        }
-
-        World world = sender.getWorld();
-
-        if (world == null) {
-            return null;
+            return ;
         }
         
-        List<Team> teams = KuffleMain.teams.getTeams();
+        List<Team> teams = TeamManager.getTeams();
         
         int spreadSize;
         
@@ -44,18 +54,26 @@ public class SpreadPlayer {
         
         radius = radius <= minRadius ? minRadius : radius;
         
-        List<Location> locations = getSpreadLocations(radius, angle, spreadSize, world, sender.getLocation());
+        List<Location> locations = getSpreadLocations(radius, angle, spreadSize, sender.getLocation());
         
         if ((teams != null && locations.size() != teams.size()) ||
         		(teams == null && players != null && locations.size() != players.size())) {
-        	return null;
+        	return ;
         }
         
-        spread(players, teams, locations, world);
-       
-        return locations;
+        spread(players, teams, locations);
+        
+        locations.clear();
     }
     
+    /**
+     * Calculates the minimum radius for a specific distance between two points
+     * 
+     * @param angle		The angle between two points
+     * @param distance	The distance between two points
+     * 
+     * @return the minimum radius
+     */
     private static long radiusCalc(double angle, double distance) {
     	double cos = Math.cos(Math.toRadians(angle));
     	double sin = Math.sin(Math.toRadians(angle));
@@ -69,7 +87,17 @@ public class SpreadPlayer {
     	return Math.round(tmp);
     }
     
-    private static List<Location> getSpreadLocations(long radius, double angleInc, int size, World world, Location center) {
+    /**
+     * Gets the spread locations list
+     * 
+     * @param radius	The distance between center and every players
+     * @param angleInc	The angle between two players
+     * @param size		The amount of players (or locations to calculate)
+     * @param center	The center of the circle as Location
+     * 
+     * @return the list of the future players locations
+     */
+    private static List<Location> getSpreadLocations(long radius, double angleInc, int size, Location center) {
     	List<Location> locations = new ArrayList<>();
     	
     	double angle = 0;
@@ -80,7 +108,7 @@ public class SpreadPlayer {
     		x = radius * Math.cos(Math.toRadians(angle));
     		z = radius * Math.sin(Math.toRadians(angle));
     		
-    		locations.add(new Location(world, x + center.getX(), 0, z + center.getZ()));
+    		locations.add(new Location(center.getWorld(), x + center.getX(), 0, z + center.getZ()));
     		
     		angle+=angleInc;
     	}
@@ -88,12 +116,19 @@ public class SpreadPlayer {
     	return locations;
     }
     
-    private static void spread(List<Player> players, List<Team> teams, List<Location> locations, World world) {
+    /**
+     * Spreads players at the defined locations
+     * 
+     * @param players	The players to teleport
+     * @param teams		The Teams to teleport
+     * @param locations	The locations where players will be teleported
+     */
+    private static void spread(List<Player> players, List<Team> teams, List<Location> locations) {
     	if (players == null) {
         	for (int j = 0; j < 15; j++) {
         		Location location = locations.get(j);
         		
-        		location.setY(74);
+        		location.setY(location.getWorld().getHighestBlockYAt(location) + 1);
         		location.getBlock().setType(Material.BEDROCK);
         	}
         	
@@ -102,18 +137,19 @@ public class SpreadPlayer {
     	
     	if (teams != null) {
     		for (int cnt = 0; cnt < teams.size(); cnt++) {
-    			 for (Player player : teams.get(cnt).players) {
-    				 Location location = locations.get(cnt);
-    	        		
-    				 location.setY(world.getHighestBlockYAt(location) + 1);
-    				 player.teleport(locations.get(cnt));
-    			 }
+    			Location location = locations.get(cnt);
+    			
+    			location.setY(location.getWorld().getHighestBlockYAt(location) + 1);
+    			
+				for (Player player : teams.get(cnt).players) {
+					player.teleport(locations.get(cnt));
+				}
     		}
     	} else {
         	for (int cnt = 0; cnt < players.size(); cnt++) {
         		Location location = locations.get(cnt);
         		
-        		location.setY(world.getHighestBlockYAt(location) + 1);
+        		location.setY(location.getWorld().getHighestBlockYAt(location) + 1);
         		
         		players.get(cnt).teleport(location);
         	}	

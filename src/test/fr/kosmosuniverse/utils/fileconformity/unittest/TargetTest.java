@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Age;
-import main.fr.kosmosuniverse.kuffle.core.Logs;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.utils.FilesConformity;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
@@ -40,7 +40,7 @@ class TargetTest {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() {
-		Logs.getInstanceSystem("C:\\Temp\\Kuffle\\unittest\\KuffleSystemlogs.txt");
+		LogManager.getInstanceSystem("C:\\Temp\\Kuffle\\unittest\\KuffleSystemlogs.txt");
 		KuffleMain.ages = new ArrayList<>();
 		KuffleMain.ages.add(new Age("Archaic_Age", 0, "RED", "RED"));
 	}

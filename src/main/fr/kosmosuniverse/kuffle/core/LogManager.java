@@ -10,13 +10,13 @@ import java.time.format.DateTimeFormatter;
 
 import org.bukkit.entity.Player;
 
-public class Logs {
-	private static Logs instanceSystem = null;
-	private static Logs instanceGame = null;
+public class LogManager {
+	private static LogManager instanceSystem = null;
+	private static LogManager instanceGame = null;
 	private String path = "";
 	private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 	
-	public Logs(String pathFile) {
+	public LogManager(String pathFile) {
 		path = pathFile;
 		Path pPath = Paths.get(pathFile);
 		
@@ -29,25 +29,25 @@ public class Logs {
 		}
 	}
 	
-	public static Logs getInstanceSystem() {
+	public static LogManager getInstanceSystem() {
 		return instanceSystem;
 	}
 	
-	public static Logs getInstanceGame() {
+	public static LogManager getInstanceGame() {
 		return instanceGame;
 	}
 	
-	public static Logs getInstanceSystem(String pathFile) {
+	public static LogManager getInstanceSystem(String pathFile) {
 		if (instanceSystem == null)  {
-			instanceSystem = new Logs(pathFile);
+			instanceSystem = new LogManager(pathFile);
 		}
 		
 		return instanceSystem;
 	}
 	
-	public static Logs getInstanceGame(String pathFile) {
+	public static LogManager getInstanceGame(String pathFile) {
 		if (instanceGame == null)  {
-			instanceGame = new Logs(pathFile);
+			instanceGame = new LogManager(pathFile);
 		}
 		
 		return instanceGame;

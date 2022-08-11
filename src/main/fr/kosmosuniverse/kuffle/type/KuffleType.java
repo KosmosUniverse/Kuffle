@@ -13,7 +13,7 @@ import main.fr.kosmosuniverse.kuffle.core.CraftManager;
 import main.fr.kosmosuniverse.kuffle.core.Game;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LevelManager;
-import main.fr.kosmosuniverse.kuffle.core.Logs;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.RewardManager;
 import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.TargetManager;
@@ -47,8 +47,8 @@ public abstract class KuffleType {
 	 * @throws KuffleFileLoadException if files load fails
 	 */
 	public KuffleType(JavaPlugin plugin) throws KuffleFileLoadException {
-		Logs.getInstanceGame(plugin.getDataFolder().getPath() + File.separator + "KuffleGamelogs.txt");
-		Logs.getInstanceSystem(plugin.getDataFolder().getPath() + File.separator + "KuffleSystemlogs.txt");
+		LogManager.getInstanceGame(plugin.getDataFolder().getPath() + File.separator + "KuffleGamelogs.txt");
+		LogManager.getInstanceSystem(plugin.getDataFolder().getPath() + File.separator + "KuffleSystemlogs.txt");
 		
 		try {
 			LangManager.setupTargetsLangs(FilesConformity.getContent("targets_langs.json"));

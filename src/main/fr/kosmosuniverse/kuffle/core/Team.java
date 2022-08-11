@@ -7,11 +7,21 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class Team {
 	public List<Player> players = new ArrayList<>();
 	public String name;
 	public ChatColor color;
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param teamName	The team name
+	 */
 	public Team(String teamName) {
 		ChatColor[] colors = ChatColor.values();
 		
@@ -19,11 +29,24 @@ public class Team {
 		color = colors[ThreadLocalRandom.current().nextInt(colors.length)];
 	}
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param teamName	The team name
+	 * @param teamColor	The team color
+	 */
 	public Team(String teamName, ChatColor teamColor) {
 		name = teamName;
 		color = teamColor;
 	}
 	
+	/**
+	 * Checks if a specific player is in this team
+	 * 
+	 * @param player	The player to check
+	 * 
+	 * @return True if the player is in the team, False instead
+	 */
 	public boolean hasPlayer(String player)	{
 		for (Player item : players) {
 			if (item.getName().equals(player)) {
@@ -34,6 +57,11 @@ public class Team {
 		return false;
 	}
 	
+	/**
+	 * Get the team players name list
+	 * 
+	 * @return the players name list
+	 */
 	public List<String> getPlayersName() {
 		List<String> names = new ArrayList<>();
 		
@@ -44,6 +72,9 @@ public class Team {
 		return names;
 	}
 	
+	/**
+	 * Gets the stringified team
+	 */
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		

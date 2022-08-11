@@ -33,7 +33,7 @@ import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.Game;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 //import main.fr.kosmosuniverse.kuffle.crafts.activables.Template;
-import main.fr.kosmosuniverse.kuffle.core.Logs;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 import main.fr.kosmosuniverse.kuffle.core.VersionManager;
 import main.fr.kosmosuniverse.kuffle.crafts.activables.Template;
@@ -573,7 +573,7 @@ public final class Utils {
 
 		sb.append(ChatColor.BLUE + Utils.getLangString(playerName, "FINISH_TOTAL").replace("%t", ChatColor.RESET + Utils.getTimeFromSec(total)) + "\n");
 
-		Logs.getInstanceSystem(null).logSystemMsg(sb.toString());
+		LogManager.getInstanceSystem(null).logSystemMsg(sb.toString());
 	}
 	
 	/**
@@ -603,6 +603,6 @@ public final class Utils {
 			sb.append(ste).append("\n");
 		}
 		
-		Logs.getInstanceSystem(null).logSystemMsg(sb.toString());
+		LogManager.getInstanceSystem(null).logSystemMsg(sb.toString());
 	}
 }
