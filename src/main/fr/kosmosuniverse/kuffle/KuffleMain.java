@@ -27,6 +27,7 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 public class KuffleMain extends JavaPlugin {
 	public static KuffleType type = null;
+	public static KuffleEnumType 
 	public static Map<String, Map<String, RewardElem>> allRewards;
 	public static Map<String, Map<String, String>> allItemsLangs;
 	public static Map<String, Map<String, String>> allLangs;
@@ -48,8 +49,8 @@ public class KuffleMain extends JavaPlugin {
 	public static Config config;
 	public static Logs gameLogs;
 	public static Logs systemLogs;
-	public static ManageTeams teams;
-	public static CraftsManager crafts = null;
+	public static TeamManager teams;
+	public static CraftManager crafts = null;
 	public static Scores scores;
 	public static Inventory playersHeads;
 	public static PlayerInteract playerInteract;
@@ -126,8 +127,8 @@ public class KuffleMain extends JavaPlugin {
 		loop = new GameLoop();
 		config = new Config(plugin.getConfig());
 
-		teams = new ManageTeams();
-		crafts = new CraftsManager();
+		teams = new TeamManager();
+		crafts = new CraftManager();
 		itemsInvs = TargetManager.getItemsInvs(allItems);
 		scores = new Scores();
 

@@ -25,6 +25,7 @@ import main.fr.kosmosuniverse.kuffle.utils.Pair;
  */
 public class TargetManager {
 	private static Map<String, List<String>> targets = null;
+	private static Map<String, List<String>> sbtts = null;
 	private static Map<String, List<Inventory>> targetsInvs = null;
 	
 	/**
@@ -37,14 +38,39 @@ public class TargetManager {
 	}
 	
 	/**
-	 * Setup all targets from file string content
+	 * Setup Targets map
 	 * 
 	 * @param content	the content to parse
 	 * 
 	 * @throws ParseException if JSONParser.parse fails
 	 */
 	public static void setupTargets(String content) throws ParseException {
-		targets = new HashMap<>();
+		targets = setup(content);
+		setupTargetsInvs();
+	}
+	
+	/**
+	 * Setup Sbtts templates map
+	 * 
+	 * @param content	the content to parse
+	 * 
+	 * @throws ParseException if JSONParser.parse fails
+	 */
+	public static void setupSbtts(String content) throws ParseException {
+		sbtts = setup(content);
+	}
+	
+	/**
+	 * Setup all targets from file string content
+	 * 
+	 * @param content	the content to parse
+	 * 
+	 * @return the map that contains targets
+	 * 
+	 * @throws ParseException if JSONParser.parse fails
+	 */
+	private static Map<String, List<String>> setup(String content) throws ParseException {
+		Map<String, List<String>> targets = new HashMap<>();
 		
 		int max = AgeManager.getLastAgeIndex();
 
@@ -54,7 +80,7 @@ public class TargetManager {
 			targets.put(age.name, setupAgeTargets(age.name, content));
 		}
 		
-		setupTargetsInvs();
+		return targets;
 	}
 	
 	/**

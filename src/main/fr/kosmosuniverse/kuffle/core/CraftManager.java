@@ -7,43 +7,91 @@ import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.crafts.ACrafts;
 import main.fr.kosmosuniverse.kuffle.crafts.Bell;
 import main.fr.kosmosuniverse.kuffle.crafts.activables.CoralCompass;
 import main.fr.kosmosuniverse.kuffle.crafts.activables.EndPortalFrame;
 import main.fr.kosmosuniverse.kuffle.crafts.activables.EndTeleporter;
 import main.fr.kosmosuniverse.kuffle.crafts.activables.OverworldTeleporter;
-import main.fr.kosmosuniverse.kuffle.crafts.armors.*;
-import main.fr.kosmosuniverse.kuffle.crafts.naturals.*;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.*;
-import main.fr.kosmosuniverse.kuffle.crafts.resources.*;
+import main.fr.kosmosuniverse.kuffle.crafts.armors.ChainmailBoots;
+import main.fr.kosmosuniverse.kuffle.crafts.armors.ChainmailChestplate;
+import main.fr.kosmosuniverse.kuffle.crafts.armors.ChainmailHelmet;
+import main.fr.kosmosuniverse.kuffle.crafts.armors.ChainmailLeggings;
+import main.fr.kosmosuniverse.kuffle.crafts.armors.DiamondHorseArmor;
+import main.fr.kosmosuniverse.kuffle.crafts.armors.GoldHorseArmor;
+import main.fr.kosmosuniverse.kuffle.crafts.armors.IronHorseArmor;
+import main.fr.kosmosuniverse.kuffle.crafts.armors.Saddle;
+import main.fr.kosmosuniverse.kuffle.crafts.naturals.BuddingAmethyst;
+import main.fr.kosmosuniverse.kuffle.crafts.naturals.MossBlock;
+import main.fr.kosmosuniverse.kuffle.crafts.naturals.MossyCobblestone;
+import main.fr.kosmosuniverse.kuffle.crafts.naturals.MossyStoneBrick;
+import main.fr.kosmosuniverse.kuffle.crafts.naturals.Mycelium;
+import main.fr.kosmosuniverse.kuffle.crafts.naturals.PointedDripstone;
+import main.fr.kosmosuniverse.kuffle.crafts.naturals.PowderSnowBucket;
+import main.fr.kosmosuniverse.kuffle.crafts.naturals.RedNetherBrick;
+import main.fr.kosmosuniverse.kuffle.crafts.naturals.RedSand;
+import main.fr.kosmosuniverse.kuffle.crafts.naturals.SmallDripleaf;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.CoalOre;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.CoalOreDeepslate;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.CopperOre;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.CopperOreDeepslate;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.DiamondOre;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.DiamondOreDeepslate;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.EmeraldOre;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.EmeraldOreDeepslate;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.ExposedCopper;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.GoldOre;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.GoldOreDeepslate;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.IronOre;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.IronOreDeepslate;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.LapisOre;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.LapisOreDeepslate;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.OxidizedCopper;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.QuartzOre;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.RedstoneOre;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.RedstoneOreDeepslate;
+import main.fr.kosmosuniverse.kuffle.crafts.ores.WeatheredCopper;
+import main.fr.kosmosuniverse.kuffle.crafts.resources.BrainCoralBlock;
+import main.fr.kosmosuniverse.kuffle.crafts.resources.BubbleCoralBlock;
+import main.fr.kosmosuniverse.kuffle.crafts.resources.Coal;
+import main.fr.kosmosuniverse.kuffle.crafts.resources.Diamond;
+import main.fr.kosmosuniverse.kuffle.crafts.resources.Emerald;
+import main.fr.kosmosuniverse.kuffle.crafts.resources.FireCoralBlock;
+import main.fr.kosmosuniverse.kuffle.crafts.resources.HornCoralBlock;
+import main.fr.kosmosuniverse.kuffle.crafts.resources.Lapis;
+import main.fr.kosmosuniverse.kuffle.crafts.resources.Quartz;
+import main.fr.kosmosuniverse.kuffle.crafts.resources.RawCopper;
+import main.fr.kosmosuniverse.kuffle.crafts.resources.RawGold;
+import main.fr.kosmosuniverse.kuffle.crafts.resources.RawIron;
+import main.fr.kosmosuniverse.kuffle.crafts.resources.Redstone;
+import main.fr.kosmosuniverse.kuffle.crafts.resources.TubeCoralBlock;
+import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
-public class CraftsManager {
+public class CraftManager {
 	private List<ACrafts> recipes = new ArrayList<>();
 	
-	public CraftsManager() {
+	public CraftManager() {
 		recipes.add(new EndPortalFrame());
 		recipes.add(new EndTeleporter());
 		recipes.add(new OverworldTeleporter());
 		recipes.add(new CoralCompass());
 		
-		if (Utils.findVersionNumber(Utils.getVersion()) >= Utils.findVersionNumber("1.16")) {
+		if (VersionManager.findVersionNumber(VersionManager.getVersion()) >= VersionManager.findVersionNumber("1.16")) {
 			recipes.add(new ChainmailHelmet());
 			recipes.add(new ChainmailChestplate());
 			recipes.add(new ChainmailLeggings());
 			recipes.add(new ChainmailBoots());
 		}
 		
-		if (Utils.findVersionNumber(Utils.getVersion()) >= Utils.findVersionNumber("1.17")) {
+		if (VersionManager.findVersionNumber(VersionManager.getVersion()) >= VersionManager.findVersionNumber("1.17")) {
 			recipes.add(new MossBlock());
 			recipes.add(new SmallDripleaf());
 			recipes.add(new PowderSnowBucket());
 			recipes.add(new BuddingAmethyst());
 		}
 		
-		if (!KuffleMain.config.getCrafts()) {
+		if (!Config.getCrafts()) {
 			return;
 		}
 		
@@ -81,7 +129,7 @@ public class CraftsManager {
 		recipes.add(new GoldHorseArmor());
 		recipes.add(new DiamondHorseArmor());
 		
-		if (Utils.findVersionNumber(Utils.getVersion()) >= Utils.findVersionNumber("1.17")) {
+		if (VersionManager.findVersionNumber(VersionManager.getVersion()) >= VersionManager.findVersionNumber("1.17")) {
 			recipes.add(new CoalOreDeepslate());
 			recipes.add(new CopperOreDeepslate());
 			recipes.add(new DiamondOreDeepslate());
@@ -143,11 +191,9 @@ public class CraftsManager {
 		return (inv);
 	}
 	
-	
-	
 	public ACrafts findCraftInventoryByItem(ItemStack item) {
 		for (ACrafts craft : recipes) {
-			if (Utils.compareItems(craft.getItem(), item, item.hasItemMeta(),
+			if (ItemUtils.itemComparison(craft.getItem(), item, item.hasItemMeta(),
 					item.hasItemMeta() ? item.getItemMeta().hasDisplayName() : false,
 					item.hasItemMeta() ? item.getItemMeta().hasLore() : false)) {
 				return (craft);

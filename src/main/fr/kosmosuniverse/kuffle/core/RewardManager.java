@@ -20,6 +20,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class RewardManager {
 	private static Map<String, Map<String, RewardElem>> rewards = null;
 	
@@ -30,6 +35,21 @@ public class RewardManager {
 	 */
 	private RewardManager() {
 		throw new IllegalStateException("Utility class");
+	}
+	
+	/**
+	 * Clears the rewards map
+	 */
+	public static void clear() {
+		if (rewards != null) {
+			rewards.forEach((k, v) -> {
+				if (v != null) {
+					v.clear();
+				}
+			});
+			
+			rewards.clear();
+		}
 	}
 	
 	/**

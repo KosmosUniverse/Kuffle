@@ -20,18 +20,18 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
 public class Config {
 	private static final String CONFIG_DEFAULT = "CONFIG_DEFAULT";
 	
-	private ConfigHolder configValues;
-	private boolean setRet;
-	private String error;
+	private static ConfigHolder configValues;
+	private static boolean setRet;
+	private static String error;
 
-	private Map<String, Consumer<Object>> configElems = null;
+	private static Map<String, Consumer<Object>> configElems = null;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param configFile	configuration file used to setup config values
 	 */
-	public Config(FileConfiguration configFile) {
+	public static void setupConfig(FileConfiguration configFile) {
 		configValues = new ConfigHolder();
 		configElems = new HashMap<>();
 
@@ -62,7 +62,7 @@ public class Config {
 		configElems.put("LEVEL", (Object i) -> setLevel((String) i));
 		configElems.put("LANG", (Object i) -> setLang((String) i));
 		
-		setupConfig(configFile);
+		checkAndSetConfig(configFile);
 	}
 	
 	/**
@@ -72,7 +72,7 @@ public class Config {
 	 * 
 	 * @return True if key exists, False instead
 	 */
-	public boolean hasKey(String key) {
+	public static boolean hasKey(String key) {
 		return configElems.containsKey(key);
 	}
 	
@@ -84,7 +84,7 @@ public class Config {
 	 * 
 	 * @throws KuffleConfigException if Set throws or return False
 	 */
-	public void setElem(String key, Object elem) throws KuffleConfigException {
+	public static void setElem(String key, Object elem) throws KuffleConfigException {
 		setRet = false;
 		error = "";
 
@@ -105,7 +105,7 @@ public class Config {
 	 * 
 	 * @param configFile	configuration file used to setup config values
 	 */
-	private void setupConfig(FileConfiguration configFile) {
+	private static void checkAndSetConfig(FileConfiguration configFile) {
 		if (!configFile.contains("game_settings.lang")
 				|| !KuffleMain.langs.contains(configFile.getString("game_settings.lang"))) {
 			configValues.lang = "en";
@@ -129,7 +129,7 @@ public class Config {
 	 * 
 	 * @param configFile	configuration file used to setup config values
 	 */
-	private void checkFileSpread(FileConfiguration configFile) {
+	private static void checkFileSpread(FileConfiguration configFile) {
 		if (!configFile.contains("game_settings.spreadplayers.enable")) {
 			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "enabling spreadplayers"));
 			configFile.set("game_settings.spreadplayers.enable", false);
@@ -154,7 +154,7 @@ public class Config {
 	 * 
 	 * @param configFile	configuration file used to setup config values
 	 */
-	private void checkFileModes(FileConfiguration configFile) {
+	private static void checkFileModes(FileConfiguration configFile) {
 		if (!configFile.contains("game_settings.team.enable")) {
 			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "enabling team"));
 			configFile.set("game_settings.team.enable", false);
@@ -199,7 +199,7 @@ public class Config {
 	 * 
 	 * @param configFile	configuration file used to setup config values
 	 */
-	private void checkFileStart(FileConfiguration configFile) {
+	private static void checkFileStart(FileConfiguration configFile) {
 		if (!configFile.contains("game_settings.target_per_age")
 				|| configFile.getInt("game_settings.target_per_age") < 1) {
 			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "item per age"));
@@ -233,7 +233,7 @@ public class Config {
 	 * 
 	 * @param configFile	configuration file used to setup config values
 	 */
-	private void checkFileOther(FileConfiguration configFile) {
+	private static void checkFileOther(FileConfiguration configFile) {
 		if (!configFile.contains("game_settings.skip.enable")) {
 			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "enabling skip"));
 			configFile.set("game_settings.skip.enable", true);
@@ -270,7 +270,7 @@ public class Config {
 	 * 
 	 * @param configFile	configuration file used to setup config values
 	 */
-	private void checkFileEnd(FileConfiguration configFile) {
+	private static void checkFileEnd(FileConfiguration configFile) {
 		if (!configFile.contains("game_settings.auto_detect_game_end.enable")) {
 			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "enabling auto detect game end"));
 			configFile.set("game_settings.auto_detect_game_end.enable", false);
@@ -290,7 +290,7 @@ public class Config {
 	 * 
 	 * @param configFile	file that contains all config values
 	 */
-	private void setValues(FileConfiguration configFile) {
+	private static void setValues(FileConfiguration configFile) {
 		configValues.saturation = configFile.getBoolean("game_settings.saturation");
 		configValues.spread = configFile.getBoolean("game_settings.spreadplayers.enable");
 		configValues.rewards = configFile.getBoolean("game_settings.rewards");
@@ -323,7 +323,7 @@ public class Config {
 	 * 
 	 * @return the string
 	 */
-	public String displayConfig() {
+	public static String displayConfig() {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("Configuration:").append("\n");
@@ -361,7 +361,7 @@ public class Config {
 	/**
 	 * Clears the configElems map
 	 */
-	public void clear() {
+	public static void clear() {
 		configElems.clear();
 	}
 	
@@ -371,7 +371,7 @@ public class Config {
 	 * @return the JSONObject
 	 */
 	@SuppressWarnings("unchecked")
-	public JSONObject saveConfig() {
+	public static JSONObject saveConfig() {
 		JSONObject configObj = new JSONObject();
 		
 		configObj.put("saturation", configValues.saturation);
@@ -408,7 +408,7 @@ public class Config {
 	 * 
 	 * @param configObj	JSONObject that contains config to load
 	 */
-	public void loadConfig(JSONObject configObj) {
+	public static void loadConfig(JSONObject configObj) {
 		configValues.saturation = (boolean) configObj.get("saturation");
 		configValues.spread = (boolean) configObj.get("spread");
 		configValues.rewards = (boolean) configObj.get("rewards");
@@ -443,7 +443,7 @@ public class Config {
 	 * 
 	 * @return if saturation is enabled
 	 */
-	public boolean getSaturation() {
+	public static boolean getSaturation() {
 		return configValues.saturation;
 	}
 
@@ -452,7 +452,7 @@ public class Config {
 	 * 
 	 * @return if spread is enabled
 	 */
-	public boolean getSpread() {
+	public static boolean getSpread() {
 		return configValues.spread;
 	}
 
@@ -461,7 +461,7 @@ public class Config {
 	 * 
 	 * @return if rewards are enabled
 	 */
-	public boolean getRewards() {
+	public static boolean getRewards() {
 		return configValues.rewards;
 	}
 
@@ -470,7 +470,7 @@ public class Config {
 	 * 
 	 * @return if skip is enabled
 	 */
-	public boolean getSkip() {
+	public static boolean getSkip() {
 		return configValues.skip;
 	}
 
@@ -479,7 +479,7 @@ public class Config {
 	 * 
 	 * @return if craft are enabled
 	 */
-	public boolean getCrafts() {
+	public static boolean getCrafts() {
 		return configValues.crafts;
 	}
 
@@ -488,7 +488,7 @@ public class Config {
 	 * 
 	 * @return if team mode is enabled
 	 */
-	public boolean getTeam() {
+	public static boolean getTeam() {
 		return configValues.team;
 	}
 	
@@ -497,7 +497,7 @@ public class Config {
 	 * 
 	 * @return if same mode is enabled
 	 */
-	public boolean getSame() {
+	public static boolean getSame() {
 		return configValues.same;
 	}
 	
@@ -506,7 +506,7 @@ public class Config {
 	 * 
 	 * @return if double mode is enabled
 	 */
-	public boolean getDouble() {
+	public static boolean getDouble() {
 		return configValues.duoMode;
 	}
 	
@@ -515,7 +515,7 @@ public class Config {
 	 * 
 	 * @return if sbtt mode is enabled
 	 */
-	public boolean getSBTT() {
+	public static boolean getSBTT() {
 		return configValues.sbttMode;
 	}
 	
@@ -524,7 +524,7 @@ public class Config {
 	 * 
 	 * @return if game end is enabled
 	 */
-	public boolean getGameEnd() {
+	public static boolean getGameEnd() {
 		return configValues.gameEnd;
 	}
 	
@@ -533,7 +533,7 @@ public class Config {
 	 * 
 	 * @return if end one is enabled
 	 */
-	public boolean getEndOne() {
+	public static boolean getEndOne() {
 		return configValues.endOne;
 	}
 	
@@ -542,7 +542,7 @@ public class Config {
 	 * 
 	 * @return if passive is enabled
 	 */
-	public boolean getPassive() {
+	public static boolean getPassive() {
 		return configValues.passive;
 	}
 
@@ -551,7 +551,7 @@ public class Config {
 	 * 
 	 * @return the team size
 	 */
-	public int getTeamSize() {
+	public static int getTeamSize() {
 		return configValues.teamSize;
 	}
 
@@ -560,7 +560,7 @@ public class Config {
 	 * 
 	 * @return the amount of target per age
 	 */
-	public int getTargetPerAge() {
+	public static int getTargetPerAge() {
 		return configValues.targetPerAge;
 	}
 
@@ -569,7 +569,7 @@ public class Config {
 	 * 
 	 * @return the start time
 	 */
-	public int getStartTime() {
+	public static int getStartTime() {
 		return configValues.startTime;
 	}
 
@@ -578,7 +578,7 @@ public class Config {
 	 * 
 	 * @return the added time
 	 */
-	public int getAddedTime() {
+	public static int getAddedTime() {
 		return configValues.addedTime;
 	}
 
@@ -587,7 +587,7 @@ public class Config {
 	 * 
 	 * @return the spread distance
 	 */
-	public int getSpreadDistance() {
+	public static int getSpreadDistance() {
 		return configValues.spreadDistance;
 	}
 
@@ -596,7 +596,7 @@ public class Config {
 	 * 
 	 * @return the spread radius
 	 */
-	public int getSpreadRadius() {
+	public static int getSpreadRadius() {
 		return configValues.spreadRadius;
 	}
 	
@@ -605,7 +605,7 @@ public class Config {
 	 * 
 	 * @return the sbtt amount
 	 */
-	public int getSBTTAmount() {
+	public static int getSBTTAmount() {
 		return configValues.sbttAmount;
 	}
 	
@@ -614,7 +614,7 @@ public class Config {
 	 * 
 	 * @return the end teleporter xp amount
 	 */
-	public int getXpEnd() {
+	public static int getXpEnd() {
 		return configValues.xpEnd;
 	}
 	
@@ -623,7 +623,7 @@ public class Config {
 	 * 
 	 * @return the overworld xp amount
 	 */
-	public int getXpOverworld() {
+	public static int getXpOverworld() {
 		return configValues.xpOverworld;
 	}
 	
@@ -632,7 +632,7 @@ public class Config {
 	 * 
 	 * @return the coral xp amount
 	 */
-	public int getXpCoral() {
+	public static int getXpCoral() {
 		return configValues.xpCoral;
 	}
 	
@@ -641,7 +641,7 @@ public class Config {
 	 * 
 	 * @return the first skip age number
 	 */
-	public Age getSkipAge() {
+	public static Age getSkipAge() {
 		return AgeManager.getAgeByNumber(configValues.skipAge);
 	}
 
@@ -650,7 +650,7 @@ public class Config {
 	 * 
 	 * @return the last age number
 	 */
-	public Age getLastAge() {
+	public static Age getLastAge() {
 		return AgeManager.getAgeByNumber(configValues.lastAge);
 	}
 
@@ -659,7 +659,7 @@ public class Config {
 	 * 
 	 * @return the level
 	 */
-	public Level getLevel() {
+	public static Level getLevel() {
 		return LevelManager.getLevelByNumber(configValues.level);
 	}
 
@@ -668,7 +668,7 @@ public class Config {
 	 * 
 	 * @return the lang
 	 */
-	public String getLang() {
+	public static String getLang() {
 		return configValues.lang;
 	}
 
@@ -677,7 +677,7 @@ public class Config {
 	 * 
 	 * @param configSaturation	value used to set saturation
 	 */
-	public void setSaturation(boolean configSaturation) {
+	private static void setSaturation(boolean configSaturation) {
 		configValues.saturation = configSaturation;
 		setRet = true;
 	}
@@ -687,7 +687,7 @@ public class Config {
 	 * 
 	 * @param configSpread	value used to set spread player
 	 */
-	public void setSpreadplayers(boolean configSpread) {
+	private static void setSpreadplayers(boolean configSpread) {
 		configValues.spread = configSpread;
 		setRet = true;
 	}
@@ -697,7 +697,7 @@ public class Config {
 	 * 
 	 * @param configRewards	value used to set reward
 	 */
-	public void setRewards(boolean configRewards) {
+	private static void setRewards(boolean configRewards) {
 		configValues.rewards = configRewards;
 		setRet = true;
 	}
@@ -707,7 +707,7 @@ public class Config {
 	 * 
 	 * @param configSkip	value used to set skip
 	 */
-	public void setSkip(boolean configSkip) {
+	private static void setSkip(boolean configSkip) {
 		configValues.skip = configSkip;
 		setRet = true;
 	}
@@ -717,7 +717,7 @@ public class Config {
 	 * 
 	 * @param configCrafts	value used to set craft
 	 */
-	public void setCrafts(boolean configCrafts) {
+	private static void setCrafts(boolean configCrafts) {
 		configValues.crafts = configCrafts;
 		setRet = true;
 	}
@@ -727,7 +727,7 @@ public class Config {
 	 * 
 	 * @param configTeam	value used to set team
 	 */
-	public void setTeam(boolean configTeam) {
+	private static void setTeam(boolean configTeam) {
 		if (KuffleMain.gameStarted) {
 			error = "Game is already running !";
 			setRet = false;
@@ -742,7 +742,7 @@ public class Config {
 	 * 
 	 * @param configSame	value used to set same
 	 */
-	public void setSame(boolean configSame) {
+	private static void setSame(boolean configSame) {
 		if (KuffleMain.gameStarted) {
 			error = "Game is already running !";
 			setRet = false;
@@ -757,7 +757,7 @@ public class Config {
 	 * 
 	 * @param configDuoMode	value used to set double mode
 	 */
-	public void setDoubleMode(boolean configDuoMode) {
+	private static void setDoubleMode(boolean configDuoMode) {
 		configValues.duoMode = configDuoMode;
 		setRet = true;
 	}
@@ -767,7 +767,7 @@ public class Config {
 	 * 
 	 * @param configSbttMode	value used to set sbtt
 	 */
-	public void setSbttMode(boolean configSbttMode) {
+	private static void setSbttMode(boolean configSbttMode) {
 		configValues.sbttMode = configSbttMode;
 		setRet = true;
 	}
@@ -777,7 +777,7 @@ public class Config {
 	 * 
 	 * @param configGameEnd	value used to set game end
 	 */
-	public void setGameEnd(boolean configGameEnd) {
+	private static void setGameEnd(boolean configGameEnd) {
 		configValues.gameEnd = configGameEnd;
 		
 		if (!configValues.gameEnd) {
@@ -792,7 +792,7 @@ public class Config {
 	 * 
 	 * @param configEndOne	value used to set end one
 	 */
-	public void setEndOne(boolean configEndOne) {
+	private static void setEndOne(boolean configEndOne) {
 		if (!configValues.gameEnd) {
 			setRet = false;
 		} else {
@@ -806,7 +806,7 @@ public class Config {
 	 * 
 	 * @param configPassive	value used to set passive
 	 */
-	public void setPassive(boolean configPassive) {
+	private static void setPassive(boolean configPassive) {
 		configValues.passive = configPassive;
 		setRet = true;
 	}
@@ -816,7 +816,7 @@ public class Config {
 	 * 
 	 * @param configTeamSize	value used to set team size
 	 */
- 	public void setTeamSize(int configTeamSize) {
+ 	private static void setTeamSize(int configTeamSize) {
  		if (KuffleMain.gameStarted) {
  			error = "Game is already running !";
 			setRet = false;
@@ -843,7 +843,7 @@ public class Config {
 	 * 
 	 * @param configSpreadDistance	value used to set spread distance
 	 */
-	public void setSpreadDistance(int configSpreadDistance) {
+	private static void setSpreadDistance(int configSpreadDistance) {
 		configValues.spreadDistance = configSpreadDistance;
 		setRet = true;
 	}
@@ -853,7 +853,7 @@ public class Config {
 	 * 
 	 * @param configSpreadRadius	value used to set spread radius
 	 */
-	public void setSpreadRadius(int configSpreadRadius) {
+	private static void setSpreadRadius(int configSpreadRadius) {
 		if (configSpreadRadius < configValues.spreadDistance) {
 			error = "Cannot set spread radius less than spread distance !";
 			setRet = false;
@@ -868,7 +868,7 @@ public class Config {
 	 * 
 	 * @param configTargetPerAge	value used to set target per age
 	 */
-	public void setItemAge(int configTargetPerAge) {
+	private static void setItemAge(int configTargetPerAge) {
 		if (configTargetPerAge < 1) {
 			error = "Cannot have less than one target per Age !";
 			setRet = false;
@@ -883,7 +883,7 @@ public class Config {
 	 * 
 	 * @param configStartTime	value used to set start time
 	 */
-	public void setStartTime(int configStartTime) {
+	private static void setStartTime(int configStartTime) {
 		if (configStartTime < 1) {
 			error = "Cannot set added time less than 1";
 			setRet = false;
@@ -898,7 +898,7 @@ public class Config {
 	 * 
 	 * @param configAddedTime	value used to set added time
 	 */
-	public void setAddedTime(int configAddedTime) {
+	private static void setAddedTime(int configAddedTime) {
 		if (configAddedTime < 1) {
 			error = "Cannot set added time less than 1";
 			setRet = false;
@@ -913,7 +913,7 @@ public class Config {
 	 * 
 	 * @param configSbttAmount	value used to set sbtt amount
 	 */
-	public void setSbttAmount(int configSbttAmount) {
+	private static void setSbttAmount(int configSbttAmount) {
 		if (configSbttAmount < 1 || configSbttAmount > 9) {
 			error = "Cannot set out out of 1 to 9 range !";
 			setRet = false;
@@ -929,7 +929,7 @@ public class Config {
 	 * 
 	 * @param configXpEnd	value used to set xp end
 	 */
-	public void setXpEnd(int configXpEnd) {
+	private static void setXpEnd(int configXpEnd) {
 		if (configXpEnd < 1 || configXpEnd > 10) {
 			error = "Cannot set out of 1 to 10 range !";
 			setRet = false;
@@ -944,7 +944,7 @@ public class Config {
 	 * 
 	 * @param configXpOverworld	value used to set xp overworld
 	 */
-	public void setXpOverworld(int configXpOverworld) {
+	private static void setXpOverworld(int configXpOverworld) {
 		if (configXpOverworld < 1 || configXpOverworld > 20) {
 			error = "Cannot set out of 1 to 20 range !";
 			setRet = false;
@@ -959,7 +959,7 @@ public class Config {
 	 * 
 	 * @param configXpCoral	value used to set xp coral
 	 */
-	public void setXpCoral(int configXpCoral) {
+	private static void setXpCoral(int configXpCoral) {
 		if (configXpCoral < 1 || configXpCoral > 30) {
 			error = "Cannot set out of 1 to 30 range !";
 			setRet = false;
@@ -974,7 +974,7 @@ public class Config {
 	 * 
 	 * @param configLastAge	value used to set last age
 	 */
-	public void setLastAge(String configLastAge) {
+	private static void setLastAge(String configLastAge) {
 		if (!AgeManager.ageExists(configLastAge)) {
 			error = "Unknown Age !";
 			setRet = false;
@@ -989,7 +989,7 @@ public class Config {
 	 * 
 	 * @param configSkipAge	value used to set skip age
 	 */
-	public void setFirstSkip(String configSkipAge) {
+	private static void setFirstSkip(String configSkipAge) {
 		if (!AgeManager.ageExists(configSkipAge)) {
 			error = "Unknown Age !";
 			setRet = false;
@@ -1007,7 +1007,7 @@ public class Config {
 	 * 
 	 * @param configLevel	value used to set level
 	 */
-	public void setLevel(String configLevel) {
+	private static void setLevel(String configLevel) {
 		if (!LevelManager.levelExists(configLevel)) {
 			error = "Unknown level !";
 			setRet = false;
@@ -1022,7 +1022,7 @@ public class Config {
 	 * 
 	 * @param configLang	value used to set lang
 	 */
-	public void setLang(String configLang) {
+	private static void setLang(String configLang) {
 		if (!KuffleMain.langs.contains(configLang)) {
 			error = "Unknown lang !";
 			setRet = false;
