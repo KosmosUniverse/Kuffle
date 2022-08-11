@@ -194,7 +194,7 @@ public class CraftManager {
 	/**
 	 * Clears the recipes list
 	 */
-	public void clear() {
+	public static void clear() {
 		if (recipes != null) {
 			recipes.clear();
 		}
@@ -237,6 +237,11 @@ public class CraftManager {
 		return (recipes);
 	}
 	
+	/**
+	 * Get an Inventory containing all custom crafts
+	 * 
+	 * @return the inventory of all crafts
+	 */
 	public Inventory getAllCraftsInventory() {
 		Inventory inv = Bukkit.createInventory(null, Utils.getNbInventoryRows(recipes.size()), "§8AllCustomCrafts");
 		int i = 0;
@@ -249,7 +254,14 @@ public class CraftManager {
 		return (inv);
 	}
 	
-	public ACrafts findCraftInventoryByItem(ItemStack item) {
+	/**
+	 * Gets ACraft object by ItemStack
+	 * 
+	 * @param item	the item as a key to find ACraft
+	 * 
+	 * @return the found ACraft object, null instead
+	 */
+	public ACrafts getCraftByItem(ItemStack item) {
 		for (ACrafts craft : recipes) {
 			if (ItemUtils.itemComparison(craft.getItem(), item, item.hasItemMeta(),
 					item.hasItemMeta() ? item.getItemMeta().hasDisplayName() : false,
@@ -261,7 +273,14 @@ public class CraftManager {
 		return null;
 	}
 	
-	public ACrafts findCraftByInventoryName(String invName) {
+	/**
+	 * Gets ACraft object by Inventory
+	 * 
+	 * @param invName	the inventory name as a key to find craft
+	 * 
+	 * @return the found ACraft object, null instead
+	 */
+	public ACrafts getCraftByInventoryName(String invName) {
 		for (ACrafts craft : recipes) {
 			String name = "§8" + craft.getName();
 			
@@ -273,6 +292,13 @@ public class CraftManager {
 		return null;
 	}
 	
+	/**
+	 * Gets craft result by item name
+	 * 
+	 * @param itemName	the name to search in recipe results
+	 * 
+	 * @return the ItemStack object found by name, null instead
+	 */
 	public ItemStack findItemByName(String itemName) {
 		for (ACrafts craft : recipes) {
 			if (itemName.equals(craft.getName())) {

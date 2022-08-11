@@ -29,11 +29,12 @@ import org.json.simple.parser.ParseException;
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Age;
 import main.fr.kosmosuniverse.kuffle.core.AgeManager;
+import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.Game;
-import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 //import main.fr.kosmosuniverse.kuffle.crafts.activables.Template;
 import main.fr.kosmosuniverse.kuffle.core.Logs;
+import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 import main.fr.kosmosuniverse.kuffle.core.VersionManager;
 import main.fr.kosmosuniverse.kuffle.crafts.activables.Template;
 
@@ -377,7 +378,7 @@ public final class Utils {
 	public static void setupTemplates() {
 		List<Template> templates = new ArrayList<>();
 
-		for (int i = 0; i < KuffleMain.config.getLastAge().number; i++)  {
+		for (int i = 0; i < Config.getLastAge().number; i++)  {
 			String name = AgeManager.getAgeByNumber(i).name;
 
 			name = name.replace("_Age", "");
@@ -394,7 +395,7 @@ public final class Utils {
 	 * Removes the template items
 	 */
 	public static void removeTemplates() {
-		for (int i = 0; i < KuffleMain.config.getLastAge().number; i++)  {
+		for (int i = 0; i < Config.getLastAge().number; i++)  {
 			String name = AgeManager.getAgeByNumber(i).name;
 			
 			name = name.replace("_Age", "");
@@ -416,8 +417,8 @@ public final class Utils {
 		List<Material> compose = new ArrayList<>();
 		List<String> done = new ArrayList<>();
 
-		for (int cnt = 0; cnt < KuffleMain.config.getSBTTAmount(); cnt++) {
-			done.add(TargetManager.newItem(done, KuffleMain.allSbtts.get(age)));
+		for (int cnt = 0; cnt < Config.getSBTTAmount(); cnt++) {
+			done.add(TargetManager.newTarget(done, age));
 		}
 
 		for (String item : done) {
@@ -492,9 +493,9 @@ public final class Utils {
 	 */
 	public static String getLangString(String player, String tag) {
 		if (KuffleMain.gameStarted && player != null && KuffleMain.games.containsKey(player)) {
-			return (LangManager.findDisplay(KuffleMain.allLangs, tag, KuffleMain.games.get(player).getLang()));
+			return (LangManager.getMsgLang(tag, KuffleMain.games.get(player).getLang()));
 		} else {
-			return (LangManager.findDisplay(KuffleMain.allLangs, tag, KuffleMain.config.getLang()));
+			return (LangManager.getMsgLang(tag, Config.getLang()));
 		}
 	}
 
@@ -527,7 +528,7 @@ public final class Utils {
 		KuffleMain.games.get(toSend).getPlayer().sendMessage(ChatColor.BLUE + Utils.getLangString(toSend, "TEMPLATE_COUNT").replace("%i", "" + ChatColor.RESET + game.getSbttCount()));
 		KuffleMain.games.get(toSend).getPlayer().sendMessage(ChatColor.BLUE + Utils.getLangString(toSend, "TIME_TAB"));
 
-		for (int i = 0; i < KuffleMain.config.getLastAge().number; i++) {
+		for (int i = 0; i < Config.getLastAge().number; i++) {
 			Age age = AgeManager.getAgeByNumber(i);
 
 			if (game.getAgeTime(age.name) == -1) {
@@ -559,7 +560,7 @@ public final class Utils {
 		sb.append(ChatColor.BLUE + Utils.getLangString(playerName, "TEMPLATE_COUNT").replace("%i", "" + ChatColor.RESET + game.getSbttCount()) + "\n");
 		sb.append(ChatColor.BLUE + Utils.getLangString(playerName, "TIME_TAB") + "\n");
 
-		for (int i = 0; i < KuffleMain.config.getLastAge().number; i++) {
+		for (int i = 0; i < Config.getLastAge().number; i++) {
 			Age age = AgeManager.getAgeByNumber(i);
 
 			if (game.getAgeTime(age.name) == -1) {
@@ -573,6 +574,21 @@ public final class Utils {
 		sb.append(ChatColor.BLUE + Utils.getLangString(playerName, "FINISH_TOTAL").replace("%t", ChatColor.RESET + Utils.getTimeFromSec(total)) + "\n");
 
 		Logs.getInstanceSystem(null).logSystemMsg(sb.toString());
+	}
+	
+	/**
+	 * Capitalize a string
+	 * 
+	 * @param str	The string to capitalize
+	 * 
+	 * @return the capitablized string
+	 */
+	public static String capitalize(String str) {
+		if (str == null || str.isBlank()) {
+			return str;
+		}
+		
+		return str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
 	
 	/**

@@ -7,7 +7,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.simple.parser.ParseException;
 
-import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.AgeManager;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
@@ -16,10 +15,9 @@ import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LevelManager;
 import main.fr.kosmosuniverse.kuffle.core.Logs;
 import main.fr.kosmosuniverse.kuffle.core.RewardManager;
-import main.fr.kosmosuniverse.kuffle.core.Scores;
+import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 import main.fr.kosmosuniverse.kuffle.core.VersionManager;
-import main.fr.kosmosuniverse.kuffle.crafts.ACrafts;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
 import main.fr.kosmosuniverse.kuffle.utils.FilesConformity;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
@@ -34,8 +32,6 @@ public abstract class KuffleType {
 	protected Map<String, Integer> playerRank = null;
 	protected Type type = Type.UNKNOWN;
 	
-	public CraftManager crafts = null;
-	public Scores scores = null;
 	public Inventory playersHeads = null;
 	
 	/**
@@ -105,6 +101,7 @@ public abstract class KuffleType {
 		}
 		
 		CraftManager.setupCrafts(type);
+		ScoreManager.setupPlayerScores();
 	}
 	
 	/**
@@ -118,6 +115,10 @@ public abstract class KuffleType {
 		LangManager.clear();
 		AgeManager.clear();
 		VersionManager.clear();
+		TargetManager.clear();
+		RewardManager.clear();
+		CraftManager.clear();
+		ScoreManager.clear();
 		
 		if (playerRank != null) {
 			playerRank.clear();
@@ -125,14 +126,6 @@ public abstract class KuffleType {
 
 		if (games != null) {
 			games.clear();
-		}
-
-		if (crafts != null) {
-			for (ACrafts craft : crafts.getRecipeList()) {
-				KuffleMain.removeRecipe(craft.getName());
-			}
-
-			crafts.clear();
 		}
 	}
 	

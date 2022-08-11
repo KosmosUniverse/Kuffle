@@ -827,7 +827,7 @@ public class Config {
  			setRet = false;
  		}
  		
-		if (setRet && configValues.team && KuffleMain.teams.getTeams().size() > 0 && KuffleMain.teams.getMaxTeamSize() > configTeamSize) {
+		if (setRet && configValues.team && TeamManager.getTeams().size() > 0 && TeamManager.getMaxTeamSize() > configTeamSize) {
 			error = "Cannot set team size less than a current team size !";
 			setRet = false;
 		}

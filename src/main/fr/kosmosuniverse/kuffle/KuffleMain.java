@@ -50,7 +50,7 @@ public class KuffleMain extends JavaPlugin {
 	public static Logs systemLogs;
 	public static TeamManager teams;
 	public static CraftManager crafts = null;
-	public static Scores scores;
+	public static ScoreManager scores;
 	public static Inventory playersHeads;
 	public static PlayerInteract playerInteract;
 	public static PlayerEvents playerEvents;
@@ -129,7 +129,7 @@ public class KuffleMain extends JavaPlugin {
 		teams = new TeamManager();
 		crafts = new CraftManager();
 		itemsInvs = TargetManager.getItemsInvs(allItems);
-		scores = new Scores();
+		scores = new ScoreManager();
 
 		int cnt = 0;
 

@@ -10,22 +10,36 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
+import main.fr.kosmosuniverse.kuffle.type.KuffleType;
+import main.fr.kosmosuniverse.kuffle.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 
-public class Scores {
-	private Scoreboard scoreboard;
-	private Objective age = null;
-	private Objective items;
-	private List<Score> sAges = new ArrayList<>();
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
+public class ScoreManager {
+	private static Scoreboard scoreboard;
+	private static Objective age = null;
+	private static Objective targets = null;
+	private static List<Score> sAges = new ArrayList<>();
 	
-	public Scores() {
+	/**
+	 * Setups scoreboard and objective
+	 * 
+	 * @param type	The game type to name the objective
+	 */
+	public static void setupScores(KuffleType.Type type) {
 		scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-		items = scoreboard.registerNewObjective("items", "dummy", "Items");
+		targets = scoreboard.registerNewObjective(type.name().toLowerCase(), "dummy", Utils.capitalize(type.name()));
+		targets.setDisplaySlot(DisplaySlot.PLAYER_LIST);
 	}
 	
-	public void setupPlayerScores() {
-		items.setDisplaySlot(DisplaySlot.PLAYER_LIST);
-		
+	/**
+	 * setups the players scores
+	 */
+	public static void setupPlayerScores() {
 		if (age != null) {
 			age.unregister();
 		}
@@ -34,8 +48,8 @@ public class Scores {
 		
 		int ageCnt = 0;
 		
-		for (; ageCnt < KuffleMain.config.getMaxAges(); ageCnt++) {
-			sAges.add(age.getScore(AgeManager.getAgeByNumber(KuffleMain.ages, ageCnt).color + AgeManager.getAgeByNumber(KuffleMain.ages, ageCnt).name.replace("_", " ")));
+		for (; ageCnt < Config.getLastAge().number; ageCnt++) {
+			sAges.add(age.getScore(AgeManager.getAgeByNumber(ageCnt).color + AgeManager.getAgeByNumber(ageCnt).name.replace("_", " ")));
 		}
 				
 		ageCnt = 1;
@@ -48,27 +62,35 @@ public class Scores {
 		age.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
 		for (String playerName : KuffleMain.games.keySet()) {
-			KuffleMain.games.get(playerName).setItemScore(items.getScore(playerName));
+			KuffleMain.games.get(playerName).setItemScore(targets.getScore(playerName));
 			KuffleMain.games.get(playerName).getItemScore().setScore(1);
 			KuffleMain.games.get(playerName).getPlayer().setScoreboard(scoreboard);
 			KuffleMain.games.get(playerName).updatePlayerListName();
 		}
 	}
 	
-	public void setupPlayerScores(Game game) {
-		items.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+	/**
+	 * Setup scores for a specific player
+	 * 
+	 * @param game	The Game object of the player
+	 */
+	public static void setupPlayerScores(Game game) {
+		targets.setDisplaySlot(DisplaySlot.PLAYER_LIST);
 		age.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-		game.setItemScore(items.getScore(game.getPlayer().getName()));
+		game.setItemScore(targets.getScore(game.getPlayer().getName()));
 		game.getItemScore().setScore(1);
 		game.getPlayer().setScoreboard(scoreboard);
 	}
 	
-	public void clear() {
+	/**
+	 * Clears the scores
+	 */
+	public static void clear() {
 		scoreboard.clearSlot(age.getDisplaySlot());
 		
-		if (items.getDisplaySlot() != null) {
-			scoreboard.clearSlot(items.getDisplaySlot());
+		if (targets.getDisplaySlot() != null) {
+			scoreboard.clearSlot(targets.getDisplaySlot());
 		}
 
 		age.unregister();
@@ -80,7 +102,10 @@ public class Scores {
 		);
 	}
 	
-	public void reset() {
+	/**
+	 * Resets scores for all players
+	 */
+	public static void reset() {
 		KuffleMain.games.forEach((playerName, game) -> {
 			game.getItemScore().setScore(1);
 			game.getPlayer().setPlayerListName(ChatColor.RED + playerName);
