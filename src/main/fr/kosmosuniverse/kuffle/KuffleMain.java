@@ -27,7 +27,6 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 public class KuffleMain extends JavaPlugin {
 	public static KuffleType type = null;
-	public static KuffleEnumType 
 	public static Map<String, Map<String, RewardElem>> allRewards;
 	public static Map<String, Map<String, String>> allItemsLangs;
 	public static Map<String, Map<String, String>> allLangs;

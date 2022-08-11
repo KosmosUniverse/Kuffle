@@ -16,6 +16,8 @@ public class KuffleBlocks extends KuffleType {
 
 	@Override
 	protected void setupTypeResources(JavaPlugin plugin) throws KuffleFileLoadException  {
+		type = Type.BLOCKS;
+		
 		try {
 			TargetManager.setupTargets(FilesConformity.getContent("blocks_1.15.json"));
 			TargetManager.setupSbtts(FilesConformity.getContent("sbtts_blocks_1.15.json"));

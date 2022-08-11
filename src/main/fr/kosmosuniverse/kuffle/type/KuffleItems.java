@@ -28,6 +28,8 @@ public class KuffleItems extends KuffleType {
 
 	@Override
 	protected void setupTypeResources(JavaPlugin plugin) throws KuffleFileLoadException  {
+		type = Type.ITEMS;
+		
 		try {
 			TargetManager.setupTargets(FilesConformity.getContent("items_1.15.json"));
 			TargetManager.setupSbtts(FilesConformity.getContent("sbtts_items_1.15.json"));

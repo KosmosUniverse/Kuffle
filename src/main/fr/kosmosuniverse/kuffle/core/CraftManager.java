@@ -27,7 +27,6 @@ import main.fr.kosmosuniverse.kuffle.crafts.naturals.MossyCobblestone;
 import main.fr.kosmosuniverse.kuffle.crafts.naturals.MossyStoneBrick;
 import main.fr.kosmosuniverse.kuffle.crafts.naturals.Mycelium;
 import main.fr.kosmosuniverse.kuffle.crafts.naturals.PointedDripstone;
-import main.fr.kosmosuniverse.kuffle.crafts.naturals.PowderSnowBucket;
 import main.fr.kosmosuniverse.kuffle.crafts.naturals.RedNetherBrick;
 import main.fr.kosmosuniverse.kuffle.crafts.naturals.RedSand;
 import main.fr.kosmosuniverse.kuffle.crafts.naturals.SmallDripleaf;
@@ -65,29 +64,35 @@ import main.fr.kosmosuniverse.kuffle.crafts.resources.RawGold;
 import main.fr.kosmosuniverse.kuffle.crafts.resources.RawIron;
 import main.fr.kosmosuniverse.kuffle.crafts.resources.Redstone;
 import main.fr.kosmosuniverse.kuffle.crafts.resources.TubeCoralBlock;
+import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class CraftManager {
-	private List<ACrafts> recipes = new ArrayList<>();
+	private static List<ACrafts> recipes = new ArrayList<>();
 	
-	public CraftManager() {
+	/**
+	 * Setups the crafts (Mandatory and Optional if Crafts option is true)
+	 * 
+	 * @param gameType	The Game type to know which crafts to load
+	 */
+	public static void setupCrafts(KuffleType.Type gameType) {
 		recipes.add(new EndPortalFrame());
-		recipes.add(new EndTeleporter());
-		recipes.add(new OverworldTeleporter());
-		recipes.add(new CoralCompass());
 		
-		if (VersionManager.findVersionNumber(VersionManager.getVersion()) >= VersionManager.findVersionNumber("1.16")) {
-			recipes.add(new ChainmailHelmet());
-			recipes.add(new ChainmailChestplate());
-			recipes.add(new ChainmailLeggings());
-			recipes.add(new ChainmailBoots());
+		if (gameType == KuffleType.Type.ITEMS) {
+			loadItemsCrafts();
+		} else if (gameType == KuffleType.Type.BLOCKS) {
+			loadBlocksCrafts();
 		}
 		
 		if (VersionManager.findVersionNumber(VersionManager.getVersion()) >= VersionManager.findVersionNumber("1.17")) {
 			recipes.add(new MossBlock());
 			recipes.add(new SmallDripleaf());
-			recipes.add(new PowderSnowBucket());
 			recipes.add(new BuddingAmethyst());
 		}
 		
@@ -95,17 +100,20 @@ public class CraftManager {
 			return;
 		}
 		
+		// Rares
 		recipes.add(new RedSand());
 		recipes.add(new Mycelium());
 		recipes.add(new MossyCobblestone());
 		recipes.add(new MossyStoneBrick());
 		
+		// Corals
 		recipes.add(new TubeCoralBlock());
 		recipes.add(new BubbleCoralBlock());
 		recipes.add(new HornCoralBlock());
 		recipes.add(new FireCoralBlock());
 		recipes.add(new BrainCoralBlock());
 		
+		// Resources
 		recipes.add(new Coal());
 		recipes.add(new Lapis());
 		recipes.add(new Redstone());
@@ -113,6 +121,7 @@ public class CraftManager {
 		recipes.add(new Emerald());
 		recipes.add(new Quartz());
 		
+		// Ores
 		recipes.add(new CoalOre());
 		recipes.add(new LapisOre());
 		recipes.add(new RedstoneOre());
@@ -120,14 +129,10 @@ public class CraftManager {
 		recipes.add(new EmeraldOre());
 		recipes.add(new QuartzOre());
 		
+		// Specifics
 		recipes.add(new RedNetherBrick());
-		
 		recipes.add(new Bell());
-		
 		recipes.add(new Saddle());
-		recipes.add(new IronHorseArmor());
-		recipes.add(new GoldHorseArmor());
-		recipes.add(new DiamondHorseArmor());
 		
 		if (VersionManager.findVersionNumber(VersionManager.getVersion()) >= VersionManager.findVersionNumber("1.17")) {
 			recipes.add(new CoalOreDeepslate());
@@ -151,16 +156,64 @@ public class CraftManager {
 		}
 	}
 	
+	/**
+	 * Loads only the Items game type custom crafts
+	 */
+	private static void loadItemsCrafts() {
+		recipes.add(new EndTeleporter());
+		recipes.add(new OverworldTeleporter());
+		recipes.add(new CoralCompass());
+		
+		if (VersionManager.findVersionNumber(VersionManager.getVersion()) >= VersionManager.findVersionNumber("1.16")) {
+			recipes.add(new ChainmailHelmet());
+			recipes.add(new ChainmailChestplate());
+			recipes.add(new ChainmailLeggings());
+			recipes.add(new ChainmailBoots());
+		}
+		
+		if (VersionManager.findVersionNumber(VersionManager.getVersion()) >= VersionManager.findVersionNumber("1.17")) {
+			recipes.add(new MossBlock());
+			recipes.add(new SmallDripleaf());
+			recipes.add(new BuddingAmethyst());
+		}
+		
+		if (Config.getCrafts()) {
+			recipes.add(new IronHorseArmor());
+			recipes.add(new GoldHorseArmor());
+			recipes.add(new DiamondHorseArmor());
+		}
+	}
+	
+	/**
+	 * Loads only the Blocks game type custom crafts
+	 */
+	private static void loadBlocksCrafts() {
+		//Nothing for the moment
+	}
+	
+	/**
+	 * Clears the recipes list
+	 */
 	public void clear() {
 		if (recipes != null) {
 			recipes.clear();
 		}
 	}
 	
+	/**
+	 * Add a craft to the recipes list
+	 * 
+	 * @param craft	The ACraft object to add
+	 */
 	public void addCraft(ACrafts craft) {
 		recipes.add(craft);
 	}
 	
+	/**
+	 * Removes a craft from the recipes list by name
+	 * 
+	 * @param name	The ACraft object name
+	 */
 	public void removeCraft(String name) {
 		ACrafts craft = null;
 		
@@ -175,6 +228,11 @@ public class CraftManager {
 		}
 	}
 	
+	/**
+	 * Gets the recipes list
+	 * 
+	 * @return the recipes list as ACraft list
+	 */
 	public List<ACrafts> getRecipeList() {
 		return (recipes);
 	}

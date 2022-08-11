@@ -32,6 +32,7 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
 public abstract class KuffleType {
 	protected Map<String, Game> games = null;
 	protected Map<String, Integer> playerRank = null;
+	protected Type type = Type.UNKNOWN;
 	
 	public CraftManager crafts = null;
 	public Scores scores = null;
@@ -91,7 +92,19 @@ public abstract class KuffleType {
 		}
 		
 		Config.setupConfig(plugin.getConfig());
-		setupTypeResources(plugin);
+		
+		try {
+			setupTypeResources(plugin);
+		} catch (KuffleFileLoadException e) {
+			type = Type.UNKNOWN;
+			
+			TargetManager.clear();
+			RewardManager.clear();
+			
+			throw e;
+		}
+		
+		CraftManager.setupCrafts(type);
 	}
 	
 	/**
@@ -121,6 +134,12 @@ public abstract class KuffleType {
 
 			crafts.clear();
 		}
+	}
+	
+	public enum Type {
+		UNKNOWN,
+		ITEMS,
+		BLOCKS
 	}
 	
 	/**
