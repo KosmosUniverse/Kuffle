@@ -89,7 +89,7 @@ public class KuffleAddDuringGame implements CommandExecutor {
 
 		KuffleMain.games.get(player.getName()).setup();
 		KuffleMain.scores.setupPlayerScores(KuffleMain.games.get(player.getName()));
-		KuffleMain.updatePlayersHead();
+		KuffleMain.updatePlayersHeads();
 
 		KuffleMain.paused = false;
 

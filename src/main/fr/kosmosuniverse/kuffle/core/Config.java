@@ -10,7 +10,6 @@ import org.json.simple.JSONObject;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleConfigException;
-import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 /**
  * 
@@ -107,9 +106,9 @@ public class Config {
 	 */
 	private static void checkAndSetConfig(FileConfiguration configFile) {
 		if (!configFile.contains("game_settings.lang")
-				|| !KuffleMain.langs.contains(configFile.getString("game_settings.lang"))) {
+				|| !LangManager.langExists(configFile.getString("game_settings.lang"))) {
 			configValues.lang = "en";
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "lang"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "lang"));
 			configFile.set("game_settings.lang", "en");
 		} else {
 			configValues.lang = configFile.getString("game_settings.lang");
@@ -131,20 +130,20 @@ public class Config {
 	 */
 	private static void checkFileSpread(FileConfiguration configFile) {
 		if (!configFile.contains("game_settings.spreadplayers.enable")) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "enabling spreadplayers"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling spreadplayers"));
 			configFile.set("game_settings.spreadplayers.enable", false);
 		}
 		
 		if (!configFile.contains("game_settings.spreadplayers.minimum_distance")
 				|| configFile.getInt("game_settings.spreadplayers.minimum_distance") < 1) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "spreadplayers minimum distance"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "spreadplayers minimum distance"));
 			configFile.set("game_settings.spreadplayers.minimum_distance", 500);
 		}
 
 		if (!configFile.contains("game_settings.spreadplayers.minimum_radius")
 				|| configFile.getInt("game_settings.spreadplayers.minimum_radius") < configFile
 						.getInt("game_settings.spreadplayers.minimum_distance")) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "spreadplayers minimum radius"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "spreadplayers minimum radius"));
 			configFile.set("game_settings.spreadplayers.minimum_radius", 1000);
 		}
 	}
@@ -156,40 +155,40 @@ public class Config {
 	 */
 	private static void checkFileModes(FileConfiguration configFile) {
 		if (!configFile.contains("game_settings.team.enable")) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "enabling team"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling team"));
 			configFile.set("game_settings.team.enable", false);
 		}
 
 		if (!configFile.contains("game_settings.team.size") || configFile.getInt("game_settings.team.size") < 2
 				|| configFile.getInt("game_settings.team.size") > 10) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "max team size"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "max team size"));
 			configFile.set("game_settings.team.size", 2);
 		}
 		
 		if (!configFile.contains("game_settings.same_mode")) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "enabling same mode"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling same mode"));
 			configFile.set("game_settings.same_mode", false);
 		}
 		
 		if (!configFile.contains("game_settings.sbtt_mode.enable")) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "SBTT mode"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "SBTT mode"));
 			configFile.set("game_settings.sbtt_mode.enable", false);
 		}
 		
 		if (!configFile.contains("game_settings.sbtt_mode.amount") ||
 				configFile.getInt("game_settings.sbtt_mode.amount") < 1 ||
 				configFile.getInt("game_settings.sbtt_mode.amount") > 9) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "SBTT item amount"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "SBTT item amount"));
 			configFile.set("game_settings.sbtt_mode.amount", 4);
 		}
 		
 		if (!configFile.contains("game_settings.double_mode")) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "Double mode"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "Double mode"));
 			configFile.set("game_settings.double_mode", false);
 		}
 		
 		if (!configFile.contains("game_settings.passive")) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "Passive mode"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "Passive mode"));
 			configFile.set("game_settings.passive", false);
 		}
 	}
@@ -202,28 +201,28 @@ public class Config {
 	private static void checkFileStart(FileConfiguration configFile) {
 		if (!configFile.contains("game_settings.target_per_age")
 				|| configFile.getInt("game_settings.target_per_age") < 1) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "item per age"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "item per age"));
 			configFile.set("game_settings.target_per_age", 5);
 		}
 		
 		if (!configFile.contains("game_settings.start_time") || configFile.getInt("game_settings.start_time") < 1) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "start time"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "start time"));
 			configFile.set("game_settings.start_time", 4);
 		}
 
 		if (!configFile.contains("game_settings.time_added") || configFile.getInt("game_settings.time_added") < 1) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "time added"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "time added"));
 			configFile.set("game_settings.time_added", 2);
 		}
 
 		if (!configFile.contains("game_settings.last_age") || configFile.getInt("game_settings.last_age") < 1 || configFile.getInt("game_settings.last_age") > AgeManager.getLastAgeIndex()) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "max ages"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "max ages"));
 			configFile.set("game_settings.last_age", AgeManager.getLastAgeIndex());
 		}
 
 		if (!configFile.contains("game_settings.level") || configFile.getInt("game_settings.level") < 0
 				|| configFile.getInt("game_settings.level") > 3) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "level"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "level"));
 			configFile.set("game_settings.level", 1);
 		}
 	}
@@ -235,32 +234,32 @@ public class Config {
 	 */
 	private static void checkFileOther(FileConfiguration configFile) {
 		if (!configFile.contains("game_settings.skip.enable")) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "enabling skip"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling skip"));
 			configFile.set("game_settings.skip.enable", true);
 		}
 
 		if (!configFile.contains("game_settings.skip.age") || configFile.getInt("game_settings.skip.age") < 1) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "skip age"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "skip age"));
 			configFile.set("game_settings.skip.age", 2);
 		}
 
 		if (!configFile.contains("game_settings.custom_crafts")) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "enabling custom crafts"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling custom crafts"));
 			configFile.set("game_settings.custom_crafts", true);
 		}
 		
 		if (!configFile.contains("game_settings.xp_max.end_teleporter")) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "xp max EndTeleporter"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "xp max EndTeleporter"));
 			configFile.set("game_settings.xp_max.end_teleporter", 5);
 		}
 		
 		if (!configFile.contains("game_settings.xp_max.overworld_teleporter")) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "xp max OverworldTeleporter"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "xp max OverworldTeleporter"));
 			configFile.set("game_settings.xp_max.overworld_teleporter", 10);
 		}
 		
 		if (!configFile.contains("game_settings.xp_max.coral_compass")) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "xp max CoralCompass"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "xp max CoralCompass"));
 			configFile.set("game_settings.xp_max.coral_compass", 20);
 		}
 	}
@@ -272,7 +271,7 @@ public class Config {
 	 */
 	private static void checkFileEnd(FileConfiguration configFile) {
 		if (!configFile.contains("game_settings.auto_detect_game_end.enable")) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "enabling auto detect game end"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling auto detect game end"));
 			configFile.set("game_settings.auto_detect_game_end.enable", false);
 		}
 		
@@ -280,7 +279,7 @@ public class Config {
 		
 		if (!configFile.contains("game_settings.auto_detect_game_end.end_when_one") ||
 				(!configValues.gameEnd && configFile.getBoolean("game_settings.auto_detect_game_end.end_when_one"))) {
-			KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, CONFIG_DEFAULT).replace("<#>", "game end when one"));
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "game end when one"));
 			configFile.set("game_settings.auto_detect_game_end.end_when_one", false);
 		}
 	}
@@ -1023,7 +1022,7 @@ public class Config {
 	 * @param configLang	value used to set lang
 	 */
 	private static void setLang(String configLang) {
-		if (!KuffleMain.langs.contains(configLang)) {
+		if (!LangManager.langExists(configLang)) {
 			error = "Unknown lang !";
 			setRet = false;
 		} else {

@@ -1,63 +1,31 @@
 package main.fr.kosmosuniverse.kuffle;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
-import main.fr.kosmosuniverse.kuffle.commands.*;
-import main.fr.kosmosuniverse.kuffle.core.*;
-import main.fr.kosmosuniverse.kuffle.crafts.ACrafts;
-import main.fr.kosmosuniverse.kuffle.listeners.*;
-import main.fr.kosmosuniverse.kuffle.tabcompleters.*;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
+import main.fr.kosmosuniverse.kuffle.listeners.PlayerEvents;
+import main.fr.kosmosuniverse.kuffle.listeners.PlayerInteract;
+import main.fr.kosmosuniverse.kuffle.type.KuffleBlocks;
+import main.fr.kosmosuniverse.kuffle.type.KuffleItems;
 import main.fr.kosmosuniverse.kuffle.type.KuffleType;
-import main.fr.kosmosuniverse.kuffle.utils.FilesConformity;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 public class KuffleMain extends JavaPlugin {
 	public static KuffleType type = null;
-	public static Map<String, Map<String, RewardElem>> allRewards;
-	public static Map<String, Map<String, String>> allItemsLangs;
-	public static Map<String, Map<String, String>> allLangs;
-
-	public static Map<String, List<String>> allItems = new HashMap<>();
-	public static Map<String, List<String>> allSbtts = new HashMap<>();
-	public static Map<String, List<Inventory>> itemsInvs;
-
-	public static Map<String, Game> games = new HashMap<>();
-	public static Map<String, Integer> playerRank = new HashMap<>();
-	public static Map<Integer, String> versions;
-
-	public static List<String> langs;
-	public static List<Age> ages;
-	public static List<Level> levels;
 
 	public static KuffleMain current;
-	public static GameLoop loop;
-	public static Config config;
-	public static LogManager gameLogs;
-	public static LogManager systemLogs;
-	public static TeamManager teams;
-	public static CraftManager crafts = null;
-	public static ScoreManager scores;
-	public static Inventory playersHeads;
 	public static PlayerInteract playerInteract;
 	public static PlayerEvents playerEvents;
 	
 	public static boolean paused = false;
 	public static boolean loaded = false;
-
 	public static boolean gameStarted = false;
 
 	public KuffleMain() {
@@ -73,25 +41,33 @@ public class KuffleMain extends JavaPlugin {
 		saveDefaultConfig();
 		reloadConfig();
 		
-		if (!setup(this)) {
+		try {
+			type = new KuffleType(this);
+			((KuffleItems) type).setupKuffleType(this);
+			type.clearType();
+			((KuffleBlocks) type).setupKuffleType(this);
+			type.clearType();
+		} catch (KuffleFileLoadException e) {
 			this.getPluginLoader().disablePlugin(this);
+			Utils.logException(e);
 		}
 		
 		loaded = true;
+		current = this;
 
-		systemLogs.logMsg(this.getName(), Utils.getLangString(null, "ON"));
+		LogManager.getInstanceSystem().logMsg(this.getName(), LangManager.getMsgLang("ON", Config.getLang()));
 	}
 
 	@Override
 	public void onDisable() {
 		if (loaded) {
-			killAll();
+			type.clear();
 		}
 
-		systemLogs.logMsg(this.getName(), Utils.getLangString(null, "OFF"));
+		LogManager.getInstanceSystem().logMsg(this.getName(), LangManager.getMsgLang("OFF", Config.getLang()));
 	}
 	
-	private static boolean setup(JavaPlugin plugin) {
+	/*private static boolean setup(JavaPlugin plugin) {
 		current = (KuffleMain) plugin;
 		
 		gameLogs = new LogManager(plugin.getDataFolder().getPath() + File.separator + "KuffleItemsGamelogs.txt");
@@ -197,109 +173,5 @@ public class KuffleMain extends JavaPlugin {
 		systemLogs.logMsg(plugin.getName(), Utils.getLangString(null, "ADD_TAB").replace("%i", "13"));
 
 		return true;
-	}
-
-	public static void addRecipe(Recipe recipe) {
-		current.getServer().addRecipe(recipe);
-	}
-
-	public static void removeRecipe(String name) {
-		NamespacedKey n = new NamespacedKey(current, name);
-
-		for (String playerName : games.keySet()) {
-			games.get(playerName).getPlayer().undiscoverRecipe(n);
-		}
-
-		current.getServer().removeRecipe(n);
-	}
-
-	private void killAll() {
-		if (allRewards != null) {
-			allRewards.forEach((k, v) -> v.clear());
-
-			allRewards.clear();
-		}
-
-		if (allItems != null) {
-			allItems.forEach((k, v) -> v.clear());
-
-			allItems.clear();
-		}
-
-		if (allItemsLangs != null) {
-			allItemsLangs.forEach((k, v) -> v.clear());
-
-			allItemsLangs.clear();
-		}
-
-		if (itemsInvs != null) {
-			itemsInvs.forEach((k, v) -> v.clear());
-
-			itemsInvs.clear();
-		}
-
-		if (playerRank != null) {
-			playerRank.clear();
-		}
-
-		if (games != null) {
-			games.clear();
-		}
-
-		if (langs != null) {
-			langs.clear();
-		}
-
-		if (ages != null) {
-			ages.clear();
-		}
-
-		if (crafts != null) {
-			for (ACrafts craft : crafts.getRecipeList()) {
-				removeRecipe(craft.getName());
-			}
-
-			crafts.clear();
-		}
-
-		if (config != null) {
-			config.clear();
-		}
-	}
-	
-	public static void updatePlayersHead() {
-		Inventory newInv = Bukkit.createInventory(null, Utils.getNbInventoryRows(games.size()), "§8Players");
-		
-		for (String playerName : games.keySet()) {
-			newInv.addItem(Utils.getHead(games.get(playerName).getPlayer(), games.get(playerName).getItemDisplay()));
-		}
-		
-		playersHeads.clear();
-		playersHeads = newInv;
-	}
-
-	public static void updatePlayersHeadData(String player, String currentItem) {
-		ItemMeta itM;
-
-		if (playersHeads == null) {
-			return;
-		}
-
-		for (ItemStack item : playersHeads) {
-			if (item != null) {
-				itM = item.getItemMeta();
-
-				if (itM.getDisplayName().equals(player)) {
-					List<String> lore = new ArrayList<>();
-
-					if (currentItem != null) {
-						lore.add(currentItem);
-					}
-
-					itM.setLore(lore);
-					item.setItemMeta(itM);
-				}
-			}
-		}
-	}
+	}*/
 }

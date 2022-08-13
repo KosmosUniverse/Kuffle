@@ -1,16 +1,14 @@
 package main.fr.kosmosuniverse.kuffle.type;
 
 import java.io.File;
-import java.util.Map;
 
-import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.simple.parser.ParseException;
 
 import main.fr.kosmosuniverse.kuffle.core.AgeManager;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
-import main.fr.kosmosuniverse.kuffle.core.Game;
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LevelManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
@@ -19,6 +17,7 @@ import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 import main.fr.kosmosuniverse.kuffle.core.VersionManager;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
+import main.fr.kosmosuniverse.kuffle.listeners.PlayerEvents;
 import main.fr.kosmosuniverse.kuffle.utils.FilesConformity;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
@@ -27,17 +26,15 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  * @author KosmosUniverse
  *
  */
-public abstract class KuffleType {
-	protected Map<String, Game> games = null;
-	protected Map<String, Integer> playerRank = null;
-	protected Type type = Type.UNKNOWN;
+public class KuffleType {
+	protected static Type type = Type.UNKNOWN;
+	private static PlayerEvents playerEvents;
 	
-	public Inventory playersHeads = null;
-	
-	/**
-	 * Setup all type related resources
-	 */
-	protected abstract void setupTypeResources(JavaPlugin plugin) throws KuffleFileLoadException ;
+	public enum Type {
+		UNKNOWN,
+		ITEMS,
+		BLOCKS
+	}
 	
 	/**
 	 * Constructor
@@ -47,8 +44,8 @@ public abstract class KuffleType {
 	 * @throws KuffleFileLoadException if files load fails
 	 */
 	public KuffleType(JavaPlugin plugin) throws KuffleFileLoadException {
-		LogManager.getInstanceGame(plugin.getDataFolder().getPath() + File.separator + "KuffleGamelogs.txt");
-		LogManager.getInstanceSystem(plugin.getDataFolder().getPath() + File.separator + "KuffleSystemlogs.txt");
+		LogManager.setupInstanceGame(plugin.getDataFolder().getPath() + File.separator + "KuffleGamelogs.txt");
+		LogManager.setupInstanceSystem(plugin.getDataFolder().getPath() + File.separator + "KuffleSystemlogs.txt");
 		
 		try {
 			LangManager.setupTargetsLangs(FilesConformity.getContent("targets_langs.json"));
@@ -89,6 +86,28 @@ public abstract class KuffleType {
 		
 		Config.setupConfig(plugin.getConfig());
 		
+		playerEvents = new PlayerEvents(plugin.getDataFolder());
+		plugin.getServer().getPluginManager().registerEvents(playerEvents, plugin);
+	}
+	
+	/**
+	 * Setup all type related resources
+	 *
+	 * @param plugin	The plugin itself
+	 * 
+	 * @throws KuffleFileLoadException if targets, sbbts or rewards files loading fails
+	 */
+	protected void setupTypeResources(JavaPlugin plugin) throws KuffleFileLoadException {
+	}
+	
+	/**
+	 * Setups Kuffle specific type
+	 * 
+	 * @param plugin	The plugin itself
+	 * 
+	 * @throws KuffleFileLoadException if file loading fails
+	 */
+	protected void setupType(JavaPlugin plugin) throws KuffleFileLoadException {
 		try {
 			setupTypeResources(plugin);
 		} catch (KuffleFileLoadException e) {
@@ -102,54 +121,29 @@ public abstract class KuffleType {
 		
 		CraftManager.setupCrafts(type);
 		ScoreManager.setupPlayerScores();
+		GameManager.setupGame();
 	}
 	
 	/**
 	 * Clear all the Objects
 	 */
-	protected final void clear() {
-		RewardManager.clear();
-		TargetManager.clear();
+	public final void clear() {
+		clearType();
+		
 		Config.clear();
 		LevelManager.clear();
-		LangManager.clear();
 		AgeManager.clear();
 		VersionManager.clear();
-		TargetManager.clear();
-		RewardManager.clear();
-		CraftManager.clear();
+		LangManager.clear();
+	}
+	
+	public final void clearType() {
+		GameManager.clear();
 		ScoreManager.clear();
+		CraftManager.clear();
+		RewardManager.clear();
+		TargetManager.clear();
 		
-		if (playerRank != null) {
-			playerRank.clear();
-		}
-
-		if (games != null) {
-			games.clear();
-		}
-	}
-	
-	public enum Type {
-		UNKNOWN,
-		ITEMS,
-		BLOCKS
-	}
-	
-	/**
-	 * Get all the games
-	 * 
-	 * @return the games map
-	 */
-	public final Map<String, Game> getGames() {
-		return games;
-	}
-	
-	/**
-	 * Get all the playersRanks
-	 * 
-	 * @return the players ranks map
-	 */
-	public final Map<String, Integer> getPlayerRanks() {
-		return playerRank;
+		type = Type.UNKNOWN;
 	}
 }

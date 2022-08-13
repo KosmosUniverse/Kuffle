@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.crafts.ACrafts;
 import main.fr.kosmosuniverse.kuffle.crafts.Bell;
 import main.fr.kosmosuniverse.kuffle.crafts.activables.CoralCompass;
 import main.fr.kosmosuniverse.kuffle.crafts.activables.EndPortalFrame;
 import main.fr.kosmosuniverse.kuffle.crafts.activables.EndTeleporter;
 import main.fr.kosmosuniverse.kuffle.crafts.activables.OverworldTeleporter;
+import main.fr.kosmosuniverse.kuffle.crafts.activables.Template;
 import main.fr.kosmosuniverse.kuffle.crafts.armors.ChainmailBoots;
 import main.fr.kosmosuniverse.kuffle.crafts.armors.ChainmailChestplate;
 import main.fr.kosmosuniverse.kuffle.crafts.armors.ChainmailHelmet;
@@ -90,7 +94,7 @@ public class CraftManager {
 			loadBlocksCrafts();
 		}
 		
-		if (VersionManager.findVersionNumber(VersionManager.getVersion()) >= VersionManager.findVersionNumber("1.17")) {
+		if (VersionManager.getVersionByValue(VersionManager.getVersion()) >= VersionManager.getVersionByValue("1.17")) {
 			recipes.add(new MossBlock());
 			recipes.add(new SmallDripleaf());
 			recipes.add(new BuddingAmethyst());
@@ -134,7 +138,7 @@ public class CraftManager {
 		recipes.add(new Bell());
 		recipes.add(new Saddle());
 		
-		if (VersionManager.findVersionNumber(VersionManager.getVersion()) >= VersionManager.findVersionNumber("1.17")) {
+		if (VersionManager.getVersionByValue(VersionManager.getVersion()) >= VersionManager.getVersionByValue("1.17")) {
 			recipes.add(new CoalOreDeepslate());
 			recipes.add(new CopperOreDeepslate());
 			recipes.add(new DiamondOreDeepslate());
@@ -164,14 +168,14 @@ public class CraftManager {
 		recipes.add(new OverworldTeleporter());
 		recipes.add(new CoralCompass());
 		
-		if (VersionManager.findVersionNumber(VersionManager.getVersion()) >= VersionManager.findVersionNumber("1.16")) {
+		if (VersionManager.getVersionByValue(VersionManager.getVersion()) >= VersionManager.getVersionByValue("1.16")) {
 			recipes.add(new ChainmailHelmet());
 			recipes.add(new ChainmailChestplate());
 			recipes.add(new ChainmailLeggings());
 			recipes.add(new ChainmailBoots());
 		}
 		
-		if (VersionManager.findVersionNumber(VersionManager.getVersion()) >= VersionManager.findVersionNumber("1.17")) {
+		if (VersionManager.getVersionByValue(VersionManager.getVersion()) >= VersionManager.getVersionByValue("1.17")) {
 			recipes.add(new MossBlock());
 			recipes.add(new SmallDripleaf());
 			recipes.add(new BuddingAmethyst());
@@ -205,8 +209,9 @@ public class CraftManager {
 	 * 
 	 * @param craft	The ACraft object to add
 	 */
-	public void addCraft(ACrafts craft) {
+	public static void addCraft(ACrafts craft) {
 		recipes.add(craft);
+		KuffleMain.current.getServer().addRecipe(craft.getRecipe());
 	}
 	
 	/**
@@ -214,7 +219,7 @@ public class CraftManager {
 	 * 
 	 * @param name	The ACraft object name
 	 */
-	public void removeCraft(String name) {
+	public static void removeCraft(String name) {
 		ACrafts craft = null;
 		
 		for (ACrafts tmp : recipes) {
@@ -225,6 +230,9 @@ public class CraftManager {
 		
 		if (craft != null) {
 			recipes.remove(craft);
+			
+			NamespacedKey n = new NamespacedKey(KuffleMain.current, name);
+			KuffleMain.current.getServer().removeRecipe(n);
 		}
 	}
 	
@@ -233,7 +241,7 @@ public class CraftManager {
 	 * 
 	 * @return the recipes list as ACraft list
 	 */
-	public List<ACrafts> getRecipeList() {
+	public static List<ACrafts> getRecipeList() {
 		return (recipes);
 	}
 	
@@ -242,7 +250,7 @@ public class CraftManager {
 	 * 
 	 * @return the inventory of all crafts
 	 */
-	public Inventory getAllCraftsInventory() {
+	public static Inventory getAllCraftsInventory() {
 		Inventory inv = Bukkit.createInventory(null, Utils.getNbInventoryRows(recipes.size()), "§8AllCustomCrafts");
 		int i = 0;
 		
@@ -261,7 +269,7 @@ public class CraftManager {
 	 * 
 	 * @return the found ACraft object, null instead
 	 */
-	public ACrafts getCraftByItem(ItemStack item) {
+	public static ACrafts getCraftByItem(ItemStack item) {
 		for (ACrafts craft : recipes) {
 			if (ItemUtils.itemComparison(craft.getItem(), item, item.hasItemMeta(),
 					item.hasItemMeta() ? item.getItemMeta().hasDisplayName() : false,
@@ -280,7 +288,7 @@ public class CraftManager {
 	 * 
 	 * @return the found ACraft object, null instead
 	 */
-	public ACrafts getCraftByInventoryName(String invName) {
+	public static ACrafts getCraftByInventoryName(String invName) {
 		for (ACrafts craft : recipes) {
 			String name = "§8" + craft.getName();
 			
@@ -299,7 +307,7 @@ public class CraftManager {
 	 * 
 	 * @return the ItemStack object found by name, null instead
 	 */
-	public ItemStack findItemByName(String itemName) {
+	public static ItemStack findItemByName(String itemName) {
 		for (ACrafts craft : recipes) {
 			if (itemName.equals(craft.getName())) {
 				return (craft.getItem());
@@ -307,5 +315,82 @@ public class CraftManager {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Setups the template items
+	 */
+	public static void setupCraftTemplates() {
+		List<Template> templates = new ArrayList<>();
+
+		for (int i = 0; i < Config.getLastAge().number; i++)  {
+			String name = AgeManager.getAgeByNumber(i).name;
+
+			name = name.replace("_Age", "");
+			templates.add(new Template(name, getMaterials(AgeManager.getAgeByNumber(i).name)));
+		}
+
+		for (Template t : templates) {
+			addCraft(t);
+		}
+	}
+
+	/**
+	 * Removes the template items
+	 */
+	public static void removeCraftTemplates() {
+		for (int i = 0; i < Config.getLastAge().number; i++)  {
+			String name = AgeManager.getAgeByNumber(i).name;
+			
+			name = name.replace("_Age", "");
+			name = name + "Template";
+
+			removeCraft(name);
+		}
+	}
+	
+	/**
+	 * Reloads the templates
+	 * 
+	 * @param name	The old template name
+	 * @param age	The Age for the new template
+	 */
+	public static void reloadTemplate(String name, String age) {
+		removeCraft(name);
+
+		String tmp = age;
+
+		tmp = tmp.replace("_Age", "");
+
+		Template t = new Template(tmp, getMaterials(age));
+
+		addCraft(t);
+
+		GameManager.getGames().forEach((playerName, game) ->
+			game.player.discoverRecipe(new NamespacedKey(KuffleMain.current, t.getName()))
+		);
+	}
+	
+	/**
+	 * Get Material list for templates in a specific Age
+	 * 
+	 * @param age	The specific Age
+	 * 
+	 * @return the material list
+	 */
+	private static List<Material> getMaterials(String age) {
+		List<Material> compose = new ArrayList<>();
+		List<String> done = new ArrayList<>();
+
+		for (int cnt = 0; cnt < Config.getSBTTAmount(); cnt++) {
+			done.add(TargetManager.newTarget(done, age));
+		}
+
+		for (String item : done) {
+			compose.add(Material.matchMaterial(item));
+		}
+
+		done.clear();
+		return compose;
 	}
 }

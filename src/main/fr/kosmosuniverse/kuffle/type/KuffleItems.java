@@ -25,7 +25,18 @@ public class KuffleItems extends KuffleType {
 	public KuffleItems(JavaPlugin plugin) throws KuffleFileLoadException {
 		super(plugin);
 	}
-
+	
+	/**
+	 * Setups the kuffle type
+	 * 
+	 * @param plugin	the plugin itself
+	 * 
+	 * @throws KuffleFileLoadException if file loading fails
+	 */
+	public void setupKuffleType(JavaPlugin plugin) throws KuffleFileLoadException {
+		setupType(plugin);
+	}
+	
 	@Override
 	protected void setupTypeResources(JavaPlugin plugin) throws KuffleFileLoadException  {
 		type = Type.ITEMS;

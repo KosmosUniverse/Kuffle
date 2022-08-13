@@ -8,8 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import main.fr.kosmosuniverse.kuffle.utils.Utils;
-
 /**
  * 
  * @author KosmosUniverse
@@ -35,7 +33,7 @@ public class SpreadPlayer {
 	 */
     public static void spreadPlayers(Player sender, double distance, long minRadius, List<Player> players) {
         if (distance < 0) {
-            sender.sendMessage(ChatColor.RED + Utils.getLangString(null, "TOO_SHORT"));
+            sender.sendMessage(ChatColor.RED + LangManager.getMsgLang("TOO_SHORT", Config.getLang()));
             return ;
         }
         

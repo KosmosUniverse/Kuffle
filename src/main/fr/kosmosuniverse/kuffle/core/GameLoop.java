@@ -29,13 +29,13 @@ public class GameLoop {
 				bestRank = getBestRank();
 				worstRank = getWorstRank();
 
-				if (KuffleMain.config.getGameEnd() && !finished) {
+				if (Config.getGameEnd() && !finished) {
 					int lasts = Utils.playerLasts();
 
 					if (lasts == 0) {
 						Utils.printGameEnd();
 						finished = true;
-					} else if (lasts == 1 && KuffleMain.config.getEndOne()) {
+					} else if (lasts == 1 && Config.getEndOne()) {
 						Utils.forceFinish(bestRank);
 					}
 				}

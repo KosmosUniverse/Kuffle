@@ -106,7 +106,7 @@ public class TargetManager {
 				finalList.add((String) ageElems.get(target));
 				
 				if (Material.matchMaterial((String) ageElems.get(target)) == null) {
-					LogManager.getInstanceSystem("Material [" + (String) ageElems.get(target) + "] does not exists !");
+					LogManager.getInstanceSystem().logSystemMsg("Material [" + (String) ageElems.get(target) + "] does not exists !");
 				}
 			}
 			
@@ -130,6 +130,16 @@ public class TargetManager {
 			});
 			
 			targets.clear();
+		}
+		
+		if (sbtts != null) {
+			sbtts.forEach((k, v) -> {
+				if (v != null) {
+					v.clear();
+				}
+			});
+			
+			sbtts.clear();
 		}
 		
 		if (targetsInvs != null) {

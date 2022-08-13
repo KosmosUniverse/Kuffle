@@ -75,7 +75,7 @@ public class KuffleLoad implements CommandExecutor {
 			}
 		}
 		
-		KuffleMain.updatePlayersHead();
+		KuffleMain.updatePlayersHeads();
 		
 		loadRankAndTeams(parser);
 		

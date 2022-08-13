@@ -14,7 +14,7 @@ import org.json.simple.parser.ParseException;
  *
  */
 public class VersionManager {
-	public static Map<Integer, String> versions = null;
+	private static Map<Integer, String> versions = null;
 	
 	/**
 	 * Private VersionManager constructor
@@ -74,13 +74,13 @@ public class VersionManager {
 	}
 	
 	/**
-	 * Finds version key from version value
+	 * Gets version key from version value
 	 * 
 	 * @param version	The version value
 	 * 
 	 * @return the key if found, -1 instead
 	 */
-	public static int findVersionNumber(String version) {
+	public static int getVersionByValue(String version) {
 		for (int key : versions.keySet()) {
 			if (versions.get(key).equals(version)) {
 				return key;
@@ -88,5 +88,16 @@ public class VersionManager {
 		}
 
 		return -1;
+	}
+	
+	/**
+	 * Gets version key from version index
+	 * 
+	 * @param version	The version index
+	 * 
+	 * @return the version if found, null instead
+	 */
+	public static String getVersionByIndex(int version) {
+		return versions.get(version);
 	}
 }

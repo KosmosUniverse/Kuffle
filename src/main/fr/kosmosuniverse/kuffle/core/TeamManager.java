@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 /**
@@ -252,7 +251,7 @@ public class TeamManager {
 				}
 			}
 		} else {
-			sb.append(Utils.getLangString(null, "NO_TEAM"));
+			sb.append(LangManager.getMsgLang("NO_TEAM", Config.getLang()));
 		}
 		
 		return sb.toString();
@@ -306,9 +305,9 @@ public class TeamManager {
 					Game tmpPlayer = games.get((String) obj);
 					
 					if (tmpPlayer == null) {
-						KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(null, "PLAYER_NOT_EXISTS").replace("<#>", "<" + (String) obj + ">"));
+						LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("PLAYER_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + (String) obj + ">"));
 					} else {
-						Player p = tmpPlayer.getPlayer();
+						Player p = tmpPlayer.player;
 						affectPlayer(name, p);	
 					}
 				}

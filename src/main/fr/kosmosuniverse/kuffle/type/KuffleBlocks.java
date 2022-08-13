@@ -9,9 +9,32 @@ import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
 import main.fr.kosmosuniverse.kuffle.utils.FilesConformity;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class KuffleBlocks extends KuffleType {
+	/**
+	 * Constructor
+	 * 
+	 * @param plugin	the plugin itself
+	 * 
+	 * @throws KuffleFileLoadException if one of the resource file load fails
+	 */
 	public KuffleBlocks(JavaPlugin plugin) throws KuffleFileLoadException {
 		super(plugin);
+	}
+	
+	/**
+	 * Setups the kuffle type
+	 * 
+	 * @param plugin	the plugin itself
+	 * 
+	 * @throws KuffleFileLoadException if file loading fails
+	 */
+	public void setupKuffleType(JavaPlugin plugin) throws KuffleFileLoadException {
+		setupType(plugin);
 	}
 
 	@Override
@@ -25,7 +48,7 @@ public class KuffleBlocks extends KuffleType {
 			Utils.logException(e);
 			TargetManager.clear();
 			
-			throw new KuffleFileLoadException("Items or Sbtts load failed !");
+			throw new KuffleFileLoadException("Blocks or Sbtts load failed !");
 		}
 		
 		try {

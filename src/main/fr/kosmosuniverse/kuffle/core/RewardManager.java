@@ -226,6 +226,22 @@ public class RewardManager {
 	}
 	
 	/**
+	 * Gives to a specific player the effects of a specific Age
+	 * 
+	 * @param player	The player that will receive the effect
+	 * @param age		The Age the effect will be taken from
+	 */
+	public static void givePlayerRewardEffect(Player player, String age) {
+		Map<String, RewardElem> ageReward = rewards.get(age);
+		
+		for (String k : ageReward.keySet()) {
+			if (k.contains("potion")) {				
+				player.addPotionEffect(new PotionEffect(findEffect(ageReward.get(k).getEffect()), 999999, ageReward.get(k).getAmount()));
+			}
+		}
+	}
+	
+	/**
 	 * Removes previous reward effects
 	 * 
 	 * @param ageName	The age name of the rewards it may remove
