@@ -43,9 +43,11 @@ public class Config {
 		configElems.put("SAME_MODE", (Object b) -> setSame((Boolean) b));
 		configElems.put("DOUBLE_MODE", (Object b) -> setDoubleMode((Boolean) b));
 		configElems.put("SBTT_MODE", (Object b) -> setSbttMode((Boolean) b));
-		configElems.put("AUTO_DETECT_END", (Object b) -> setGameEnd((Boolean) b));
+		configElems.put("PRINT_TAB", (Object b) -> setPrintTab((Boolean) b));
+		configElems.put("PRINT_TAB_ALL", (Object b) -> setPrintTabAll((Boolean) b));
 		configElems.put("END_WHEN_ONE", (Object b) -> setEndOne((Boolean) b));
-		configElems.put("PASSIVE", (Object b) -> setPassive((Boolean) b));
+		configElems.put("PASSIVE_ALL", (Object b) -> setPassiveAll((Boolean) b));
+		configElems.put("PASSIVE_TEAM", (Object b) -> setPassiveTeam((Boolean) b));
 		configElems.put("SPREAD_MIN_DISTANCE", (Object i) -> setSpreadDistance((Integer) i));
 		configElems.put("SPREAD_MIN_RADIUS", (Object i) -> setSpreadRadius((Integer) i));
 		configElems.put("TARGET_PER_AGE", (Object i) -> setItemAge((Integer) i));
@@ -165,31 +167,36 @@ public class Config {
 			configFile.set("game_settings.team.size", 2);
 		}
 		
-		if (!configFile.contains("game_settings.same_mode")) {
+		if (!configFile.contains("game_settings.mode.same")) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling same mode"));
-			configFile.set("game_settings.same_mode", false);
+			configFile.set("game_settings.mode.same", false);
 		}
 		
-		if (!configFile.contains("game_settings.sbtt_mode.enable")) {
+		if (!configFile.contains("game_settings.mode.sbtt.enable")) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "SBTT mode"));
-			configFile.set("game_settings.sbtt_mode.enable", false);
+			configFile.set("game_settings.mode.sbtt.enable", false);
 		}
 		
-		if (!configFile.contains("game_settings.sbtt_mode.amount") ||
-				configFile.getInt("game_settings.sbtt_mode.amount") < 1 ||
-				configFile.getInt("game_settings.sbtt_mode.amount") > 9) {
+		if (!configFile.contains("game_settings.mode.sbtt.amount") ||
+				configFile.getInt("game_settings.mode.sbtt.amount") < 1 ||
+				configFile.getInt("game_settings.mode.sbtt.amount") > 9) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "SBTT item amount"));
-			configFile.set("game_settings.sbtt_mode.amount", 4);
+			configFile.set("game_settings.mode.sbtt.amount", 4);
 		}
 		
-		if (!configFile.contains("game_settings.double_mode")) {
+		if (!configFile.contains("game_settings.mode.double")) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "Double mode"));
-			configFile.set("game_settings.double_mode", false);
+			configFile.set("game_settings.mode.double", false);
 		}
 		
-		if (!configFile.contains("game_settings.passive")) {
+		if (!configFile.contains("game_settings.passive.all")) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "Passive mode"));
-			configFile.set("game_settings.passive", false);
+			configFile.set("game_settings.passive.all", false);
+		}
+		
+		if (!configFile.contains("game_settings.passive.team")) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "Passive mode"));
+			configFile.set("game_settings.passive.team", false);
 		}
 	}
 	
@@ -205,25 +212,25 @@ public class Config {
 			configFile.set("game_settings.target_per_age", 5);
 		}
 		
-		if (!configFile.contains("game_settings.start_time") || configFile.getInt("game_settings.start_time") < 1) {
+		if (!configFile.contains("game_settings.time.start") || configFile.getInt("game_settings.start_time") < 1) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "start time"));
-			configFile.set("game_settings.start_time", 4);
+			configFile.set("game_settings.time.start", 4);
 		}
 
-		if (!configFile.contains("game_settings.time_added") || configFile.getInt("game_settings.time_added") < 1) {
+		if (!configFile.contains("game_settings.time.added") || configFile.getInt("game_settings.time_added") < 1) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "time added"));
-			configFile.set("game_settings.time_added", 2);
+			configFile.set("game_settings.time.added", 2);
 		}
 
-		if (!configFile.contains("game_settings.last_age") || configFile.getInt("game_settings.last_age") < 1 || configFile.getInt("game_settings.last_age") > AgeManager.getLastAgeIndex()) {
+		if (!configFile.contains("game_settings.last_age") || AgeManager.getAgeByName(configFile.getString("game_settings.last_age")) == null || AgeManager.getAgeByName(configFile.getString("game_settings.last_age")).number == -1) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "max ages"));
-			configFile.set("game_settings.last_age", AgeManager.getLastAgeIndex());
+			configFile.set("game_settings.last_age", AgeManager.getLastAge().name);
 		}
 
-		if (!configFile.contains("game_settings.level") || configFile.getInt("game_settings.level") < 0
-				|| configFile.getInt("game_settings.level") > 3) {
+		if (!configFile.contains("game_settings.level") ||
+				LevelManager.levelExists(configFile.getString("game_settings.level"))) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "level"));
-			configFile.set("game_settings.level", 1);
+			configFile.set("game_settings.level", LevelManager.getFirstLevel().name);
 		}
 	}
 	
@@ -238,9 +245,9 @@ public class Config {
 			configFile.set("game_settings.skip.enable", true);
 		}
 
-		if (!configFile.contains("game_settings.skip.age") || configFile.getInt("game_settings.skip.age") < 1) {
+		if (!configFile.contains("game_settings.skip.age") || AgeManager.getAgeByName(configFile.getString("game_settings.skip.age")) == null || AgeManager.getAgeByName(configFile.getString("game_settings.skip.age")).number == -1) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "skip age"));
-			configFile.set("game_settings.skip.age", 2);
+			configFile.set("game_settings.skip.age", AgeManager.getFirstAge().name);
 		}
 
 		if (!configFile.contains("game_settings.custom_crafts")) {
@@ -270,15 +277,18 @@ public class Config {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkFileEnd(FileConfiguration configFile) {
-		if (!configFile.contains("game_settings.auto_detect_game_end.enable")) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling auto detect game end"));
-			configFile.set("game_settings.auto_detect_game_end.enable", false);
+		if (!configFile.contains("game_settings.print_player_tab.enable")) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling game end tab display"));
+			configFile.set("game_settings.print_player_tab.enable", true);
 		}
 		
-		configValues.gameEnd = configFile.getBoolean("game_settings.auto_detect_game_end.enable");
+		if (!configFile.contains("game_settings.print_player_tab.for_all_players") &&
+				(!configFile.getBoolean("game_settings.print_player_tab.enable") && configFile.getBoolean("game_settings.print_player_tab.for_all_players"))) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling game end tab for all display"));
+			configFile.set("game_settings.print_player_tab.for_all_players", true);
+		}
 		
-		if (!configFile.contains("game_settings.auto_detect_game_end.end_when_one") ||
-				(!configValues.gameEnd && configFile.getBoolean("game_settings.auto_detect_game_end.end_when_one"))) {
+		if (!configFile.contains("game_settings.auto_detect_game_end.end_when_one")) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "game end when one"));
 			configFile.set("game_settings.auto_detect_game_end.end_when_one", false);
 		}
@@ -296,25 +306,29 @@ public class Config {
 		configValues.skip = configFile.getBoolean("game_settings.skip.enable");
 		configValues.crafts = configFile.getBoolean("game_settings.custom_crafts");
 		configValues.team = configFile.getBoolean("game_settings.team.enable");
-		configValues.same = configFile.getBoolean("game_settings.same_mode");
+		configValues.same = configFile.getBoolean("game_settings.mode.same");
+		configValues.printTab = configFile.getBoolean("game_settings.print_player_tab.enable");
+		configValues.printTabAll = configFile.getBoolean("game_settings.print_player_tab.for_all_players");
 		configValues.endOne = configFile.getBoolean("game_settings.auto_detect_game_end.end_when_one");
-		configValues.duoMode = configFile.getBoolean("game_settings.double_mode");
-		configValues.sbttMode = configFile.getBoolean("game_settings.sbtt_mode.enable");
-		configValues.passive = configFile.getBoolean("game_settings.passive");
+		configValues.duoMode = configFile.getBoolean("game_settings.mode.double");
+		configValues.sbttMode = configFile.getBoolean("game_settings.mode.sbtt.enable");
+		configValues.passiveAll = configFile.getBoolean("game_settings.passive.all");
+		configValues.passiveTeam = configFile.getBoolean("game_settings.passive.team");
 		
 		configValues.spreadDistance = configFile.getInt("game_settings.spreadplayers.minimum_distance");
 		configValues.spreadRadius = configFile.getInt("game_settings.spreadplayers.minimum_radius");
 		configValues.targetPerAge = configFile.getInt("game_settings.target_per_age");
-		configValues.skipAge = configFile.getInt("game_settings.skip.age");
-		configValues.lastAge = configFile.getInt("game_settings.last_age");
-		configValues.startTime = configFile.getInt("game_settings.start_time");
-		configValues.addedTime = configFile.getInt("game_settings.time_added");
-		configValues.level = configFile.getInt("game_settings.level");
+		configValues.startTime = configFile.getInt("game_settings.time.start");
+		configValues.addedTime = configFile.getInt("game_settings.time.added");
 		configValues.teamSize = configFile.getInt("game_settings.team.size");
-		configValues.sbttAmount = configFile.getInt("game_settings.sbtt_mode.amount");
+		configValues.sbttAmount = configFile.getInt("game_settings.mode.sbtt.amount");
 		configValues.xpEnd = configFile.getInt("game_settings.xp_max.end_teleporter");
 		configValues.xpOverworld = configFile.getInt("game_settings.xp_max.overworld_teleporter");
 		configValues.xpCoral = configFile.getInt("game_settings.xp_max.coral_compass");
+		
+		configValues.lastAge = AgeManager.getAgeByName(configFile.getString("game_settings.last_age")).number;
+		configValues.level = LevelManager.getLevelByName(configFile.getString("game_settings.level")).number;
+		configValues.skipAge = AgeManager.getAgeByName(configFile.getString("game_settings.skip.age")).number;
 	}
 	
 	/**
@@ -333,22 +347,26 @@ public class Config {
 		sb.append("  " + ChatColor.BLUE).append("Rewards: " + ChatColor.GOLD).append(configValues.rewards).append("\n");
 		sb.append("  " + ChatColor.BLUE).append("Skip: " + ChatColor.GOLD).append(configValues.skip).append("\n");
 		sb.append("  " + ChatColor.BLUE).append("Crafts: " + ChatColor.GOLD).append(configValues.crafts).append("\n");
-		sb.append("  " + ChatColor.BLUE).append("Nb item per age: " + ChatColor.GOLD).append(configValues.targetPerAge).append("\n");
-		sb.append("  " + ChatColor.BLUE).append("First Age for Skipping: " + ChatColor.GOLD).append(configValues.skipAge).append("\n");
-		sb.append("  " + ChatColor.BLUE).append("Max age: " + ChatColor.GOLD).append(configValues.lastAge).append("\n");
+		sb.append("  " + ChatColor.BLUE).append("Nb target per age: " + ChatColor.GOLD).append(configValues.targetPerAge).append("\n");
+		sb.append("  " + ChatColor.BLUE).append("First Age for Skipping: " + ChatColor.GOLD).append(AgeManager.getAgeByNumber(configValues.skipAge).name).append("\n");
+		sb.append("  " + ChatColor.BLUE).append("Max age: " + ChatColor.GOLD).append(AgeManager.getAgeByNumber(configValues.lastAge).name).append("\n");
 		sb.append("  " + ChatColor.BLUE).append("Start duration: " + ChatColor.GOLD).append(configValues.startTime).append("\n");
 		sb.append("  " + ChatColor.BLUE).append("Added duration: " + ChatColor.GOLD).append(configValues.addedTime).append("\n");
 		sb.append("  " + ChatColor.BLUE).append("Lang: " + ChatColor.GOLD).append(configValues.lang).append("\n");
 		sb.append("  " + ChatColor.BLUE).append("Level: " + ChatColor.GOLD).append(LevelManager.getLevelByNumber(configValues.level).name).append("\n");
-		sb.append("  " + ChatColor.BLUE).append("Detect Game End: " + ChatColor.GOLD).append(configValues.gameEnd).append("\n");
-		sb.append("  " + ChatColor.BLUE).append("End game at one: " + ChatColor.GOLD).append(configValues.endOne).append("\n");
-		sb.append("  " + ChatColor.BLUE).append("Passive: " + ChatColor.GOLD).append(configValues.passive).append("\n");
+		sb.append("  " + ChatColor.BLUE).append("Print tab at game end: " + ChatColor.GOLD).append(configValues.printTab).append("\n");
+		sb.append("  " + ChatColor.BLUE).append("Print tab for all players at game end: " + ChatColor.GOLD).append(configValues.printTabAll).append("\n");
+		sb.append("  " + ChatColor.BLUE).append("Game ends when remains one: " + ChatColor.GOLD).append(configValues.endOne).append("\n");
+		sb.append("  " + ChatColor.BLUE).append("Passive: ").append("\n");
+		sb.append("  " + ChatColor.BLUE).append("	- All: " + ChatColor.GOLD).append(configValues.passiveAll).append("\n");
+		sb.append("  " + ChatColor.BLUE).append("	- Team: " + ChatColor.GOLD).append(configValues.passiveTeam).append("\n");
 		sb.append("  " + ChatColor.BLUE).append("Team: " + ChatColor.GOLD).append(configValues.team).append("\n");
 		sb.append("  " + ChatColor.BLUE).append("  - Team Size: " + ChatColor.GOLD).append(configValues.teamSize).append("\n");
-		sb.append("  " + ChatColor.BLUE).append("Same mode: " + ChatColor.GOLD).append(configValues.same).append("\n");
-		sb.append("  " + ChatColor.BLUE).append("Double mode: " + ChatColor.GOLD).append(configValues.duoMode).append("\n");
-		sb.append("  " + ChatColor.BLUE).append("SBTT mode: " + ChatColor.GOLD).append(configValues.sbttMode).append("\n");
-		sb.append("  " + ChatColor.BLUE).append("  - SBTT amount: " + ChatColor.GOLD).append(configValues.sbttAmount).append("\n");
+		sb.append("  " + ChatColor.BLUE).append("Mode: ").append("\n");
+		sb.append("  " + ChatColor.BLUE).append("	- Same: " + ChatColor.GOLD).append(configValues.same).append("\n");
+		sb.append("  " + ChatColor.BLUE).append("	- Double: " + ChatColor.GOLD).append(configValues.duoMode).append("\n");
+		sb.append("  " + ChatColor.BLUE).append("	- SBTT: " + ChatColor.GOLD).append(configValues.sbttMode).append("\n");
+		sb.append("  " + ChatColor.BLUE).append(" 		- amount: " + ChatColor.GOLD).append(configValues.sbttAmount).append("\n");
 		sb.append("  " + ChatColor.BLUE).append("XP Max: ").append("\n");
 		sb.append("  " + ChatColor.BLUE).append("  - EndTeleporter: " + ChatColor.GOLD).append(configValues.xpEnd).append("\n");
 		sb.append("  " + ChatColor.BLUE).append("  - OverworldTeleporter: " + ChatColor.GOLD).append(configValues.xpOverworld).append("\n");
@@ -382,18 +400,19 @@ public class Config {
 		configObj.put("same", configValues.same);
 		configObj.put("duoMode", configValues.duoMode);
 		configObj.put("sbttMode", configValues.sbttMode);
-		configObj.put("gameEnd", configValues.gameEnd);
+		configObj.put("printTab", configValues.printTab);
+		configObj.put("printTabAll", configValues.printTabAll);
 		configObj.put("endOne", configValues.endOne);
 		configObj.put("sbttAmount", configValues.sbttAmount);
 		configObj.put("teamSize", configValues.teamSize);
 		configObj.put("spreadMin", configValues.spreadDistance);
 		configObj.put("spreadMax", configValues.spreadRadius);
-		configObj.put("itemPerAge", configValues.targetPerAge);
-		configObj.put("skipAge", configValues.skipAge);
-		configObj.put("maxAges", configValues.lastAge);
+		configObj.put("targetPerAge", configValues.targetPerAge);
+		configObj.put("skipAge", AgeManager.getAgeByNumber(configValues.skipAge).name);
+		configObj.put("lastAge", AgeManager.getAgeByNumber(configValues.lastAge).name);
 		configObj.put("startTime", configValues.startTime);
 		configObj.put("addedTime", configValues.addedTime);
-		configObj.put("level", configValues.level);
+		configObj.put("level", LevelManager.getLevelByNumber(configValues.level).name);
 		configObj.put("lang", configValues.lang);
 		configObj.put("xpEnd", configValues.xpEnd);
 		configObj.put("xpOverworld", configValues.xpOverworld);
@@ -417,7 +436,8 @@ public class Config {
 		configValues.same = (boolean) configObj.get("same");
 		configValues.duoMode = (boolean) configObj.get("duoMode");
 		configValues.sbttMode = (boolean) configObj.get("sbttMode");
-		configValues.gameEnd = (boolean) configObj.get("gameEnd");
+		configValues.printTab = (boolean) configObj.get("printTab");
+		configValues.printTabAll = (boolean) configObj.get("printTabAll");
 		configValues.endOne = (boolean) configObj.get("endOne");
 		
 		configValues.sbttAmount = Integer.parseInt(configObj.get("sbttAmount").toString());
@@ -425,15 +445,15 @@ public class Config {
 		configValues.spreadDistance = Integer.parseInt(configObj.get("spreadMin").toString());
 		configValues.spreadRadius = Integer.parseInt(configObj.get("spreadMax").toString());
 		configValues.targetPerAge = Integer.parseInt(configObj.get("itemPerAge").toString());
-		configValues.skipAge = Integer.parseInt(configObj.get("skipAge").toString());
-		configValues.lastAge = Integer.parseInt(configObj.get("maxAges").toString());
 		configValues.startTime = Integer.parseInt(configObj.get("startTime").toString());
 		configValues.addedTime = Integer.parseInt(configObj.get("addedTime").toString());
-		configValues.level = Integer.parseInt(configObj.get("level").toString());
 		configValues.xpEnd = Integer.parseInt(configObj.get("xpEnd").toString());
 		configValues.xpOverworld = Integer.parseInt(configObj.get("xpOverworld").toString());
 		configValues.xpCoral = Integer.parseInt(configObj.get("xpCoral").toString());
-		
+
+		configValues.skipAge = AgeManager.getAgeByName(configObj.get("skipAge").toString()).number;
+		configValues.lastAge = AgeManager.getAgeByName(configObj.get("lastAge").toString()).number;
+		configValues.level = LevelManager.getLevelByName(configObj.get("level").toString()).number;
 		configValues.lang = configObj.get("lang").toString();
 	}
 
@@ -519,12 +539,21 @@ public class Config {
 	}
 	
 	/**
-	 * Get game end enable value
+	 * Get print end game tab enable value
 	 * 
-	 * @return if game end is enabled
+	 * @return if print tab is enabled
 	 */
-	public static boolean getGameEnd() {
-		return configValues.gameEnd;
+	public static boolean getPrintTab() {
+		return configValues.printTab;
+	}
+	
+	/**
+	 * Get print end game tab for all players enable value
+	 * 
+	 * @return if print tab all is enabled
+	 */
+	public static boolean getPrintTabAll() {
+		return configValues.printTabAll;
 	}
 	
 	/**
@@ -537,12 +566,21 @@ public class Config {
 	}
 	
 	/**
-	 * Get passive enable value
+	 * Get passive all enable value
 	 * 
 	 * @return if passive is enabled
 	 */
-	public static boolean getPassive() {
-		return configValues.passive;
+	public static boolean getPassiveAll() {
+		return configValues.passiveAll;
+	}
+	
+	/**
+	 * Get passive team enable value
+	 * 
+	 * @return if passive is enabled for team mates
+	 */
+	public static boolean getPassiveTeam() {
+		return configValues.passiveTeam;
 	}
 
 	/**
@@ -772,18 +810,33 @@ public class Config {
 	}
 	
 	/**
-	 * Set game end value
+	 * Set print tab value
 	 * 
-	 * @param configGameEnd	value used to set game end
+	 * @param configPrintTab	value used to set printTab
 	 */
-	private static void setGameEnd(boolean configGameEnd) {
-		configValues.gameEnd = configGameEnd;
+	private static void setPrintTab(boolean configPrintTab) {
+		configValues.printTab = configPrintTab;
 		
-		if (!configValues.gameEnd) {
-			configValues.endOne = false;
+		if (!configValues.printTab) {
+			configValues.printTabAll = false;
 		}
 		
 		setRet = true;
+	}
+	
+	/**
+	 * Set print tab all value
+	 * 
+	 * @param configPrintTabAll	value used to set printTabAll
+	 */
+	private static void setPrintTabAll(boolean configPrintTabAll) {
+		if (configPrintTabAll && !configValues.printTab) {
+			error = "Cannot enable PRINT_TAB_ALL if PRINT_TAB is Disable";
+			setRet = false;
+		} else {
+			configValues.printTabAll = configPrintTabAll;
+			setRet = true;
+		}
 	}
 	
 	/**
@@ -792,24 +845,31 @@ public class Config {
 	 * @param configEndOne	value used to set end one
 	 */
 	private static void setEndOne(boolean configEndOne) {
-		if (!configValues.gameEnd) {
-			setRet = false;
-		} else {
-			configValues.endOne = configEndOne;
-			setRet = true;
-		}
+		configValues.endOne = configEndOne;
+		
+		setRet = true;
 	}
 	
 	/**
-	 * Set passive value
+	 * Set passive All value
 	 * 
-	 * @param configPassive	value used to set passive
+	 * @param configPassive	value used to set passive all
 	 */
-	private static void setPassive(boolean configPassive) {
-		configValues.passive = configPassive;
+	private static void setPassiveAll(boolean configPassive) {
+		configValues.passiveAll = configPassive;
 		setRet = true;
 	}
 
+	/**
+	 * Set passive Team value
+	 * 
+	 * @param configPassive	value used to set passive team
+	 */
+	private static void setPassiveTeam(boolean configPassive) {
+		configValues.passiveTeam = configPassive;
+		setRet = true;
+	}
+	
 	/**
 	 * Set team size value
 	 * 

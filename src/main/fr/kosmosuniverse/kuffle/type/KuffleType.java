@@ -17,6 +17,9 @@ import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 import main.fr.kosmosuniverse.kuffle.core.VersionManager;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
+import main.fr.kosmosuniverse.kuffle.listeners.InventoryListeners;
+import main.fr.kosmosuniverse.kuffle.listeners.ItemEvent;
+import main.fr.kosmosuniverse.kuffle.listeners.ItemsPlayerInteract;
 import main.fr.kosmosuniverse.kuffle.listeners.PlayerEvents;
 import main.fr.kosmosuniverse.kuffle.utils.FilesConformity;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
@@ -28,7 +31,8 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  */
 public class KuffleType {
 	protected static Type type = Type.UNKNOWN;
-	private static PlayerEvents playerEvents;
+	protected static PlayerEvents playerEvents;
+	protected static ItemsPlayerInteract playerInteract;
 	
 	public enum Type {
 		UNKNOWN,
@@ -87,7 +91,9 @@ public class KuffleType {
 		Config.setupConfig(plugin.getConfig());
 		
 		playerEvents = new PlayerEvents(plugin.getDataFolder());
+		
 		plugin.getServer().getPluginManager().registerEvents(playerEvents, plugin);
+		plugin.getServer().getPluginManager().registerEvents(new ItemEvent(), plugin);
 	}
 	
 	/**
@@ -122,6 +128,8 @@ public class KuffleType {
 		CraftManager.setupCrafts(type);
 		ScoreManager.setupPlayerScores();
 		GameManager.setupGame();
+		
+		plugin.getServer().getPluginManager().registerEvents(new InventoryListeners(), plugin);
 	}
 	
 	/**

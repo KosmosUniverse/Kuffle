@@ -1,6 +1,7 @@
 package main.fr.kosmosuniverse.kuffle.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -204,7 +205,7 @@ public class TargetManager {
 	private static void setupTargetsInvs() {
 		targetsInvs = new HashMap<>();
 
-		targets.forEach((k, v) -> targetsInvs.put(k, getAgeInvs(k, v)));
+		targets.forEach((k, v) -> targetsInvs.put(k, setupAgeInvs(k, v)));
 	}
 
 	/**
@@ -215,7 +216,7 @@ public class TargetManager {
 	 * 
 	 * @return the Inventory list
 	 */
-	public static List<Inventory> getAgeInvs(String age, List<String> ageTargets) {
+	private static List<Inventory> setupAgeInvs(String age, List<String> ageTargets) {
 		List<Inventory> invs = new ArrayList<>();
 		Inventory inv;
 		int invCnt = 0;
@@ -310,5 +311,44 @@ public class TargetManager {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Gets Inventory in inventories list of a specific Age and depending on a clicked itemName
+	 * 
+	 * @param age		The Age inventory list
+	 * @param current	The current age that is open
+	 * @param modifier	The modifier is 1 if player want to move to next page and -1 if he wants to go backwards
+	 * 
+	 * @return the inventory to display to the player
+	 */
+	public static Inventory getAgeInv(String age, Inventory current, int modifier) {
+		List<Inventory> ageInvs = targetsInvs.get(age);
+		
+		int idx = ageInvs.indexOf(current);
+		
+		return ageInvs.get(idx + modifier);
+	}
+
+	/**
+	 * Gets the Target list for a specific Age as an unmodifiable list
+	 * 
+	 * @param age	The age
+	 * 
+	 * @return the list of targets of the Age <age>
+	 */
+	public static List<String> getAgeTargets(String age) {
+		return Collections.unmodifiableList(targets.get(age));
+	}
+	
+	/**
+	 * Gets the Target invs list for a specific Age as an unmodifiable list
+	 * 
+	 * @param age	The age
+	 * 
+	 * @return the list of targets of the Age <age>
+	 */
+	public static List<Inventory> getAgeTargetsInvs(String age) {
+		return Collections.unmodifiableList(targetsInvs.get(age));
 	}
 }

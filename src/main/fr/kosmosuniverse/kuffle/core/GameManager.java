@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -49,6 +50,7 @@ public class GameManager {
 	private static Map<String, Integer> playersRanks = null;
 	private static Inventory playersHeads = null;
 	private static List<Material> exceptions;
+	private static List<Location> signs = null;
 	
 	/**
 	 * Private GameManager constructor
@@ -67,6 +69,7 @@ public class GameManager {
 		playersRanks = new HashMap<>();
 		
 		exceptions = new ArrayList<>();
+		signs = new ArrayList<>();
 		
 		for (Material m : Material.values()) {
 			if (m.name().contains("SHULKER_BOX")) {
@@ -495,9 +498,7 @@ public class GameManager {
 	 * 
 	 * @param player	The player that is moving to the next Age
 	 */
-	public static void nextPlayerAge(String player) {
-		Game game = games.get(player);
-		
+	public static void nextPlayerAge(Game game) {
 		if (Config.getRewards()) {
 			if (game.age > 0) {
 				RewardManager.removePreviousRewardEffects(AgeManager.getAgeByNumber(game.age - 1).name, game.player);
@@ -518,12 +519,12 @@ public class GameManager {
 		game.time = game.time + Config.getAddedTime();
 		game.player.playSound(game.player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f);
 		game.score.setScore(game.targetCount);
-		updatePlayerListName(player);
-		updatePlayerBar(player);
+		updatePlayerListName(game.player.getName());
+		updatePlayerBar(game.player.getName());
 
 		Age tmpAge = AgeManager.getAgeByNumber(game.age);
 
-		games.forEach((playerName, playerGame) -> playerGame.player.sendMessage(LangManager.getMsgLang("AGE_MOVED", game.configLang).replace("<#>", ChatColor.BLUE + "<§6§l" + player + ChatColor.BLUE + ">").replace("<##>", "<" + tmpAge.color + tmpAge.name.replace("_Age", "") + ChatColor.BLUE + ">")));
+		games.forEach((playerName, playerGame) -> playerGame.player.sendMessage(LangManager.getMsgLang("AGE_MOVED", game.configLang).replace("<#>", ChatColor.BLUE + "<§6§l" + game.player.getName() + ChatColor.BLUE + ">").replace("<##>", "<" + tmpAge.color + tmpAge.name.replace("_Age", "") + ChatColor.BLUE + ">")));
 		game.player.sendMessage(LangManager.getMsgLang("TIME_AGE", game.configLang).replace("%t", Utils.getTimeFromSec(game.totalTime)));
 	}
 	
@@ -533,9 +534,7 @@ public class GameManager {
 	 * @param player	The player that finished
 	 * @param rank		The player rank
 	 */
-	public static void finish(String player, int rank) {
-		Game game = games.get(player);
-		
+	public static void finish(Game game, int rank) {
 		game.finished = true;
 
 		if (Config.getTeam()) {
@@ -555,8 +554,8 @@ public class GameManager {
 			game.ageDisplay.setProgress(1.0f);
 		}
 
-		playersRanks.put(player, game.gameRank);
-		updatePlayersHeadData(player, null);
+		playersRanks.put(game.player.getName(), game.gameRank);
+		updatePlayersHeadData(game.player.getName(), null);
 
 		for (PotionEffect pe : game.player.getActivePotionEffects()) {
 			game.player.removePotionEffect(pe.getType());
@@ -572,10 +571,10 @@ public class GameManager {
 
 		game.age = -1;
 
-		updatePlayerListName(player);
+		updatePlayerListName(game.player.getName());
 
-		printPlayer(player, player);
-		logPlayer(player);
+		printPlayer(game.player.getName(), game.player.getName());
+		logPlayer(game.player.getName());
 	}
 	
 	/**
@@ -603,8 +602,7 @@ public class GameManager {
 	 * 
 	 * @param player
 	 */
-	public static void playerRandomBarColor(String player) {
-		Game game = games.get(player);
+	public static void playerRandomBarColor(Game game) {
 		BarColor[] colors = BarColor.values();
 		
 		game.ageDisplay.setColor(colors[ThreadLocalRandom.current().nextInt(colors.length)]);
@@ -743,6 +741,17 @@ public class GameManager {
 	}
 	
 	/**
+	 * Gets the player age as Age object
+	 * 
+	 * @param player	The player from who it will take the age
+	 * 
+	 * @return The player's Age object
+	 */
+	public static Age getPlayerAge(String player) {
+		return AgeManager.getAgeByNumber(games.get(player).age);
+	}
+	
+	/**
 	 * Gets the alreadyGot list from JSON
 	 * 
 	 * @param got	The alreadyGot list as List from JSONArray
@@ -755,6 +764,17 @@ public class GameManager {
 		}
 		
 		return list;
+	}
+	
+	/**
+	 * Gets the alreadyGot list of a specific player game object
+	 * 
+	 * @param game	The game object in which it takes the list
+	 * 
+	 * @return the list as an unmodifiable list
+	 */
+	public static List<String> getPlayerAlreadyGot(Game game) {
+		return Collections.unmodifiableList(game.alreadyGot);
 	}
 
 	/**
@@ -1063,37 +1083,32 @@ public class GameManager {
 	}
 
 	/**
-	 * Adds a target to alreadyGot list for a specific player
+	 * Adds a target to the alreadyGot list of a specific player's game
 	 * 
-	 * @param player	The player
+	 * @param game		The game
 	 * @param target	The target to add
 	 */
-	@Deprecated
-	public static void addToAlreadyGot(String player, String target) {
-		games.get(player).alreadyGot.add(target);
+	public static void addToAlreadyGot(Game game, String target) {
+		game.alreadyGot.add(target);
 	}
 
 	/**
-	 * Removes targets from alreadyGot list for a specific player
+	 * Removes target from the alreadyGot list of a specific player's game
 	 * 
-	 * @param player	The player
-	 * @param array		An array of all targets to remove
+	 * @param game		The game
+	 * @param target	The target to remove
 	 */
-	@Deprecated
-	public static void removeFromList(String player, String[] array) {
-		Game game = games.get(player);
-		
-		game.alreadyGot.remove(game.currentTarget.equals(array[0]) ? array[1] : array[0]);
+	public static void removeFromList(Game game, String target) {
+		game.alreadyGot.remove(target);
 	}
 
 	/**
-	 * Resets alreadyGot list
+	 * Resets alreadyGot list for a specific player's gama
 	 * 
-	 * @param player	The player
+	 * @param game	The game
 	 */
-	@Deprecated
-	public static void resetList(String player) {
-		games.get(player).alreadyGot.clear();
+	public static void resetPlayerList(Game game) {
+		game.alreadyGot.clear();
 	}
 	
 	/**
@@ -1257,6 +1272,8 @@ public class GameManager {
 			sign.setLine(1, LangManager.getMsgLang("HERE_DIES", games.get(playerName).configLang));
 			sign.setLine(2, playerName);
 			sign.update(true);
+			
+			signs.add(loc);
 		}
 	}
 	
@@ -1303,6 +1320,23 @@ public class GameManager {
 		}
 
 		return end;
+	}
+	
+	public static boolean finishLast(int rank) {
+		boolean ret = false;
+		
+		if (getNbPlayerStillPlaying() == 1) {
+			for (String playerName : games.keySet()) {
+				if (!games.get(playerName).finished) {
+					finish(games.get(playerName), rank);
+					break;
+				}
+			}
+			
+			ret = true;
+		}
+		
+		return ret;
 	}
 	
 	/**
@@ -1396,5 +1430,101 @@ public class GameManager {
 			playerGame.player.setPlayerListName(ChatColor.WHITE + playerName);
 			playerGame.score.setScore(1);
 		});
+	}
+	
+	/**
+	 * Checks if a specific target is the target of this player
+	 * 
+	 * @param player	The player
+	 * @param target	The target to check
+	 * 
+	 * @return True if <target> is the <player>'s target
+	 */
+	public static boolean checkPlayerTarget(String player, ItemStack target) {
+		Game game = games.get(player);
+		boolean ret = false;
+		
+		if (Config.getDouble()) {
+			String[] targets = game.currentTarget.split("/");
+
+			ret = targets[0].equals(target.getType().name().toLowerCase()) || targets[1].equals(target.getType().name().toLowerCase());;
+		} else {
+			ret = game.currentTarget.equals(target.getType().name().toLowerCase());
+		}
+		
+		return ret;
+	}
+	
+	/**
+	 * Checks if there is a sign at this location
+	 * 
+	 * @param loc	The location to check
+	 * 
+	 * @return True if there is a plugin sign at this location
+	 */
+	public static boolean checkSign(Location loc) {
+		return signs.contains(loc);
+	}
+	
+	/**
+	 * Teleports a specific player to a target player
+	 * 
+	 * @param player		The player to teleport
+	 * @param targetPlayer	The target for teleportation
+	 */
+	public static void teleportPlayerToPlayer(Player player, String targetPlayer) {
+		Game game = games.get(targetPlayer);
+		
+		player.teleport(game.player);
+	}
+	
+	/**
+	 * Apply behavior to all players.
+	 * 
+	 * @param loop	The actions to apply on all players as Lambda
+	 */
+	public static void applyToPlayers(Consumer<Game> loop) {
+		games.forEach((playerName, playerGame) -> loop.accept(playerGame));
+	}
+	
+	/**
+	 * Gets the best rank from playerRanks map
+	 * 
+	 * @return the best rank
+	 */
+	public static int getBestRank() {
+		int cntRank = 1;
+
+		while (cntRank <= playersRanks.size() && playersRanks.containsValue(cntRank)) {
+			cntRank++;
+		}
+
+		return cntRank;
+	}
+
+	/**
+	 * Gets the worst rank from playerRanks map
+	 * 
+	 * @return the worst rank
+	 */
+	public static int getWorstRank() {
+		int cntRank = playersRanks.size();
+
+		while (cntRank >= 1 && playersRanks.containsValue(cntRank)) {
+			cntRank--;
+		}
+
+		return cntRank;
+	}
+	
+	/**
+	 * Gets the lang for a specific player
+	 * 
+	 * @param player	The player
+	 * 
+	 * @return the lang as String the player chosen
+	 */
+	public static String getPlayerLang(String player) {
+		return games.get(player).configLang;
 	}
 }

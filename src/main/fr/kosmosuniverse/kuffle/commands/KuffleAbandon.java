@@ -6,7 +6,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
-import main.fr.kosmosuniverse.kuffle.utils.Utils;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
 
 public class KuffleAbandon implements CommandExecutor  {
 	@Override
@@ -16,22 +19,22 @@ public class KuffleAbandon implements CommandExecutor  {
 		
 		Player player = (Player) sender;
 		
-		KuffleMain.systemLogs.logMsg(player.getName(), Utils.getLangString(player.getName(), "CMD_PERF").replace("<#>", "<ki-abandon>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-abandon>"));
 		
 		if (!player.hasPermission("ki-abandon")) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_ALLOWED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", GameManager.getPlayerLang(player.getName())));
 			return false;
 		}
 		
 		if (KuffleMain.gameStarted) {
-			if (!KuffleMain.games.containsKey(player.getName())) {
-				KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_PLAYING"));
+			if (!GameManager.hasPlayer(player.getName())) {
+				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_PLAYING", GameManager.getPlayerLang(player.getName())));
 				return true;
 			}
 			
-			KuffleMain.games.get(player.getName()).setLose(true);
+			GameManager.setLose(player.getName(), true);
 		} else {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "GAME_NOT_LAUNCHED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", GameManager.getPlayerLang(player.getName())));
 		}
 
 		return true;

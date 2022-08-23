@@ -2,6 +2,7 @@ package main.fr.kosmosuniverse.kuffle.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -128,6 +129,24 @@ public class AgeManager {
 		
 		return null;
 	}
+
+	/**
+	 * Gets the last Age of ages list
+	 * 
+	 * @return the last age as Age object
+	 */
+	public static Age getLastAge() {
+		return ages.get(ages.size() - 1);
+	}
+	
+	/**
+	 * Gets the first Age of ages list
+	 * 
+	 * @return the first age as Age object
+	 */
+	public static Age getFirstAge() {
+		return ages.get(0);
+	}
 	
 	/**
 	 * Gets last age index
@@ -142,5 +161,14 @@ public class AgeManager {
 		}
 		
 		return max;
+	}
+	
+	/**
+	 * Gets the list of Ages name
+	 * 
+	 * @return Ages name as List of Strings
+	 */
+	public static List<String> getAgesNameList() {
+		return ages.stream().map(age -> age.name).collect(Collectors.toList());
 	}
 }

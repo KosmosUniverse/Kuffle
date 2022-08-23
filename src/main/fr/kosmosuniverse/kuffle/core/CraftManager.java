@@ -393,4 +393,26 @@ public class CraftManager {
 		done.clear();
 		return compose;
 	}
+	
+	/**
+	 * Checks if a specific item is a template
+	 * 
+	 * @param item	The item to check
+	 * 
+	 * @return True if item is a template, False instead
+	 */
+	public static boolean isTemplate(ItemStack item) {
+		boolean ret = false;
+		
+		for (ACrafts recipe : recipes) {
+			if (recipe.getName().toLowerCase().contains("template")) {
+				if (ItemUtils.itemComparison(item, recipe.getItem(), true, true, true)) {
+					ret = true;
+					break;
+				}
+			}
+		}
+		
+		return ret;
+	}
 }

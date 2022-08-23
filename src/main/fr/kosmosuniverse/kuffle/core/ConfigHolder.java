@@ -15,9 +15,11 @@ class ConfigHolder {
 	public boolean same;
 	public boolean duoMode;
 	public boolean sbttMode;
-	public boolean gameEnd;
+	public boolean printTab;
+	public boolean printTabAll;
 	public boolean endOne;
-	public boolean passive;
+	public boolean passiveAll;
+	public boolean passiveTeam;
 	public int sbttAmount;
 	public int teamSize;
 	public int spreadDistance;

@@ -340,4 +340,15 @@ public class TeamManager {
 		
 		return null;
 	}
+	
+	public static boolean sameTeam(String player1, String player2) {
+		Team team = findTeamByPlayer(player1);
+		boolean ret = false;
+		
+		if (team != null && team.hasPlayer(player2)) {
+			ret = true;
+		}
+		
+		return ret;
+	}
 }

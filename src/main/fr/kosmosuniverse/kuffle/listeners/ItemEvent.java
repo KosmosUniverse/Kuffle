@@ -13,8 +13,19 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class ItemEvent implements Listener {
+	/**
+	 * Event triggered at item dropped by player, if this item is shulker_box it is invulnerable
+	 * 
+	 * @param event	The PlayerDropItemEvent
+	 */
 	@EventHandler
 	public void onItemDrop(PlayerDropItemEvent event) {
 		if (!KuffleMain.gameStarted) {
@@ -24,7 +35,7 @@ public class ItemEvent implements Listener {
 		Item item = event.getItemDrop();
 		Player player = event.getPlayer();
 		
-		if (!KuffleMain.games.containsKey(player.getName())) {
+		if (!GameManager.hasPlayer(player.getName())) {
 			return ;
 		}
 		
@@ -38,6 +49,11 @@ public class ItemEvent implements Listener {
 		item.setInvulnerable(true);
 	}
 	
+	/**
+	 * Event triggered at item drop by block break, if this item is shulker_box it is invulnerable
+	 * 
+	 * @param event	The BlockDropItemEvent
+	 */
 	@EventHandler
 	public void onBlockBreak(BlockDropItemEvent event) {
 		if (!KuffleMain.gameStarted) {
@@ -60,6 +76,11 @@ public class ItemEvent implements Listener {
 		}
 	}
 	
+	/**
+	 * Event triggered when item is about to despawn, cancel if item is shulker_box
+	 * 
+	 * @param event	The ItemDespawnEvent
+	 */
 	@EventHandler
 	public void onItemDespawn(ItemDespawnEvent event) {
 		if (!KuffleMain.gameStarted) {
@@ -70,7 +91,7 @@ public class ItemEvent implements Listener {
 		
 		Player player = Bukkit.getPlayer(item.getOwner());
 		
-		if (player == null || !KuffleMain.games.containsKey(player.getName())) {
+		if (player == null || !GameManager.hasPlayer(player.getName())) {
 			return ;
 		}
 		

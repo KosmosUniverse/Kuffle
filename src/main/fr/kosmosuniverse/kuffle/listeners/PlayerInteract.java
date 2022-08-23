@@ -3,14 +3,11 @@ package main.fr.kosmosuniverse.kuffle.listeners;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,157 +21,191 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.json.simple.JSONObject;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
-import main.fr.kosmosuniverse.kuffle.core.AgeManager;
-import main.fr.kosmosuniverse.kuffle.core.Game;
-import main.fr.kosmosuniverse.kuffle.utils.Utils;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.CraftManager;
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.core.TeamManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleEventNotUsableException;
+import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 
-public class PlayerInteract implements Listener {
-	private Map<String, Integer> xpActivables;
-	private Map<Location, String> shulkers = new HashMap<>();
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
+public class PlayerInteract implements Listener  {
+	protected Map<String, Integer> xpActivables;
+	protected Map<Location, String> shulkers = new HashMap<>();
 
-	public PlayerInteract() {
+	/**
+	 * Constructor
+	 */
+	protected PlayerInteract() {
 		xpActivables = new HashMap<>();
 		
-		xpActivables.put("EndTeleporter", KuffleMain.config.getXpEnd());
-		xpActivables.put("OverworldTeleporter", KuffleMain.config.getXpOverworld());
-		xpActivables.put("CoralCompass", KuffleMain.config.getXpCoral());
+		xpActivables.put("EndTeleporter", Config.getXpEnd());
+		xpActivables.put("OverworldTeleporter", Config.getXpOverworld());
+		xpActivables.put("CoralCompass", Config.getXpCoral());
 	}
 	
+	/**
+	 * Loads xpActivables map from JSON Object
+	 * 
+	 * @param xpMax	The JSON object representing xpActivales to load from previous save
+	 */
 	public void loadXpMax(JSONObject xpMax) {
 		xpActivables.clear();
 		
-		xpActivables.put("EndTeleporter", Integer.parseInt(xpMax.get("xpEnd").toString()));
-		xpActivables.put("OverworldTeleporter", Integer.parseInt(xpMax.get("xpOverworld").toString()));
-		xpActivables.put("CoralCompass", Integer.parseInt(xpMax.get("xpCoral").toString()));
+		for (Object key : xpMax.keySet()) {
+			xpActivables.put((String) key, Integer.parseInt((String) xpMax.get(key)));
+		}
 	}
 	
+	/**
+	 * Saves xpActivales map to load it later
+	 * 
+	 * @return the JSONObject containing the xpActivables map
+	 */
 	@SuppressWarnings("unchecked")
 	public JSONObject saveXpMax() {
 		JSONObject xpMaxObj = new JSONObject();
-
-		xpMaxObj.put("xpEnd", xpActivables.get("EndTeleporter"));
-		xpMaxObj.put("xpOverworld", xpActivables.get("OverworldTeleporter"));
-		xpMaxObj.put("xpCoral", xpActivables.get("CoralCompass"));
 		
+		xpActivables.forEach((k, v) -> xpMaxObj.put(k, v));
+
 		return xpMaxObj;
 	}
 	
-	@EventHandler
-	public void onLeftClick(PlayerInteractEvent event) {
-		if (!KuffleMain.gameStarted) {
-			return ;
-		}
-		
-		if (!event.hasItem()) {
-			return ;
-		}
-		
-		Player player = event.getPlayer();
-		Action action = event.getAction();
-		ItemStack item = event.getItem();
-		
-		if (action != Action.RIGHT_CLICK_AIR || item == null) {
-			return ;
-		}
-		
-		if (Utils.compareItems(item, KuffleMain.crafts.findItemByName("EndTeleporter"), true, true, true)) {
-			consumeItem(event);
-			
-			endTeleporter(player);
-			
-			return ;
-		}
-		
-		if (Utils.compareItems(item, KuffleMain.crafts.findItemByName("OverworldTeleporter"), true, true, true)) {
-			consumeItem(event);
-			
-			overworldTeleporter(player);
-			
-			return ;
-		}
-		
-		if (Utils.compareItems(item, KuffleMain.crafts.findItemByName("CoralCompass"), true, true, true)) {
-			if (!((CompassMeta) item.getItemMeta()).hasLodestone()) {
-				coralCompass(player, item);
-			} else {
-				KuffleMain.gameLogs.writeMsg(player, "This CoralCompass is already paired to a warm ocean.");
-			}
-			
-			return ;
-		}
-		
-		Game tmpGame = KuffleMain.games.get(player.getName());
-
-		if (item.getItemMeta().getDisplayName().contains("Template")) {
-			String name = AgeManager.getAgeByNumber(KuffleMain.ages, tmpGame.getAge()).name;
-			name = name.replace("_Age", "");
-			name = name + "Template";
-
-			if (Utils.compareItems(item, KuffleMain.crafts.findItemByName(name), true, true, true)) {
-				event.setCancelled(true);
-				
-				consumeItem(event);
-				
-				tmpGame.foundSBTT();
-				KuffleMain.gameLogs.logMsg(tmpGame.getPlayer().getName(), "just used " + name + " !");
-				
-				return ;
-			}
-		}
-		
-		if (tmpGame == null || tmpGame.getCurrentItem() == null) {
-			return ;
-		}
-		
-		checkItem(tmpGame, item);
-	}
-	
-	private void consumeItem(PlayerInteractEvent event) {
-		Player player = event.getPlayer();
-		
-		if (event.getHand() == EquipmentSlot.HAND) {
+	/**
+	 * Delete the player's item from its hand
+	 * 
+	 * @param player	The player
+	 * @param hand		The hand that hold the item to delete
+	 */
+	protected void consumeItem(Player player, EquipmentSlot hand) {
+		if (hand == EquipmentSlot.HAND) {
 			player.getInventory().setItemInMainHand(null);	
-		} else if (event.getHand() == EquipmentSlot.OFF_HAND) {
+		} else if (hand == EquipmentSlot.OFF_HAND) {
 			player.getInventory().setItemInOffHand(null);
 		}
 	}
-	
-	private void checkItem(Game game, ItemStack item) {
-		if (!KuffleMain.config.getDouble() && game.getCurrentItem().equals(item.getType().name().toLowerCase())) {
-			KuffleMain.gameLogs.logMsg(game.getPlayer().getName(), " validate his item [" + game.getCurrentItem() + "] !");
-			game.found();
-		} else if (KuffleMain.config.getDouble() &&
-				(game.getCurrentItem().split("/")[0].equals(item.getType().name().toLowerCase()) ||
-						game.getCurrentItem().split("/")[1].equals(item.getType().name().toLowerCase()))) {
-			String tmp = game.getCurrentItem().split("/")[0].equals(item.getType().name().toLowerCase()) ? game.getCurrentItem().split("/")[0] : game.getCurrentItem().split("/")[1];
-			KuffleMain.gameLogs.logMsg(game.getPlayer().getName(), " validate his item [" + tmp + "] !");
-			game.found();
+		
+	/**
+	 * Manages the common behavior of player left click
+	 * 
+	 * @param event	The PlayerInteractEvent
+	 * 
+	 * @return True if it was managed by the method, False instead
+	 * 
+	 * @throws KuffleEventNotUsableException if event is not usable by Kuffle plugin
+	 */
+	protected boolean onLeftClickGeneric(PlayerInteractEvent event) throws KuffleEventNotUsableException {
+		boolean ret = true;
+		
+		if (!KuffleMain.gameStarted) {
+			ret = false;
 		}
+		
+		Player player = event.getPlayer();
+		
+		if (ret && !GameManager.hasPlayer(player.getName())) {
+			ret = false;
+		}
+		
+		Action action = event.getAction();
+		
+		if (ret && action != Action.RIGHT_CLICK_AIR) {
+			ret = false;
+		}
+		
+		if (ret && (!event.hasItem() || event.getItem() == null)) {
+			ret = false;
+		}
+		
+		if (!ret) {
+			throw new KuffleEventNotUsableException("Not a good event type to use here.");
+		}
+		
+		ret = false;
+		
+		ItemStack item = event.getItem();
+		
+		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("CoralCompass"), true, true, true)) {
+			if (!((CompassMeta) item.getItemMeta()).hasLodestone()) {
+				coralCompass(player, item);
+				
+			} else {
+				LogManager.getInstanceGame().writeMsg(player, "This CoralCompass is already paired to a warm ocean.");
+			}
+			
+			ret = true;
+		}
+		
+		return ret;
 	}
 	
+	/**
+	 * Manages the common behavior of player shulker placing
+	 * 
+	 * @param event	The BlockPlaceEvent
+	 */
 	@EventHandler
-	public void onPlaceShulker(BlockPlaceEvent event) {
-		if (!KuffleMain.gameStarted || !KuffleMain.config.getPassive()) {
+	public void onPlaceShulkerGeneric(BlockPlaceEvent event) {
+		if (!KuffleMain.gameStarted || !Config.getPassiveAll()) {
 			return ;
 		}
 		
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 		Location location = block.getLocation();
+
+		if (!GameManager.hasPlayer(player.getName())) {
+			return ;
+		}
 		
 		if (block.getType().name().toLowerCase().contains("shulker_box")) {
 			shulkers.put(location, player.getName());
 		}
 	}
-	
+
+	/**
+	 * Manages the common behavior of player shulker opening
+	 * 
+	 * @param event	The PlayerInteractEvent
+	 */
 	@EventHandler
-	public void onBreakShulker(BlockBreakEvent event) {
-		if (!KuffleMain.gameStarted || !KuffleMain.config.getPassive()) {
+	public void onInteractShulkerGeneric(PlayerInteractEvent event) {
+		if (!KuffleMain.gameStarted || !Config.getPassiveAll()) {
+			return ;
+		}
+		
+		Player player = event.getPlayer();
+		Action action = event.getAction();
+		Block block = event.getClickedBlock();
+		
+		if (action != Action.RIGHT_CLICK_BLOCK || block == null) {
+			return ;
+		}
+		
+		String placerName = shulkers.get(block.getLocation());
+		
+		if (!(GameManager.hasPlayer(player.getName()) && (placerName.equals(player.getName()) ||
+				(Config.getTeam() && TeamManager.sameTeam(placerName, player.getName()))))) {
+			event.setCancelled(true);
+		}
+	}
+	
+	/**
+	 * Manages the common behavior of player shulker breaking
+	 * 
+	 * @param event	The BlockBreakEvent
+	 */
+	@EventHandler
+	public void onBreakShulkerGeneric(BlockBreakEvent event) {
+		if (!KuffleMain.gameStarted || !Config.getPassiveAll()) {
 			return ;
 		}
 		
@@ -188,57 +219,37 @@ public class PlayerInteract implements Listener {
 		
 		String placerName = shulkers.get(location);
 		
-		if (!placerName.equals(player.getName()) &&
-				(!KuffleMain.config.getTeam() ||
-						!KuffleMain.games.get(player.getName()).getTeamName().equals(KuffleMain.games.get(placerName).getTeamName()))) {
+		if (GameManager.hasPlayer(player.getName()) && (placerName.equals(player.getName()) ||
+				(Config.getTeam() && TeamManager.sameTeam(placerName, player.getName())))) {
 			event.setCancelled(true);
 		}
 	}
 	
+	/**
+	 * Manages the common behavior of Kuffle sign breaking
+	 * 
+	 * @param event	The BlockBreakEvent
+	 */
 	@EventHandler
-	public void onBreakSign(BlockBreakEvent event) {
+	public void onBreakSignGeneric(BlockBreakEvent event) {
 		if (!KuffleMain.gameStarted) {
 			return ;
 		}
 		
 		Block block = event.getBlock();
 		
-		if (block.getType() != Material.OAK_SIGN) {
-			return;
-		}
-		
-		Sign sign = (Sign) block.getState();
-		
-		if (sign == null ||
-				!sign.getLine(0).equals("[KuffleItems]") ||
-				!sign.getLine(1).equals("Here dies") ||
-				!KuffleMain.games.containsKey(sign.getLine(2))) {
-			return ;
-		}
-		
-		event.setCancelled(true);
-	}
-	
-	@EventHandler
-	public void onInteractShulker(PlayerInteractEvent event) {
-		if (!KuffleMain.gameStarted || !KuffleMain.config.getPassive()) {
-			return ;
-		}
-		
-		Player player = event.getPlayer();
-		Action action = event.getAction();
-		Block block = event.getClickedBlock();
-		
-		if (action == Action.RIGHT_CLICK_BLOCK && block != null &&
-				block.getType().name().toLowerCase().contains("shulker_box") &&
-				!shulkers.containsValue(player.getName()) &&
-				(!KuffleMain.config.getTeam() || !KuffleMain.games.get(player.getName()).getTeamName().equals(KuffleMain.games.get(shulkers.get(block.getLocation())).getTeamName()))) {
+		if (block.getType() == Material.OAK_SIGN && GameManager.checkSign(block.getLocation())) {
 			event.setCancelled(true);
 		}
 	}
 	
+	/**
+	 * Manages the common behavior of player crafting
+	 * 
+	 * @param event	The CraftItemEvent
+	 */
 	@EventHandler
-	public void onCraft(CraftItemEvent event) {
+	public void onCraftGeneric(CraftItemEvent event) {
 		if (!KuffleMain.gameStarted) {
 			return ;
 		}
@@ -246,50 +257,25 @@ public class PlayerInteract implements Listener {
 		ItemStack item = event.getInventory().getResult();
 		Player player = (Player) event.getWhoClicked();
 
-		if (Utils.compareItems(item, KuffleMain.crafts.findItemByName("EndTeleporter"), true, true, true)) {
-			if (player.getLevel() < xpActivables.get("EndTeleporter")) {
-				event.setCancelled(true);
-				player.sendMessage("You need " + xpActivables.get("EndTeleporter") + " xp levels to craft this item.");
-			} else {
-				player.setLevel(player.getLevel() - xpActivables.get("EndTeleporter"));
-				KuffleMain.gameLogs.logMsg(player.getName(), "Crafted EndTeleporter.");
-			}
-		} else if (Utils.compareItems(item, KuffleMain.crafts.findItemByName("OverworldTeleporter"), true, true, true)) {
-			if (player.getLevel() < xpActivables.get("OverworldTeleporter")) {
-				event.setCancelled(true);
-				player.sendMessage("You need " + xpActivables.get("OverworldTeleporter") + " xp levels to craft this item.");
-			} else {
-				player.setLevel(player.getLevel() - xpActivables.get("OverworldTeleporter"));
-				KuffleMain.gameLogs.logMsg(player.getName(), "Crafted OverworldTeleporter.");
-			}
-		} else if (Utils.compareItems(item, KuffleMain.crafts.findItemByName("CoralCompass"), true, true, true)) {
+		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("CoralCompass"), true, true, true)) {
 			if (player.getLevel() < xpActivables.get("CoralCompass")) {
 				event.setCancelled(true);
 				player.sendMessage("You need " + xpActivables.get("CoralCompass") + " xp levels to craft this item.");
 			} else {
 				player.setLevel(player.getLevel() - xpActivables.get("CoralCompass"));
-				KuffleMain.gameLogs.logMsg(player.getName(), "Crafted CoralCompass.");
+				LogManager.getInstanceGame().logMsg(player.getName(), "Crafted CoralCompass.");
 			}
-		} else if (item.hasItemMeta() &&
-				item.getItemMeta().hasDisplayName() &&
-				item.getItemMeta().getDisplayName().contains("Template")) {
-			String name = AgeManager.getAgeByNumber(KuffleMain.ages, KuffleMain.games.get(player.getName()).getAge()).name;
-
-			name = name.replace("_Age", "");
-			name = name + "Template";
-			
-			Utils.reloadTemplate(name, AgeManager.getAgeByNumber(KuffleMain.ages, KuffleMain.games.get(player.getName()).getAge()).name);
-			
-			for (String playerName : KuffleMain.games.keySet()) {
-				KuffleMain.games.get(playerName).getPlayer().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + player.getName() + ChatColor.RESET + "" + ChatColor.BLUE + " just crafted Template !");
-			}
-			KuffleMain.gameLogs.logMsg(player.getName(), "just crafted Template !");
 		}
 	}
 	
+	/**
+	 * Manages the common behavior of player hitting another player
+	 * 
+	 * @param event	The EntityDamageByEntityEvent
+	 */
 	@EventHandler
-	public void onPlayerHitPlayer(EntityDamageByEntityEvent event) {
-		if (!KuffleMain.gameStarted) {
+	public void onPlayerHitPlayerGeneric(EntityDamageByEntityEvent event) {
+		if (!KuffleMain.gameStarted && !Config.getPassiveAll()) {
 			return ;
 		}
 		
@@ -303,24 +289,28 @@ public class PlayerInteract implements Listener {
 		Player damager = (Player) tmpDamager;
 		Player damagee = (Player) tmpDamagee;
 		
-		if (!KuffleMain.games.containsKey(damager.getName()) || !KuffleMain.games.containsKey(damagee.getName())) {
+		if (!GameManager.hasPlayer(damager.getName()) || !GameManager.hasPlayer(damagee.getName())) {
 			return ;
 		}
 		
-		if (KuffleMain.config.getPassive()) {
+		if (Config.getPassiveAll()) {
 			event.setCancelled(true);
 			
 			return ;
 		}
 		
-		if (KuffleMain.config.getTeam() &&
-				KuffleMain.games.get(damager.getName()).getTeamName().equals(KuffleMain.games.get(damagee.getName()).getTeamName())) {
+		if (Config.getPassiveTeam() && Config.getTeam() && TeamManager.sameTeam(damager.getName(), damagee.getName())) {
 			event.setCancelled(true);
 		}
 	}
 	
+	/**
+	 * Manages the common behavior of firework throwing
+	 * 
+	 * @param event	The PlayerInteractEvent
+	 */
 	@EventHandler
-	public void onFireWorkThrow(PlayerInteractEvent event) {
+	public void onFireWorkThrowGeneric(PlayerInteractEvent event) {
 		if (!KuffleMain.gameStarted) {
 			return ;
 		}
@@ -329,7 +319,7 @@ public class PlayerInteract implements Listener {
 		Action action = event.getAction();
 		Player player = event.getPlayer();
 
-		if (!KuffleMain.games.containsKey(player.getName())) {
+		if (!GameManager.hasPlayer(player.getName())) {
 			return ;
 		}
 		
@@ -354,36 +344,17 @@ public class PlayerInteract implements Listener {
 		}
 	}
 	
-	private void endTeleporter(Player player) {
-		Location tmp = new Location(Bukkit.getWorld(Utils.findNormalWorld().getName() + "_the_end"), player.getLocation().getX() + 1000, 60.0, player.getLocation().getZ() + 1000);
-		
-		while (tmp.getBlock().getType() != Material.END_STONE) {
-			tmp.add(10, 0, 10);
-		}
-		
-		teleport(tmp, player, "Teleported to the End.");
-		
-		if (xpActivables.get("EndTeleporter") > 1) {
-			xpActivables.put("EndTeleporter", xpActivables.get("EndTeleporter") - 1);
-		}
-	}
-	
-	private void overworldTeleporter(Player player) {
-		Location tmp = new Location(Bukkit.getWorld(Utils.findNormalWorld().getName()), player.getLocation().getX() - 1000, 80.0, player.getLocation().getZ() - 1000);
-		
-		teleport(tmp, player, "Teleported to the Overworld.");
-		
-		if (xpActivables.get("OverworldTeleporter") > 1) {
-			int tmpXp = xpActivables.get("OverworldTeleporter") - 2;
-			xpActivables.put("OverworldTeleporter", tmpXp < 1 ? 1 : tmpXp);
-		}
-	}
-	
+	/**
+	 * Manages coral compass search
+	 * 
+	 * @param player	The player that searching warm ocean
+	 * @param compass	The compass item
+	 */
 	private void coralCompass(Player player, ItemStack compass) {
 		Location tmp = player.getLocation();
 		
 		if (findCoralBiome(tmp, compass)) {
-			KuffleMain.gameLogs.writeMsg(player, "Warm ocean found, follow the compass.");
+			LogManager.getInstanceGame().writeMsg(player, "Warm ocean found, follow the compass.");
 			
 			if (xpActivables.get("CoralCompass") > 1) {
 				int tmpXp = xpActivables.get("CoralCompass");
@@ -396,37 +367,23 @@ public class PlayerInteract implements Listener {
 				xpActivables.put("CoralCompass", tmpXp < 1 ? 1 : tmpXp);
 			}
 		} else {
-			KuffleMain.gameLogs.writeMsg(player, "Warm ocean not found, move away and try again.");	
+			LogManager.getInstanceGame().writeMsg(player, "Warm ocean not found, move away and try again.");	
 		}
 	}
 	
-	private void teleport(Location loc, Player player, String msg) {
-		loc.setY((double) loc.getWorld().getHighestBlockAt(loc).getY());
-		
-		if (KuffleMain.config.getTeam()) {
-			String teamName = KuffleMain.games.get(player.getName()).getTeamName();
-			
-			for (String playerName : KuffleMain.games.keySet()) {
-				if (KuffleMain.games.get(playerName).getTeamName().equals(teamName)) {
-					KuffleMain.games.get(playerName).getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 50, false, false, false));
-					KuffleMain.games.get(playerName).getPlayer().teleport(loc);
-					KuffleMain.games.get(playerName).getPlayer().removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-					KuffleMain.gameLogs.logMsg(playerName, msg);
-				}
-			}
-		} else {
-			player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 50, false, false, false));
-			player.teleport(loc);
-			player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-			KuffleMain.gameLogs.logMsg(player.getName(), msg);
-		}
-	}
-	
+	/**
+	 * Search for a warm ocean in a 10 chunk square centered in loc
+	 * 
+	 * @param loc		Location of the square center
+	 * @param compass	The compass item
+	 * 
+	 * @return True if warm ocean is found, False instead
+	 */
 	private boolean findCoralBiome(Location loc, ItemStack compass) {
 		Chunk baseChunk = loc.getChunk();
 
 		for (int radius = 0; radius <= 10; radius++) {
-			Location found = searchWarmRadius(baseChunk, radius, loc);
+			Location found = searchWarmRadius(baseChunk, radius);
 			
 			if (found != null) {
 				CompassMeta cm = (CompassMeta) compass.getItemMeta();
@@ -442,13 +399,21 @@ public class PlayerInteract implements Listener {
 		return false;
 	}
 	
-	private Location searchWarmRadius(Chunk baseChunk, int radius, Location loc) {
+	/**
+	 * Search for a warm ocean in radius centered on baseChunk
+	 * 
+	 * @param baseChunk	The center chunk for the research
+	 * @param radius	The radius around baseChunk to search for
+	 * 
+	 * @return True if Warm ocean found, False instead
+	 */
+	private Location searchWarmRadius(Chunk baseChunk, int radius) {
 		for (int x = -radius; x <= radius; x++) {
 			for (int z = -radius; z <= radius; z++) {
 				if (Math.abs(x) == radius || Math.abs(z) == radius) {
-					Chunk currentChunk = loc.getWorld().getChunkAt(baseChunk.getX() + x, baseChunk.getZ() + z);
+					Chunk currentChunk = baseChunk.getWorld().getChunkAt(baseChunk.getX() + x, baseChunk.getZ() + z);
 					Location blockLoc = currentChunk.getBlock(8, 0, 8).getLocation();
-					Biome biome = loc.getWorld().getBiome(blockLoc.getBlockX(), blockLoc.getBlockY(), blockLoc.getBlockZ());
+					Biome biome = baseChunk.getWorld().getBiome(blockLoc.getBlockX(), blockLoc.getBlockY(), blockLoc.getBlockZ());
 					
 					if (biome == Biome.WARM_OCEAN || biome == Biome.DEEP_WARM_OCEAN) {
 						blockLoc.getBlock().setType(Material.LODESTONE);

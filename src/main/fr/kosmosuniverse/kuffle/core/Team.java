@@ -1,6 +1,7 @@
 package main.fr.kosmosuniverse.kuffle.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -70,6 +71,15 @@ public class Team {
 		}
 		
 		return names;
+	}
+	
+	/**
+	 * Gets team players list
+	 * 
+	 * @return the players list
+	 */
+	public List<Player> getPlayers() {
+		return Collections.unmodifiableList(players);
 	}
 	
 	/**

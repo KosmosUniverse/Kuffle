@@ -6,6 +6,7 @@ import org.json.simple.parser.ParseException;
 import main.fr.kosmosuniverse.kuffle.core.RewardManager;
 import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
+import main.fr.kosmosuniverse.kuffle.listeners.ItemsPlayerInteract;
 import main.fr.kosmosuniverse.kuffle.utils.FilesConformity;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
@@ -35,6 +36,9 @@ public class KuffleItems extends KuffleType {
 	 */
 	public void setupKuffleType(JavaPlugin plugin) throws KuffleFileLoadException {
 		setupType(plugin);
+		
+		playerInteract = new ItemsPlayerInteract();
+		plugin.getServer().getPluginManager().registerEvents(playerInteract, plugin);
 	}
 	
 	@Override

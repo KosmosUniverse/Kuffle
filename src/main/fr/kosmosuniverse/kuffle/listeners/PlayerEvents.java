@@ -36,17 +36,23 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
 public class PlayerEvents implements Listener {
 	private File dataFolder;
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param folder	The plugin folder
+	 */
 	public PlayerEvents(File folder) {
 		dataFolder = folder;
 	}
 	
+	/**
+	 * Event triggered at player connection, if game is started load for this player if he has saved game file
+	 * 
+	 * @param event	The PlayerJoinEvent
+	 */
 	@EventHandler
 	public void onPlayerConnectEvent(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
-
-		for (ACrafts item : CraftManager.getRecipeList()) {
-			player.discoverRecipe(new NamespacedKey(KuffleMain.current, item.getName()));
-		}
 	
 		if (!KuffleMain.gameStarted) {
 			return;
@@ -54,13 +60,17 @@ public class PlayerEvents implements Listener {
 		
 		if (!Utils.fileExists(dataFolder.getPath(), player.getName() + ".ki")) {
 			return;
-		}		
+		}
 
 		try {
 			GameManager.loadPlayerGame(player);
 		} catch (IOException | ParseException e) {
 			Utils.logException(e);
 			player.sendMessage();
+		}
+		
+		for (ACrafts item : CraftManager.getRecipeList()) {
+			player.discoverRecipe(new NamespacedKey(KuffleMain.current, item.getName()));
 		}
 		
 		GameManager.sendMsgToPlayers("[" + KuffleMain.current.getName() + "] : <" + player.getName() + "> game is reloaded !");
@@ -76,12 +86,12 @@ public class PlayerEvents implements Listener {
 	public void onPlayerDisconnectEvent(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		
-		for (ACrafts item : CraftManager.getRecipeList()) {
-			player.undiscoverRecipe(new NamespacedKey(KuffleMain.current, item.getName()));
-		}
-		
 		if (!KuffleMain.gameStarted || !GameManager.hasPlayer(player.getName())) {
 			return ;
+		}
+		
+		for (ACrafts item : CraftManager.getRecipeList()) {
+			player.undiscoverRecipe(new NamespacedKey(KuffleMain.current, item.getName()));
 		}
 		
 		try (FileWriter writer = new FileWriter(dataFolder.getPath() + File.separator + player.getName() + ".ki")) {			

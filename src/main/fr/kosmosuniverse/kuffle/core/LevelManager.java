@@ -128,4 +128,13 @@ public class LevelManager {
 		
 		return max;
 	}
+	
+	/**
+	 * Gets the lowest level
+	 * 
+	 * @return the levels' first Level
+	 */
+	public static Level getFirstLevel() {
+		return levels.get(0);
+	}
 }

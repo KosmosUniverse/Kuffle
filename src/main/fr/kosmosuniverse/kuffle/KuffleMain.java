@@ -11,7 +11,6 @@ import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
 import main.fr.kosmosuniverse.kuffle.listeners.PlayerEvents;
-import main.fr.kosmosuniverse.kuffle.listeners.PlayerInteract;
 import main.fr.kosmosuniverse.kuffle.type.KuffleBlocks;
 import main.fr.kosmosuniverse.kuffle.type.KuffleItems;
 import main.fr.kosmosuniverse.kuffle.type.KuffleType;
@@ -21,7 +20,6 @@ public class KuffleMain extends JavaPlugin {
 	public static KuffleType type = null;
 
 	public static KuffleMain current;
-	public static PlayerInteract playerInteract;
 	public static PlayerEvents playerEvents;
 	
 	public static boolean paused = false;
