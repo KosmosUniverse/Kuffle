@@ -5,9 +5,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import main.fr.kosmosuniverse.kuffle.KuffleMain;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleConfigException;
-import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 /**
  * 
@@ -40,15 +41,15 @@ public class KuffleConfig implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		KuffleMain.systemLogs.logMsg(player.getName(), Utils.getLangString(player.getName(), "CMD_PERF").replace("<#>", "<ki-config>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-config>"));
 		
 		if (args.length == 0) {
-			player.sendMessage(KuffleMain.config.displayConfig());
+			player.sendMessage(Config.displayConfig());
 			return true;
 		}
 		
 		if (!player.hasPermission("ki-op")) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_ALLOWED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return true;
 		}
 		
@@ -61,9 +62,9 @@ public class KuffleConfig implements CommandExecutor {
 				ResultType ret = invokeMethod(player, before, args[i]);
 				
 				if (ret == ResultType.GOOD) {
-					KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), CONFIG_SET).replace("[#]", before).replace("[##]", "[" + args[i] + "]"));	
+					LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang(CONFIG_SET, Config.getLang()).replace("[#]", before).replace("[##]", "[" + args[i] + "]"));	
 				} else if (ret == ResultType.BAD) {
-					KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), CONFIG_NOT_SET).replace("[#]", before).replace("[##]", "[" + args[i] + "]"));
+					LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang(CONFIG_NOT_SET, Config.getLang()).replace("[#]", before).replace("[##]", "[" + args[i] + "]"));
 				}
 			}
 		}
@@ -83,12 +84,12 @@ public class KuffleConfig implements CommandExecutor {
 	private ResultType invokeMethod(Player player, String before, String current) {
 		ResultType ret = ResultType.GOOD;
 		
-		if (!KuffleMain.config.hasKey(before)) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "KEY_NOT_REC").replace("[#]", "[" + before + "]"));
+		if (!Config.hasKey(before)) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("KEY_NOT_REC", Config.getLang()).replace("[#]", "[" + before + "]"));
 			ret = ResultType.INVALID;
 		} else {
 			try {
-				KuffleMain.config.setElem(before, current);
+				Config.setElem(before, current);
 			} catch (KuffleConfigException e) {
 				player.sendMessage(e.getMessage());
 				ret = ResultType.BAD;

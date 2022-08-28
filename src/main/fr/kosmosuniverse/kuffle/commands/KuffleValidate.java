@@ -7,6 +7,10 @@ import org.bukkit.entity.Player;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.AgeManager;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 public class KuffleValidate implements CommandExecutor {
@@ -18,7 +22,7 @@ public class KuffleValidate implements CommandExecutor {
 		Player player = (Player) sender;
 		
 		if (!KuffleMain.gameStarted) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "GAME_NOT_LAUNCHED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", Config.getLang()));
 			return true;
 		}
 		
@@ -27,40 +31,36 @@ public class KuffleValidate implements CommandExecutor {
 		}
 		
 		if (msg.equalsIgnoreCase("ki-validate")) {
-			KuffleMain.systemLogs.logMsg(player.getName(), Utils.getLangString(player.getName(), "CMD_PERF").replace("<#>", "<ki-validate>"));
+			LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-validate>"));
 			
 			if (!player.hasPermission("ki-validate")) {
-				KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_ALLOWED"));
+				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 				return false;
 			}
 			
-			if (!KuffleMain.games.containsKey(args[0])) {
-				KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "VALIDATE_PLAYER_ITEM"));	
+			if (!GameManager.hasPlayer(args[0])) {
+				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("VALIDATE_PLAYER_ITEM", Config.getLang()));
 				return true;
 			}
 
-			String tmp = KuffleMain.games.get(args[0]).getCurrentItem();
-			
-			KuffleMain.games.get(args[0]).found();
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "ITEM_VALIDATED").replace("[#]", " [" + tmp + "] ").replace("<#>", "<" + args[0] + ">"));			
-		}
-		
-		if (msg.equalsIgnoreCase("ki-validate-age")) {
-			KuffleMain.systemLogs.logMsg(player.getName(), Utils.getLangString(player.getName(), "CMD_PERF").replace("<#>", "<ki-validate-age>"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("ITEM_VALIDATED", Config.getLang()).replace("[#]", " [" + GameManager.getPlayerTarget(playerTarget) + "] ").replace("<#>", "<" + args[0] + ">"));			
+			GameManager.playerFoundTarget(args[0]);
+		} else if (msg.equalsIgnoreCase("ki-validate-age")) {
+			LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-validate-age>"));
 			
 			if (!player.hasPermission("ki-validate-age")) {
-				KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_ALLOWED"));
+				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 				return false;
 			}
 			
-			if (!KuffleMain.games.containsKey(args[0])) {
-				KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "VALIDATE_PLAYER_AGE"));	
+			if (!GameManager.hasPlayer(args[0])) {
+				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("VALIDATE_PLAYER_AGE", Config.getLang()));	
 				
 				return true;
 			}
 			
 			if (KuffleMain.games.get(args[0]).getAge() == -1) {
-				KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "GAME_ALREADY_FINISHED").replace("<#>", "<" + args[0] + ">"));
+				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_ALREADY_FINISHED", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 				
 				return true;
 			}
@@ -69,7 +69,7 @@ public class KuffleValidate implements CommandExecutor {
 			
 			KuffleMain.games.get(args[0]).setItemCount(KuffleMain.config.getItemPerAge() + 1);
 			KuffleMain.games.get(args[0]).setCurrentItem(null);
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "AGE_VALIDATED").replace("[#]", "[" + tmp + "]").replace("<#>", "<" + args[0] + ">"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("AGE_VALIDATED", Config.getLang()).replace("[#]", "[" + tmp + "]").replace("<#>", "<" + args[0] + ">"));
 		}
 		
 		return true;

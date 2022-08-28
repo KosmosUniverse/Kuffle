@@ -1,6 +1,7 @@
 package main.fr.kosmosuniverse.kuffle.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -169,6 +170,15 @@ public class AgeManager {
 	 * @return Ages name as List of Strings
 	 */
 	public static List<String> getAgesNameList() {
-		return ages.stream().map(age -> age.name).collect(Collectors.toList());
+		return Collections.unmodifiableList(ages.stream().map(age -> age.name).collect(Collectors.toList()));
+	}
+	
+	/**
+	 * Gets the Ages list as an unmodifiable list
+	 * 
+	 * @return the ages list
+	 */
+	public static List<Age> getAges() {
+		return Collections.unmodifiableList(ages);
 	}
 }

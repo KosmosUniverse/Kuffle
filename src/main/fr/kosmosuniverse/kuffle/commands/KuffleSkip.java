@@ -6,7 +6,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
-import main.fr.kosmosuniverse.kuffle.utils.Utils;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
 
 public class KuffleSkip implements CommandExecutor {
 	@Override
@@ -16,22 +19,22 @@ public class KuffleSkip implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		KuffleMain.systemLogs.logMsg(player.getName(), Utils.getLangString(player.getName(), "CMD_PERF").replace("<#>", "<ki-skip>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-skip>"));
 		
 		if (!KuffleMain.gameStarted) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "GAME_NOT_LAUNCHED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", Config.getLang()));
 			
 			return false;
 		}
 
-		if (!KuffleMain.config.getSkip() && !msg.equals("ki-adminskip")) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "CONFIG_DISABLED"));
+		if (!Config.getSkip() && !msg.equals("ki-adminskip")) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("CONFIG_DISABLED", Config.getLang()));
 			
 			return false;
 		}
 		
-		if (!KuffleMain.games.containsKey(player.getName())) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_PLAYING"));					
+		if (!GameManager.hasPlayer(player.getName())) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_PLAYING", Config.getLang()));
 			return true;
 		}
 		
@@ -40,13 +43,13 @@ public class KuffleSkip implements CommandExecutor {
 				return false;
 			}
 			
-			doSkip(player, "ki-skip", player.getName());
+			doSkip(player, msg, player.getName());
 		} else if (msg.equals("ki-adminskip")) {
 			if (args.length != 1) {
 				return false;
 			}
 			
-			doSkip(player, "ki-adminskip", args[0]);
+			doSkip(player, msg, args[0]);
 		}
 		
 		return true;
@@ -54,19 +57,18 @@ public class KuffleSkip implements CommandExecutor {
 	
 	private void doSkip(Player player, String cmd, String playerTarget) {
 		if (!player.hasPermission(cmd)) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_ALLOWED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return ;
 		}
 		
-		if (!KuffleMain.games.containsKey(playerTarget)) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "PLAYER_NOT_IN_GAME"));
+		if (!GameManager.hasPlayer(playerTarget)) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("PLAYER_NOT_IN_GAME", Config.getLang()));
 			return ;
 		}
 		
-		String tmp = KuffleMain.games.get(playerTarget).getCurrentItem();
-		
-		KuffleMain.games.get(player.getName()).skip("ki-skip".equals(cmd));
-		KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "ITEM_SKIPPED").replace("[#]", " [" + tmp + "] ").replace("<#>", " <" + playerTarget + ">"));				
+		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("ITEM_SKIPPED", Config.getLang()).replace("[#]", " [" + GameManager.getPlayerTarget(playerTarget) + "] ").replace("<#>", " <" + playerTarget + ">"));
+		GameManager.skipPlayerTarget(playerTarget, "ki-skip".equals(cmd));
+
 		
 		return ;
 	}

@@ -16,6 +16,11 @@ import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class KuffleAgeItems implements CommandExecutor  {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cnd, String msg, String[] args) {

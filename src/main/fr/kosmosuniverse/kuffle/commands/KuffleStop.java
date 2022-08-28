@@ -7,7 +7,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
-import main.fr.kosmosuniverse.kuffle.utils.Utils;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.CraftManager;
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
+import main.fr.kosmosuniverse.kuffle.core.TeamManager;
 
 public class KuffleStop implements CommandExecutor {
 	@Override
@@ -17,39 +23,39 @@ public class KuffleStop implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		KuffleMain.systemLogs.logMsg(player.getName(), Utils.getLangString(player.getName(), "CMD_PERF").replace("<#>", "<ki-stop>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-stop>"));
 		
 		if (!player.hasPermission("ki-stop")) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_ALLOWED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return false;
 		}
 		
 		if (!KuffleMain.gameStarted) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "GAME_NOT_LAUNCHED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", Config.getLang()));
 			return false;
 		}
 		
-		KuffleMain.games.forEach((playerName, game) -> {
-			for (PotionEffect pe : game.getPlayer().getActivePotionEffects()) {
-				game.getPlayer().removePotionEffect(pe.getType());
+		GameManager.applyToPlayers((game) -> {
+			for (PotionEffect pe : game.player.getActivePotionEffects()) {
+				game.player.removePotionEffect(pe.getType());
 			}
 			
-			game.resetBar();
+			GameManager.resetPlayerBar(game);
 		});
 
-		Utils.removeTemplates();
-		KuffleMain.scores.clear();
+		CraftManager.removeCraftTemplates();
+		ScoreManager.clear();
 		
-		if (KuffleMain.config.getTeam()) {
-			KuffleMain.teams.resetAll();
+		if (Config.getTeam()) {
+			TeamManager.clear();
 		}
 		
-		KuffleMain.games.clear();
+		GameManager.clear();
 		KuffleMain.loop.kill();
 		
 		KuffleMain.gameStarted = false;
 		KuffleMain.paused = false;
-		KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "GAME_STOPPED"));
+		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_STOPPED", Config.getLang()));
 		
 		return true;
 	}

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
@@ -110,15 +111,36 @@ public class GameManager {
 	public static boolean addPlayer(Player player) {
 		boolean ret;
 		
-		if (!games.containsKey(player.getName())) {
-			//insert log
+		if (games.containsKey(player.getName())) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("PLAYER_ALREADY_LIST", Config.getLang()));
 			ret = false;
 		} else {
 			games.put(player.getName(), new Game(player));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("ADDED_ONE_LIST", Config.getLang()));
 			ret = true;
 		}
 		
 		return ret;
+	}
+	
+	/**
+	 * Adds players to the game list
+	 * 
+	 * @param players	The players list to add
+	 * 
+	 * @return the number of player successfuly added to the list
+	 */
+	public static int addPlayers(List<Player> players) {
+		int cnt = 0;
+		
+		for (Player player : players) {
+			if (!games.containsKey(player.getName())) {
+				games.put(player.getName(), new Game(player));
+				cnt++;
+			}
+		}
+		
+		return cnt;
 	}
 	
 	/**
@@ -132,7 +154,6 @@ public class GameManager {
 		boolean ret;
 		
 		if (!games.containsKey(player)) {
-			//insert log
 			ret = false;
 		} else {
 			games.get(player).clear();
@@ -141,6 +162,16 @@ public class GameManager {
 		}
 		
 		return ret;
+	}
+	
+	/**
+	 * Resets the games map
+	 */
+	public static void resetList() {
+		if (games != null) {
+			games.forEach((k, v) -> v.clear());
+			games.clear();
+		}
 	}
 	
 	/**
@@ -377,7 +408,7 @@ public class GameManager {
 			game.gameRank = playersRanks.get(playerName);
 		}
 		
-		updatePlayerBar(playerName);
+		updatePlayerBar(game);
 		reloadPlayerEffects(playerName);
 		updatePlayerListName(playerName);
 		
@@ -387,22 +418,18 @@ public class GameManager {
 	/**
 	 * Pause the player's game by saving the difference between actual time and player's timer
 	 * 
-	 * @param player	The player to pause
+	 * @param game	The Game of player to pause
 	 */
-	public static void pauseplayer(String player) {
-		Game game = games.get(player);
-		
+	public static void pausePlayer(Game game) {
 		game.interval = System.currentTimeMillis() - game.timeShuffle;
 	}
 
 	/**
 	 * Resume the player's game by loading the difference between actual time and pause time
 	 * 
-	 * @param player	The player to resume
+	 * @param game	The Game of player to resume
 	 */
-	public static void resume(String player) {
-		Game game = games.get(player);
-		
+	public static void resumePlayer(Game game) {
 		game.timeShuffle = System.currentTimeMillis() - game.interval;
 		game.interval = -1;
 	}
@@ -410,11 +437,9 @@ public class GameManager {
 	/**
 	 * Updates the player boss bar
 	 * 
-	 * @param player	The player to update
+	 * @param game	The Game of player to update
 	 */
-	public static void updatePlayerBar(String player) {
-		Game game = games.get(player);
-		
+	public static void updatePlayerBar(Game game) {
 		if (game.lose) {
 			game.ageDisplay.setProgress(0.0);
 			game.ageDisplay.setTitle(LangManager.getMsgLang("GAME_DONE", game.configLang).replace("%i", "" + game.gameRank));
@@ -438,28 +463,24 @@ public class GameManager {
 	/**
 	 * Setup basics variables for a player
 	 * 
-	 * @param player	The player that will be setup
+	 * @param game	The Game of player that will be setup
 	 */
-	public static void setupPlayer(String player) {
-		Game game = games.get(player);
-		
+	public static void setupPlayer(Game game) {
 		game.time = Config.getStartTime();
 		game.timeBase = System.currentTimeMillis();
 		game.configLang = Config.getLang();
 		game.ageDisplay = Bukkit.createBossBar(LangManager.getMsgLang("START", game.configLang), BarColor.PURPLE, BarStyle.SOLID);
 		game.ageDisplay.addPlayer(game.player);
 		
-		updatePlayerBar(player);
+		updatePlayerBar(game);
 	}
 	
 	/**
 	 * Reset player's BossBar
 	 * 
-	 * @param player	The player
+	 * @param game	The player's game
 	 */
-	public static void resetPlayerBar(String player) {
-		Game game = games.get(player);
-		
+	public static void resetPlayerBar(Game game) {
 		if (game.ageDisplay != null && game.ageDisplay.getPlayers().size() != 0) {
 			game.ageDisplay.removeAll();
 			game.ageDisplay = null;
@@ -469,34 +490,39 @@ public class GameManager {
 	/**
 	 * Player used Sbtt
 	 * 
-	 * @param player	The player that used sbtt
+	 * @param game	The Game of player that used sbtt
 	 */
-	public static void playerFoundSBTT(String player) {
-		Game game = games.get(player);
-		
+	public static void playerFoundSBTT(Game game) {
 		game.sbttCount++;
-		playerFoundTarget(player);
+		playerFoundTarget(game);
 	}
 	
 	/**
 	 * Player found its target
 	 * 
-	 * @param player	The player that found
+	 * @param game	The Game of player that found
 	 */
-	public static void playerFoundTarget(String player) {
-		Game game = games.get(player);
-		
+	public static void playerFoundTarget(String playerName) {
+		playerFoundTarget(games.get(playerName));
+	}
+	
+	/**
+	 * Player found its target
+	 * 
+	 * @param game	The Game of player that found
+	 */
+	public static void playerFoundTarget(Game game) {
 		game.currentTarget = null;
 		game.targetCount++;
 		game.player.playSound(game.player.getLocation(), Sound.BLOCK_BELL_USE, 1f, 1f);
 		game.score.setScore(game.targetCount);
-		updatePlayerBar(player);
+		updatePlayerBar(game);
 	}
 	
 	/**
 	 * Player goes to the next Age
 	 * 
-	 * @param player	The player that is moving to the next Age
+	 * @param game	The Game of player that is moving to the next Age
 	 */
 	public static void nextPlayerAge(Game game) {
 		if (Config.getRewards()) {
@@ -520,7 +546,7 @@ public class GameManager {
 		game.player.playSound(game.player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f);
 		game.score.setScore(game.targetCount);
 		updatePlayerListName(game.player.getName());
-		updatePlayerBar(game.player.getName());
+		updatePlayerBar(game);
 
 		Age tmpAge = AgeManager.getAgeByNumber(game.age);
 
@@ -531,8 +557,8 @@ public class GameManager {
 	/**
 	 * Makes a Player finish with specific rank
 	 * 
-	 * @param player	The player that finished
-	 * @param rank		The player rank
+	 * @param game	The Game of player that finished
+	 * @param rank	The player rank
 	 */
 	public static void finish(Game game, int rank) {
 		game.finished = true;
@@ -645,12 +671,12 @@ public class GameManager {
 			game.score.setScore(game.targetCount);
 			game.currentTarget = null;
 			
-			updatePlayerBar(player);
+			updatePlayerBar(game);
 		} else {
 			game.score.setScore(game.targetCount);
 			game.currentTarget = null;
 
-			updatePlayerBar(player);
+			updatePlayerBar(game);
 		}
 
 		return true;
@@ -859,7 +885,7 @@ public class GameManager {
 			game.score.setScore(game.targetCount);
 		}
 
-		updatePlayerBar(player);
+		updatePlayerBar(game);
 	}
 
 	/**
@@ -1488,6 +1514,15 @@ public class GameManager {
 	}
 	
 	/**
+	 * Apply behavior to all players.
+	 * 
+	 * @param loop	The actions to apply on all players as Lambda
+	 */
+	public static void applyToPlayers(Object object, BiConsumer<Game, Object> loop) {
+		games.forEach((playerName, playerGame) -> loop.accept(playerGame, object));
+	}
+	
+	/**
 	 * Gets the best rank from playerRanks map
 	 * 
 	 * @return the best rank
@@ -1526,5 +1561,70 @@ public class GameManager {
 	 */
 	public static String getPlayerLang(String player) {
 		return games.get(player).configLang;
+	}
+	
+	/**
+	 * Display the player in game list
+	 * 
+	 * @param player	the player that ask for display
+	 */
+	public static void displayList(Player player) {
+		if (GameManager.getGames().size() == 0) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NO_PLAYERS", Config.getLang()));
+		} else {
+			StringBuilder sb = new StringBuilder();
+			int i = 0;
+
+			for (String playerName : games.keySet()) {
+				if (i == 0) {
+					sb.append(playerName);
+				} else {
+					sb.append(", ").append(playerName);
+				}
+
+				i++;
+			}
+
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("PLAYER_LIST", Config.getLang()) + " " + sb.toString());
+		}
+	}
+	
+	/**
+	 * Gets the inventory with all players heads and game infos
+	 * 
+	 * @return the inventory
+	 */
+	public static Inventory getPlayersHeadsInventory() {
+		return playersHeads;
+	}
+	
+	/**
+	 * Setups the playersRanks map
+	 */
+	public static void setupPlayersRanks() {
+		if (Config.getTeam()) {
+			TeamManager.getTeams().forEach((team) -> playersRanks.put(team.name, 0));
+		} else {
+			games.forEach((playerName, playerGame) -> playersRanks.put(playerName, 0));
+		}
+	}
+	
+	/**
+	 * Checks if all players have a team
+	 * 
+	 * @return True if all players are in a team, False instead
+	 */
+	public static boolean checkTeams() {
+		for (String playerName : games.keySet()) {
+			if (!TeamManager.isInTeam(playerName)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public static String getPlayerTarget(String player) {
+		return games.get(player).currentTarget();
 	}
 }

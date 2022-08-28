@@ -116,7 +116,7 @@ public class LangManager {
 	 * 
 	 * @return True if lang found, False instead
 	 */
-	public static boolean langExists(String lang) {
+	public static boolean hasLang(String lang) {
 		return langs.contains(lang);
 	}
 	

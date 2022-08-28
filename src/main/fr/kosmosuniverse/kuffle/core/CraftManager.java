@@ -350,6 +350,15 @@ public class CraftManager {
 	}
 	
 	/**
+	 * Reloads templates
+	 */
+	public static void reloadTemplates() {
+		for (Age age : AgeManager.getAges()) {
+			reloadTemplate(age.name.replace("_Age", "Template"), age.name);
+		}
+	}
+	
+	/**
 	 * Reloads the templates
 	 * 
 	 * @param name	The old template name
@@ -358,11 +367,7 @@ public class CraftManager {
 	public static void reloadTemplate(String name, String age) {
 		removeCraft(name);
 
-		String tmp = age;
-
-		tmp = tmp.replace("_Age", "");
-
-		Template t = new Template(tmp, getMaterials(age));
+		Template t = new Template(name, getMaterials(age));
 
 		addCraft(t);
 

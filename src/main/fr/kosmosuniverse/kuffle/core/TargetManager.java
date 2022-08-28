@@ -16,6 +16,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Pair;
 
@@ -350,5 +351,14 @@ public class TargetManager {
 	 */
 	public static List<Inventory> getAgeTargetsInvs(String age) {
 		return Collections.unmodifiableList(targetsInvs.get(age));
+	}
+	
+	/**
+	 * Shuffles all targets for each ages
+	 */
+	public static void shuffleTargets() {
+		for (String age : targets.keySet()) {
+			Collections.shuffle(targets.get(age));
+		}
 	}
 }

@@ -108,7 +108,7 @@ public class Config {
 	 */
 	private static void checkAndSetConfig(FileConfiguration configFile) {
 		if (!configFile.contains("game_settings.lang")
-				|| !LangManager.langExists(configFile.getString("game_settings.lang"))) {
+				|| !LangManager.hasLang(configFile.getString("game_settings.lang"))) {
 			configValues.lang = "en";
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "lang"));
 			configFile.set("game_settings.lang", "en");
@@ -1082,7 +1082,7 @@ public class Config {
 	 * @param configLang	value used to set lang
 	 */
 	private static void setLang(String configLang) {
-		if (!LangManager.langExists(configLang)) {
+		if (!LangManager.hasLang(configLang)) {
 			error = "Unknown lang !";
 			setRet = false;
 		} else {

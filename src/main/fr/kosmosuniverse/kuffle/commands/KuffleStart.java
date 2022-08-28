@@ -1,7 +1,5 @@
 package main.fr.kosmosuniverse.kuffle.commands;
 
-import java.util.Collections;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -11,15 +9,27 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.ActionBar;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.CraftManager;
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.SpreadPlayer;
-import main.fr.kosmosuniverse.kuffle.utils.Utils;
+import main.fr.kosmosuniverse.kuffle.core.TargetManager;
+import main.fr.kosmosuniverse.kuffle.core.TeamManager;
+import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class KuffleStart implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
@@ -28,106 +38,94 @@ public class KuffleStart implements CommandExecutor {
 
 		Player player = (Player) sender;
 
-		KuffleMain.systemLogs.logMsg(player.getName(), Utils.getLangString(player.getName(), "CMD_PERF").replace("<#>", "<ki-start>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-start>"));
 
 		if (!player.hasPermission("ki-start")) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_ALLOWED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return false;
 		}
 
-		if (KuffleMain.games.size() == 0) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NO_PLAYERS"));
+		if (GameManager.getGames().size() == 0) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NO_PLAYERS", Config.getLang()));
 
 			return false;
 		}
 
 		if (KuffleMain.gameStarted) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "GAME_LAUNCHED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
+			
 			return false;
 		}
 
-		if (KuffleMain.config.getTeam() && !checkTeams()) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "PLAYER_NOT_IN_TEAM"));
+		if (Config.getTeam() && !GameManager.checkTeams()) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("PLAYER_NOT_IN_TEAM", Config.getLang()));
+			
 			return true;
-		} else if (!KuffleMain.config.getTeam()) {
-			KuffleMain.teams.resetAll();
+		} else if (!Config.getTeam()) {
+			TeamManager.clear();
 		}
 		
-		if (KuffleMain.config.getSaturation()) {
-			KuffleMain.games.forEach((playerName, game) ->
-				game.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 999999, 10, false, false, false))
-			);
-		}
+		GameManager.applyToPlayers((game) -> {
+			if (Config.getSaturation()) {
+				game.player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 999999, 10, false, false, false));
+			}
 
-		for (String key : KuffleMain.allItems.keySet()) {
-			Collections.shuffle(KuffleMain.allItems.get(key));
-		}
+			game.player.sendMessage(LangManager.getMsgLang("GAME_STARTED", game.configLang));
+		});
 
-		KuffleMain.games.forEach((playerName, game) ->
-			game.getPlayer().sendMessage(Utils.getLangString(player.getName(), "GAME_STARTED"))
-		);
-
-		KuffleMain.systemLogs.logSystemMsg(Utils.getLangString(player.getName(), "GAME_STARTED"));
+		LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("GAME_STARTED", Config.getLang()));
 
 		int spread = spreadAndSpawn(player);
 
-		KuffleMain.playersHeads = Bukkit.createInventory(null, Utils.getNbInventoryRows(KuffleMain.games.size()), "§8Players");
-
-		KuffleMain.games.forEach((playerName, game) -> {
-			KuffleMain.playersHeads.addItem(Utils.getHead(game.getPlayer()));
-
-			if (KuffleMain.config.getTeam() && !KuffleMain.playerRank.containsKey(game.getTeamName())) {
-				KuffleMain.playerRank.put(game.getTeamName(), 0);
-			} else {
-				KuffleMain.playerRank.put(playerName, 0);
-			}
-		});
+		TargetManager.shuffleTargets();
+		GameManager.updatePlayersHeads();
+		GameManager.setupPlayersRanks();
 
 		KuffleMain.paused = true;
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
-			KuffleMain.games.forEach((playerName, game) ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.RED + "5" + ChatColor.RESET, game.getPlayer())
+			GameManager.applyToPlayers((game) ->
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.RED + "5" + ChatColor.RESET, game.player)
 			);
 
-			if (KuffleMain.config.getSBTT()) {
-				Utils.setupTemplates();
+			if (Config.getSBTT()) {
+				CraftManager.reloadTemplates();
 			}
 		}, 20 + spread);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () ->
-			KuffleMain.games.forEach((playerName, game) ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GOLD + "4" + ChatColor.RESET, game.getPlayer())
+			GameManager.applyToPlayers((game) ->
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GOLD + "4" + ChatColor.RESET, game.player)
 			)
 		, 40 + spread);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () ->
-			KuffleMain.games.forEach((playerName, game) ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "3" + ChatColor.RESET, game.getPlayer())
+			GameManager.applyToPlayers((game) ->
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "3" + ChatColor.RESET, game.player)
 			)
 		, 60 + spread);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () ->
-			KuffleMain.games.forEach((playerName, game) ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GREEN + "2" + ChatColor.RESET, game.getPlayer())
+			GameManager.applyToPlayers((game) ->
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GREEN + "2" + ChatColor.RESET, game.player)
 			)
 		, 80 + spread);
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
-			KuffleMain.games.forEach((playerName, game) -> {
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.BLUE + "1" + ChatColor.RESET, game.getPlayer());
-				game.setup();
+			GameManager.applyToPlayers((game) -> {
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.BLUE + "1" + ChatColor.RESET, game.player);
+				GameManager.setupPlayer(game);
 			});
 
-			KuffleMain.scores.setupPlayerScores();
+			ScoreManager.setupPlayerScores();
 		}, 100 + spread);
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
 			ItemStack box = getStartBox();
 
-			KuffleMain.games.forEach((playerName, game) -> {
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + "GO!" + ChatColor.RESET, game.getPlayer());
-				game.getPlayer().getInventory().addItem(box);
+			GameManager.applyToPlayers((game) -> {
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + "GO!" + ChatColor.RESET, game.player);
+				game.player.getInventory().addItem(box);
 			});
 
 			KuffleMain.loop.startRunnable();
@@ -138,60 +136,60 @@ public class KuffleStart implements CommandExecutor {
 		return true;
 	}
 	
+	/**
+	 * Sets players spawn location after spreading if on in config
+	 * 
+	 * @param sender	The player thatmade start command
+	 * 
+	 * @return 20 is players have been spread, 0 instead
+	 */
 	private int spreadAndSpawn(Player sender) {
-		if (KuffleMain.config.getSpread()) {
-			SpreadPlayer.spreadPlayers(sender, KuffleMain.config.getSpreadDistance(), KuffleMain.config.getSpreadRadius(), Utils.getPlayerList());
+		if (Config.getSpread()) {
+			SpreadPlayer.spreadPlayers(sender, Config.getSpreadDistance(), Config.getSpreadRadius(), GameManager.getPlayerList());
 
-			KuffleMain.games.forEach((playerName, game) -> {
-				if (KuffleMain.config.getTeam()) {
-					game.setTeamName(KuffleMain.teams.findTeamByPlayer(playerName));
+			GameManager.applyToPlayers((game) -> {
+				if (Config.getTeam()) {
+					game.teamName = TeamManager.findTeamByPlayer(game.player.getName()).name;
 				}
 
-				game.getPlayer().setBedSpawnLocation(game.getPlayer().getLocation(), true);
-				game.setSpawnLoc(game.getPlayer().getLocation());
-				game.getSpawnLoc().add(0, -1, 0).getBlock().setType(Material.BEDROCK);
+				game.player.setBedSpawnLocation(game.player.getLocation(), true);
+				game.spawnLoc = game.player.getLocation();
+				game.spawnLoc.add(0, -1, 0).getBlock().setType(Material.BEDROCK);
 			});
 
 			return 20;
 		} else {
-			Location spawn = null;
+			Location spawn = new Location(sender.getLocation().getWorld(), -1, -1, -1);
 
-			for (String playerName : KuffleMain.games.keySet()) {
-				if (KuffleMain.config.getTeam()) {
-					KuffleMain.games.get(playerName).setTeamName(KuffleMain.teams.findTeamByPlayer(playerName));
+			GameManager.applyToPlayers(spawn, (game, spawnLoc) -> {
+				if (Config.getTeam()) {
+					game.teamName = TeamManager.findTeamByPlayer(game.player.getName()).name;
 				}
 
-				if (spawn == null) {
-					spawn = KuffleMain.games.get(playerName).getPlayer().getLocation().getWorld().getSpawnLocation();
+				if (((Location) spawnLoc).getY() < 0) {
+					Location tmp = game.player.getLocation().getWorld().getSpawnLocation();
+					
+					((Location) spawnLoc).setWorld(tmp.getWorld());
+					((Location) spawnLoc).setX(tmp.getX());
+					((Location) spawnLoc).setY(tmp.getY());
+					((Location) spawnLoc).setZ(tmp.getZ());
+					
+					((Location) spawnLoc).subtract(0, 1, 0).getBlock().setType(Material.BEDROCK);
 				}
 
-				KuffleMain.games.get(playerName).setSpawnLoc(spawn);
-			}
-
-			if (spawn != null) {
-				spawn.subtract(0, 1, 0).getBlock().setType(Material.BEDROCK);
-			}
+				game.spawnLoc = ((Location) spawnLoc);
+			});
+			
 			return 0;
 		}
 	}
 
+	/**
+	 * Makes the start shulker box
+	 * 
+	 * @return the shulker box ItemStack
+	 */
 	static ItemStack getStartBox() {
-		ItemStack item = new ItemStack(Material.WHITE_SHULKER_BOX);
-		ItemMeta itM = item.getItemMeta();
-
-		itM.setDisplayName("Start Box");
-		item.setItemMeta(itM);
-
-		return item;
-	}
-
-	public boolean checkTeams() {
-		for (String playerName : KuffleMain.games.keySet()) {
-			if (!KuffleMain.teams.isInTeam(playerName)) {
-				return false;
-			}
-		}
-
-		return true;
+		return ItemUtils.itemMakerName(Material.WHITE_SHULKER_BOX, 1, "Start Box");
 	}
 }

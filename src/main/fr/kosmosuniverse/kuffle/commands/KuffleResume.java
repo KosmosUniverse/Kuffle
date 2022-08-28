@@ -10,8 +10,16 @@ import org.bukkit.potion.PotionEffectType;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.ActionBar;
-import main.fr.kosmosuniverse.kuffle.utils.Utils;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class KuffleResume implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
@@ -20,48 +28,48 @@ public class KuffleResume implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		KuffleMain.systemLogs.logMsg(player.getName(), Utils.getLangString(player.getName(), "CMD_PERF").replace("<#>", "<ki-resume>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-resume>"));
 		
 		if (!player.hasPermission("ki-resume")) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_ALLOWED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return false;
 		}
 		
 		if (!KuffleMain.gameStarted) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "GAME_NOT_LAUNCHED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", Config.getLang()));
 			return false;
 		}
 		
 		if (!KuffleMain.paused) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "GAME_ALREADY_RUNNING"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_ALREADY_RUNNING", Config.getLang()));
 			return false;
 		}
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () ->
-			KuffleMain.games.forEach((playerName, game) ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.RED + "3" + ChatColor.RESET, game.getPlayer())
-			)
+			GameManager.applyToPlayers((game) -> {
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.RED + "3" + ChatColor.RESET, game.player);
+			})
 		, 20);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () ->
-			KuffleMain.games.forEach((playerName, game) ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "2" + ChatColor.RESET, game.getPlayer())
-			)
+			GameManager.applyToPlayers((game) -> {
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "2" + ChatColor.RESET, game.player);
+			})
 		, 40);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () ->
-			KuffleMain.games.forEach((playerName, game) ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GREEN + "1" + ChatColor.RESET, game.getPlayer())
-			)
+			GameManager.applyToPlayers((game) -> {
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GREEN + "1" + ChatColor.RESET, game.player);
+			})
 		, 60);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
 			KuffleMain.paused = false;
 			
-			KuffleMain.games.forEach((playerName, game) -> {
-				game.resume();
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + Utils.getLangString(player.getName(), "GAME_RESUMED") + ChatColor.RESET, game.getPlayer());
-				game.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
+			GameManager.applyToPlayers((game) -> {
+				GameManager.resumePlayer(game);
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + LangManager.getMsgLang("GAME_RESUMED", game.configLang) + ChatColor.RESET, game.player);
+				game.player.removePotionEffect(PotionEffectType.INVISIBILITY);
 			});
 		}, 80);
 

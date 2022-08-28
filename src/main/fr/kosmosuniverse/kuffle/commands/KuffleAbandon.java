@@ -11,6 +11,11 @@ import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class KuffleAbandon implements CommandExecutor  {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cnd, String msg, String[] args) {

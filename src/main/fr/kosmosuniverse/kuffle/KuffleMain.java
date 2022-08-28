@@ -7,20 +7,20 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
 import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.GameLoop;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
-import main.fr.kosmosuniverse.kuffle.listeners.PlayerEvents;
 import main.fr.kosmosuniverse.kuffle.type.KuffleBlocks;
 import main.fr.kosmosuniverse.kuffle.type.KuffleItems;
 import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 public class KuffleMain extends JavaPlugin {
-	public static KuffleType type = null;
-
 	public static KuffleMain current;
-	public static PlayerEvents playerEvents;
+	public static KuffleType type = null;
+	
+	public static GameLoop loop;
 	
 	public static boolean paused = false;
 	public static boolean loaded = false;
@@ -46,8 +46,8 @@ public class KuffleMain extends JavaPlugin {
 			((KuffleBlocks) type).setupKuffleType(this);
 			type.clearType();
 		} catch (KuffleFileLoadException e) {
-			this.getPluginLoader().disablePlugin(this);
 			Utils.logException(e);
+			this.getPluginLoader().disablePlugin(this);
 		}
 		
 		loaded = true;

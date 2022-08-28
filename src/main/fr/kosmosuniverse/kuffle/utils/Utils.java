@@ -311,4 +311,26 @@ public final class Utils {
 		
 		LogManager.getInstanceSystem().logSystemMsg(sb.toString());
 	}
+	
+	/**
+	 * Gets the Player object by its name
+	 * 
+	 * @param name	The player name to search for
+	 * 
+	 * @return The player Object if found, null instead
+	 */
+	public static Player searchPlayerByName(String name) {
+		List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
+		Player retPlayer = null;
+
+		for (Player player : players) {
+			if (player.getName().contains(name)) {
+				retPlayer = player;
+			}
+		}
+
+		players.clear();
+
+		return retPlayer;
+	}
 }

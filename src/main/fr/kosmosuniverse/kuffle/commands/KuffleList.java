@@ -1,7 +1,6 @@
 package main.fr.kosmosuniverse.kuffle.commands;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -10,12 +9,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
-import main.fr.kosmosuniverse.kuffle.core.Game;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 public class KuffleList implements CommandExecutor {
-	private static final String NO_PLAYERS = "NO_PLAYERS";
-	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
 		if (!(sender instanceof Player))
@@ -23,21 +23,21 @@ public class KuffleList implements CommandExecutor {
 
 		Player player = (Player) sender;
 
-		KuffleMain.systemLogs.logMsg(player.getName(), Utils.getLangString(player.getName(), "CMD_PERF").replace("<#>", "<ki-list>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-list>"));
 
 		if (!player.hasPermission("ki-list")) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_ALLOWED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 
 			return false;
 		}
 		
 		if (args.length != 0 && KuffleMain.gameStarted) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "GAME_LAUNCHED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
 			return true;
 		}
 
 		if (args.length == 0) {
-			displayList(player);
+			GameManager.displayList(player);
 
 			return true;
 		} else if (args.length == 1) {
@@ -58,38 +58,11 @@ public class KuffleList implements CommandExecutor {
 
 		return true;
 	}
-	
-	private void displayList(Player player) {
-		if (KuffleMain.games.size() == 0) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), NO_PLAYERS));
-		} else {
-			StringBuilder sb = new StringBuilder();
-			int i = 0;
-
-			for (String playerName : KuffleMain.games.keySet()) {
-				if (i == 0) {
-					sb.append(playerName);
-				} else {
-					sb.append(", ").append(playerName);
-				}
-
-				i++;
-			}
-
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "PLAYER_LIST") + " " + sb.toString());
-		}
-	}
 
 	private boolean resetList(Player player, String firstArg) {
 		if (firstArg.equals("reset")) {
-			if (KuffleMain.games.size() == 0) {
-				KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), NO_PLAYERS));
-
-				return false;
-			}
-
-			KuffleMain.games.clear();
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "LIST_RESET"));
+			GameManager.resetList();
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("LIST_RESET", Config.getLang()));
 			
 			return true;
 		}
@@ -98,58 +71,26 @@ public class KuffleList implements CommandExecutor {
 	}
 	
 	private void addAllList(Player player) {
-		int cnt = 0;
-		List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
-
-		for (Player p : players) {
-			if (!KuffleMain.games.containsKey(p.getName())) {
-				KuffleMain.games.put(p.getName(), new Game(p));
-				cnt++;
-			}
-		}
-
-		KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "ADDED_LIST").replace("%i", "" + cnt));
+		int cnt = GameManager.addPlayers(new ArrayList<>(Bukkit.getOnlinePlayers()));
+		
+		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("ADDED_LIST", Config.getLang()).replace("%i", "" + cnt));
 	}
 	
 	private void addOneList(Player player, String playerName) {
 		Player retComp;
 
-		if ((retComp = searchPlayerByName(playerName)) != null) {
-			if (!KuffleMain.games.containsKey(retComp.getName())) {
-				KuffleMain.games.put(retComp.getName(), new Game(retComp));
-				KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "ADDED_ONE_LIST"));
-			} else {
-				KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "PLAYER_ALREADY_LIST"));
-			}
+		if ((retComp = Utils.searchPlayerByName(playerName)) != null) {
+			GameManager.addPlayer(retComp);
 		} else {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "PLAYER_NOT_EXISTS").replace("<#>", playerName));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("PLAYER_NOT_EXISTS", Config.getLang()).replace("<#>", playerName));
 		}
 	}
 	
 	private void removeList(Player player, String playerName) {
-		if (KuffleMain.games.size() == 0) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), NO_PLAYERS));
-		} else if (KuffleMain.games.containsKey(playerName)) {
-			KuffleMain.games.remove(playerName);
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "REMOVED_LIST"));
+		if (GameManager.removePlayer(playerName)) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("REMOVED_LIST", Config.getLang()));
 		} else {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "PLAYER_NOT_IN_GAME"));		
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("PLAYER_NOT_IN_GAME", Config.getLang()));		
 		}
 	}
-	
-	static Player searchPlayerByName(String name) {
-		List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
-		Player retPlayer = null;
-
-		for (Player player : players) {
-			if (player.getName().contains(name)) {
-				retPlayer = player;
-			}
-		}
-
-		players.clear();
-
-		return retPlayer;
-	}
-
 }

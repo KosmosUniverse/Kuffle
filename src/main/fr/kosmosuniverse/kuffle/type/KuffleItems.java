@@ -3,6 +3,7 @@ package main.fr.kosmosuniverse.kuffle.type;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.simple.parser.ParseException;
 
+import main.fr.kosmosuniverse.kuffle.core.CraftManager;
 import main.fr.kosmosuniverse.kuffle.core.RewardManager;
 import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
@@ -36,6 +37,8 @@ public class KuffleItems extends KuffleType {
 	 */
 	public void setupKuffleType(JavaPlugin plugin) throws KuffleFileLoadException {
 		setupType(plugin);
+		
+		CraftManager.setupCraftTemplates();
 		
 		playerInteract = new ItemsPlayerInteract();
 		plugin.getServer().getPluginManager().registerEvents(playerInteract, plugin);
