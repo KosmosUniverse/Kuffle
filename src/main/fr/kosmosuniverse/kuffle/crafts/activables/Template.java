@@ -13,6 +13,7 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
+import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.crafts.ACrafts;
 
 public class Template extends ACrafts {
@@ -37,14 +38,14 @@ public class Template extends ACrafts {
 		
 		recipe = new ShapelessRecipe(new NamespacedKey(KuffleMain.current, name), item);
 		
-		for (int cnt = 0; cnt < KuffleMain.config.getSBTTAmount(); cnt++) {
+		for (int cnt = 0; cnt < Config.getSBTTAmount(); cnt++) {
 			((ShapelessRecipe) recipe).addIngredient(compose.get(cnt));
 		}
 	}
 
 	@Override
 	public Inventory getInventoryRecipe() {
-		Inventory inv = Bukkit.createInventory(null,  27, "§8" + name);
+		Inventory inv = Bukkit.createInventory(null,  27, "ï¿½8" + name);
 
 		int cnt = 0;
 		
