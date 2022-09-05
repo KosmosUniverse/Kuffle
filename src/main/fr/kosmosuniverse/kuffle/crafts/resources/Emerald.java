@@ -12,9 +12,9 @@ import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
+import main.fr.kosmosuniverse.kuffle.core.VersionManager;
 import main.fr.kosmosuniverse.kuffle.crafts.ACrafts;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
-import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 public class Emerald extends ACrafts {
 	MaterialChoice mc;
@@ -28,7 +28,7 @@ public class Emerald extends ACrafts {
 		
 		ores.add(Material.EMERALD_ORE);
 		
-		if (Utils.findVersionNumber(Utils.getVersion()) >= Utils.findVersionNumber("1.17")) {
+		if (VersionManager.getVersionByValue(VersionManager.getVersion()) >= VersionManager.getVersionByValue("1.17")) {
 			ores.add(Material.DEEPSLATE_EMERALD_ORE);
 		}
 		
@@ -40,7 +40,7 @@ public class Emerald extends ACrafts {
 	}
 	
 	public Inventory getInventoryRecipe() {
-		Inventory inv = Bukkit.createInventory(null,  27, "§8" + name);
+		Inventory inv = Bukkit.createInventory(null,  27, "ï¿½8" + name);
 		ItemStack customOre = mc.getChoices().size() > 1 ? ItemUtils.itemMakerName(Material.EMERALD_ORE, 1, ChatColor.BLUE + "Any" + ChatColor.GREEN + " Emerald " + ChatColor.RED + "Ore") : new ItemStack(Material.EMERALD_ORE);
 		
 		for (int i = 0; i < 27; i++) {
