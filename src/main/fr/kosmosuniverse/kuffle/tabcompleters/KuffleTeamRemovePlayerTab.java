@@ -8,9 +8,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Team;
+import main.fr.kosmosuniverse.kuffle.core.TeamManager;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class KuffleTeamRemovePlayerTab implements TabCompleter {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String msg, String[] args) {
@@ -21,15 +26,15 @@ public class KuffleTeamRemovePlayerTab implements TabCompleter {
 		if (args.length == 1) {
 			List<String> ret = new ArrayList<>();
 			
-			for (Team item : KuffleMain.teams.getTeams()) {
+			for (Team item : TeamManager.getTeams()) {
 				if (item.players.size() != 0) {
 					ret.add(item.name);
 				}
 			}
 			
 			return ret;
-		} else if (args.length == 2 && KuffleMain.teams.hasTeam(args[0])) {
-			return KuffleMain.teams.getTeam(args[0]).getPlayersName();
+		} else if (args.length == 2 && TeamManager.hasTeam(args[0])) {
+			return TeamManager.getTeam(args[0]).getPlayersName();
 		}
 
 		return new ArrayList<>();

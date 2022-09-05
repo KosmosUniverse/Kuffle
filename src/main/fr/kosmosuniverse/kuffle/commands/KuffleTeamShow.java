@@ -5,9 +5,16 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import main.fr.kosmosuniverse.kuffle.KuffleMain;
-import main.fr.kosmosuniverse.kuffle.utils.Utils;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.core.TeamManager;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class KuffleTeamShow implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
@@ -16,10 +23,10 @@ public class KuffleTeamShow implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		KuffleMain.systemLogs.logMsg(player.getName(), Utils.getLangString(player.getName(), "CMD_PERF").replace("<#>", "<ki-team-show>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-team-show>"));
 		
 		if (!player.hasPermission("ki-team-show")) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_ALLOWED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return false;
 		}
 		
@@ -28,12 +35,12 @@ public class KuffleTeamShow implements CommandExecutor {
 		}
 		
 		if (args.length == 0) {
-			KuffleMain.systemLogs.writeMsg(player, KuffleMain.teams.toString());
+			LogManager.getInstanceSystem().writeMsg(player, TeamManager.printTeams());
 		} else if (args.length == 1) {
-			if (KuffleMain.teams.hasTeam(args[0])) {
-				KuffleMain.systemLogs.writeMsg(player, KuffleMain.teams.printTeam(args[0]));
+			if (TeamManager.hasTeam(args[0])) {
+				LogManager.getInstanceSystem().writeMsg(player, TeamManager.printTeam(args[0]));
 			} else {
-				KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "TEAM_NOT_EXISTS").replace("<#>", "<" + args[0] + ">"));
+				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 			}
 		}
 		

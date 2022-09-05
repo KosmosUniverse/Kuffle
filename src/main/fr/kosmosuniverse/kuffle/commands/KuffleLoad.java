@@ -3,8 +3,6 @@ package main.fr.kosmosuniverse.kuffle.commands;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,12 +18,29 @@ import org.json.simple.parser.ParseException;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.ActionBar;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.CraftManager;
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
+import main.fr.kosmosuniverse.kuffle.core.TeamManager;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class KuffleLoad implements CommandExecutor {
 	private File dataFolder;
 	private static final String GAME_FILE = "Game.ki";
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param folder	The Kuffle plugin folder
+	 */
 	public KuffleLoad(File folder) {
 		dataFolder = folder;
 	}
@@ -37,18 +52,18 @@ public class KuffleLoad implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		KuffleMain.systemLogs.logMsg(player.getName(), Utils.getLangString(player.getName(), "CMD_PERF").replace("<#>", "<ki-load>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-load>"));
 		
 		if (!player.hasPermission("ki-load")) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_ALLOWED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return false;
 		}
 		
 		if (KuffleMain.gameStarted) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "GAME_LAUNCHED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
 			return true;
-		} else if (KuffleMain.games.size() != 0) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "LIST_NOT_EMPTY") + ".");
+		} else if (GameManager.getGames().size() != 0) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("LIST_NOT_EMPTY", Config.getLang()) + ".");
 			return true;
 		}
 		
@@ -58,78 +73,76 @@ public class KuffleLoad implements CommandExecutor {
 		if (Utils.fileExists(dataFolder.getPath(), GAME_FILE)) {
 			try (FileReader reader = new FileReader(dataFolder.getPath() + File.separator + GAME_FILE)) {
 				mainObject = (JSONObject) parser.parse(reader);
-				KuffleMain.config.loadConfig((JSONObject) mainObject.get("config"));
-				loadRanks((JSONObject) mainObject.get("ranks"));
-				KuffleMain.playerInteract.loadXpMax((JSONObject) mainObject.get("xpMax"));
+				Config.loadConfig((JSONObject) mainObject.get("config"));
+				GameManager.loadRanks((JSONObject) mainObject.get("ranks"));
+				KuffleMain.type.getPlayerInteract().loadXpMax((JSONObject) mainObject.get("xpMax"));
 				mainObject.clear();
 			} catch (IOException | ParseException e) {
-				e.printStackTrace();
+				Utils.logException(e);
 			}
 		}
 		
-		List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
-		
-		for (Player p : players) {
-			if (Utils.fileExists(dataFolder.getPath(), player.getName() + ".ki")) {
-				Utils.loadGame(p);
-			}
+		try {
+			GameManager.loadPlayers(dataFolder.getPath());
+		} catch (IOException | ParseException e) {
+			Utils.logException(e);
 		}
 		
-		KuffleMain.updatePlayersHeads();
+		GameManager.updatePlayersHeads();
 		
-		loadRankAndTeams(parser);
-		
-		if (KuffleMain.config.getSaturation()) {
-			KuffleMain.games.forEach((playerName, game) ->
-				game.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 999999, 10, false, false, false))
-			);
+		if (Config.getTeam()) {
+			loadTeams(parser);
 		}
 		
 		KuffleMain.paused = true;
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
-			KuffleMain.games.forEach((playerName, game) ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.RED + "5" + ChatColor.RESET, game.getPlayer())
+			GameManager.applyToPlayers((game) ->
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.RED + "5" + ChatColor.RESET, game.player)
 			);
 			
-			if (KuffleMain.config.getSBTT()) {
-				Utils.setupTemplates();
+			if (Config.getSBTT()) {
+				CraftManager.setupCraftTemplates();
 			}
 		}, 20);
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () ->
-			KuffleMain.games.forEach((playerName, game) ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GOLD + "4" + ChatColor.RESET, game.getPlayer())
-			)
-		, 40);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
+			GameManager.applyToPlayers((game) -> {
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GOLD + "4" + ChatColor.RESET, game.player);
+				
+				if (Config.getSaturation()) {
+					game.player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 999999, 10, false, false, false));
+				}
+			});
+		}, 40);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () ->
-			KuffleMain.games.forEach((playerName, game) ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "3" + ChatColor.RESET, game.getPlayer())
+			GameManager.applyToPlayers((game) ->
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "3" + ChatColor.RESET, game.player)
 			)
 		, 60);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () ->
-			KuffleMain.games.forEach((playerName, game) ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GREEN + "2" + ChatColor.RESET, game.getPlayer())
+			GameManager.applyToPlayers((game) ->
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GREEN + "2" + ChatColor.RESET, game.player)
 			)
 		, 80);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
-			KuffleMain.scores.setupPlayerScores();
+			ScoreManager.setupPlayersScores();
 				
-			KuffleMain.games.forEach((playerName, game) -> {
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.BLUE + "1" + ChatColor.RESET, game.getPlayer());
-				game.load();
+			GameManager.applyToPlayers((game) -> {
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.BLUE + "1" + ChatColor.RESET, game.player);
+				//game.load();
 			});
 		}, 100);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
-			KuffleMain.games.forEach((playerName, game) -> {
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + "GO!" + ChatColor.RESET, game.getPlayer());
-				KuffleMain.updatePlayersHeadData(playerName, game.getItemDisplay());
-			});
+			GameManager.applyToPlayers((game) ->
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + "GO!" + ChatColor.RESET, game.player)
+			);
 			
+			GameManager.updatePlayersHeads();
 			KuffleMain.loop.startRunnable();
 			KuffleMain.gameStarted = true;
 			KuffleMain.paused = false;
@@ -139,34 +152,20 @@ public class KuffleLoad implements CommandExecutor {
 		return true;
 	}
 	
-	private void loadRankAndTeams(JSONParser parser) {
-		KuffleMain.games.forEach((playerName, game) -> {
-			if (KuffleMain.config.getTeam() && !KuffleMain.playerRank.containsKey(game.getTeamName())) {
-				KuffleMain.playerRank.put(game.getTeamName(), 0);
-			} else if (!KuffleMain.playerRank.containsKey(playerName)) {
-				KuffleMain.playerRank.put(playerName, 0);
-			}
-		});
+	/**
+	 * Loads Teams from Teams file
+	 * 
+	 * @param parser	The JSONParser object that will parse Teams file
+	 */
+	private void loadTeams(JSONParser parser) {
+		JSONObject mainObject;
 		
-		if (KuffleMain.config.getTeam()) {
-			JSONObject mainObject;
-			
-			try (FileReader reader = new FileReader(dataFolder.getPath() + File.separator + "Teams.ki")) {
-				mainObject = (JSONObject) parser.parse(reader);
-				KuffleMain.teams.loadTeams(mainObject, KuffleMain.games);
-				mainObject.clear();
-			} catch (IOException | ParseException e) {
-				KuffleMain.systemLogs.logSystemMsg(e.getMessage());
-			}
-		}
-	}
-	
-	private void loadRanks(JSONObject ranksObj) {
-		for (Object key : ranksObj.keySet()) {
-			String playerName = (String) key;
-			int rank = Integer.parseInt(ranksObj.get(key).toString());
-			
-			KuffleMain.playerRank.put(playerName, rank);
+		try (FileReader reader = new FileReader(dataFolder.getPath() + File.separator + "Teams.ki")) {
+			mainObject = (JSONObject) parser.parse(reader);
+			TeamManager.loadTeams(mainObject, GameManager.getGames());
+			mainObject.clear();
+		} catch (IOException | ParseException e) {
+			LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
 		}
 	}
 }

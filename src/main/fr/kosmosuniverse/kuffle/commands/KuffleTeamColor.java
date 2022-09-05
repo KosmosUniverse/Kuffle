@@ -9,8 +9,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.core.TeamManager;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class KuffleTeamColor implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
@@ -19,15 +29,15 @@ public class KuffleTeamColor implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		KuffleMain.systemLogs.logMsg(player.getName(), Utils.getLangString(player.getName(), "CMD_PERF").replace("<#>", "<ki-team-color>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-team-color>"));
 		
 		if (!player.hasPermission("ki-team-color")) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_ALLOWED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return false;
 		}
 		
-		if (KuffleMain.games.size() > 0 && KuffleMain.gameStarted) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "GAME_LAUNCHED"));
+		if (KuffleMain.gameStarted && GameManager.getGames().size() > 0) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
 			return true;
 		}
 		
@@ -35,36 +45,36 @@ public class KuffleTeamColor implements CommandExecutor {
 			return false;
 		}
 		
-		if (!KuffleMain.teams.hasTeam(args[0])) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "TEAM_NOT_EXISTS").replace("<#>", "<" + args[0] + ">"));
+		if (!TeamManager.hasTeam(args[0])) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 			return true;
 		}
-		if (KuffleMain.teams.getTeam(args[0]).hasPlayer(args[1])) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "TEAM_PLAYER"));
+		if (TeamManager.getTeam(args[0]).hasPlayer(args[1])) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_PLAYER", Config.getLang()));
 			return true;
 		}
 		
 		ChatColor tmp;
 		
 		if ((tmp = Utils.findChatColor(args[1])) == null) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "COLOR_NOT_EXISTS").replace("[#]", "[" + args[1] + "]"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("COLOR_NOT_EXISTS", Config.getLang()).replace("[#]", "[" + args[1] + "]"));
 			return true;
 		}
 		
-		List<String> colorUsed = KuffleMain.teams.getTeamColors();
+		List<String> colorUsed = TeamManager.getTeamColors();
 		
 		if (colorUsed.contains(tmp.name())) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "COLOR_ALREADY_USED").replace("[#]", "[" + tmp.name() + "]"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("COLOR_ALREADY_USED", Config.getLang()).replace("[#]", "[" + tmp.name() + "]"));
 			colorUsed.clear();
 			return true;
 		}
 		
 		colorUsed.clear();
 
-		String tmpColor = KuffleMain.teams.getTeam(args[0]).color.name();
+		String tmpColor = TeamManager.getTeam(args[0]).color.name();
 		
-		KuffleMain.teams.changeTeamColor(args[0], tmp);	
-		KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "COLOR_CHANGED").replace("[#]", "[" + tmpColor + "]").replace("[##]", "[" + tmp.name() + "]").replace("<#>",	"<" + args[0] + ">"));
+		TeamManager.changeTeamColor(args[0], tmp);	
+		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("COLOR_CHANGED", Config.getLang()).replace("[#]", "[" + tmpColor + "]").replace("[##]", "[" + tmp.name() + "]").replace("<#>",	"<" + args[0] + ">"));
 		
 		return true;
 	}

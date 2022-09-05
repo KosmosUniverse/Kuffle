@@ -9,9 +9,19 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
-import main.fr.kosmosuniverse.kuffle.core.Game;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
+import main.fr.kosmosuniverse.kuffle.core.TeamManager;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class KuffleAddDuringGame implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
@@ -20,15 +30,15 @@ public class KuffleAddDuringGame implements CommandExecutor {
 
 		Player player = (Player) sender;
 
-		KuffleMain.systemLogs.logMsg(player.getName(), Utils.getLangString(player.getName(), "CMD_PERF").replace("<#>", "<ki-add-during-game>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-add-during-game>"));
 
 		if (!player.hasPermission("ki-add-during-game")) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_ALLOWED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return false;
 		}
 
 		if (!KuffleMain.gameStarted) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "GAME_NOT_LAUNCHED"));			
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", Config.getLang()));			
 			return true;
 		}
 		
@@ -38,65 +48,76 @@ public class KuffleAddDuringGame implements CommandExecutor {
 
 		Player retPlayer;
 
-		if ((retPlayer = KuffleList.searchPlayerByName(args[0])) == null) {
+		if ((retPlayer = Utils.searchPlayerByName(args[0])) == null) {
 			return true;
 		}
 
-		if (KuffleMain.config.getTeam() && args.length == 2) {
-			if (!KuffleMain.teams.hasTeam(args[1])) {
-				KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "TEAM_NOT_EXISTS").replace("<#>", "<" + args[1] + ">"));
+		if (Config.getTeam() && args.length == 2) {
+			if (!TeamManager.hasTeam(args[1])) {
+				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + args[1] + ">"));
 				return true;
-			} else if (KuffleMain.teams.getTeam(args[1]).players.size() == KuffleMain.config.getTeamSize()) {
-				KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "TEAM_FULL"));
+			} else if (TeamManager.getTeam(args[1]).players.size() == Config.getTeamSize()) {
+				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_FULL", Config.getLang()));
 				return true;
 			}
 
 			startPlayer(player, retPlayer, args[1]);
-		} else if (args.length == 1 && !KuffleMain.config.getTeam()) {
+		} else if (args.length == 1 && !Config.getTeam()) {
 			startPlayer(player, retPlayer, null);
 		} else {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "TEAM_PREVENT_ADD"));			
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_PREVENT_ADD", Config.getLang()));			
 			return false;
 		}
 
 		return true;
 	}
 
+	/**
+	 * Starts a player
+	 * 
+	 * @param sender	The player that want to start <player>
+	 * @param player	The player for whom the game will start
+	 * @param team		The player's team if needed
+	 */
 	private void startPlayer(Player sender, Player player, String team) {
 		KuffleMain.paused = true;
 
-		KuffleMain.games.put(player.getName(), new Game(player));
-		KuffleMain.systemLogs.writeMsg(sender, Utils.getLangString(sender.getName(), "ADDED_ONE_LIST"));
+		GameManager.addPlayer(player);
+		LogManager.getInstanceSystem().writeMsg(sender, LangManager.getMsgLang("ADDED_ONE_LIST", Config.getLang()));
 
 		if (team != null) {
-			KuffleMain.teams.affectPlayer(team, player);
-			KuffleMain.systemLogs.writeMsg(sender, Utils.getLangString(sender.getName(), "TEAM_ADD_PLAYER").replace("<#>", "<" + team + ">").replace("<##>", "<" + player.getName() + ">"));
-			KuffleMain.games.get(player.getName()).setTeamName(KuffleMain.teams.findTeamByPlayer(player.getName()));
-			KuffleMain.games.get(player.getName()).setSpawnLoc(KuffleMain.games.get(KuffleMain.teams.getTeam(team).getPlayersName().get(0)).getSpawnLoc());
-			KuffleMain.playerRank.put(KuffleMain.games.get(player.getName()).getTeamName(), 0);
+			TeamManager.affectPlayer(team, player);
+			LogManager.getInstanceSystem().writeMsg(sender, LangManager.getMsgLang("TEAM_ADD_PLAYER", Config.getLang()).replace("<#>", "<" + team + ">").replace("<##>", "<" + player.getName() + ">"));
 
-			player.setBedSpawnLocation(KuffleMain.games.get(KuffleMain.teams.getTeam(team).getPlayersName().get(0)).getSpawnLoc(), true);
-			player.teleport(KuffleMain.games.get(KuffleMain.teams.getTeam(team).getPlayersName().get(0)).getPlayer());
+			GameManager.applyToPlayer(player.getName(), (game) -> {
+				game.teamName = team;
+				game.spawnLoc = GameManager.getPlayerSpawnLoc(TeamManager.getTeam(team).getPlayersName().get(0));
+			});
+
+			player.setBedSpawnLocation(GameManager.getPlayerSpawnLoc(player.getName()), true);
+			player.teleport(GameManager.getPlayer(TeamManager.getTeam(team).getPlayersName().get(0)).getPlayer());
 		} else {
-			KuffleMain.games.get(player.getName()).setSpawnLoc(player.getLocation());
-			KuffleMain.games.get(player.getName()).getSpawnLoc().add(0, -1, 0).getBlock().setType(Material.BEDROCK);
-			KuffleMain.playerRank.put(player.getName(), 0);
-
+			GameManager.applyToPlayer(player.getName(), (game) -> {
+				game.spawnLoc = player.getLocation();
+				game.spawnLoc.add(0, -1, 0).getBlock().setType(Material.BEDROCK);
+			});
+			
 			player.setBedSpawnLocation(player.getLocation(), true);
 		}
 
-		player.sendMessage(Utils.getLangString(sender.getName(), "GAME_STARTED"));
+		GameManager.addToPlayersRanks(player.getName());
+		player.sendMessage(LangManager.getMsgLang("GAME_STARTED", Config.getLang()));
 
-		KuffleMain.games.get(player.getName()).setup();
-		KuffleMain.scores.setupPlayerScores(KuffleMain.games.get(player.getName()));
-		KuffleMain.updatePlayersHeads();
+		GameManager.setupPlayer(player.getName());
+		
+		ScoreManager.setupPlayerScore(player.getName());
+		GameManager.updatePlayersHeads();
 
 		KuffleMain.paused = false;
 
 		player.getInventory().addItem(KuffleStart.getStartBox());
-		KuffleMain.games.get(player.getName()).updatePlayerListName();
 
-		if (KuffleMain.config.getSaturation()) {
+		if (Config.getSaturation()) {
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 999999, 10, false, false, false));
 		}
 	}

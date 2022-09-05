@@ -11,11 +11,27 @@ import org.bukkit.entity.Player;
 import org.json.simple.JSONObject;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
-import main.fr.kosmosuniverse.kuffle.utils.Utils;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.CraftManager;
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
+import main.fr.kosmosuniverse.kuffle.core.TeamManager;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class KuffleSave implements CommandExecutor {
 	private File dataFolder;
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param folder	The Kuffle plugin folder
+	 */
 	public KuffleSave(File folder) {
 		dataFolder = folder;
 	}
@@ -28,75 +44,53 @@ public class KuffleSave implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		KuffleMain.systemLogs.logMsg(player.getName(), Utils.getLangString(player.getName(), "CMD_PERF").replace("<#>", "<ki-save>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-save>"));
 		
 		if (!player.hasPermission("ki-save")) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_ALLOWED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			
 			return false;
 		}
 		
 		if (!KuffleMain.gameStarted) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "GAME_NOT_LAUNCHED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", Config.getLang()));
 			return false;
 		}
 		
 		KuffleMain.paused = true;
-		
-		for (String playerName : KuffleMain.games.keySet()) {
-			try (FileWriter writer = new FileWriter(dataFolder.getPath() + File.separator + playerName + ".ki");) {				
-				writer.write(KuffleMain.games.get(playerName).save());
-			} catch (IOException e) {
-				KuffleMain.systemLogs.logSystemMsg(e.getMessage());
-			}
-			
-			KuffleMain.games.get(playerName).stop();
-		}
-		
-		if (KuffleMain.config.getTeam()) {
+
+		GameManager.savePlayers(dataFolder.getPath());
+				
+		if (Config.getTeam()) {
 			try (FileWriter writer = new FileWriter(dataFolder.getPath() + File.separator + "Teams.ki");) {				
-				writer.write(KuffleMain.teams.saveTeams());
+				writer.write(TeamManager.saveTeams());
 			} catch (IOException e) {
-				KuffleMain.systemLogs.logSystemMsg(e.getMessage());
+				LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
 			}
 		}
 		
 		try (FileWriter writer = new FileWriter(dataFolder.getPath() + File.separator + "Games.ki");) {				
 			JSONObject global = new JSONObject();
 
-			global.put("config", KuffleMain.config.saveConfig());
-			global.put("ranks", saveRanks());
-			global.put("xpMax", KuffleMain.playerInteract.saveXpMax());
+			global.put("config", Config.saveConfig());
+			global.put("ranks", GameManager.saveRanks());
+			global.put("xpMax", KuffleMain.type.getPlayerInteract().saveXpMax());
 			
 			writer.write(global.toJSONString());
 			
 			global.clear();
 		} catch (IOException e) {
-			KuffleMain.systemLogs.logSystemMsg(e.getMessage());
+			LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
 		}
 		
-		Utils.removeTemplates();
-		KuffleMain.scores.clear();
-		KuffleMain.games.clear();
+		CraftManager.removeCraftTemplates();
+		ScoreManager.clear();
+		GameManager.clear();
 		KuffleMain.loop.kill();
 		KuffleMain.paused = false;
 		KuffleMain.gameStarted = false;
-		KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "GAME_SAVED"));
+		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_SAVED", Config.getLang()));
 		
 		return true;
-	}
-	
-	@SuppressWarnings("unchecked")
-	private JSONObject saveRanks() {
-		JSONObject rankObj = new JSONObject();
-		
-		for (String name : KuffleMain.playerRank.keySet()) {
-			if ((!KuffleMain.config.getTeam() && KuffleMain.games.containsKey(name)) ||
-			(KuffleMain.config.getTeam() && KuffleMain.teams.hasTeam(name))) {
-				rankObj.put(name, KuffleMain.playerRank.get(name));
-			}
-		}
-		
-		return rankObj;
 	}
 }

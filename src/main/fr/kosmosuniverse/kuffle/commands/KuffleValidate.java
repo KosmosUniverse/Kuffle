@@ -6,12 +6,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
-import main.fr.kosmosuniverse.kuffle.core.AgeManager;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
-import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 public class KuffleValidate implements CommandExecutor {
 	@Override
@@ -43,7 +41,7 @@ public class KuffleValidate implements CommandExecutor {
 				return true;
 			}
 
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("ITEM_VALIDATED", Config.getLang()).replace("[#]", " [" + GameManager.getPlayerTarget(playerTarget) + "] ").replace("<#>", "<" + args[0] + ">"));			
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("ITEM_VALIDATED", Config.getLang()).replace("[#]", " [" + GameManager.getPlayerTarget(args[0]) + "] ").replace("<#>", "<" + args[0] + ">"));			
 			GameManager.playerFoundTarget(args[0]);
 		} else if (msg.equalsIgnoreCase("ki-validate-age")) {
 			LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-validate-age>"));
@@ -59,17 +57,14 @@ public class KuffleValidate implements CommandExecutor {
 				return true;
 			}
 			
-			if (KuffleMain.games.get(args[0]).getAge() == -1) {
+			if (GameManager.getPlayerAge(args[0]).number == -1) {
 				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_ALREADY_FINISHED", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 				
 				return true;
 			}
-			
-			String tmp = AgeManager.getAgeByNumber(KuffleMain.ages, KuffleMain.games.get(args[0]).getAge()).name;
-			
-			KuffleMain.games.get(args[0]).setItemCount(KuffleMain.config.getItemPerAge() + 1);
-			KuffleMain.games.get(args[0]).setCurrentItem(null);
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("AGE_VALIDATED", Config.getLang()).replace("[#]", "[" + tmp + "]").replace("<#>", "<" + args[0] + ">"));
+
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("AGE_VALIDATED", Config.getLang()).replace("[#]", "[" + GameManager.getPlayerAge(args[0]) + "]").replace("<#>", "<" + args[0] + ">"));
+			GameManager.nextPlayerAge(args[0]);
 		}
 		
 		return true;

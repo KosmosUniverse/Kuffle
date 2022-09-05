@@ -8,17 +8,24 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.AgeManager;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class KuffleAgeItemsTab implements TabCompleter  {
 	private ArrayList<String> ages = new ArrayList<>();
 
+	/**
+	 * Constructor
+	 */
 	public KuffleAgeItemsTab() {
-		int max = AgeManager.getAgeMaxNumber(KuffleMain.ages);
+		int max = AgeManager.getLastAgeIndex();
 		
 		for (int cnt = 0; cnt <= max; cnt++) {
-			String age = AgeManager.getAgeByNumber(KuffleMain.ages, cnt).name;
+			String age = AgeManager.getAgeByNumber(cnt).name;
 
 			ages.add(age);
 		}

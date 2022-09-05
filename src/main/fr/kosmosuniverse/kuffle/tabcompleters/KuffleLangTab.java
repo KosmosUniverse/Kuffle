@@ -8,8 +8,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import main.fr.kosmosuniverse.kuffle.KuffleMain;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class KuffleLangTab implements TabCompleter {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String msg, String[] args) {
@@ -18,7 +23,7 @@ public class KuffleLangTab implements TabCompleter {
 		}
 		
 		if (args.length == 1) {
-			return KuffleMain.langs;
+			return LangManager.getLangs();
 		}
 
 		return new ArrayList<>();

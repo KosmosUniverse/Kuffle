@@ -9,8 +9,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.core.TeamManager;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
+/**
+ * 
+ * @author KosmosUniverse
+ * 
+ */
 public class KuffleTeamCreate implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
@@ -19,20 +29,20 @@ public class KuffleTeamCreate implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		KuffleMain.systemLogs.logMsg(player.getName(), Utils.getLangString(player.getName(), "CMD_PERF").replace("<#>", "<ki-team-create>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-team-create>"));
 		
 		if (!player.hasPermission("ki-team-create")) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_ALLOWED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return false;
 		}
 		
-		if (!KuffleMain.config.getTeam()) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "TEAM_ENABLE"));
+		if (!Config.getTeam()) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_ENABLE", Config.getLang()));
 			return true;
 		}
 		
-		if (KuffleMain.games.size() > 0 && KuffleMain.gameStarted) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "GAME_LAUNCHED"));
+		if (KuffleMain.gameStarted && GameManager.getGames().size() > 0) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
 			return true;
 		}
 		
@@ -40,34 +50,34 @@ public class KuffleTeamCreate implements CommandExecutor {
 			return false;
 		}
 		
-		if (KuffleMain.teams.hasTeam(args[0])) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "TEAM_EXISTS").replace("<#>", "<" + args[0] + ">"));
+		if (TeamManager.hasTeam(args[0])) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_EXISTS", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 			return true;
 		}
 		
 		if (args.length == 1) {
-			KuffleMain.teams.createTeam(args[0]);
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "TEAM_CREATED").replace("<#>", "<" + args[0] + ">"));
+			TeamManager.createTeam(args[0]);
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_CREATED", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 		} else if (args.length == 2) {
 			ChatColor tmp;
 			
 			if ((tmp = Utils.findChatColor(args[1])) == null) {
-				KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "COLOR_NOT_EXISTS").replace("[#]", "[" + args[1] + "]"));
+				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("COLOR_NOT_EXISTS", Config.getLang()).replace("[#]", "[" + args[1] + "]"));
 				return true;
 			}
 			
-			List<String> colorUsed = KuffleMain.teams.getTeamColors();
+			List<String> colorUsed = TeamManager.getTeamColors();
 			
 			if (colorUsed.contains(tmp.name())) {
-				KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "COLOR_ALREADY_USED").replace("[#]", "[" + tmp.name() + "]"));
+				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("COLOR_ALREADY_USED", Config.getLang()).replace("[#]", "[" + tmp.name() + "]"));
 				colorUsed.clear();
 				return true;
 			}
 			
 			colorUsed.clear();
-			KuffleMain.teams.createTeam(args[0], tmp);
+			TeamManager.createTeam(args[0], tmp);
 			
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "TEAM_CREATED").replace("<#>", "<" + args[0] + ">"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_CREATED", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 		}
 		
 		return true;

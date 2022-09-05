@@ -6,8 +6,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
-import main.fr.kosmosuniverse.kuffle.utils.Utils;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
+import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.core.TeamManager;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class KuffleTeamRemovePlayer implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
@@ -16,15 +25,15 @@ public class KuffleTeamRemovePlayer implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		KuffleMain.systemLogs.logMsg(player.getName(), Utils.getLangString(player.getName(), "CMD_PERF").replace("<#>", "<ki-team-remove-player>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-team-remove-player>"));
 		
 		if (!player.hasPermission("ki-team-remove-player")) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "NOT_ALLOWED"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return false;
 		}
 		
-		if (KuffleMain.games.size() > 0 && KuffleMain.gameStarted) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "GAME_LAUNCHED"));
+		if (KuffleMain.gameStarted && GameManager.getGames().size() > 0) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
 			return true;
 		}
 				
@@ -32,18 +41,18 @@ public class KuffleTeamRemovePlayer implements CommandExecutor {
 			return false;
 		}
 		
-		if (!KuffleMain.teams.hasTeam(args[0])) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "TEAM_NOT_EXISTS").replace("<#>", "<" + args[0] + ">"));
+		if (!TeamManager.hasTeam(args[0])) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 			return true;
 		}
 		
-		if (!KuffleMain.teams.getTeam(args[0]).hasPlayer(args[1])) {
-			KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "TEAM_NO_PLAYER"));
+		if (!TeamManager.getTeam(args[0]).hasPlayer(args[1])) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NO_PLAYER", Config.getLang()));
 			return true;
 		}
 		
-		KuffleMain.teams.removePlayer(args[0], KuffleMain.games.get(args[1]).getPlayer());
-		KuffleMain.systemLogs.writeMsg(player, Utils.getLangString(player.getName(), "TEAM_REMOVED").replace("<#>", "<" + args[1] + ">").replace("<##>", "<" + args[0] + ">"));
+		TeamManager.removePlayer(args[0], GameManager.getPlayer(args[1]));
+		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_REMOVED", Config.getLang()).replace("<#>", "<" + args[1] + ">").replace("<##>", "<" + args[0] + ">"));
 		
 		return true;
 	}

@@ -117,7 +117,7 @@ public class KuffleStart implements CommandExecutor {
 				GameManager.setupPlayer(game);
 			});
 
-			ScoreManager.setupPlayerScores();
+			ScoreManager.setupPlayersScores();
 		}, 100 + spread);
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {

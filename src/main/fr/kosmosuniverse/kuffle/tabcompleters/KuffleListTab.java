@@ -9,11 +9,19 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import main.fr.kosmosuniverse.kuffle.KuffleMain;
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class KuffleListTab implements TabCompleter {
 	private List<String> list = new ArrayList<>();
 	
+	/**
+	 * Constructor
+	 */
 	public KuffleListTab() {
 		list.add("add");
 		list.add("remove");
@@ -22,31 +30,28 @@ public class KuffleListTab implements TabCompleter {
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender,  Command cmd, String msg, String[] args) {
+		List<String> ret = new ArrayList<>();
+		
 		if (!(sender instanceof Player)) {
-			return new ArrayList<>();
+			return ret;
 		}
 		
 		if (args.length == 1) {
 			return list;
 		} else if (args.length == 2) {
-			List<String> nextList = new ArrayList<>();
-			
 			if (args[0].equals("add")) {
-				nextList.add("@a");
+				ret.add("@a");
 				
 				for (Player player : Bukkit.getOnlinePlayers()) {
-					nextList.add(player.getName());
+					ret.add(player.getName());
 				}
-				
-				return nextList;
 			} else if (args[0].equals("remove")) {
-				for (String playerName : KuffleMain.games.keySet()) {
-					nextList.add(playerName);
+				for (String playerName : GameManager.getPlayerNames()) {
+					ret.add(playerName);
 				}
-				return nextList;
 			}
 		}
 		
-		return new ArrayList<>();
+		return ret;
 	}
 }
