@@ -126,7 +126,7 @@ public class KuffleType {
 		}
 		
 		CraftManager.setupCrafts(type);
-		ScoreManager.setupPlayerScores();
+		ScoreManager.setupPlayersScores();
 		GameManager.setupGame();
 		
 		plugin.getServer().getPluginManager().registerEvents(new InventoryListeners(), plugin);
@@ -153,5 +153,14 @@ public class KuffleType {
 		TargetManager.clear();
 		
 		type = Type.UNKNOWN;
+	}
+	
+	/**
+	 * Gets the ItemsPlayerInteract class
+	 * 
+	 * @return the playerInteract object
+	 */
+	public ItemsPlayerInteract getPlayerInteract() {
+		return playerInteract;
 	}
 }

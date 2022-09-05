@@ -16,7 +16,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Pair;
 
@@ -164,6 +163,31 @@ public class TargetManager {
 	 * @return the target as String
 	 */
 	public static String newTarget(List<String> done, String ageName) {	
+		return newObject(targets, done, ageName);
+	}
+	
+	/**
+	 * Gets a new sbtt from Age ageName that is not in done list.
+	 * 
+	 * @param done		The list of excluded sbtts
+	 * @param ageName	The Age name in which list it has to search
+	 * 
+	 * @return the sbtt as String
+	 */
+	public static String newSbtt(List<String> done, String ageName) {	
+		return newObject(sbtts, done, ageName);
+	}
+	
+	/**
+	 * Gets a new object (target or sbtt) from Age ageName that is not in done list.
+	 * 
+	 * @param targets	The map in which the object will be searched
+	 * @param done		The list of excluded targets
+	 * @param ageName	The Age name in which list it has to search
+	 * 
+	 * @return the target as String
+	 */
+	private static String newObject(Map<String, List<String>> targets, List<String> done, String ageName) {	
 		List<String> finalList = new ArrayList<>();
 		
 		for (String s : targets.get(ageName)) {
@@ -226,9 +250,9 @@ public class TargetManager {
 
 		
 		if (ageTargets.size() > 45) {
-			inv = Bukkit.createInventory(null, 54, "§8" + age + " Targets Tab 1");
+			inv = Bukkit.createInventory(null, 54, "ï¿½8" + age + " Targets Tab 1");
 		} else {
-			inv = Bukkit.createInventory(null, 54, "§8" + age + " Targets");
+			inv = Bukkit.createInventory(null, 54, "ï¿½8" + age + " Targets");
 		}
 		
 		setupFirstRow(inv, true, hasNext);
@@ -240,7 +264,7 @@ public class TargetManager {
 				invCnt = 0;
 				invs.add(inv);
 				nbInv++;
-				inv = Bukkit.createInventory(null, 54, "§8" + age + " Targets Tab " + nbInv);
+				inv = Bukkit.createInventory(null, 54, "ï¿½8" + age + " Targets Tab " + nbInv);
 				
 				setupFirstRow(inv, false, hasNext);
 			} else {

@@ -3,6 +3,7 @@ package main.fr.kosmosuniverse.kuffle.core;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -234,14 +235,49 @@ public class GameManager {
 	 * @param player	The player to clear
 	 */
 	public static void stopPlayer(String player) {
-		Game game = games.get(player);
-		
+		stopPlayer(games.get(player));
+	}
+	
+	/**
+	 * Clears Player's game related effects and data
+	 * 
+	 * @param game	The game of player to clear
+	 */
+	public static void stopPlayer(Game game) {
 		for (PotionEffect pe : game.player.getActivePotionEffects()) {
 			game.player.removePotionEffect(pe.getType());
 		}
 
-		resetPlayerBar(player);
+		resetPlayerBar(game);
 		game.clear();
+	}
+	
+	/**
+	 * Saves players data into files
+	 * 
+	 * @param path	The location in which files will be generated
+	 */
+	public static void savePlayers(String path) {
+		games.forEach((playerName, playerGame) -> {
+			try (FileWriter writer = new FileWriter(path + File.separator + playerName + ".ki");) {				
+				writer.write(savePlayer(playerGame));
+			} catch (IOException e) {
+				LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
+			}
+			
+			stopPlayer(playerGame);
+		});
+	}
+	
+	/**
+	 * Convert player datas into a stringify JSON
+	 * 
+	 * @param player	The player that will be saved
+	 * 
+	 * @return the JSON formatted string of player's data
+	 */
+	public static String savePlayer(String player) {
+		return (savePlayer(games.get(player)));
 	}
 	
 	/**
@@ -252,8 +288,7 @@ public class GameManager {
 	 * @return the JSON formatted string of player's data
 	 */
 	@SuppressWarnings("unchecked")
-	public static String savePlayer(String player) {
-		Game game = games.get(player);
+	public static String savePlayer(Game game) {
 		JSONObject jsonSpawn = new JSONObject();
 
 		jsonSpawn.put("World", game.spawnLoc.getWorld().getName());
@@ -275,7 +310,7 @@ public class GameManager {
 
 		if (game.deathInv != null) {
 			try {
-				savePlayerInventory(player);
+				savePlayerInventory(game);
 			} catch (IOException e) {
 				LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
 			}
@@ -315,6 +350,10 @@ public class GameManager {
 		return (global.toString());
 	}
 	
+	public static void savePlayerInventory(String player) throws IOException {
+		savePlayerInventory(games.get(player));
+	}
+	
 	/**
 	 * Saves a player's inventory in a YAML file
 	 * 
@@ -322,8 +361,7 @@ public class GameManager {
 	 * 
 	 * @throws IOException if FileConfiguration.save() fails
 	 */
-	public static void savePlayerInventory(String player) throws IOException {
-		Game game = games.get(player);
+	public static void savePlayerInventory(Game game) throws IOException {
         File f = new File(KuffleMain.current.getDataFolder().getPath(), game.player.getName() + ".yml");
         FileConfiguration c = YamlConfiguration.loadConfiguration(f);
         
@@ -347,6 +385,18 @@ public class GameManager {
         ItemStack[] content = ((List<ItemStack>) c.get("inventory.content")).toArray(new ItemStack[0]);
         game.deathInv.setContents(content);
     }
+	
+	public static void loadPlayers(String path) throws FileNotFoundException, IOException, ParseException {
+		List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
+		
+		for (Player p : players) {
+			if (Utils.fileExists(path, p.getName() + ".ki")) {
+				loadPlayerGame(p);
+			}
+		}
+		
+		players.clear();
+	}
 	
 	/**
 	 * Loads a new Game for a specific Player
@@ -463,6 +513,15 @@ public class GameManager {
 	/**
 	 * Setup basics variables for a player
 	 * 
+	 * @param player	The Player that will be setup
+	 */
+	public static void setupPlayer(String player) {
+		setupPlayer(games.get(player));
+	}
+	
+	/**
+	 * Setup basics variables for a player
+	 * 
 	 * @param game	The Game of player that will be setup
 	 */
 	public static void setupPlayer(Game game) {
@@ -485,6 +544,15 @@ public class GameManager {
 			game.ageDisplay.removeAll();
 			game.ageDisplay = null;
 		}
+	}
+	
+	/**
+	 * Player used Sbtt
+	 * 
+	 * @param player	The name of player that used sbtt
+	 */
+	public static void playerFoundSBTT(String player) {
+		playerFoundSBTT(games.get(player));
 	}
 	
 	/**
@@ -522,6 +590,15 @@ public class GameManager {
 	/**
 	 * Player goes to the next Age
 	 * 
+	 * @param player	The name of the player that is moving to the next Age
+	 */
+	public static void nextPlayerAge(String player) {
+		nextPlayerAge(games.get(player));
+	}
+	
+	/**
+	 * Player goes to the next Age
+	 * 
 	 * @param game	The Game of player that is moving to the next Age
 	 */
 	public static void nextPlayerAge(Game game) {
@@ -550,7 +627,7 @@ public class GameManager {
 
 		Age tmpAge = AgeManager.getAgeByNumber(game.age);
 
-		games.forEach((playerName, playerGame) -> playerGame.player.sendMessage(LangManager.getMsgLang("AGE_MOVED", game.configLang).replace("<#>", ChatColor.BLUE + "<§6§l" + game.player.getName() + ChatColor.BLUE + ">").replace("<##>", "<" + tmpAge.color + tmpAge.name.replace("_Age", "") + ChatColor.BLUE + ">")));
+		games.forEach((playerName, playerGame) -> playerGame.player.sendMessage(LangManager.getMsgLang("AGE_MOVED", game.configLang).replace("<#>", ChatColor.BLUE + "<ï¿½6ï¿½l" + game.player.getName() + ChatColor.BLUE + ">").replace("<##>", "<" + tmpAge.color + tmpAge.name.replace("_Age", "") + ChatColor.BLUE + ">")));
 		game.player.sendMessage(LangManager.getMsgLang("TIME_AGE", game.configLang).replace("%t", Utils.getTimeFromSec(game.totalTime)));
 	}
 	
@@ -1141,7 +1218,7 @@ public class GameManager {
 	 * Updates players heads in playersHeads inventory
 	 */
 	public static void updatePlayersHeads() {
-		Inventory newInv = Bukkit.createInventory(null, Utils.getNbInventoryRows(games.size()), "§8Players");
+		Inventory newInv = Bukkit.createInventory(null, Utils.getNbInventoryRows(games.size()), "ï¿½8Players");
 		
 		for (String playerName : games.keySet()) {
 			newInv.addItem(Utils.getHead(games.get(playerName).player, games.get(playerName).targetDisplay));
@@ -1505,6 +1582,16 @@ public class GameManager {
 	}
 	
 	/**
+	 * Apply behavior to a player
+	 * 
+	 * @param player	The player that will follow the behavior
+	 * @param loop		The behavior to follow
+	 */
+	public static void applyToPlayer(String player, Consumer<Game> loop) {
+		loop.accept(games.get(player));
+	}
+	
+	/**
 	 * Apply behavior to all players.
 	 * 
 	 * @param loop	The actions to apply on all players as Lambda
@@ -1602,10 +1689,29 @@ public class GameManager {
 	 * Setups the playersRanks map
 	 */
 	public static void setupPlayersRanks() {
+		playersRanks.clear();
+		
 		if (Config.getTeam()) {
 			TeamManager.getTeams().forEach((team) -> playersRanks.put(team.name, 0));
 		} else {
 			games.forEach((playerName, playerGame) -> playersRanks.put(playerName, 0));
+		}
+	}
+	
+	/**
+	 * Adds a player to the ranks map
+	 * 
+	 * @param player	The player to add
+	 */
+	public static void addToPlayersRanks(String player) {
+		Game game = games.get(player);
+		
+		if (game != null) {
+			if (Config.getTeam() && !playersRanks.containsKey(game.teamName)) {
+				playersRanks.put(game.teamName, 0);
+			} else if (!Config.getTeam()) {
+				playersRanks.put(player, 0);
+			}
 		}
 	}
 	
@@ -1624,7 +1730,58 @@ public class GameManager {
 		return true;
 	}
 	
+	/**
+	 * Gets the target of a specific player
+	 * 
+	 * @param player	The player from whom it will take the target
+	 * 
+	 * @return the player's target
+	 */
 	public static String getPlayerTarget(String player) {
-		return games.get(player).currentTarget();
+		return games.get(player).currentTarget;
+	}
+	
+	/**
+	 * Gets Player object by player name
+	 * 
+	 * @param player	The player name that will be searched
+	 * 
+	 * @return the player object
+	 */
+	public static Player getPlayer(String player) {
+		return games.get(player).player;
+	}
+
+	/**
+	 * Gets a JSONObject that represent actual players ranks
+	 * 
+	 * @return the JSONObject
+	 */
+	@SuppressWarnings("unchecked")
+	public static JSONObject saveRanks() {
+		JSONObject rankObj = new JSONObject();
+		
+		for (String name : playersRanks.keySet()) {
+			if ((!Config.getTeam() && hasPlayer(name)) ||
+			(Config.getTeam() && TeamManager.hasTeam(name))) {
+				rankObj.put(name, playersRanks.get(name));
+			}
+		}
+		
+		return rankObj;
+	}
+	
+	/**
+	 * Loads ranks from JSONObject
+	 * 
+	 * @param ranksObj	The JSON object that represent saved ranks
+	 */
+	public static void loadRanks(JSONObject ranksObj) {
+		for (Object key : ranksObj.keySet()) {
+			String rankName = (String) key;
+			int rank = Integer.parseInt(ranksObj.get(key).toString());
+			
+			playersRanks.put(rankName, rank);
+		}
 	}
 }

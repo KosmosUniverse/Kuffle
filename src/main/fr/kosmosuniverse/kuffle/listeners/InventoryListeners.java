@@ -16,6 +16,8 @@ import main.fr.kosmosuniverse.kuffle.core.CraftManager;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 import main.fr.kosmosuniverse.kuffle.crafts.ACrafts;
+import main.fr.kosmosuniverse.kuffle.multiblock.AMultiblock;
+import main.fr.kosmosuniverse.kuffle.multiblock.MultiblockManager;
 
 /**
  * 
@@ -33,19 +35,29 @@ public class InventoryListeners implements Listener {
 	public void onItemClick(InventoryClickEvent event) {	
 		Player player = (Player) event.getWhoClicked();
 		ItemStack item = event.getCurrentItem();
+		Inventory current = event.getClickedInventory();
 		ACrafts craft;
+		AMultiblock multiblock;
 		Inventory inv;
 		
 		if (item == null) {
 			return;
 		}
 		
-		if (event.getView().getTitle() == "§8AllCustomCrafts") {
+		if (event.getView().getTitle() == "ï¿½8AllCustomCrafts") {
 			event.setCancelled(true);
 			
 			if ((craft = CraftManager.getCraftByItem(item)) != null &&
 					(inv = craft.getInventoryRecipe()) != null) {
 				player.openInventory(inv);
+			}
+		} else if (event.getView().getTitle().equals("ï¿½8AllMultiBlocks")) {
+			event.setCancelled(true);
+			
+			if ((multiblock = MultiblockManager.searchMultiBlockByItem(item)) != null) {
+				if ((inv = multiblock.getInventory(current, item, MultiblockManager.getMultiblocksInventories(), true)) != null) {
+					player.openInventory(inv);
+				}
 			}
 		} else if (CraftManager.getCraftByInventoryName(event.getView().getTitle()) != null) {
 			event.setCancelled(true);
@@ -53,7 +65,13 @@ public class InventoryListeners implements Listener {
 			if (item.getItemMeta().getDisplayName().equals("<- Back")) {
 				player.openInventory(CraftManager.getAllCraftsInventory());
 			}
-		} else if (event.getView().getTitle() == "§8Players") {
+		} else if ((multiblock = MultiblockManager.searchMultiBlockByInventoryName(event.getView().getTitle())) != null) {
+			event.setCancelled(true);
+			
+			if ((inv = multiblock.getInventory(current, item, MultiblockManager.getMultiblocksInventories(), false)) != null) {
+				player.openInventory(inv);
+			}
+		} else if (event.getView().getTitle() == "ï¿½8Players") {
 			event.setCancelled(true);
 			
 			playersInventory(player, item);

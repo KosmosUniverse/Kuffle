@@ -1,20 +1,22 @@
 package test.fr.kosmosuniverse.utils.fileconformity.unittest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import main.fr.kosmosuniverse.kuffle.KuffleMain;
-import main.fr.kosmosuniverse.kuffle.core.Age;
+import main.fr.kosmosuniverse.kuffle.core.AgeManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
 import main.fr.kosmosuniverse.kuffle.utils.FilesConformity;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
@@ -37,20 +39,28 @@ class TargetTest {
 	
 	/**
 	 * SetUp system log file and ages list
+	 * 
+	 * @throws KuffleFileLoadException if file load failed
 	 */
 	@BeforeAll
-	static void setUpBeforeClass() {
-		LogManager.getInstanceSystem("C:\\Temp\\Kuffle\\unittest\\KuffleSystemlogs.txt");
-		KuffleMain.ages = new ArrayList<>();
-		KuffleMain.ages.add(new Age("Archaic_Age", 0, "RED", "RED"));
-	}
+	static void setUpBeforeClass() throws KuffleFileLoadException {
+		LogManager.setupInstanceSystem("C:\\Temp\\Kuffle\\unittest\\KuffleSystemlogs.txt");
+		
+		try {
+			AgeManager.setupAges(FilesConformity.getContent("ages.json", true));
+		} catch (IllegalArgumentException | ParseException e) {
+			Utils.logException(e);
+			AgeManager.clear();
+			
+			throw new KuffleFileLoadException("Ages load failed !");
+		}	}
 	
 	/**
 	 * TearDown to clear ages list
 	 */
 	@AfterAll
 	static void tearDownAfterClass() {
-		KuffleMain.ages.clear();
+		AgeManager.clear();
 	}
 
 	/**

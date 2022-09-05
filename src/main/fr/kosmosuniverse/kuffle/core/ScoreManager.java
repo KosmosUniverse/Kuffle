@@ -41,7 +41,7 @@ public class ScoreManager {
 	/**
 	 * setups the players scores
 	 */
-	public static void setupPlayerScores() {
+	public static void setupPlayersScores() {
 		if (age != null) {
 			age.unregister();
 		}
@@ -63,9 +63,21 @@ public class ScoreManager {
 		
 		age.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
-		GameManager.getGames().forEach((playerName, playerGame) -> {
-			GameManager.setupPlayerScores(playerName, scoreboard, targets.getScore(playerName));
-			GameManager.updatePlayerListName(playerName);
+		GameManager.applyToPlayers((game) -> {
+			GameManager.setupPlayerScores(game.player.getName(), scoreboard, targets.getScore(game.player.getName()));
+			GameManager.updatePlayerListName(game.player.getName());
+		});
+	}
+	
+	/**
+	 * Setups score for a specific player
+	 * 
+	 * @param player	The player that will be setup
+	 */
+	public static void setupPlayerScore(String player) {
+		GameManager.applyToPlayer(player, (game) -> {
+			GameManager.setupPlayerScores(game.player.getName(), scoreboard, targets.getScore(game.player.getName()));
+			GameManager.updatePlayerListName(game.player.getName());
 		});
 	}
 	

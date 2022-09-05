@@ -36,7 +36,7 @@ class LangTest {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() {
-		LogManager.getInstanceSystem("C:\\Temp\\Kuffle\\unittest\\KuffleSystemlogs.txt");
+		LogManager.setupInstanceSystem("C:\\Temp\\Kuffle\\unittest\\KuffleSystemlogs.txt");
 	}
 
 	/**

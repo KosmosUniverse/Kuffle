@@ -53,7 +53,7 @@ public class TeamManager {
 	 * 
 	 * @return True if Team exists, False instead
 	 */
-	public boolean hasTeam(String teamName) {
+	public static boolean hasTeam(String teamName) {
 		if (teams != null) {
 			for (Team item : teams) {
 				if (item.name.equals(teamName)) {

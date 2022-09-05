@@ -19,6 +19,7 @@ import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.AgeManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.RewardManager;
+import main.fr.kosmosuniverse.kuffle.core.VersionManager;
 
 /**
  * 
@@ -44,7 +45,19 @@ public class FilesConformity {
 	 * @return the file content as String, null if file is null
 	 */
 	public static String getContent(String file) {
-		String content;
+		return getContent(file, false);
+	}
+	
+	/**
+	 * Get a file content
+	 * 
+	 * @param file			The file of whom we will get the content
+	 * @param onlyResource	The file is searched only in plugin resource files
+	 * 
+	 * @return the file content as String, null if file is null
+	 */
+	public static String getContent(String file, boolean onlyResource) {
+		String content = null;
 		
 		if (file.contains("%v")) {
 			file = Utils.findFileExistVersion(file);
@@ -54,13 +67,17 @@ public class FilesConformity {
 			}
 		}
 		
-		content = getFromFile(file);
+		if (onlyResource) {
+			content = getFromResource(file);
+		} else {
+			content = getFromFile(file);	
+		}
 		
 		if (content == null || !checkContent(file, content)) {
 			content = getFromResource(file);
-			KuffleMain.systemLogs.logMsg(KuffleMain.current.getName(), "Load " + file + " from Resource.");
+			LogManager.getInstanceSystem().logMsg(KuffleMain.current.getName(), "Load " + file + " from Resource.");
 		} else {
-			KuffleMain.systemLogs.logMsg(KuffleMain.current.getName(), "Load " + file + " from File.");
+			LogManager.getInstanceSystem().logMsg(KuffleMain.current.getName(), "Load " + file + " from File.");
 		}
 		
 		return content;
@@ -158,10 +175,10 @@ public class FilesConformity {
 			ret = itemLangConformity(content);
 		} else if (ret && file.equals("langs.json")) {
 			ret = msgLangConformity(content);
-		} else if (ret && file.equals("items_" + Utils.getVersion() + ".json") ||
-				file.equals("sbtt_" + Utils.getVersion() + ".json")) {
+		} else if (ret && file.equals("items_" + VersionManager.getVersion() + ".json") ||
+				file.equals("sbtt_" + VersionManager.getVersion() + ".json")) {
 			ret = itemsConformity(content);
-		} else if (ret && file.equals("rewards_" + Utils.getVersion() + ".json")) {
+		} else if (ret && file.equals("rewards_" + VersionManager.getVersion() + ".json")) {
 			ret = rewardsConformity(content);
 		} else if (ret && file.equals("levels.json")) {
 			ret = levelsConformity(content);
@@ -223,13 +240,13 @@ public class FilesConformity {
 		boolean ret = true;
 		
 		if (!ageObj.containsKey("Number")) {
-			LogManager.getInstanceSystem(null).logSystemMsg("Age [" + age + "] does not contain 'Number' Object.");
+			LogManager.getInstanceSystem().logSystemMsg("Age [" + age + "] does not contain 'Number' Object.");
 			ret = false;
 		} else if (ret && !ageObj.containsKey("TextColor")) {
-			LogManager.getInstanceSystem(null).logSystemMsg("Age [" + age + "] does not contain 'TextColor' Object.");
+			LogManager.getInstanceSystem().logSystemMsg("Age [" + age + "] does not contain 'TextColor' Object.");
 			ret = false;
 		} else if (ret && !ageObj.containsKey("BoxColor")) {
-			LogManager.getInstanceSystem(null).logSystemMsg("Age [" + age + "] does not contain 'BoxColor' Object.");
+			LogManager.getInstanceSystem().logSystemMsg("Age [" + age + "] does not contain 'BoxColor' Object.");
 			ret = false;
 		}
 		
@@ -243,12 +260,12 @@ public class FilesConformity {
 		String box = (String) ageObj.get("BoxColor") + "_SHULKER_BOX";
 		
 		if (ChatColor.valueOf(color) == null) {
-			LogManager.getInstanceSystem(null).logSystemMsg("Age [" + age + "] color [" + color + "] is not in ChatColor Enum.");
+			LogManager.getInstanceSystem().logSystemMsg("Age [" + age + "] color [" + color + "] is not in ChatColor Enum.");
 			ret = false;
 		}
 		
 		if (ret && Material.matchMaterial(box) == null) {
-			LogManager.getInstanceSystem(null).logSystemMsg("Age [" + age + "] box [" + box + "] is not in Material Enum.");
+			LogManager.getInstanceSystem().logSystemMsg("Age [" + age + "] box [" + box + "] is not in Material Enum.");
 			ret = false;
 		}
 		
@@ -293,7 +310,7 @@ public class FilesConformity {
 		try {
 			jsonObj = (JSONObject) parser.parse(content);
 		} catch (ParseException e) {
-			LogManager.getInstanceSystem(null).logSystemMsg(e.getMessage());
+			LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
 			return false;
 		}
 		
@@ -302,7 +319,7 @@ public class FilesConformity {
 		for (Object key : jsonObj.keySet()) {
 			
 			if (areMaterial && Material.matchMaterial((String) key) == null) {
-				LogManager.getInstanceSystem(null).logSystemMsg("Material [" + (String) key + "] does not exist.");
+				LogManager.getInstanceSystem().logSystemMsg("Material [" + (String) key + "] does not exist.");
 				ret = false;
 				break;
 			}
@@ -348,7 +365,7 @@ public class FilesConformity {
 	private static boolean elementLangCheck(JSONObject langObj, List<String> langs) {
 		for (Object keyLang : langObj.keySet()) {
 			if (!langs.contains(keyLang)) {
-				LogManager.getInstanceSystem(null).logSystemMsg("Lang [" + (String) keyLang + "] is not everywhere in lang file.");
+				LogManager.getInstanceSystem().logSystemMsg("Lang [" + (String) keyLang + "] is not everywhere in lang file.");
 				return false;
 			}
 		}
@@ -373,8 +390,8 @@ public class FilesConformity {
 			jsonObj = (JSONObject) parser.parse(content);
 			
 			for (Object key : jsonObj.keySet()) {
-				if (!AgeManager.ageExists(KuffleMain.ages, (String) key)) {
-					LogManager.getInstanceSystem(null).logSystemMsg("Age [" + (String) key + "] does not exist in ages.json.");
+				if (!AgeManager.ageExists((String) key)) {
+					LogManager.getInstanceSystem().logSystemMsg("Age [" + (String) key + "] does not exist in ages.json.");
 					ret = false;
 					break;
 				}
@@ -386,7 +403,7 @@ public class FilesConformity {
 					
 					for (int i = 0; i < array.size(); i++) {
 						if (Material.matchMaterial((String) array.get(i)) == null) {
-							LogManager.getInstanceSystem(null).logSystemMsg("Material [" + (String) array.get(i) + "] for category [" + (String) category + "] of Age [" + (String) key + "] does not exist.");
+							LogManager.getInstanceSystem().logSystemMsg("Material [" + (String) array.get(i) + "] for category [" + (String) category + "] of Age [" + (String) key + "] does not exist.");
 							ret = false;
 							break;
 						}
@@ -432,8 +449,8 @@ public class FilesConformity {
 			jsonObj = (JSONObject) parser.parse(content);
 			
 			for (Object key : jsonObj.keySet()) {
-				if (!AgeManager.ageExists(KuffleMain.ages, (String) key)) {
-					LogManager.getInstanceSystem(null).logSystemMsg("Age [" + (String) key + "] does not exist in ages.json.");
+				if (!AgeManager.ageExists((String) key)) {
+					LogManager.getInstanceSystem().logSystemMsg("Age [" + (String) key + "] does not exist in ages.json.");
 					ret = false;
 					break;
 				}
@@ -470,7 +487,7 @@ public class FilesConformity {
 		
 		for (Object reward : rewards.keySet()) {
 			if (Material.matchMaterial((String) reward) == null) {
-				LogManager.getInstanceSystem(null).logSystemMsg("Material [" + (String) reward + "] is not in Material Enum.");
+				LogManager.getInstanceSystem().logSystemMsg("Material [" + (String) reward + "] is not in Material Enum.");
 				ret = false;
 				break;
 			}
@@ -522,16 +539,16 @@ public class FilesConformity {
 		boolean containKey = true;
 		
 		if (!itemObj.containsKey("Amount")) {
-			LogManager.getInstanceSystem(null).logSystemMsg("Reward [" + reward + "] does not contain 'Amount' Object.");
+			LogManager.getInstanceSystem().logSystemMsg("Reward [" + reward + "] does not contain 'Amount' Object.");
 			containKey = false;
 		} else if (!itemObj.containsKey("Enchant")) {
-			LogManager.getInstanceSystem(null).logSystemMsg("Reward [" + reward + "] does not contain 'Enchant' Object.");
+			LogManager.getInstanceSystem().logSystemMsg("Reward [" + reward + "] does not contain 'Enchant' Object.");
 			containKey = false;
 		} else if (!itemObj.containsKey("Level")) {
-			LogManager.getInstanceSystem(null).logSystemMsg("Reward [" + reward + "] does not contain 'Level' Object.");
+			LogManager.getInstanceSystem().logSystemMsg("Reward [" + reward + "] does not contain 'Level' Object.");
 			containKey = false;
 		} else if (!itemObj.containsKey("Effect")) {
-			LogManager.getInstanceSystem(null).logSystemMsg("Reward [" + reward + "] does not contain 'Effect' Object.");
+			LogManager.getInstanceSystem().logSystemMsg("Reward [" + reward + "] does not contain 'Effect' Object.");
 			containKey = false;
 		}
 		
@@ -552,13 +569,13 @@ public class FilesConformity {
 		if (enchants.contains(",")) {
 			for (String enchant : enchants.split(",")) {
 				if (RewardManager.getEnchantment(enchant) == null) {
-					LogManager.getInstanceSystem(null).logSystemMsg("Reward [" + reward + "] contains unknown enchant : [" + enchant + "].");
+					LogManager.getInstanceSystem().logSystemMsg("Reward [" + reward + "] contains unknown enchant : [" + enchant + "].");
 					containKey = false;
 					break;
 				}
 			}
 		} else if (RewardManager.getEnchantment(enchants) == null) {
-			LogManager.getInstanceSystem(null).logSystemMsg("Reward [" + reward + "] contains unknown enchant : [" + enchants + "].");
+			LogManager.getInstanceSystem().logSystemMsg("Reward [" + reward + "] contains unknown enchant : [" + enchants + "].");
 			containKey = false;
 		}
 		
@@ -579,12 +596,12 @@ public class FilesConformity {
 		if (effects.contains(",")) {
 			for (String effect : effects.split(",")) {
 				if (RewardManager.findEffect(effect) == null) {
-					LogManager.getInstanceSystem(null).logSystemMsg("Reward [" + reward + "] contains unknown effect : [" + effect + "].");
+					LogManager.getInstanceSystem().logSystemMsg("Reward [" + reward + "] contains unknown effect : [" + effect + "].");
 					containKey = false;
 				}
 			}
 		} else if (!Utils.checkEffect(effects)) {
-			LogManager.getInstanceSystem(null).logSystemMsg("Reward [" + reward + "] contains unknown enchant : [" + effects + "].");
+			LogManager.getInstanceSystem().logSystemMsg("Reward [" + reward + "] contains unknown enchant : [" + effects + "].");
 			containKey = false;
 		}
 		
@@ -611,13 +628,13 @@ public class FilesConformity {
 				JSONObject levelObj = (JSONObject) jsonObj.get(key);
 				
 				if (!levelObj.containsKey("Number")) {
-					LogManager.getInstanceSystem(null).logSystemMsg("Level [" + (String) key + "] does not contain 'Number' Object.");
+					LogManager.getInstanceSystem().logSystemMsg("Level [" + (String) key + "] does not contain 'Number' Object.");
 					ret = false;
 				} else if (!levelObj.containsKey("Seconds")) {
-					LogManager.getInstanceSystem(null).logSystemMsg("Level [" + (String) key + "] does not contain 'Seconds' Object.");
+					LogManager.getInstanceSystem().logSystemMsg("Level [" + (String) key + "] does not contain 'Seconds' Object.");
 					ret = false;
 				} else if (!levelObj.containsKey("Lose")) {
-					LogManager.getInstanceSystem(null).logSystemMsg("Level [" + (String) key + "] does not contain 'Lose' Object.");
+					LogManager.getInstanceSystem().logSystemMsg("Level [" + (String) key + "] does not contain 'Lose' Object.");
 					ret = false;
 				}
 				
