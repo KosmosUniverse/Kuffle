@@ -13,6 +13,7 @@ import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 public class KuffleList implements CommandExecutor {
@@ -23,12 +24,17 @@ public class KuffleList implements CommandExecutor {
 
 		Player player = (Player) sender;
 
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-list>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-list>"));
 
-		if (!player.hasPermission("ki-list")) {
+		if (!player.hasPermission("k-list")) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 
 			return false;
+		}
+		
+		if (KuffleMain.type.getType() == KuffleType.Type.UNKNOWN) {
+			LogManager.getInstanceSystem().writeMsg(player, "Kuffle type not configured, please set it with /k-set-type");
+			return true;
 		}
 		
 		if (args.length != 0 && KuffleMain.gameStarted) {

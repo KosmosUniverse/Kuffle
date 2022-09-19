@@ -28,9 +28,9 @@ public class KuffleLang implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-lang>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-lang>"));
 		
-		if (!player.hasPermission("ki-lang")) {
+		if (!player.hasPermission("k-lang")) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return false;
 		}

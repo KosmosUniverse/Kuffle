@@ -5,10 +5,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.multiblock.MultiblockManager;
+import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 
 /**
  * 
@@ -23,11 +25,16 @@ public class KuffleMultiBlocks implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<kb-multiblocks>"));
+		LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-multiblocks>"));
 		
-		if (!player.hasPermission("kb-multiblocks")) {
+		if (!player.hasPermission("k-multiblocks")) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return false;
+		}
+		
+		if (KuffleMain.type.getType() == KuffleType.Type.UNKNOWN) {
+			LogManager.getInstanceSystem().writeMsg(player, "Kuffle type not configured, please set it with /k-set-type");
+			return true;
 		}
 		
 		player.openInventory(MultiblockManager.getMultiblocksInventories());

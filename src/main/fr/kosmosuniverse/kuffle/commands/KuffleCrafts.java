@@ -5,10 +5,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 
 /**
  * 
@@ -23,14 +25,19 @@ public class KuffleCrafts implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-crafts>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-crafts>"));
 		
-		if (!player.hasPermission("ki-crafts")) {
+		if (!player.hasPermission("k-crafts")) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return false;
 		}
 		
-		player.openInventory(CraftManager.getAllCraftsInventory());
+		if (KuffleMain.type.getType() == KuffleType.Type.UNKNOWN) {
+			LogManager.getInstanceSystem().writeMsg(player, "Kuffle type not configured, please set it with /k-set-type");
+			return true;
+		}
+		
+		player.openInventory(CraftManager.getCraftsInventory());
 		
 		return true;
 	}

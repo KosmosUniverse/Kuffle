@@ -10,6 +10,7 @@ import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 
 public class KuffleSkip implements CommandExecutor {
 	@Override
@@ -19,7 +20,12 @@ public class KuffleSkip implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-skip>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-skip>"));
+		
+		if (KuffleMain.type.getType() == KuffleType.Type.UNKNOWN) {
+			LogManager.getInstanceSystem().writeMsg(player, "Kuffle type not configured, please set it with /k-set-type");
+			return true;
+		}
 		
 		if (!KuffleMain.gameStarted) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", Config.getLang()));
@@ -27,7 +33,7 @@ public class KuffleSkip implements CommandExecutor {
 			return false;
 		}
 
-		if (!Config.getSkip() && !msg.equals("ki-adminskip")) {
+		if (!Config.getSkip() && !msg.equals("k-adminskip")) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("CONFIG_DISABLED", Config.getLang()));
 			
 			return false;
@@ -38,13 +44,13 @@ public class KuffleSkip implements CommandExecutor {
 			return true;
 		}
 		
-		if (msg.equals("ki-skip")) {
+		if (msg.equals("k-skip")) {
 			if (args.length != 0) {
 				return false;
 			}
 			
 			doSkip(player, msg, player.getName());
-		} else if (msg.equals("ki-adminskip")) {
+		} else if (msg.equals("k-adminskip")) {
 			if (args.length != 1) {
 				return false;
 			}
@@ -67,7 +73,7 @@ public class KuffleSkip implements CommandExecutor {
 		}
 		
 		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("ITEM_SKIPPED", Config.getLang()).replace("[#]", " [" + GameManager.getPlayerTarget(playerTarget) + "] ").replace("<#>", " <" + playerTarget + ">"));
-		GameManager.skipPlayerTarget(playerTarget, "ki-skip".equals(cmd));
+		GameManager.skipPlayerTarget(playerTarget, "k-skip".equals(cmd));
 
 		
 		return ;

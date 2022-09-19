@@ -14,6 +14,7 @@ import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
+import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 
 public class KuffleStop implements CommandExecutor {
 	@Override
@@ -23,11 +24,16 @@ public class KuffleStop implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-stop>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-stop>"));
 		
-		if (!player.hasPermission("ki-stop")) {
+		if (!player.hasPermission("k-stop")) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return false;
+		}
+		
+		if (KuffleMain.type.getType() == KuffleType.Type.UNKNOWN) {
+			LogManager.getInstanceSystem().writeMsg(player, "Kuffle type not configured, please set it with /k-set-type");
+			return true;
 		}
 		
 		if (!KuffleMain.gameStarted) {

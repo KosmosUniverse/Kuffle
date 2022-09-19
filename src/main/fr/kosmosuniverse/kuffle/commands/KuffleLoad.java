@@ -25,6 +25,7 @@ import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
+import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 /**
@@ -34,7 +35,7 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  */
 public class KuffleLoad implements CommandExecutor {
 	private File dataFolder;
-	private static final String GAME_FILE = "Game.ki";
+	private static final String GAME_FILE = "Game.k";
 	
 	/**
 	 * Constructor
@@ -52,11 +53,16 @@ public class KuffleLoad implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-load>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-load>"));
 		
-		if (!player.hasPermission("ki-load")) {
+		if (!player.hasPermission("k-load")) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return false;
+		}
+		
+		if (KuffleMain.type.getType() == KuffleType.Type.UNKNOWN) {
+			LogManager.getInstanceSystem().writeMsg(player, "Kuffle type not configured, please set it with /k-set-type");
+			return true;
 		}
 		
 		if (KuffleMain.gameStarted) {
@@ -160,7 +166,7 @@ public class KuffleLoad implements CommandExecutor {
 	private void loadTeams(JSONParser parser) {
 		JSONObject mainObject;
 		
-		try (FileReader reader = new FileReader(dataFolder.getPath() + File.separator + "Teams.ki")) {
+		try (FileReader reader = new FileReader(dataFolder.getPath() + File.separator + "Teams.k")) {
 			mainObject = (JSONObject) parser.parse(reader);
 			TeamManager.loadTeams(mainObject, GameManager.getGames());
 			mainObject.clear();

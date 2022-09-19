@@ -10,6 +10,7 @@ import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 
 public class KuffleValidate implements CommandExecutor {
 	@Override
@@ -19,19 +20,25 @@ public class KuffleValidate implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
+		if (KuffleMain.type.getType() == KuffleType.Type.UNKNOWN) {
+			LogManager.getInstanceSystem().writeMsg(player, "Kuffle type not configured, please set it with /k-set-type");
+			return true;
+		}
+		
 		if (!KuffleMain.gameStarted) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", Config.getLang()));
 			return true;
 		}
 		
+		
 		if (args.length != 1) {
 			return false;
 		}
 		
-		if (msg.equalsIgnoreCase("ki-validate")) {
-			LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-validate>"));
+		if (msg.equalsIgnoreCase("k-validate")) {
+			LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-validate>"));
 			
-			if (!player.hasPermission("ki-validate")) {
+			if (!player.hasPermission("k-validate")) {
 				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 				return false;
 			}
@@ -43,10 +50,10 @@ public class KuffleValidate implements CommandExecutor {
 
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("ITEM_VALIDATED", Config.getLang()).replace("[#]", " [" + GameManager.getPlayerTarget(args[0]) + "] ").replace("<#>", "<" + args[0] + ">"));			
 			GameManager.playerFoundTarget(args[0]);
-		} else if (msg.equalsIgnoreCase("ki-validate-age")) {
-			LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-validate-age>"));
+		} else if (msg.equalsIgnoreCase("k-validate-age")) {
+			LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-validate-age>"));
 			
-			if (!player.hasPermission("ki-validate-age")) {
+			if (!player.hasPermission("k-validate-age")) {
 				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 				return false;
 			}

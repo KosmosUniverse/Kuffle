@@ -16,6 +16,7 @@ import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.ActionBar;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
+import main.fr.kosmosuniverse.kuffle.core.GameLoop;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
@@ -23,6 +24,7 @@ import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.SpreadPlayer;
 import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
+import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 
 /**
@@ -38,11 +40,16 @@ public class KuffleStart implements CommandExecutor {
 
 		Player player = (Player) sender;
 
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-start>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-start>"));
 
-		if (!player.hasPermission("ki-start")) {
+		if (!player.hasPermission("k-start")) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return false;
+		}
+		
+		if (KuffleMain.type.getType() == KuffleType.Type.UNKNOWN) {
+			LogManager.getInstanceSystem().writeMsg(player, "Kuffle type not configured, please set it with /k-set-type");
+			return true;
 		}
 
 		if (GameManager.getGames().size() == 0) {
@@ -128,6 +135,10 @@ public class KuffleStart implements CommandExecutor {
 				game.player.getInventory().addItem(box);
 			});
 
+			if (KuffleMain.loop == null) {
+				KuffleMain.loop = new GameLoop();
+			}
+			
 			KuffleMain.loop.startRunnable();
 			KuffleMain.gameStarted = true;
 			KuffleMain.paused = false;
@@ -190,6 +201,6 @@ public class KuffleStart implements CommandExecutor {
 	 * @return the shulker box ItemStack
 	 */
 	static ItemStack getStartBox() {
-		return ItemUtils.itemMakerName(Material.WHITE_SHULKER_BOX, 1, "Start Box");
+		return ItemUtils.itemMaker(Material.WHITE_SHULKER_BOX, 1, "Start Box");
 	}
 }

@@ -30,9 +30,9 @@ public class KuffleAddDuringGame implements CommandExecutor {
 
 		Player player = (Player) sender;
 
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<ki-add-during-game>"));
+		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-add-during-game>"));
 
-		if (!player.hasPermission("ki-add-during-game")) {
+		if (!player.hasPermission("k-add-during-game")) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return false;
 		}

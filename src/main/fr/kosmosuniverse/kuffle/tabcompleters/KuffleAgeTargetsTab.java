@@ -15,13 +15,13 @@ import main.fr.kosmosuniverse.kuffle.core.AgeManager;
  * @author KosmosUniverse
  *
  */
-public class KuffleAgeItemsTab implements TabCompleter  {
-	private ArrayList<String> ages = new ArrayList<>();
+public class KuffleAgeTargetsTab implements TabCompleter  {
+	private List<String> ages = new ArrayList<>();
 
 	/**
 	 * Constructor
 	 */
-	public KuffleAgeItemsTab() {
+	public KuffleAgeTargetsTab() {
 		int max = AgeManager.getLastAgeIndex();
 		
 		for (int cnt = 0; cnt <= max; cnt++) {
@@ -29,6 +29,13 @@ public class KuffleAgeItemsTab implements TabCompleter  {
 
 			ages.add(age);
 		}
+	}
+	
+	/**
+	 * Clears the <ages> list
+	 */
+	public void clear() {
+		ages.clear();
 	}
 	
 	@Override

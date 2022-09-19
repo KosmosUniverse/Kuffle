@@ -5,11 +5,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.multiblock.AMultiblock;
 import main.fr.kosmosuniverse.kuffle.multiblock.MultiblockManager;
+import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 
 /**
  * 
@@ -24,12 +26,21 @@ public class KuffleSpawnMuliblock implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<kb-spawn-multiblock>"));
-		
-		if (!player.hasPermission("kb-spawn-multiblock")) {
+		LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-spawn-multiblock>"));
+		System.out.println("tok");
+		if (!player.hasPermission("k-spawn-multiblock")) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return false;
 		}
+		
+		System.out.println("tauk");
+		
+		if (KuffleMain.type.getType() == KuffleType.Type.UNKNOWN) {
+			LogManager.getInstanceSystem().writeMsg(player, "Kuffle type not configured, please set it with /k-set-type");
+			return true;
+		}
+		
+		System.out.println("teauk");
 		
 		if (args.length != 1) {
 			return false;
