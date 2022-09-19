@@ -50,7 +50,7 @@ public class ScoreManager {
 		
 		int ageCnt = 0;
 		
-		for (; ageCnt < Config.getLastAge().number; ageCnt++) {
+		for (; ageCnt < (Config.getLastAge().number + 1); ageCnt++) {
 			sAges.add(age.getScore(AgeManager.getAgeByNumber(ageCnt).color + AgeManager.getAgeByNumber(ageCnt).name.replace("_", " ")));
 		}
 				

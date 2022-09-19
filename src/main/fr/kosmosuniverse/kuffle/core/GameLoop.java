@@ -92,7 +92,7 @@ public class GameLoop {
 			GameManager.applyToPlayers((playerGame) -> {
 				playerGame.player.sendMessage(LangManager.getMsgLang("GAME_COMPLETE", playerGame.configLang).replace("<#>", ChatColor.GOLD + "" + ChatColor.BOLD + game.player.getName() + ChatColor.BLUE));
 			});
-		} else if ((!Config.getTeam() && game.targetCount >= Config.getTargetPerAge()) || (Config.getTeam() && checkTeamMates(game))) {
+		} else if ((!Config.getTeam() && game.targetCount >= (Config.getTargetPerAge() + 1)) || (Config.getTeam() && checkTeamMates(game))) {
 			GameManager.nextPlayerAge(game);
 		} else {
 			newItem(game);		
@@ -161,7 +161,7 @@ public class GameLoop {
 			Game game = GameManager.getGames().get(player.getName());
 			
 			if (game.age <= tmpGame.age &&
-					game.targetCount < Config.getTargetPerAge()) {
+					game.targetCount < (Config.getTargetPerAge() + 1)) {
 				ret = false;
 				break;
 			}

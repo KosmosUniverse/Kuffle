@@ -2,7 +2,6 @@ package main.fr.kosmosuniverse.kuffle.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -45,20 +44,20 @@ public class LangManager {
 		JSONParser jsonParser = new JSONParser();
 		JSONObject langages = (JSONObject) jsonParser.parse(jsonContent);
 
-		for (Iterator<?> itTarget = langages.keySet().iterator(); itTarget.hasNext();) {
-			String keyItem = (String) itTarget.next();
+		for (Object key : langages.keySet()) {
+			String keyItem = key.toString();
 			JSONObject target = (JSONObject) langages.get(keyItem);
 
 			Map<String, String> targetLangs = new HashMap<>();
 			
-			for (Iterator<?> itLang = target.keySet().iterator(); itLang.hasNext();) {
-				String keyLang = (String) itLang.next();
-				String value = (String) target.get(keyLang);
+			for (Object keylang : target.keySet()) {
+				String lang = keylang.toString();
+				String value = (String) target.get(lang);
 				
-				targetLangs.put(keyLang, value);
+				targetLangs.put(lang, value);
 				
-				if (!langs.contains(keyLang)) {
-					langs.add(keyLang);
+				if (!langs.contains(lang)) {
+					langs.add(lang);
 				}
 			}
 			
