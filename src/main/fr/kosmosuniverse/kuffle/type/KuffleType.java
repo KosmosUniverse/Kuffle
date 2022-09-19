@@ -5,6 +5,8 @@ import java.io.File;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.simple.parser.ParseException;
 
+import main.fr.kosmosuniverse.kuffle.commands.*;
+import main.fr.kosmosuniverse.kuffle.tabcompleters.*;
 import main.fr.kosmosuniverse.kuffle.core.AgeManager;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
@@ -29,15 +31,27 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  * @author KosmosUniverse
  *
  */
-public class KuffleType {
-	protected static Type type = Type.UNKNOWN;
-	protected static PlayerEvents playerEvents;
+public abstract class KuffleType {
 	protected static ItemsPlayerInteract playerInteract;
+	protected static KuffleSetType kuffleSetType;
+	protected static KuffleAgeTargetsTab kuffleAgeTargetsTab = null;
+	protected static KuffleSetTypeTab kuffleSetTypeTab = null;
 	
+	/**
+	 * 
+	 * @author KosmosUniverse
+	 *
+	 */
 	public enum Type {
-		UNKNOWN,
+		NO_TYPE,
 		ITEMS,
 		BLOCKS
+	}
+	
+	/**
+	 * Constructor
+	 */
+	public KuffleType() {
 	}
 	
 	/**
@@ -52,7 +66,6 @@ public class KuffleType {
 		LogManager.setupInstanceSystem(plugin.getDataFolder().getPath() + File.separator + "KuffleSystemlogs.txt");
 		
 		try {
-			LangManager.setupTargetsLangs(FilesConformity.getContent("targets_langs.json"));
 			LangManager.setupMsgsLangs(FilesConformity.getContent("msgs_langs.json"));
 		} catch (IllegalArgumentException | ParseException e) {
 			Utils.logException(e);
@@ -62,7 +75,7 @@ public class KuffleType {
 		}
 		
 		try {
-			VersionManager.setupVersions("versions.json");
+			VersionManager.setupVersions(FilesConformity.getContent("versions.json"));
 		} catch (IllegalArgumentException | ParseException e) {
 			Utils.logException(e);
 			VersionManager.clear();
@@ -90,20 +103,58 @@ public class KuffleType {
 		
 		Config.setupConfig(plugin.getConfig());
 		
-		playerEvents = new PlayerEvents(plugin.getDataFolder());
+		kuffleSetType = new KuffleSetType();
+		kuffleSetTypeTab = new KuffleSetTypeTab();
 		
-		plugin.getServer().getPluginManager().registerEvents(playerEvents, plugin);
+		// Listeners
+		plugin.getServer().getPluginManager().registerEvents(new PlayerEvents(), plugin);
 		plugin.getServer().getPluginManager().registerEvents(new ItemEvent(), plugin);
-	}
-	
-	/**
-	 * Setup all type related resources
-	 *
-	 * @param plugin	The plugin itself
-	 * 
-	 * @throws KuffleFileLoadException if targets, sbbts or rewards files loading fails
-	 */
-	protected void setupTypeResources(JavaPlugin plugin) throws KuffleFileLoadException {
+		
+		// Commands
+		plugin.getCommand("k-config").setExecutor(new KuffleConfig());
+		plugin.getCommand("k-list").setExecutor(new KuffleList());
+		plugin.getCommand("k-save").setExecutor(new KuffleSave(plugin.getDataFolder()));
+		plugin.getCommand("k-load").setExecutor(new KuffleLoad(plugin.getDataFolder()));
+		plugin.getCommand("k-start").setExecutor(new KuffleStart());
+		plugin.getCommand("k-stop").setExecutor(new KuffleStop());
+		plugin.getCommand("k-pause").setExecutor(new KufflePause());
+		plugin.getCommand("k-resume").setExecutor(new KuffleResume());
+		plugin.getCommand("k-set-type").setExecutor(kuffleSetType);
+		plugin.getCommand("k-lang").setExecutor(new KuffleLang());
+		plugin.getCommand("k-skip").setExecutor(new KuffleSkip());
+		plugin.getCommand("k-abandon").setExecutor(new KuffleAbandon());
+		plugin.getCommand("k-adminskip").setExecutor(new KuffleSkip());
+		plugin.getCommand("k-validate").setExecutor(new KuffleValidate());
+		plugin.getCommand("k-validate-age").setExecutor(new KuffleValidate());
+		plugin.getCommand("k-players").setExecutor(new KufflePlayers());
+		plugin.getCommand("k-add-during-game").setExecutor(new KuffleAddDuringGame());
+
+		plugin.getCommand("k-team-create").setExecutor(new KuffleTeamCreate());
+		plugin.getCommand("k-team-delete").setExecutor(new KuffleTeamDelete());
+		plugin.getCommand("k-team-color").setExecutor(new KuffleTeamColor());
+		plugin.getCommand("k-team-show").setExecutor(new KuffleTeamShow());
+		plugin.getCommand("k-team-affect-player").setExecutor(new KuffleTeamAffectPlayer());
+		plugin.getCommand("k-team-remove-player").setExecutor(new KuffleTeamRemovePlayer());
+		plugin.getCommand("k-team-reset-players").setExecutor(new KuffleTeamResetPlayers());
+		plugin.getCommand("k-team-random-player").setExecutor(new KuffleTeamRandomPlayer());
+		
+		// TabCompleters
+		plugin.getCommand("k-config").setTabCompleter(new KuffleConfigTab());
+		plugin.getCommand("k-list").setTabCompleter(new KuffleListTab());
+		plugin.getCommand("k-lang").setTabCompleter(new KuffleLangTab());
+		plugin.getCommand("k-adminskip").setTabCompleter(new KuffleCurrentGamePlayerTab());
+		plugin.getCommand("k-validate").setTabCompleter(new KuffleCurrentGamePlayerTab());
+		plugin.getCommand("k-validate-age").setTabCompleter(new KuffleCurrentGamePlayerTab());
+		plugin.getCommand("k-add-during-game").setTabCompleter(new KuffleAddDuringGameTab());
+		plugin.getCommand("k-set-type").setTabCompleter(kuffleSetTypeTab);
+		
+		plugin.getCommand("k-team-create").setTabCompleter(new KuffleTeamCreateTab());
+		plugin.getCommand("k-team-delete").setTabCompleter(new KuffleTeamDeleteTab());
+		plugin.getCommand("k-team-color").setTabCompleter(new KuffleTeamColorTab());
+		plugin.getCommand("k-team-show").setTabCompleter(new KuffleTeamShowTab());
+		plugin.getCommand("k-team-affect-player").setTabCompleter(new KuffleTeamAffectPlayerTab());
+		plugin.getCommand("k-team-remove-player").setTabCompleter(new KuffleTeamRemovePlayerTab());
+		plugin.getCommand("k-team-reset-players").setTabCompleter(new KuffleTeamResetPlayersTab());
 	}
 	
 	/**
@@ -115,19 +166,43 @@ public class KuffleType {
 	 */
 	protected void setupType(JavaPlugin plugin) throws KuffleFileLoadException {
 		try {
-			setupTypeResources(plugin);
-		} catch (KuffleFileLoadException e) {
-			type = Type.UNKNOWN;
-			
+			TargetManager.setup(FilesConformity.getContent("targets.json"));
+		} catch (IllegalArgumentException | ParseException e) {
+			Utils.logException(e);
 			TargetManager.clear();
-			RewardManager.clear();
 			
-			throw e;
+			throw new KuffleFileLoadException("Targets load failed !", e);
 		}
 		
-		CraftManager.setupCrafts(type);
-		ScoreManager.setupPlayersScores();
+		try {
+			RewardManager.setupRewards(FilesConformity.getContent("rewards.json"));
+		} catch (IllegalArgumentException | ParseException e) {
+			Utils.logException(e);
+			RewardManager.clear();
+			
+			throw new KuffleFileLoadException("Rewards load failed !");
+		}
+		
+		try {
+			CraftManager.setupCrafts(getType(), FilesConformity.getContent("crafts.json"));
+		} catch (IllegalArgumentException | ParseException e) {
+			Utils.logException(e);
+			CraftManager.clear();
+			
+			throw new KuffleFileLoadException("Crafts load failed !");
+		}
+		
+		ScoreManager.setupScores(getType());
 		GameManager.setupGame();
+		
+		plugin.getCommand("k-agetargets").setExecutor(new KuffleAgeTargets());
+		plugin.getCommand("k-crafts").setExecutor(new KuffleCrafts());
+		
+		if (kuffleAgeTargetsTab == null) {
+			kuffleAgeTargetsTab = new KuffleAgeTargetsTab();
+		}
+		
+		plugin.getCommand("k-agetargets").setTabCompleter(kuffleAgeTargetsTab);
 		
 		plugin.getServer().getPluginManager().registerEvents(new InventoryListeners(), plugin);
 	}
@@ -138,6 +213,18 @@ public class KuffleType {
 	public final void clear() {
 		clearType();
 		
+		if (kuffleSetType != null) {
+			kuffleSetType.clear();
+		}
+		
+		if (kuffleAgeTargetsTab != null) {
+			kuffleAgeTargetsTab.clear();
+		}
+		
+		if (kuffleSetTypeTab != null) {
+			kuffleSetTypeTab.clear();	
+		}
+		
 		Config.clear();
 		LevelManager.clear();
 		AgeManager.clear();
@@ -145,15 +232,12 @@ public class KuffleType {
 		LangManager.clear();
 	}
 	
-	public final void clearType() {
-		GameManager.clear();
-		ScoreManager.clear();
-		CraftManager.clear();
-		RewardManager.clear();
-		TargetManager.clear();
-		
-		type = Type.UNKNOWN;
-	}
+	/**
+	 * Clears the specific Type and return basic one
+	 * 
+	 * @return Base Type
+	 */
+	public abstract KuffleType clearType();
 	
 	/**
 	 * Gets the ItemsPlayerInteract class
@@ -163,4 +247,9 @@ public class KuffleType {
 	public ItemsPlayerInteract getPlayerInteract() {
 		return playerInteract;
 	}
+	
+	/**
+	 * Gets the current type
+	 */
+	public abstract Type getType();
 }

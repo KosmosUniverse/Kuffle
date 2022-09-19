@@ -123,7 +123,7 @@ public final class Utils {
 			return null;
 		}
 
-		while (KuffleMain.current.getResource(file)  == null && versionNb > 0) {
+		while (KuffleMain.current.getResource(file) == null && versionNb > 0) {
 			versionNb -= 1;
 			version = VersionManager.getVersionByIndex(versionNb);
 			file = fileName.replace("%v", version);
@@ -304,6 +304,8 @@ public final class Utils {
 	 */
 	public static void logException(Exception e) {
 		StringBuilder sb = new StringBuilder();
+		
+		sb.append(e.getMessage()).append("\n");
 		
 		for (StackTraceElement ste : e.getStackTrace()) {
 			sb.append(ste).append("\n");

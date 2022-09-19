@@ -1,0 +1,38 @@
+{
+	"Archaic_Age" : {
+		"iron_sword" : {
+			"Amount" : 1,
+			"Enchant" : "fire_aspect",
+			"Level" : 1,
+			"Effect" : ""
+		},
+		"potion" : {
+			"Amount" : 1,
+			"Enchant" : "",
+			"Level" : 0,
+			"Effect" : "speed"
+		},
+		"cooked_beef" : {
+			"Amount" : 16,
+			"Enchant" : "",
+			"Level" : 0,
+			"Effect" : ""
+		}
+	},
+	"Classic_Age" : {
+		"diamond_pickaxe" : {
+			"Amount" : 1,
+			"Enchant" : "silk_touch,efficiency,unbreaking",
+			"Level" : 5,
+			"Effect" : ""
+		}
+	},
+	"Mineric_Age" : {
+		"potion" : {
+			"Amount" : 2,
+			"Enchant" : "",
+			"Level" : 0,
+			"Effect" : "fire_resistance, water_breathing"
+		}
+	}
+}

@@ -1,0 +1,19 @@
+{
+	"CopperOre": {  
+		"Type" : "WorkBench",
+		"Shape" : "CSC-SRS-CSC",
+		"Version" : "1.17",
+		"Result" : {
+			"Type" : "copper_ore",
+			"Amount" : 1,
+		}
+		"Ingredients": {
+			"S" : {
+				"Type" : "stone",
+			},
+			"C" : {
+				"Type" : "raw_copper",
+			}
+		}
+	}
+}

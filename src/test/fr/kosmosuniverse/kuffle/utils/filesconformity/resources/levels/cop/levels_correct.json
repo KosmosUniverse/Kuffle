@@ -1,0 +1,12 @@
+{
+	"CHILD" : {
+		"Number" : 0,
+		"Seconds" : 1,
+		"Lose" : false
+	},
+	"ULTRA" : {
+		"Number" : 4,
+		"Seconds" : -1,
+		"Lose" : true
+	}
+}

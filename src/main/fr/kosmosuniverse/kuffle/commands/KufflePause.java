@@ -36,7 +36,7 @@ public class KufflePause implements CommandExecutor {
 			return false;
 		}
 		
-		if (KuffleMain.type.getType() == KuffleType.Type.UNKNOWN) {
+		if (KuffleMain.type.getType() == KuffleType.Type.NO_TYPE) {
 			LogManager.getInstanceSystem().writeMsg(player, "Kuffle type not configured, please set it with /k-set-type");
 			return true;
 		}

@@ -76,7 +76,7 @@ public class KuffleSetType implements CommandExecutor  {
 		if (!confirm.containsKey(player.getUniqueId())) {				
 			LogManager.getInstanceSystem().writeMsg(player, "[Warning] : Change Kuffle type takes few seconds to reload resource files.");
 			
-			if (KuffleMain.type.getType() != KuffleType.Type.UNKNOWN) {
+			if (KuffleMain.type.getType() != KuffleType.Type.NO_TYPE) {
 				LogManager.getInstanceSystem().writeMsg(player, "[Warning] : Kuffle type is already set. This action will unload current Kuffle type {" + KuffleMain.type.getType() + "}.");
 			}
 			
@@ -116,7 +116,7 @@ public class KuffleSetType implements CommandExecutor  {
 			case BLOCKS:
 				KuffleMain.type = new KuffleBlocks(KuffleMain.type, KuffleMain.current);
 				break;
-			case UNKNOWN:
+			case NO_TYPE:
 			default:
 				break;
 		}

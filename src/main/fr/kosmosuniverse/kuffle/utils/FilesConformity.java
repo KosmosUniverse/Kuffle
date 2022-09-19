@@ -67,15 +67,16 @@ public class FilesConformity {
 			}
 		}
 		
-		if (onlyResource) {
-			content = getFromResource(file);
-		} else {
-			content = getFromFile(file);	
-		}
+		content = getFromFile(file);
 		
 		if (content == null || !checkContent(file, content)) {
 			content = getFromResource(file);
-			LogManager.getInstanceSystem().logMsg(KuffleMain.current.getName(), "Load " + file + " from Resource.");
+			
+			if (content != null)  {
+				LogManager.getInstanceSystem().logMsg(KuffleMain.current.getName(), "Load " + file + " from Resource.");
+			} else {
+				LogManager.getInstanceSystem().logMsg(KuffleMain.current.getName(), "File : " + file + " does not exist.");
+			}
 		} else {
 			LogManager.getInstanceSystem().logMsg(KuffleMain.current.getName(), "Load " + file + " from File.");
 		}
@@ -136,9 +137,7 @@ public class FilesConformity {
 		try {
 			InputStream in = KuffleMain.current.getResource(file);
 			String result = Utils.readFileContent(in);
-			
 			JSONParser parser = new JSONParser();
-			
 			JSONObject mainObject = (JSONObject) parser.parse(result);
 			
 			result = mainObject.toString();

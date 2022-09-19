@@ -1,0 +1,10 @@
+{
+	"FOOBAR" : {
+		"iron_sword" : {
+			"Amount" : 1,
+			"Enchant" : "fire_aspect",
+			"Level" : 1,
+			"Effect" : ""
+		}
+	}
+}

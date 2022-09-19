@@ -8,7 +8,7 @@ import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
 import main.fr.kosmosuniverse.kuffle.type.KuffleType;
-import main.fr.kosmosuniverse.kuffle.type.KuffleUnknown;
+import main.fr.kosmosuniverse.kuffle.type.KuffleNoType;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 /**
@@ -34,7 +34,7 @@ public class KuffleMain extends JavaPlugin {
 		current = this;
 		
 		try {
-			type = new KuffleUnknown(this);
+			type = new KuffleNoType(this);
 		} catch (KuffleFileLoadException e) {
 			Utils.logException(e);
 			this.getPluginLoader().disablePlugin(this);

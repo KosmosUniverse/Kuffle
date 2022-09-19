@@ -1,0 +1,10 @@
+{
+	"Classic_Age" : {
+		"diamond_pickaxe" : {
+			"Amount" : 1,
+			"Enchant" : "silk_touch,efzfef,unbreaking",
+			"Level" : 5,
+			"Effect" : ""
+		}
+	}
+}
