@@ -85,15 +85,19 @@ public class ScoreManager {
 	 * Clears the scores
 	 */
 	public static void clear() {
-		scoreboard.clearSlot(age.getDisplaySlot());
+		if (age != null) {
+			scoreboard.clearSlot(age.getDisplaySlot());
+			age.unregister();
+			age = null;
+		}
 		
 		if (targets.getDisplaySlot() != null) {
 			scoreboard.clearSlot(targets.getDisplaySlot());
 		}
 
-		age.unregister();
-		age = null;
-		sAges.clear();
+		if (sAges != null) {
+			sAges.clear();
+		}
 		
 		GameManager.clearPlayersListNames();
 	}

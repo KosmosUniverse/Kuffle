@@ -1027,37 +1027,6 @@ public class GameManager {
 	}
 
 	/**
-	 * Sets the player's current target
-	 * 
-	 * @param player	The player
-	 * @param target	The target to set
-	 */
-	public static void setPlayerCurrentTarget(String player, String target) {
-		Game game = games.get(player);
-		
-		game.currentTarget = target;
-
-		if (game.currentTarget == null) {
-			return ;
-		}
-
-		if (Config.getDouble()) {
-			game.timeShuffle = System.currentTimeMillis();
-
-			game.targetDisplay = LangManager.getTargetLang(game.currentTarget.split("/")[0], game.configLang) + "/" + LangManager.getTargetLang(game.currentTarget.split("/")[1], game.configLang);
-			updatePlayersHeadData(player, game.targetDisplay);
-		} else {
-			if (!game.alreadyGot.contains(game.currentTarget)) {
-				game.alreadyGot.add(game.currentTarget);
-			}
-
-			game.timeShuffle = System.currentTimeMillis();
-			game.targetDisplay = LangManager.getTargetLang(game.currentTarget, game.configLang);
-			updatePlayersHeadData(player, game.targetDisplay);
-		}
-	}
-
-	/**
 	 * Sets the Team name
 	 * 
 	 * @param player	The player
@@ -1224,10 +1193,13 @@ public class GameManager {
 			newInv.addItem(Utils.getHead(games.get(playerName).player, games.get(playerName).targetDisplay));
 		}
 		
-		playersHeads.clear();
+		if (playersHeads != null) {
+			playersHeads.clear();
+		}
+		
 		playersHeads = newInv;
 	}
-
+	
 	/**
 	 * Updates the head of a specific player in playersHeads inventory
 	 * 

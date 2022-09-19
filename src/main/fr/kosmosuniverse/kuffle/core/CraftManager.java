@@ -2,75 +2,24 @@ package main.fr.kosmosuniverse.kuffle.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
-import main.fr.kosmosuniverse.kuffle.crafts.ACrafts;
-import main.fr.kosmosuniverse.kuffle.crafts.Bell;
-import main.fr.kosmosuniverse.kuffle.crafts.activables.CoralCompass;
-import main.fr.kosmosuniverse.kuffle.crafts.activables.EndPortalFrame;
-import main.fr.kosmosuniverse.kuffle.crafts.activables.EndTeleporter;
-import main.fr.kosmosuniverse.kuffle.crafts.activables.OverworldTeleporter;
-import main.fr.kosmosuniverse.kuffle.crafts.activables.Template;
-import main.fr.kosmosuniverse.kuffle.crafts.armors.ChainmailBoots;
-import main.fr.kosmosuniverse.kuffle.crafts.armors.ChainmailChestplate;
-import main.fr.kosmosuniverse.kuffle.crafts.armors.ChainmailHelmet;
-import main.fr.kosmosuniverse.kuffle.crafts.armors.ChainmailLeggings;
-import main.fr.kosmosuniverse.kuffle.crafts.armors.DiamondHorseArmor;
-import main.fr.kosmosuniverse.kuffle.crafts.armors.GoldHorseArmor;
-import main.fr.kosmosuniverse.kuffle.crafts.armors.IronHorseArmor;
-import main.fr.kosmosuniverse.kuffle.crafts.armors.Saddle;
-import main.fr.kosmosuniverse.kuffle.crafts.naturals.BuddingAmethyst;
-import main.fr.kosmosuniverse.kuffle.crafts.naturals.MossBlock;
-import main.fr.kosmosuniverse.kuffle.crafts.naturals.MossyCobblestone;
-import main.fr.kosmosuniverse.kuffle.crafts.naturals.MossyStoneBrick;
-import main.fr.kosmosuniverse.kuffle.crafts.naturals.Mycelium;
-import main.fr.kosmosuniverse.kuffle.crafts.naturals.PointedDripstone;
-import main.fr.kosmosuniverse.kuffle.crafts.naturals.RedNetherBrick;
-import main.fr.kosmosuniverse.kuffle.crafts.naturals.RedSand;
-import main.fr.kosmosuniverse.kuffle.crafts.naturals.SmallDripleaf;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.CoalOre;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.CoalOreDeepslate;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.CopperOre;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.CopperOreDeepslate;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.DiamondOre;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.DiamondOreDeepslate;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.EmeraldOre;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.EmeraldOreDeepslate;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.ExposedCopper;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.GoldOre;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.GoldOreDeepslate;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.IronOre;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.IronOreDeepslate;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.LapisOre;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.LapisOreDeepslate;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.OxidizedCopper;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.QuartzOre;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.RedstoneOre;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.RedstoneOreDeepslate;
-import main.fr.kosmosuniverse.kuffle.crafts.ores.WeatheredCopper;
-import main.fr.kosmosuniverse.kuffle.crafts.resources.BrainCoralBlock;
-import main.fr.kosmosuniverse.kuffle.crafts.resources.BubbleCoralBlock;
-import main.fr.kosmosuniverse.kuffle.crafts.resources.Coal;
-import main.fr.kosmosuniverse.kuffle.crafts.resources.Diamond;
-import main.fr.kosmosuniverse.kuffle.crafts.resources.Emerald;
-import main.fr.kosmosuniverse.kuffle.crafts.resources.FireCoralBlock;
-import main.fr.kosmosuniverse.kuffle.crafts.resources.HornCoralBlock;
-import main.fr.kosmosuniverse.kuffle.crafts.resources.Lapis;
-import main.fr.kosmosuniverse.kuffle.crafts.resources.Quartz;
-import main.fr.kosmosuniverse.kuffle.crafts.resources.RawCopper;
-import main.fr.kosmosuniverse.kuffle.crafts.resources.RawGold;
-import main.fr.kosmosuniverse.kuffle.crafts.resources.RawIron;
-import main.fr.kosmosuniverse.kuffle.crafts.resources.Redstone;
-import main.fr.kosmosuniverse.kuffle.crafts.resources.TubeCoralBlock;
+import main.fr.kosmosuniverse.kuffle.crafts.ACraft;
+import main.fr.kosmosuniverse.kuffle.crafts.CraftImpl;
+import main.fr.kosmosuniverse.kuffle.crafts.Template;
 import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
-import main.fr.kosmosuniverse.kuffle.utils.Utils;
+import net.md_5.bungee.api.ChatColor;
 
 /**
  * 
@@ -78,121 +27,43 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  *
  */
 public class CraftManager {
-	private static List<ACrafts> recipes = new ArrayList<>();
+	private static List<ACraft> recipes = new ArrayList<>();
+	private static List<Inventory> inventories = new ArrayList<>();
+	private static ItemStack limePane = ItemUtils.itemMaker(Material.LIME_STAINED_GLASS_PANE, 1, " ");
+	private static ItemStack redPane = ItemUtils.itemMaker(Material.RED_STAINED_GLASS_PANE, 1, "<- Back");
+	private static ItemStack bluePane = ItemUtils.itemMaker(Material.BLUE_STAINED_GLASS_PANE, 1, "Next ->");
+	private static int slotCnt;
 	
 	/**
 	 * Setups the crafts (Mandatory and Optional if Crafts option is true)
 	 * 
 	 * @param gameType	The Game type to know which crafts to load
+	 * 
+	 * @throws ParseException 
 	 */
-	public static void setupCrafts(KuffleType.Type gameType) {
-		recipes.add(new EndPortalFrame());
+	public static void setupCrafts(KuffleType.Type gameType, String content) throws ParseException {
+		JSONParser parser = new JSONParser();
+		JSONObject crafts = (JSONObject) parser.parse(content);
+		int i = 1;
 		
-		if (gameType == KuffleType.Type.ITEMS) {
-			loadItemsCrafts();
-		} else if (gameType == KuffleType.Type.BLOCKS) {
-			loadBlocksCrafts();
+		while (crafts.containsKey("" + i)) {
+			JSONObject craft = (JSONObject) crafts.get("" + i);
+			
+			String version = craft.get("Version").toString();
+			String remVersion = craft.containsKey("RemVersion") ? craft.get("RemVersion").toString() : null;
+			String kuffleType = craft.get("KuffleType").toString();
+			boolean mandatory = Boolean.valueOf(craft.get("Mandatory").toString().toUpperCase());
+			
+			if (VersionManager.isVersionValid(version, remVersion) &&
+					(kuffleType.equals("BOTH") || gameType == KuffleType.Type.valueOf(kuffleType.toUpperCase())) &&
+					(mandatory || Config.getCrafts())) {
+				addCraft(new CraftImpl(craft));
+			}
+			
+			i++;
 		}
 		
-		if (VersionManager.getVersionByValue(VersionManager.getVersion()) >= VersionManager.getVersionByValue("1.17")) {
-			recipes.add(new MossBlock());
-			recipes.add(new SmallDripleaf());
-			recipes.add(new BuddingAmethyst());
-		}
-		
-		if (!Config.getCrafts()) {
-			return;
-		}
-		
-		// Rares
-		recipes.add(new RedSand());
-		recipes.add(new Mycelium());
-		recipes.add(new MossyCobblestone());
-		recipes.add(new MossyStoneBrick());
-		
-		// Corals
-		recipes.add(new TubeCoralBlock());
-		recipes.add(new BubbleCoralBlock());
-		recipes.add(new HornCoralBlock());
-		recipes.add(new FireCoralBlock());
-		recipes.add(new BrainCoralBlock());
-		
-		// Resources
-		recipes.add(new Coal());
-		recipes.add(new Lapis());
-		recipes.add(new Redstone());
-		recipes.add(new Diamond());
-		recipes.add(new Emerald());
-		recipes.add(new Quartz());
-		
-		// Ores
-		recipes.add(new CoalOre());
-		recipes.add(new LapisOre());
-		recipes.add(new RedstoneOre());
-		recipes.add(new DiamondOre());
-		recipes.add(new EmeraldOre());
-		recipes.add(new QuartzOre());
-		
-		// Specifics
-		recipes.add(new RedNetherBrick());
-		recipes.add(new Bell());
-		recipes.add(new Saddle());
-		
-		if (VersionManager.getVersionByValue(VersionManager.getVersion()) >= VersionManager.getVersionByValue("1.17")) {
-			recipes.add(new CoalOreDeepslate());
-			recipes.add(new CopperOreDeepslate());
-			recipes.add(new DiamondOreDeepslate());
-			recipes.add(new EmeraldOreDeepslate());
-			recipes.add(new GoldOreDeepslate());
-			recipes.add(new IronOreDeepslate());
-			recipes.add(new LapisOreDeepslate());
-			recipes.add(new RedstoneOreDeepslate());
-			recipes.add(new CopperOre());
-			recipes.add(new GoldOre());
-			recipes.add(new IronOre());
-			recipes.add(new RawCopper());
-			recipes.add(new RawGold());
-			recipes.add(new RawIron());
-			recipes.add(new PointedDripstone());
-			recipes.add(new ExposedCopper());
-			recipes.add(new WeatheredCopper());
-			recipes.add(new OxidizedCopper());
-		}
-	}
-	
-	/**
-	 * Loads only the Items game type custom crafts
-	 */
-	private static void loadItemsCrafts() {
-		recipes.add(new EndTeleporter());
-		recipes.add(new OverworldTeleporter());
-		recipes.add(new CoralCompass());
-		
-		if (VersionManager.getVersionByValue(VersionManager.getVersion()) >= VersionManager.getVersionByValue("1.16")) {
-			recipes.add(new ChainmailHelmet());
-			recipes.add(new ChainmailChestplate());
-			recipes.add(new ChainmailLeggings());
-			recipes.add(new ChainmailBoots());
-		}
-		
-		if (VersionManager.getVersionByValue(VersionManager.getVersion()) >= VersionManager.getVersionByValue("1.17")) {
-			recipes.add(new MossBlock());
-			recipes.add(new SmallDripleaf());
-			recipes.add(new BuddingAmethyst());
-		}
-		
-		if (Config.getCrafts()) {
-			recipes.add(new IronHorseArmor());
-			recipes.add(new GoldHorseArmor());
-			recipes.add(new DiamondHorseArmor());
-		}
-	}
-	
-	/**
-	 * Loads only the Blocks game type custom crafts
-	 */
-	private static void loadBlocksCrafts() {
-		//Nothing for the moment
+		setupCraftsInventories();
 	}
 	
 	/**
@@ -200,7 +71,7 @@ public class CraftManager {
 	 */
 	public static void clear() {
 		if (recipes != null) {
-			recipes.clear();
+			removeCrafts();
 		}
 	}
 	
@@ -209,9 +80,11 @@ public class CraftManager {
 	 * 
 	 * @param craft	The ACraft object to add
 	 */
-	public static void addCraft(ACrafts craft) {
+	public static void addCraft(ACraft craft) {
 		recipes.add(craft);
-		KuffleMain.current.getServer().addRecipe(craft.getRecipe());
+		if (KuffleMain.current.getServer().getRecipe(new NamespacedKey(KuffleMain.current, craft.getName())) == null) {
+			KuffleMain.current.getServer().addRecipe(craft.getRecipe());	
+		}
 	}
 	
 	/**
@@ -220,9 +93,9 @@ public class CraftManager {
 	 * @param name	The ACraft object name
 	 */
 	public static void removeCraft(String name) {
-		ACrafts craft = null;
+		ACraft craft = null;
 		
-		for (ACrafts tmp : recipes) {
+		for (ACraft tmp : recipes) {
 			if (tmp.getName().equals(name)) {
 				craft = tmp;
 			}
@@ -237,12 +110,62 @@ public class CraftManager {
 	}
 	
 	/**
+	 * Removes all crafts
+	 */
+	public static void removeCrafts() {
+		List<String> names = recipes.stream().map(recipe -> recipe.getName()).collect(Collectors.toList());
+		
+		names.forEach(name -> removeCraft(name));
+		names.clear();
+	}
+	
+	/**
 	 * Gets the recipes list
 	 * 
 	 * @return the recipes list as ACraft list
 	 */
-	public static List<ACrafts> getRecipeList() {
+	public static List<ACraft> getRecipeList() {
 		return (recipes);
+	}
+	
+	private static void setupCraftsInventories() {
+		int recipesCnt = recipes.size();
+		int nbRows = recipesCnt / 9;
+		int nbInvTotal = nbRows / 5;
+		int nbRowsRest = nbRows % 5;
+		int cnt = 1;
+		slotCnt = 0;
+				
+		 for (int i = 0; i < nbInvTotal; i++) {
+			 inventories.add(setupInventory(54, cnt, (!(nbRowsRest > 0) && (i + 1) == nbInvTotal)));
+			 cnt++;
+		 }
+		 
+		 if (nbRowsRest > 0) {
+			 inventories.add(setupInventory((nbRowsRest + 1) * 9, cnt, true));
+		 }
+	}
+	
+	/**
+	 * Creates this craft recipe inventory base
+	 */
+	private static Inventory setupInventory(int nbSlot, int cnt, boolean last) {
+		Inventory inv = Bukkit.createInventory(null,  nbSlot, ChatColor.BLACK + "AllCustomCrafts " + cnt);
+		
+		for (int i = 0; i < nbSlot; i++) {
+			if (i == 0 && cnt != 1) {
+				inv.setItem(i, redPane);
+			} else if (i == 8 && !last) {
+				inv.setItem(i, bluePane);
+			} else if (i >= 0 && i < 9) {
+				inv.setItem(i, limePane);
+			} else {
+				inv.setItem(i, recipes.get(slotCnt).getItem());
+				slotCnt++;
+			}
+		}
+		
+		return inv;
 	}
 	
 	/**
@@ -250,16 +173,15 @@ public class CraftManager {
 	 * 
 	 * @return the inventory of all crafts
 	 */
-	public static Inventory getAllCraftsInventory() {
-		Inventory inv = Bukkit.createInventory(null, Utils.getNbInventoryRows(recipes.size()), "§8AllCustomCrafts");
-		int i = 0;
+	public static Inventory getCraftsInventory() {
+		return (inventories.get(0));
+	}
+	
+	public static Inventory getCraftsInventory(ACraft craft) {
+		int idx = recipes.indexOf(craft);
+		int invIdx = idx / 45;
 		
-		for (ACrafts item : recipes) {
-			inv.setItem(i, item.getItem());
-			i++;
-		}
-		
-		return (inv);
+		return (inventories.get(invIdx));
 	}
 	
 	/**
@@ -269,11 +191,9 @@ public class CraftManager {
 	 * 
 	 * @return the found ACraft object, null instead
 	 */
-	public static ACrafts getCraftByItem(ItemStack item) {
-		for (ACrafts craft : recipes) {
-			if (ItemUtils.itemComparison(craft.getItem(), item, item.hasItemMeta(),
-					item.hasItemMeta() ? item.getItemMeta().hasDisplayName() : false,
-					item.hasItemMeta() ? item.getItemMeta().hasLore() : false)) {
+	public static ACraft getCraftByItem(ItemStack item) {
+		for (ACraft craft : recipes) {
+			if (ItemUtils.itemComparison(craft.getItem(), item)) {
 				return (craft);
 			}
 		}
@@ -288,12 +208,46 @@ public class CraftManager {
 	 * 
 	 * @return the found ACraft object, null instead
 	 */
-	public static ACrafts getCraftByInventoryName(String invName) {
-		for (ACrafts craft : recipes) {
-			String name = "§8" + craft.getName();
+	public static ACraft getCraftByInventoryName(String invName) {
+		for (ACraft craft : recipes) {
+			String name = ChatColor.BLACK + craft.getName();
 			
 			if (invName.contains(name)) {
 				return (craft);
+			}
+		}
+		
+		return null;
+	}
+	
+	public static Inventory getInventory(Inventory current, ItemStack item) {
+		int idx = -1;
+		
+		for (Inventory inv : inventories) {
+			if (inv.equals(current)) {
+				idx = inventories.indexOf(inv);
+				break;
+			}
+		}
+		
+		if (idx == -1) {
+			return null;
+		}
+		
+		if (item.getType() == Material.BLUE_STAINED_GLASS_PANE) {
+			if (idx == inventories.size() - 1) {
+				return null;
+			}
+			idx += 1;
+			return (inventories.get(idx));
+		} else if (item.getType() == Material.RED_STAINED_GLASS_PANE) {
+			if (item.getItemMeta().getDisplayName().equals("<- Back")) {
+				return (inventories.get(0));
+			} else if (item.getItemMeta().getDisplayName().equals("<- Previous")) {
+				if (idx > 0) {
+					idx -= 1;
+					return (inventories.get(idx));
+				}
 			}
 		}
 		
@@ -308,7 +262,7 @@ public class CraftManager {
 	 * @return the ItemStack object found by name, null instead
 	 */
 	public static ItemStack findItemByName(String itemName) {
-		for (ACrafts craft : recipes) {
+		for (ACraft craft : recipes) {
 			if (itemName.equals(craft.getName())) {
 				return (craft.getItem());
 			}
@@ -386,13 +340,19 @@ public class CraftManager {
 	private static List<Material> getMaterials(String age) {
 		List<Material> compose = new ArrayList<>();
 		List<String> done = new ArrayList<>();
-
+		
 		for (int cnt = 0; cnt < Config.getSBTTAmount(); cnt++) {
-			done.add(TargetManager.newTarget(done, age));
+			done.add(TargetManager.newSbtt(done, age));
 		}
-
+		
 		for (String item : done) {
-			compose.add(Material.matchMaterial(item));
+			Material m = Material.matchMaterial(item.toUpperCase());
+			
+			if (m == null) {
+				m = Material.valueOf(item.toUpperCase());
+			}
+			
+			compose.add(m);
 		}
 
 		done.clear();
@@ -409,9 +369,9 @@ public class CraftManager {
 	public static boolean isTemplate(ItemStack item) {
 		boolean ret = false;
 		
-		for (ACrafts recipe : recipes) {
+		for (ACraft recipe : recipes) {
 			if (recipe.getName().toLowerCase().contains("template")) {
-				if (ItemUtils.itemComparison(item, recipe.getItem(), true, true, true)) {
+				if (ItemUtils.itemComparison(item, recipe.getItem())) {
 					ret = true;
 					break;
 				}

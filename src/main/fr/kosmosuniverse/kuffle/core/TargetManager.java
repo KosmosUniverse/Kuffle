@@ -11,11 +11,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import main.fr.kosmosuniverse.kuffle.KuffleMain;
+import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Pair;
 
@@ -37,86 +38,92 @@ public class TargetManager {
 	private TargetManager() {
 		throw new IllegalStateException("Utility class");
 	}
-	
-	/**
-	 * Setup Targets map
-	 * 
-	 * @param content	the content to parse
-	 * 
-	 * @throws ParseException if JSONParser.parse fails
-	 */
-	public static void setupTargets(String content) throws ParseException {
-		targets = setup(content);
-		setupTargetsInvs();
-	}
-	
-	/**
-	 * Setup Sbtts templates map
-	 * 
-	 * @param content	the content to parse
-	 * 
-	 * @throws ParseException if JSONParser.parse fails
-	 */
-	public static void setupSbtts(String content) throws ParseException {
-		sbtts = setup(content);
-	}
-	
+
 	/**
 	 * Setup all targets from file string content
 	 * 
 	 * @param content	the content to parse
 	 * 
-	 * @return the map that contains targets
-	 * 
 	 * @throws ParseException if JSONParser.parse fails
 	 */
-	private static Map<String, List<String>> setup(String content) throws ParseException {
-		Map<String, List<String>> targets = new HashMap<>();
+	public static void setup(String content) throws ParseException {
+		JSONParser jsonParser = new JSONParser();
+		JSONObject allObj = (JSONObject) jsonParser.parse(content);
+		targets = new HashMap<>();
+		sbtts = new HashMap<>();
 		
-		int max = AgeManager.getLastAgeIndex();
-
-		for (int ageCnt = 0; ageCnt <= max; ageCnt++) {
-			Age age = AgeManager.getAgeByNumber(ageCnt);
-			
-			targets.put(age.name, setupAgeTargets(age.name, content));
-		}
-		
-		return targets;
+		setupVersions(allObj);
+		setupTargetsInvs();
 	}
 	
-	/**
-	 * Setup targets for a specific Age
-	 * 
-	 * @param age		the age to set targets
-	 * @param content	the file content to parse
-	 * 
-	 * @return the String target list
-	 * 
-	 * @throws ParseException if JSONParser.parse fails
-	 */
-	private static List<String> setupAgeTargets(String age, String content) throws ParseException {
-		List<String> finalList = new ArrayList<>();
-		JSONParser jsonParser = new JSONParser();
-		JSONObject targets = (JSONObject) jsonParser.parse(content);
-		JSONObject ageObject = (JSONObject) targets.get(age);
-
-		for (Object key : ageObject.keySet()) {
-			JSONArray ageElems = (JSONArray) ageObject.get(key);
-			
-			for (int target = 0; target < ageElems.size(); target++) {
-				finalList.add((String) ageElems.get(target));
+	private static void setupVersions(JSONObject allObj) {
+		for (Object version : allObj.keySet()) {
+			if (VersionManager.isVersionValid(version.toString(), null)) {
+				JSONObject versionObj = (JSONObject) allObj.get(version);
 				
-				if (Material.matchMaterial((String) ageElems.get(target)) == null) {
-					LogManager.getInstanceSystem().logSystemMsg("Material [" + (String) ageElems.get(target) + "] does not exists !");
-				}
+				setupTypes(version.toString(), versionObj);
+			}
+		}
+	}
+	
+	private static void setupTypes(String version, JSONObject versionObj) {
+		for (Object kuffleType : versionObj.keySet()) {
+			if ("BOTH".equals(kuffleType.toString().toUpperCase()) ||
+					KuffleMain.type.getType() == KuffleType.Type.valueOf(kuffleType.toString().toUpperCase())) {
+				JSONObject typeObj = (JSONObject) versionObj.get(kuffleType);
+				
+				setupAges(version, typeObj);
+			}
+		}
+	}
+	
+	private static void setupAges(String version, JSONObject typeObj) {
+		for (Object age : typeObj.keySet()) {
+			JSONObject ageObj = (JSONObject) typeObj.get(age);
+			
+			if (!targets.containsKey(age.toString())) {
+				targets.put(age.toString(), new ArrayList<>());
+			}
+
+			if (!sbtts.containsKey(age.toString())) {
+				sbtts.put(age.toString(), new ArrayList<>());
 			}
 			
-			ageElems.clear();
+			setupTargets(version, age.toString(), ageObj);
+		}
+	}
+	
+	private static void setupTargets(String version, String age, JSONObject ageObj) {
+		for (Object target : ageObj.keySet()) {
+			JSONObject targetObj = (JSONObject) ageObj.get(target);
+			boolean sbtt = Boolean.valueOf(targetObj.get("Sbtt").toString());
+			
+			if (!targetObj.containsKey("remVersion") ||
+					VersionManager.isVersionValid(version, targetObj.get("remVersion").toString())) {
+				targets.get(age).add(target.toString());
+				
+				if (sbtt) {
+					sbtts.get(age).add(target.toString());
+				}
+				
+				if (!LangManager.hasTarget(target.toString())) {
+					JSONObject langObj = (JSONObject) targetObj.get("Langs");
+					
+					setupLang(target.toString(), langObj);
+				}
+			}
+		}
+	}
+	
+	private static void setupLang(String target, JSONObject langObj) {
+		Map<String, String> langs = new HashMap<>();
+		
+		for (Object lang : langObj.keySet()) {
+			langs.put(lang.toString(), langObj.get(lang).toString());
 		}
 		
-		ageObject.clear();
-		
-		return finalList;
+		LangManager.addTarget(target, langs);
+		langs.clear();
 	}
 	
 	/**
@@ -181,23 +188,21 @@ public class TargetManager {
 	/**
 	 * Gets a new object (target or sbtt) from Age ageName that is not in done list.
 	 * 
-	 * @param targets	The map in which the object will be searched
+	 * @param objects	The map in which the object will be searched
 	 * @param done		The list of excluded targets
 	 * @param ageName	The Age name in which list it has to search
 	 * 
 	 * @return the target as String
 	 */
-	private static String newObject(Map<String, List<String>> targets, List<String> done, String ageName) {	
+	private static String newObject(Map<String, List<String>> objects, List<String> done, String ageName) {	
 		List<String> finalList = new ArrayList<>();
-		
-		for (String s : targets.get(ageName)) {
-			if (!done.contains(s)) {
-				finalList.add(s);
-			}
-		}
+
+		objects.get(ageName).stream().filter(s -> !done.contains(s)).forEach(s -> finalList.add(s));
 		
 		if (finalList.size() == 1) {
 			return finalList.get(0);
+		} else if (finalList.size() == 0) {
+			return null;
 		}
 		
 		return finalList.get(ThreadLocalRandom.current().nextInt(finalList.size()));
@@ -248,7 +253,6 @@ public class TargetManager {
 		int nbInv = 1;
 		boolean hasNext = ageTargets.size() > 45;
 
-		
 		if (ageTargets.size() > 45) {
 			inv = Bukkit.createInventory(null, 54, "�8" + age + " Targets Tab 1");
 		} else {
@@ -272,7 +276,7 @@ public class TargetManager {
 			}
 		}
 		
-		inv.setItem(8, ItemUtils.itemMakerName(Material.LIME_STAINED_GLASS_PANE, 1, " "));
+		inv.setItem(8, ItemUtils.itemMaker(Material.LIME_STAINED_GLASS_PANE, 1, " "));
 		
 		invs.add(inv);
 		
@@ -288,9 +292,9 @@ public class TargetManager {
 	 */
 	private static void setupFirstRow(Inventory inv, boolean isFirst, boolean hasNext) {
 		int invCnt = 0;
-		ItemStack bluePane = ItemUtils.itemMakerName(Material.BLUE_STAINED_GLASS_PANE, 1, "Next ->");
-		ItemStack limePane = ItemUtils.itemMakerName(Material.LIME_STAINED_GLASS_PANE, 1, " ");
-		ItemStack redPane = ItemUtils.itemMakerName(Material.RED_STAINED_GLASS_PANE, 1, "<- Previous");
+		ItemStack bluePane = ItemUtils.itemMaker(Material.BLUE_STAINED_GLASS_PANE, 1, "Next ->");
+		ItemStack limePane = ItemUtils.itemMaker(Material.LIME_STAINED_GLASS_PANE, 1, " ");
+		ItemStack redPane = ItemUtils.itemMaker(Material.RED_STAINED_GLASS_PANE, 1, "<- Previous");
 		
 		for (; invCnt < 9; invCnt++) {
 			if (invCnt == 0 && !isFirst) {
@@ -312,30 +316,17 @@ public class TargetManager {
 	 */
 	private static ItemStack getMaterial(String target) {
 		for (Material mat : Material.values()) {
-			if (mat.getKey().toString().split(":")[1].equals(target) && mat.isItem()) {
+			if (mat.toString().equals(target.toUpperCase())) {
 				return new ItemStack(mat);
-			}
-		}
-		
-		ItemStack retItem;
-		
-		for (Material mat : Material.values()) {
-			if (mat.getKey().toString().split(":")[1].contains(target) && mat.isItem()) {
-				retItem = ItemUtils.itemMakerName(mat, 1, target);
+			} else if (mat.toString().contains(target.toUpperCase()) &&
+					target.toUpperCase().contains(mat.toString())) {
+				ItemStack retItem = ItemUtils.itemMaker(mat, 1, target);
 
 				return retItem;
 			}
 		}
 		
-		for (Material mat : Material.values()) {
-			if (target.contains(mat.getKey().toString().split(":")[1]) && mat.isItem()) {
-				retItem = ItemUtils.itemMakerName(mat, 1, target);
-
-				return retItem;
-			}
-		}
-		
-		return null;
+		return ItemUtils.itemMaker(Material.GRAY_STAINED_GLASS_PANE, 1, target);
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 package main.fr.kosmosuniverse.kuffle.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -29,17 +30,6 @@ public class LangManager {
 	}
 	
 	/**
-	 * Setup targets langs
-	 * 
-	 * @param jsonContent	file string content to parse
-	 * 
-	 * @throws ParseException
-	 */
-	public static void setupTargetsLangs(String jsonContent) throws ParseException {
-		targetsLangs = setupLangs(jsonContent);
-	}
-	
-	/**
 	 * Setup msgs langs
 	 * 
 	 * @param jsonContent	file string content to parse
@@ -47,19 +37,11 @@ public class LangManager {
 	 * @throws ParseException
 	 */
 	public static void setupMsgsLangs(String jsonContent) throws ParseException {
-		msgsLangs = setupLangs(jsonContent);
-	}
-	
-	/**
-	 * Setup langs
-	 * 
-	 * @param jsonContent	file string content to parse
-	 * @return 
-	 * 
-	 * @throws ParseException if JSONParser.parse fails
-	 */
-	private static Map<String, Map<String, String>> setupLangs(String jsonContent) throws ParseException {
-		Map<String, Map<String, String>> langs = new HashMap<>();
+		if (langs == null) {
+			langs = new ArrayList<>();
+		}
+		
+		msgsLangs = new HashMap<>();
 		JSONParser jsonParser = new JSONParser();
 		JSONObject langages = (JSONObject) jsonParser.parse(jsonContent);
 
@@ -74,12 +56,36 @@ public class LangManager {
 				String value = (String) target.get(keyLang);
 				
 				targetLangs.put(keyLang, value);
+				
+				if (!langs.contains(keyLang)) {
+					langs.add(keyLang);
+				}
 			}
 			
-			langs.put(keyItem, targetLangs);
+			msgsLangs.put(keyItem, targetLangs);
+		}
+	}
+	
+	/**
+	 * Add target's langs to <targets> map
+	 * 
+	 * @param target	The target to add
+	 * @param langs		The langs of targets
+	 */
+	public static void addTarget(String target, Map<String, String> langs) {
+		if (targetsLangs == null)  {
+			targetsLangs = new HashMap<>();
 		}
 		
-		return langs;
+		if (!targetsLangs.containsKey(target)) {
+			targetsLangs.put(target, new HashMap<>());
+		}
+		
+		langs.forEach((key, value) -> {
+			if (!targetsLangs.get(target).containsKey(key)) {
+				targetsLangs.get(target).put(key, value);
+			}
+		});
 	}
 	
 	/**
@@ -139,8 +145,8 @@ public class LangManager {
 	 * 
 	 * @return True if target found, False instead
 	 */
-	public static boolean targetExists(String target) {
-		return targetsLangs.containsKey(target);
+	public static boolean hasTarget(String target) {
+		return targetsLangs == null ? false : targetsLangs.containsKey(target);
 	}
 	
 	/**

@@ -100,4 +100,28 @@ public class VersionManager {
 	public static String getVersionByIndex(int version) {
 		return versions.get(version);
 	}
+	
+	/**
+	 * Checks if the actual version is >= of the given <version> and, if there is one, <= of the given <remVersion>
+	 * 
+	 * @param version		The version to check
+	 * @param remVersion	The remove version to check
+	 * 
+	 * @return True if <version> is greater or equals to server version and, if there is one, lower than <remVersion>, False instead
+	 */
+	public static boolean isVersionValid(String version, String remVersion) {
+		int versionIdx = getVersionByValue(version);
+		int remVersionIdx = remVersion == null ? -1 : getVersionByValue(remVersion);
+		int currentIdx = getVersionByValue(getVersion());
+		
+		if (currentIdx < versionIdx) {
+			return false;
+		}
+		
+		if (remVersionIdx != -1 && currentIdx >= remVersionIdx) {
+			return false;
+		}
+		
+		return true;
+	}
 }

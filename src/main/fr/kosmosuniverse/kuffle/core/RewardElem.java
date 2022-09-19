@@ -10,7 +10,7 @@ public class RewardElem {
 	private Integer amount;
 	private boolean enchantOn = false;
 	private String enchant = null;
-	private Integer level;
+	private Integer level = 0;
 	private boolean effectOn = false;
 	private String effect = null;
 	

@@ -83,6 +83,8 @@ public class GameLoop {
 	}
  	
 	private void checkTargetStatus(Game game) {
+		//game.player.sendMessage("Current : " + game.targetCount + ", goal : " + Config.getTargetPerAge());
+		
 		if (game.age == (Config.getLastAge().number + 1)) {
 			GameManager.finish(game, bestRank);
 			bestRank = GameManager.getBestRank();
@@ -90,7 +92,7 @@ public class GameLoop {
 			GameManager.applyToPlayers((playerGame) -> {
 				playerGame.player.sendMessage(LangManager.getMsgLang("GAME_COMPLETE", playerGame.configLang).replace("<#>", ChatColor.GOLD + "" + ChatColor.BOLD + game.player.getName() + ChatColor.BLUE));
 			});
-		} else if (game.targetCount >= Config.getTargetPerAge() && (Config.getTeam() && checkTeamMates(game))) {
+		} else if ((!Config.getTeam() && game.targetCount >= Config.getTargetPerAge()) || (Config.getTeam() && checkTeamMates(game))) {
 			GameManager.nextPlayerAge(game);
 		} else {
 			newItem(game);		
@@ -158,9 +160,8 @@ public class GameLoop {
 		for (Player player : team.players) {
 			Game game = GameManager.getGames().get(player.getName());
 			
-			if (game.teamName.equals(tmpGame.teamName) &&
-					game.age <= tmpGame.age &&
-					game.targetCount < (Config.getTargetPerAge() + 1)) {
+			if (game.age <= tmpGame.age &&
+					game.targetCount < Config.getTargetPerAge()) {
 				ret = false;
 				break;
 			}
@@ -181,6 +182,8 @@ public class GameLoop {
 		} else {
 			tmpGame.currentTarget = newItemSingle(tmpGame);
 		}
+		
+		updatePlayerDisplayTarget(tmpGame);
 	}
 
 	private String newItemSingle(Game tmpGame) {
@@ -200,6 +203,27 @@ public class GameLoop {
 		}
 
 		return ret;
+	}
+	
+	private static void updatePlayerDisplayTarget(Game tmpGame) {
+		if (tmpGame.currentTarget == null) {
+			return ;
+		}
+
+		if (Config.getDouble()) {
+			tmpGame.timeShuffle = System.currentTimeMillis();
+
+			tmpGame.targetDisplay = LangManager.getTargetLang(tmpGame.currentTarget.split("/")[0], tmpGame.configLang) + "/" + LangManager.getTargetLang(tmpGame.currentTarget.split("/")[1], tmpGame.configLang);
+		} else {
+			if (!tmpGame.alreadyGot.contains(tmpGame.currentTarget)) {
+				tmpGame.alreadyGot.add(tmpGame.currentTarget);
+			}
+
+			tmpGame.timeShuffle = System.currentTimeMillis();
+			tmpGame.targetDisplay = LangManager.getTargetLang(tmpGame.currentTarget, tmpGame.configLang);
+		}
+		
+		GameManager.updatePlayersHeadData(tmpGame.player.getName(), tmpGame.targetDisplay);
 	}
 
 	public void kill() {

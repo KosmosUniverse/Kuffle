@@ -2,7 +2,6 @@ package main.fr.kosmosuniverse.kuffle.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -60,38 +59,47 @@ public class RewardManager {
 	 * @throws ParseException if JSONParser.parse fails
 	 */
 	public static void setupRewards(String rewardsContent) throws ParseException {
+		JSONParser jsonParser = new JSONParser();
+		JSONObject allObj = (JSONObject) jsonParser.parse(rewardsContent);
+		
 		rewards = new HashMap<>();
 		
-		int max = AgeManager.getLastAgeIndex();
-		
-		for (int ageCnt = 0; ageCnt <= max; ageCnt++) {
-			rewards.put(AgeManager.getAgeByNumber(ageCnt).name, setupAgeRewards(AgeManager.getAgeByNumber(ageCnt).name, rewardsContent));
+		setupVersion(allObj);
+	}
+	
+	private static void setupVersion(JSONObject allObj) {
+		for (Object version : allObj.keySet()) {
+			if (VersionManager.isVersionValid(version.toString(), null)) {
+				JSONObject versionObj = (JSONObject) allObj.get(version);
+				
+				setupAges(versionObj);
+			}
 		}
 	}
 	
-	/**
-	 * Setup rewards for a specific Age
-	 * 
-	 * @param age				The specific age
-	 * @param rewardsContent	The String file content
-	 * 
-	 * @return the map that contains age rewards
-	 * 
-	 * @throws ParseException if JSONParser.parse fails
-	 */
-	private static Map<String, RewardElem> setupAgeRewards(String age, String rewardsContent) throws ParseException {
-		Map<String, RewardElem> ageRewards = new HashMap<>();
-		JSONParser jsonParser = new JSONParser();
-		JSONObject rewards = (JSONObject) jsonParser.parse(rewardsContent);
-		JSONObject ageObject = (JSONObject) rewards.get(age);
-		
-		for (Iterator<?> it = ageObject.keySet().iterator(); it.hasNext();) {
-			String key = (String) it.next();
-			JSONObject tmp = (JSONObject) ageObject.get(key);
-			ageRewards.put(key, new RewardElem(key, Integer.parseInt(((Long) tmp.get("Amount")).toString()), (String) tmp.get("Enchant"), Integer.parseInt(((Long) tmp.get("Level")).toString()), (String) tmp.get("Effect")));
+	private static void setupAges(JSONObject versionObj) {
+		for (Object age : versionObj.keySet()) {
+			JSONObject ageObj = (JSONObject) versionObj.get(age);
+			
+			if (!rewards.containsKey(age.toString())) {
+				rewards.put(age.toString(), new HashMap<>());
+			}
+
+			setupReward(age.toString(), ageObj);
 		}
-		
-		return ageRewards;
+	}
+	
+	private static void setupReward(String age, JSONObject ageObj) {
+		for (Object reward : ageObj.keySet()) {
+			JSONObject rewardObj = (JSONObject) ageObj.get(reward);
+			
+			String amount = rewardObj.get("Amount").toString();
+			String enchant = rewardObj.containsKey("Enchant") ? rewardObj.get("Enchant").toString() : null;
+			String level = rewardObj.containsKey("Level") ? rewardObj.get("Level").toString() : null;
+			String effect = rewardObj.containsKey("Effect") ? rewardObj.get("Effect").toString() : null;
+			
+			rewards.get(age).put(reward.toString(), new RewardElem(reward.toString(), Integer.parseInt(amount.toString()), enchant, level == null ? -1 : Integer.parseInt(level.toString()), effect));
+		}
 	}
 	
 	/**
