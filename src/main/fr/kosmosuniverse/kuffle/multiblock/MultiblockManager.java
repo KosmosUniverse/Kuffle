@@ -30,7 +30,7 @@ public class MultiblockManager {
 	/**
 	 * Constructor
 	 */
-	public MultiblockManager() {
+	public static void setup() {
 		multiblocks = new ArrayList<>();
 		
 		multiblocks.add(new EndTeleporter());
@@ -235,7 +235,7 @@ public class MultiblockManager {
 	 * @return The Multiblock
 	 */
 	public static AMultiblock searchMultiBlockByItem(ItemStack item) {
-		Optional<AMultiblock> tmp = multiblocks.stream().filter(m -> ItemUtils.itemComparison(item, m.getItem(), true, true, true)).findFirst();
+		Optional<AMultiblock> tmp = multiblocks.stream().filter(m -> ItemUtils.itemComparison(item, m.getItem())).findFirst();
 		
 		return tmp.isPresent() ? tmp.get() : null;
 	}
