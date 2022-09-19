@@ -133,7 +133,7 @@ public class PlayerInteract implements Listener  {
 		
 		ItemStack item = event.getItem();
 		
-		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("CoralCompass"), true, true, true)) {
+		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("CoralCompass"))) {
 			if (!((CompassMeta) item.getItemMeta()).hasLodestone()) {
 				coralCompass(player, item);
 				
@@ -257,7 +257,7 @@ public class PlayerInteract implements Listener  {
 		ItemStack item = event.getInventory().getResult();
 		Player player = (Player) event.getWhoClicked();
 
-		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("CoralCompass"), true, true, true)) {
+		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("CoralCompass"))) {
 			if (player.getLevel() < xpActivables.get("CoralCompass")) {
 				event.setCancelled(true);
 				player.sendMessage("You need " + xpActivables.get("CoralCompass") + " xp levels to craft this item.");

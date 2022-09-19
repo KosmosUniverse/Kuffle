@@ -1,0 +1,1277 @@
+{
+	"1": {
+		"Name" : "EndTeleporter",
+		"Type": "WorkBench",
+		"Shape": "GWD-RER-QLQ",
+		"Version": "1.15",
+		"Mandatory": true,
+		"KuffleType": "ITEMS",
+		"Result": {
+			"Type": "EMERALD",
+			"Amount": 1,
+			"Color": "DARK_GREEN",
+			"Name": "EndTeleporter",
+			"Lore": [
+				"Single Use Teleporter.",
+				"Right click to teleport to The End."
+			]
+		},
+		"Ingredients": {
+			"G": {
+				"Type": "GOLD_BLOCK"
+			},
+			"W": {
+				"Type": "WATER_BUCKET"
+			},
+			"D": {
+				"Type": "DIAMOND_BLOCK"
+			},
+			"R": {
+				"Type": "RED_NETHER_BRICKS"
+			},
+			"E": {
+				"Type": "ENDER_PEARL"
+			},
+			"Q": {
+				"Type": "QUARTZ_PILLAR"
+			},
+			"L": {
+				"Type": "LAVA_BUCKET"
+			}
+		}
+	},
+	
+	"2": {
+		"Name" : "OverworldTeleporter",
+		"Type": "WorkBench",
+		"Shape": "RER-PSP-BEB",
+		"Version": "1.15",
+		"Mandatory": true,
+		"KuffleType": "ITEMS",
+		"Result": {
+			"Type": "EMERALD",
+			"Amount": 1,
+			"Color": "DARK_BLUE",
+			"Name": "OverworldTeleporter",
+			"Lore": [
+				"Single Use Teleporter.",
+				"Right click to teleport to The Overworld."
+			]
+		},
+		"Ingredients": {
+			"R": {
+				"Type": "END_ROD"
+			},
+			"E": {
+				"Type": "ENDER_PEARL"
+			},
+			"P": {
+				"Type": "PURPUR_PILLAR"
+			},
+			"S": {
+				"Type": "SHULKER_SHELL"
+			},
+			"B": {
+				"Type": "END_STONE_BRICKS"
+			}
+		}
+	},
+
+	"3": {
+		"Name" : "CoralCompass",
+		"Type": "WorkBench",
+		"Shape": "DLD-PSP-DLD",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "compass",
+			"Amount": 1,
+			"Name": "CoralCompass",
+			"Lore": [
+				"This compass shows you",
+				"the nearest warm ocean biome."
+			]
+		},
+		"Ingredients": {
+			"D": {
+				"Type": "DARK_PRISMARINE"
+			},
+			"L": {
+				"Type": "SEA_LANTERN"
+			},
+			"P": {
+				"Type": "PRISMARINE_BRICKS"
+			},
+			"S": {
+				"Type": "SPONGE"
+			}
+		}
+	},
+	
+	"4": {
+		"Name" : "EndPortalFrame",
+		"Type": "WorkBench",
+		"Shape": "EEE-SOS-SSS",
+		"Version": "1.15",
+		"Mandatory": true,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "END_PORTAL_FRAME",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"E": {
+				"Type": "ENDER_PEARL"
+			},
+			"S": {
+				"Type": "END_STONE"
+			},
+			"O": {
+				"Type": "OBSIDIAN"
+			}
+		}
+	},
+
+	"5": {
+		"Name" : "Bell",
+		"Type": "Stonecutter",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "bell",
+			"Amount": 1,
+		},
+		"Ingredients": {
+			"A": {
+				"Type": "GOLD_BLOCK"
+			}
+		}
+	},
+	
+	"9": {
+		"Name" : "ChainmailBoots",
+		"Type": "WorkBench",
+		"Shape": "RRR-CRC-CRC",
+		"Version": "1.16",
+		"Mandatory": true,
+		"KuffleType": "ITEMS",
+		"Result": {
+			"Type": "CHAINMAIL_BOOTS",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "CHAIN"
+			}
+		}
+	},
+
+	"8": {
+		"Name" : "ChainmailLeggings",
+		"Type": "WorkBench",
+		"Shape": "CCC-CRC-CRC",
+		"Version": "1.16",
+		"Mandatory": true,
+		"KuffleType": "ITEMS",
+		"Result": {
+			"Type": "CHAINMAIL_LEGGINGS",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "CHAIN"
+			}
+		}
+	},
+
+	"7": {
+		"Name" : "ChainmailChestplate",
+		"Type": "WorkBench",
+		"Shape": "CRC-CCC-CCC",
+		"Version": "1.16",
+		"Mandatory": true,
+		"KuffleType": "ITEMS",
+		"Result": {
+			"Type": "CHAINMAIL_CHESTPLATE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "CHAIN"
+			}
+		}
+	},
+
+	"6": {
+		"Name" : "ChainmailHelmet",
+		"Type": "WorkBench",
+		"Shape": "CCC-CRC-RRR",
+		"Version": "1.16",
+		"Mandatory": true,
+		"KuffleType": "ITEMS",
+		"Result": {
+			"Type": "CHAINMAIL_HELMET",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "CHAIN"
+			}
+		}
+	},
+
+	"12": {
+		"Name" : "DiamondHorseArmor",
+		"Type": "WorkBench",
+		"Shape": "RRD-DWD-DDD",
+		"Version": "1.15",
+		"Mandatory": true,
+		"KuffleType": "ITEMS",
+		"Result": {
+			"Type": "DIAMOND_HORSE_ARMOR",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"D": {
+				"Type": "DIAMOND"
+			},
+			"W": {
+				"Type": "WHITE_WOOL,BLACK_WOOL,GRAY_WOOL,LIGHT_GRAY_WOOL,ORANGE_WOOL,PURPLE_WOOL,RED_WOOL,YELLOW_WOOL,BLUE_WOOL,BROWN_WOOL,CYAN_WOOL,GREEN_WOOL,LIGHT_BLUE_WOOL,LIME_WOOL,MAGENTA_WOOL,PINK_WOOL"
+			}
+		}
+	},
+
+	"11": {
+		"Name" : "GoldHorseArmor",
+		"Type": "WorkBench",
+		"Shape": "RRD-DWD-DDD",
+		"Version": "1.15",
+		"Mandatory": true,
+		"KuffleType": "ITEMS",
+		"Result": {
+			"Type": "GOLDEN_HORSE_ARMOR",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"D": {
+				"Type": "GOLD_INGOT"
+			},
+			"W": {
+				"Type": "WHITE_WOOL,BLACK_WOOL,GRAY_WOOL,LIGHT_GRAY_WOOL,ORANGE_WOOL,PURPLE_WOOL,RED_WOOL,YELLOW_WOOL,BLUE_WOOL,BROWN_WOOL,CYAN_WOOL,GREEN_WOOL,LIGHT_BLUE_WOOL,LIME_WOOL,MAGENTA_WOOL,PINK_WOOL"
+			}
+		}
+	},
+
+	"10": {
+		"Name" : "IronHorseArmor",
+		"Type": "WorkBench",
+		"Shape": "RRD-DWD-DDD",
+		"Version": "1.15",
+		"Mandatory": true,
+		"KuffleType": "ITEMS",
+		"Result": {
+			"Type": "IRON_HORSE_ARMOR",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"D": {
+				"Type": "IRON_INGOT"
+			},
+			"W": {
+				"Type": "WHITE_WOOL,BLACK_WOOL,GRAY_WOOL,LIGHT_GRAY_WOOL,ORANGE_WOOL,PURPLE_WOOL,RED_WOOL,YELLOW_WOOL,BLUE_WOOL,BROWN_WOOL,CYAN_WOOL,GREEN_WOOL,LIGHT_BLUE_WOOL,LIME_WOOL,MAGENTA_WOOL,PINK_WOOL"
+			}
+		}
+	},
+
+	"13": {
+		"Name" : "Saddle",
+		"Type": "WorkBench",
+		"Shape": "LLL-RLR-TRT",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "ITEMS",
+		"Result": {
+			"Type": "SADDLE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"L": {
+				"Type": "LEATHER"
+			},
+			"T": {
+				"Type": "TRIPWIRE_HOOK"
+			}
+		}
+	},
+
+	"14": {
+		"Name" : "MossyCobblestone",
+		"Type": "WorkBench",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "ITEMS",
+		"Result": {
+			"Type": "MOSSY_COBBLESTONE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"A": {
+				"Type": "COBBLESTONE"
+			},
+			"B": {
+				"Type": "GRASS"
+			}
+		}
+	},
+
+	"15": {
+		"Name" : "MossyStoneBrick",
+		"Type": "WorkBench",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "MOSSY_STONE_BRICKS",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"A": {
+				"Type": "STONE_BRICKS"
+			},
+			"B": {
+				"Type": "GRASS"
+			}
+		}
+	},
+
+	"16": {
+		"Name" : "Mycelium",
+		"Type": "WorkBench",
+		"Version": "1.15",
+		"RemVersion": "1.16",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "MYCELIUM",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"A": {
+				"Type": "DIRT"
+			},
+			"B": {
+				"Type": "BROWN_MUSHROOM,RED_MUSHROOM"
+			}
+		}
+	},
+
+	"17": {
+		"Name" : "Mycelium",
+		"Type": "WorkBench",
+		"Version": "1.16",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "MYCELIUM",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"A": {
+				"Type": "DIRT"
+			},
+			"B": {
+				"Type": "BROWN_MUSHROOM,RED_MUSHROOM,CRIMSON_FUNGUS,WARPED_FUNGUS"
+			}
+		}
+	},
+
+	"18": {
+		"Name" : "RedSand",
+		"Type": "WorkBench",
+		"Shape": "SSS-SRS-SSS",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "RED_SAND",
+			"Amount": 8
+		},
+		"Ingredients": {
+			"S": {
+				"Type": "SAND"
+			},
+			"R": {
+				"Type": "RED_DYE"
+			}
+		}
+	},
+
+	"19": {
+		"Name" : "CoalOre",
+		"Type": "WorkBench",
+		"Shape": "SCR-CSR-RRR",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "COAL_ORE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"S": {
+				"Type": "STONE"
+			},
+			"C": {
+				"Type": "COAL"
+			}
+		}
+	},
+
+	"20": {
+		"Name" : "CoalOreDeepslate",
+		"Type": "WorkBench",
+		"Shape": "DCR-CDR-RRR",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "DEEPSLATE_COAL_ORE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"D": {
+				"Type": "DEEPSLATE"
+			},
+			"C": {
+				"Type": "COAL"
+			}
+		}
+	},
+
+	"21": {
+		"Name" : "CopperOre",
+		"Type": "WorkBench",
+		"Shape": "CSC-SRS-CSC",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "COPPER_ORE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"S": {
+				"Type": "STONE"
+			},
+			"C": {
+				"Type": "RAW_COPPER"
+			}
+		}
+	},
+
+	"22": {
+		"Name" : "CopperOreDeepslate",
+		"Type": "WorkBench",
+		"Shape": "CDC-DRD-CDC",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "DEEPSLATE_COPPER_ORE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"D": {
+				"Type": "DEEPSLATE"
+			},
+			"C": {
+				"Type": "RAW_COPPER"
+			}
+		}
+	},
+
+	"23": {
+		"Name" : "DiamondOre",
+		"Type": "WorkBench",
+		"Shape": "SDR-DSR-RRR",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "DIAMOND_ORE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"S": {
+				"Type": "STONE"
+			},
+			"D": {
+				"Type": "DIAMOND"
+			}
+		}
+	},
+
+	"24": {
+		"Name" : "DiamondOreDeepslate",
+		"Type": "WorkBench",
+		"Shape": "DCR-CDR-RRR",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "DEEPSLATE_DIAMOND_ORE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"D": {
+				"Type": "DEEPSLATE"
+			},
+			"C": {
+				"Type": "DIAMOND"
+			}
+		}
+	},
+
+	"25": {
+		"Name" : "EmeraldOre",
+		"Type": "WorkBench",
+		"Shape": "SER-ESR-RRR",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "EMERALD_ORE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"S": {
+				"Type": "STONE"
+			},
+			"E": {
+				"Type": "EMERALD"
+			}
+		}
+	},
+
+	"26": {
+		"Name" : "EmeraldOreDeepslate",
+		"Type": "WorkBench",
+		"Shape": "DCR-CDR-RRR",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "DEEPSLATE_EMERALD_ORE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"D": {
+				"Type": "DEEPSLATE"
+			},
+			"C": {
+				"Type": "EMERALD"
+			}
+		}
+	},
+
+	"27": {
+		"Name" : "GoldOre",
+		"Type": "WorkBench",
+		"Shape": "SGR-GSR-RRR",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "GOLD_ORE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"S": {
+				"Type": "STONE"
+			},
+			"G": {
+				"Type": "RAW_GOLD"
+			}
+		}
+	},
+
+	"28": {
+		"Name" : "GoldOreDeepslate",
+		"Type": "WorkBench",
+		"Shape": "DCR-CDR-RRR",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "DEEPSLATE_GOLD_ORE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"D": {
+				"Type": "DEEPSLATE"
+			},
+			"C": {
+				"Type": "RAW_GOLD"
+			}
+		}
+	},
+
+	"29": {
+		"Name" : "IronOre",
+		"Type": "WorkBench",
+		"Shape": "SIR-CIR-RRR",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "IRON_ORE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"S": {
+				"Type": "STONE"
+			},
+			"I": {
+				"Type": "RAW_IRON"
+			}
+		}
+	},
+
+	"30": {
+		"Name" : "IronOreDeepslate",
+		"Type": "WorkBench",
+		"Shape": "DCR-CDR-RRR",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "DEEPSLATE_IRON_ORE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"D": {
+				"Type": "DEEPSLATE"
+			},
+			"C": {
+				"Type": "RAW_IRON"
+			}
+		}
+	},
+
+	"31": {
+		"Name" : "LapisOre",
+		"Type": "WorkBench",
+		"Shape": "LSL-LSL-LSL",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "LAPIS_ORE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"S": {
+				"Type": "STONE"
+			},
+			"L": {
+				"Type": "LAPIS_LAZULI"
+			}
+		}
+	},
+
+	"32": {
+		"Name" : "LapisOreDeepslate",
+		"Type": "WorkBench",
+		"Shape": "LSL-LSL-LSL",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "DEEPSLATE_LAPIS_ORE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"S": {
+				"Type": "DEEPSLATE"
+			},
+			"L": {
+				"Type": "LAPIS_LAZULI"
+			}
+		}
+	},
+
+	"33": {
+		"Name" : "RedstoneOre",
+		"Type": "WorkBench",
+		"Shape": "RSR-SRS-RSR",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "REDSTONE_ORE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"S": {
+				"Type": "STONE"
+			},
+			"R": {
+				"Type": "REDSTONE"
+			}
+		}
+	},
+
+	"34": {
+		"Name" : "RedstoneOreDeepslate",
+		"Type": "WorkBench",
+		"Shape": "RSR-SRS-RSR",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "DEEPSLATE_REDSTONE_ORE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"S": {
+				"Type": "DEEPSLATE"
+			},
+			"R": {
+				"Type": "REDSTONE"
+			}
+		}
+	},
+
+	"35": {
+		"Name" : "QuartzOre",
+		"Type": "WorkBench",
+		"Shape": "SCR-CSR-RRR",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "NETHER_QUARTZ_ORE",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"S": {
+				"Type": "NETHERRACK"
+			},
+			"D": {
+				"Type": "QUARTZ"
+			}
+		}
+	},
+
+	"36": {
+		"Name" : "Coal",
+		"Type": "WorkBench",
+		"Version": "1.15",
+		"RemVersion": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "COAL",
+			"Amount": 2
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "COAL_ORE"
+			}
+		}
+	},
+
+	"37": {
+		"Name" : "Coal",
+		"Type": "WorkBench",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "COAL",
+			"Amount": 2
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "COAL_ORE,DEEPSLATE_COAL_ORE",
+				"Name": "Any Coal Ore"
+			}
+		}
+	},
+
+	"38": {
+		"Name" : "Diamond",
+		"Type": "WorkBench",
+		"Version": "1.15",
+		"RemVersion": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "DIAMOND",
+			"Amount": 2
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "DIAMOND_ORE"
+			}
+		}
+	},
+
+	"39": {
+		"Name" : "Diamond",
+		"Type": "WorkBench",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "DIAMOND",
+			"Amount": 2
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "DIAMOND_ORE,DEEPSLATE_DIAMOND_ORE",
+				"Name": "Any Diamond Ore"
+			}
+		}
+	},
+
+	"40": {
+		"Name" : "Emerald",
+		"Type": "WorkBench",
+		"Version": "1.15",
+		"RemVersion": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "EMERALD",
+			"Amount": 2
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "EMERALD_ORE"
+			}
+		}
+	},
+
+	"41": {
+		"Name" : "Emerald",
+		"Type": "WorkBench",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "EMERALD",
+			"Amount": 2
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "EMERALD_ORE,DEEPSLATE_EMERALD_ORE",
+				"Name": "Any Emerald Ore"
+			}
+		}
+	},
+
+	"42": {
+		"Name" : "Lapis",
+		"Type": "WorkBench",
+		"Version": "1.15",
+		"RemVersion": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "LAPIS_LAZULI",
+			"Amount": 6
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "LAPIS_ORE"
+			}
+		}
+	},
+
+	"43": {
+		"Name" : "Lapis",
+		"Type": "WorkBench",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "LAPIS_LAZULI",
+			"Amount": 6
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "LAPIS_ORE,DEEPSLATE_LAPIS_ORE",
+				"Name": "Any Lapis Ore"
+			}
+		}
+	},
+
+	"46": {
+		"Name" : "Quartz",
+		"Type": "WorkBench",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "QUARTZ",
+			"Amount": 2
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "NETHER_QUARTZ_ORE"
+			}
+		}
+	},
+
+	"44": {
+		"Name" : "Redstone",
+		"Type": "WorkBench",
+		"Version": "1.15",
+		"RemVersion": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "REDSTONE",
+			"Amount": 5
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "REDSTONE_ORE"
+			}
+		}
+	},
+
+	"45": {
+		"Name" : "Redstone",
+		"Type": "WorkBench",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "REDSTONE",
+			"Amount": 5
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "REDSTONE_ORE,DEEPSLATE_REDSTONE_ORE",
+				"Name": "Any Redstone Ore"
+			}
+		}
+	},
+
+	"47": {
+		"Name" : "RawCopper",
+		"Type": "WorkBench",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "RAW_COPPER",
+			"Amount": 4
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "COPPER_ORE,DEEPSLATE_COPPER_ORE",
+				"Name": "Any Copper ore"
+			}
+		}
+	},
+
+	"48": {
+		"Name" : "RawGold",
+		"Type": "WorkBench",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "RAW_GOLD",
+			"Amount": 2
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "GOLD_ORE,DEEPSLATE_GOLD_ORE",
+				"Name": "Any Gold ore"
+			}
+		}
+	},
+
+	"49": {
+		"Name" : "RawIron",
+		"Type": "WorkBench",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "RAW_IRON",
+			"Amount": 2
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "IRON_ORE,DEEPSLATE_IRON_ORE",
+				"Name": "Any Iron ore"
+			}
+		}
+	},
+
+	"50": {
+		"Name" : "ExposedCopper",
+		"Type": "WorkBench",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "EXPOSED_COPPER",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"A": {
+				"Type": "COPPER_BLOCK"
+			},
+			"B": {
+				"Type": "WATER_BUCKET"
+			}
+		}
+	},
+
+	"51": {
+		"Name" : "WeatheredCopper",
+		"Type": "WorkBench",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "WEATHERED_COPPER",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"A": {
+				"Type": "COPPER_BLOCK"
+			},
+			"B": {
+				"Type": "WATER_BUCKET"
+			},
+			"C": {
+				"Type": "WATER_BUCKET"
+			}
+		}
+	},
+
+	"52": {
+		"Name" : "OxidizedCopper",
+		"Type": "WorkBench",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "OXIDIZED_COPPER",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"A": {
+				"Type": "COPPER_BLOCK"
+			},
+			"B": {
+				"Type": "WATER_BUCKET"
+			},
+			"C": {
+				"Type": "WATER_BUCKET"
+			},
+			"D": {
+				"Type": "WATER_BUCKET"
+			}
+		}
+	},
+
+	"53": {
+		"Name" : "BrainCoralBlock",
+		"Type": "WorkBench",
+		"Shape": "CCC-CRC-CCC",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "BRAIN_CORAL_BLOCK",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "BRAIN_CORAL,BRAIN_CORAL_FAN",
+				"Name": "Brain Coral or Brain Coral Fan"
+			}
+		}
+	},
+
+	"54": {
+		"Name" : "BubbleCoralBlock",
+		"Type": "WorkBench",
+		"Shape": "CCC-CRC-CCC",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "BUBBLE_CORAL_BLOCK",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "BUBBLE_CORAL,BUBBLE_CORAL_FAN",
+				"Name": "Bubble Coral or Bubble Coral Fan"
+			}
+		}
+	},
+
+	"55": {
+		"Name" : "FireCoralBlock",
+		"Type": "WorkBench",
+		"Shape": "CCC-CRC-CCC",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "FIRE_CORAL_BLOCK",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "FIRE_CORAL,FIRE_CORAL_FAN",
+				"Name": "Fire Coral or Fire Coral Fan"
+			}
+		}
+	},
+
+	"56": {
+		"Name" : "HornCoralBlock",
+		"Type": "WorkBench",
+		"Shape": "CCC-CRC-CCC",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "HORN_CORAL_BLOCK",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "HORN_CORAL,HORN_CORAL_FAN",
+				"Name": "Horn Coral or Horn Coral Fan"
+			}
+		}
+	},
+
+	"57": {
+		"Name" : "TubeCoralBlock",
+		"Type": "WorkBench",
+		"Shape": "CCC-CRC-CCC",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "TUBE_CORAL_BLOCK",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"C": {
+				"Type": "TUBE_CORAL,TUBE_CORAL_FAN",
+				"Name": "Tube Coral or Tube Coral Fan"
+			}
+		}
+	},
+
+	"58": {
+		"Name" : "BuddingAmethyst",
+		"Type": "WorkBench",
+		"Shape": "ARA-RAR-ARA",
+		"Version": "1.17",
+		"Mandatory": true,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "BUDDING_AMETHYST",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"A": {
+				"Type": "AMETHYST_BLOCK"
+			}
+		}
+	},
+
+	"59": {
+		"Name" : "MossBlock",
+		"Type": "WorkBench",
+		"Shape": "SSS-SSS-SSS",
+		"Version": "1.17",
+		"Mandatory": true,
+		"KuffleType": "ITEMS",
+		"Result": {
+			"Type": "MOSS_BLOCK",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"S": {
+				"Type": "GRASS"
+			}
+		}
+	},
+
+	"60": {
+		"Name" : "SmallDripleaf",
+		"Type": "WorkBench",
+		"Shape": "RNR-RVN-NVR",
+		"Version": "1.17",
+		"Mandatory": true,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "SMALL_DRIPLEAF",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"N": {
+				"Type": "LILY_PAD"
+			},
+			"V": {
+				"Type": "VINE"
+			}
+		}
+	},
+
+	"61": {
+		"Name" : "PointedDripstone",
+		"Type": "WorkBench",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "POINTED_DRIPSTONE",
+			"Amount": 4
+		},
+		"Ingredients": {
+			"A": {
+				"Type": "DRIPSTONE_BLOCK"
+			}
+		}
+	},
+
+	"62": {
+		"Name" : "PowderSnowBucket",
+		"Type": "WorkBench",
+		"Shape": "RSR-SBS-RSR",
+		"Version": "1.17",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "POWDER_SNOW_BUCKET",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"S": {
+				"Type": "SNOW_BLOCK"
+			},
+			"B": {
+				"Type": "BUCKET"
+			}
+		}
+	}
+}

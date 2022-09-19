@@ -11,13 +11,16 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.AgeManager;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.TargetManager;
-import main.fr.kosmosuniverse.kuffle.crafts.ACrafts;
+import main.fr.kosmosuniverse.kuffle.crafts.ACraft;
 import main.fr.kosmosuniverse.kuffle.multiblock.AMultiblock;
 import main.fr.kosmosuniverse.kuffle.multiblock.MultiblockManager;
+import main.fr.kosmosuniverse.kuffle.type.KuffleType;
+import net.md_5.bungee.api.ChatColor;
 
 /**
  * 
@@ -36,7 +39,7 @@ public class InventoryListeners implements Listener {
 		Player player = (Player) event.getWhoClicked();
 		ItemStack item = event.getCurrentItem();
 		Inventory current = event.getClickedInventory();
-		ACrafts craft;
+		ACraft craft;
 		AMultiblock multiblock;
 		Inventory inv;
 		
@@ -44,14 +47,16 @@ public class InventoryListeners implements Listener {
 			return;
 		}
 		
-		if (event.getView().getTitle() == "�8AllCustomCrafts") {
+		if (event.getView().getTitle().contains(ChatColor.BLACK + "AllCustomCrafts")) {
 			event.setCancelled(true);
 			
-			if ((craft = CraftManager.getCraftByItem(item)) != null &&
-					(inv = craft.getInventoryRecipe()) != null) {
+			if ((inv = CraftManager.getInventory(current, item)) != null) {
+				player.openInventory(inv);
+			} else if ((craft = CraftManager.getCraftByItem(item)) != null &&
+					(inv = craft.getInventory()) != null) {
 				player.openInventory(inv);
 			}
-		} else if (event.getView().getTitle().equals("�8AllMultiBlocks")) {
+		} else if (event.getView().getTitle().equals(ChatColor.BLACK + "AllMultiBlocks")) {
 			event.setCancelled(true);
 			
 			if ((multiblock = MultiblockManager.searchMultiBlockByItem(item)) != null) {
@@ -59,19 +64,19 @@ public class InventoryListeners implements Listener {
 					player.openInventory(inv);
 				}
 			}
-		} else if (CraftManager.getCraftByInventoryName(event.getView().getTitle()) != null) {
+		} else if ((craft = CraftManager.getCraftByInventoryName(event.getView().getTitle())) != null) {
 			event.setCancelled(true);
 			
 			if (item.getItemMeta().getDisplayName().equals("<- Back")) {
-				player.openInventory(CraftManager.getAllCraftsInventory());
+				player.openInventory(CraftManager.getCraftsInventory(craft));
 			}
-		} else if ((multiblock = MultiblockManager.searchMultiBlockByInventoryName(event.getView().getTitle())) != null) {
+		} else if (KuffleMain.type.getType() == KuffleType.Type.BLOCKS && (multiblock = MultiblockManager.searchMultiBlockByInventoryName(event.getView().getTitle())) != null) {
 			event.setCancelled(true);
 			
 			if ((inv = multiblock.getInventory(current, item, MultiblockManager.getMultiblocksInventories(), false)) != null) {
 				player.openInventory(inv);
 			}
-		} else if (event.getView().getTitle() == "�8Players") {
+		} else if (event.getView().getTitle() == (ChatColor.BLACK + "Players")) {
 			event.setCancelled(true);
 			
 			playersInventory(player, item);

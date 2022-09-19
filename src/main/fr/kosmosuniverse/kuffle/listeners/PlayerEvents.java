@@ -25,7 +25,7 @@ import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
-import main.fr.kosmosuniverse.kuffle.crafts.ACrafts;
+import main.fr.kosmosuniverse.kuffle.crafts.ACraft;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 /**
@@ -34,17 +34,6 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  *
  */
 public class PlayerEvents implements Listener {
-	private File dataFolder;
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param folder	The plugin folder
-	 */
-	public PlayerEvents(File folder) {
-		dataFolder = folder;
-	}
-	
 	/**
 	 * Event triggered at player connection, if game is started load for this player if he has saved game file
 	 * 
@@ -58,7 +47,7 @@ public class PlayerEvents implements Listener {
 			return;
 		}
 		
-		if (!Utils.fileExists(dataFolder.getPath(), player.getName() + ".ki")) {
+		if (!Utils.fileExists(KuffleMain.current.getDataFolder().getPath(), player.getName() + ".ki")) {
 			return;
 		}
 
@@ -69,7 +58,7 @@ public class PlayerEvents implements Listener {
 			player.sendMessage();
 		}
 		
-		for (ACrafts item : CraftManager.getRecipeList()) {
+		for (ACraft item : CraftManager.getRecipeList()) {
 			player.discoverRecipe(new NamespacedKey(KuffleMain.current, item.getName()));
 		}
 		
@@ -90,11 +79,11 @@ public class PlayerEvents implements Listener {
 			return ;
 		}
 		
-		for (ACrafts item : CraftManager.getRecipeList()) {
+		for (ACraft item : CraftManager.getRecipeList()) {
 			player.undiscoverRecipe(new NamespacedKey(KuffleMain.current, item.getName()));
 		}
 		
-		try (FileWriter writer = new FileWriter(dataFolder.getPath() + File.separator + player.getName() + ".ki")) {			
+		try (FileWriter writer = new FileWriter(KuffleMain.current.getDataFolder().getPath() + File.separator + player.getName() + ".ki")) {			
 			writer.write(GameManager.savePlayer(player.getName()));			
 			LogManager.getInstanceSystem().logMsg(KuffleMain.current.getName(), "<" + player.getName() + "> game is saved.");
 		} catch (IOException e) {

@@ -27,7 +27,7 @@ public class Template extends AMultiblock {
 		
 		squareSize = 1;
 		
-		item = ItemUtils.itemMakerName(compose.get(compose.size() - 1), 1, name);
+		item = ItemUtils.itemMaker(compose.get(compose.size() - 1), 1, name);
 		
 		multiblock = new MultiBlock(compose.get(compose.size() - 1));
 		

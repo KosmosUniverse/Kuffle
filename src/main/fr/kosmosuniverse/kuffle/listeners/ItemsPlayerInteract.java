@@ -52,7 +52,7 @@ public class ItemsPlayerInteract extends PlayerInteract {
 		Player player = event.getPlayer();
 		ItemStack item = event.getItem();
 		
-		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("EndTeleporter"), true, true, true)) {
+		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("EndTeleporter"))) {
 			consumeItem(player, event.getHand());
 			
 			endTeleporter(player);
@@ -60,7 +60,7 @@ public class ItemsPlayerInteract extends PlayerInteract {
 			return ;
 		}
 		
-		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("OverworldTeleporter"), true, true, true)) {
+		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("OverworldTeleporter"))) {
 			consumeItem(player, event.getHand());
 			
 			overworldTeleporter(player);
