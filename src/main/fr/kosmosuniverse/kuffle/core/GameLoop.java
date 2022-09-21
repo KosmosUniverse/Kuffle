@@ -83,8 +83,6 @@ public class GameLoop {
 	}
  	
 	private void checkTargetStatus(Game game) {
-		//game.player.sendMessage("Current : " + game.targetCount + ", goal : " + Config.getTargetPerAge());
-		
 		if (game.age == (Config.getLastAge().number + 1)) {
 			GameManager.finish(game, bestRank);
 			bestRank = GameManager.getBestRank();
@@ -95,7 +93,7 @@ public class GameLoop {
 		} else if ((!Config.getTeam() && game.targetCount >= (Config.getTargetPerAge() + 1)) || (Config.getTeam() && checkTeamMates(game))) {
 			GameManager.nextPlayerAge(game);
 		} else {
-			newItem(game);		
+			newItem(game);
 		}
 	}
 	
@@ -109,7 +107,7 @@ public class GameLoop {
 
 			GameManager.addToAlreadyGot(game, currentTmp);
 			game.currentTarget = game.currentTarget + "/" + currentTmp;
-		} else if (Config.getDouble() && game.currentTarget.contains("/")) {
+		} else if (!Config.getDouble() && game.currentTarget.contains("/")) {
 			String[] array = game.currentTarget.split("/");
 
 			game.currentTarget = array[random.nextInt(2)];
@@ -210,16 +208,15 @@ public class GameLoop {
 			return ;
 		}
 
+		tmpGame.timeShuffle = System.currentTimeMillis();
+		
 		if (Config.getDouble()) {
-			tmpGame.timeShuffle = System.currentTimeMillis();
-
 			tmpGame.targetDisplay = LangManager.getTargetLang(tmpGame.currentTarget.split("/")[0], tmpGame.configLang) + "/" + LangManager.getTargetLang(tmpGame.currentTarget.split("/")[1], tmpGame.configLang);
 		} else {
 			if (!tmpGame.alreadyGot.contains(tmpGame.currentTarget)) {
 				tmpGame.alreadyGot.add(tmpGame.currentTarget);
 			}
-
-			tmpGame.timeShuffle = System.currentTimeMillis();
+			
 			tmpGame.targetDisplay = LangManager.getTargetLang(tmpGame.currentTarget, tmpGame.configLang);
 		}
 		

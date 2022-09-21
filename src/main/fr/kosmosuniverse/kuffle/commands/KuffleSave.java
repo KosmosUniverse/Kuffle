@@ -89,7 +89,10 @@ public class KuffleSave implements CommandExecutor {
 			LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
 		}
 		
-		CraftManager.removeCraftTemplates();
+		if (KuffleMain.type.getType() == KuffleType.Type.ITEMS) {
+			CraftManager.removeCraftTemplates();
+		}
+		
 		ScoreManager.clear();
 		GameManager.clear();
 		KuffleMain.loop.kill();

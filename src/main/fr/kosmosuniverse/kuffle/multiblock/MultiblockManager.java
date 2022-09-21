@@ -18,6 +18,7 @@ import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
+import net.md_5.bungee.api.ChatColor;
 
 /**
  * 
@@ -164,7 +165,7 @@ public class MultiblockManager {
 	 * @return the inventory
 	 */
 	public static Inventory getMultiblocksInventories() {
-		Inventory inv = Bukkit.createInventory(null, Utils.getNbInventoryRows(multiblocks.size()), "�8AllMultiBlocks");
+		Inventory inv = Bukkit.createInventory(null, Utils.getNbInventoryRows(multiblocks.size()), ChatColor.BLACK + "AllMultiBlocks");
 		int i = 0;
 		
 		for (AMultiblock mb : multiblocks) {

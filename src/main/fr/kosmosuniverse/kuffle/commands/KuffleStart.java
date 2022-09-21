@@ -73,12 +73,15 @@ public class KuffleStart implements CommandExecutor {
 		}
 		
 		GameManager.applyToPlayers((game) -> {
+			game.configLang = Config.getLang();
+			
 			if (Config.getSaturation()) {
 				game.player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 999999, 10, false, false, false));
 			}
-
+			
 			game.player.sendMessage(LangManager.getMsgLang("GAME_STARTED", game.configLang));
 		});
+
 
 		LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("GAME_STARTED", Config.getLang()));
 

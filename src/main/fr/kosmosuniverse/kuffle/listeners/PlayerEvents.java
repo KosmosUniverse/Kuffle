@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
@@ -25,7 +26,10 @@ import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
+import main.fr.kosmosuniverse.kuffle.core.TeamManager;
 import main.fr.kosmosuniverse.kuffle.crafts.ACraft;
+import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 /**
@@ -71,6 +75,7 @@ public class PlayerEvents implements Listener {
 	 * 
 	 * @param event	The PlayerQuitEvent
 	 */
+	@SuppressWarnings("unchecked")
 	@EventHandler
 	public void onPlayerDisconnectEvent(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
@@ -94,6 +99,42 @@ public class PlayerEvents implements Listener {
 		GameManager.removePlayer(player.getName());
 		GameManager.updatePlayersHeads();
 		GameManager.sendMsgToPlayers("[" + KuffleMain.current.getName() + "] : <" + player.getName() + "> game is saved.");
+		
+		if (GameManager.getGames().size() == 0) {
+			if (Config.getTeam()) {
+				try (FileWriter writer = new FileWriter(KuffleMain.current.getDataFolder().getPath() + File.separator + "Teams.k");) {				
+					writer.write(TeamManager.saveTeams());
+				} catch (IOException e) {
+					LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
+				}
+			}
+			
+			try (FileWriter writer = new FileWriter(KuffleMain.current.getDataFolder().getPath() + File.separator + "Games.k");) {				
+				JSONObject global = new JSONObject();
+
+				global.put("config", Config.saveConfig());
+				global.put("ranks", GameManager.saveRanks());
+				global.put("xpMax", KuffleMain.type.getPlayerInteract().saveXpMax());
+				
+				writer.write(global.toJSONString());
+				
+				global.clear();
+			} catch (IOException e) {
+				LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
+			}
+
+			if (KuffleMain.type.getType() == KuffleType.Type.ITEMS) {
+				CraftManager.removeCraftTemplates();
+			}
+			
+			ScoreManager.clear();
+			GameManager.clear();
+			KuffleMain.loop.kill();
+			KuffleMain.paused = false;
+			KuffleMain.gameStarted = false;
+			LogManager.getInstanceSystem().logSystemMsg("No player remain connected, game saved.");
+			LogManager.getInstanceGame().logSystemMsg("No player remain connected, game saved.");
+		}
 	}
 	
 	/**

@@ -1187,7 +1187,8 @@ public class GameManager {
 	 * Updates players heads in playersHeads inventory
 	 */
 	public static void updatePlayersHeads() {
-		Inventory newInv = Bukkit.createInventory(null, Utils.getNbInventoryRows(games.size()), "�8Players");
+		int slots = Utils.getNbInventoryRows(games.size());
+		Inventory newInv = Bukkit.createInventory(null, slots == 0 ? 1 : slots, ChatColor.BLACK + "Players");
 		
 		for (String playerName : games.keySet()) {
 			newInv.addItem(Utils.getHead(games.get(playerName).player, games.get(playerName).targetDisplay));
