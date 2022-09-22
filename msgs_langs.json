@@ -295,6 +295,10 @@
 		"en" : "    - Total Time: %t",
 		"fr" : "    - Temps total: %t"
 	},
+	"ABANDONED" : {
+		"en" : "Abandoned",
+		"fr" : "Abandon"
+	},
 	"CANT_SKIP_AGE" : {
 		"en" : "You can't skip item this age.",
 		"fr" : "Vous ne pouvez pas passer d'objet à cet Age."
@@ -358,5 +362,9 @@
 	"TEAM_PREVENT_ADD" : {
 		"en" : "Cannot add player due to current team state.",
 		"fr" : "Impossible d'ajouter un joueur a cause de l'état courant des équipes."
+	},
+	"GAME_ABANDONED" : {
+		"en" : "<#> abandoned !",
+		"fr" : "<#> a abandonné !"
 	}
 }

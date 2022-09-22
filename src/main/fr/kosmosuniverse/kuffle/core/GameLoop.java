@@ -41,6 +41,10 @@ public class GameLoop {
 					}
 					
 					if (succeed) {
+						if (Config.getPrintTabAll()) {
+							GameManager.printGameEnd();
+						}
+						
 						runnable.cancel();
 					}
 				}
@@ -67,6 +71,9 @@ public class GameLoop {
 				if (!game.finished) {
 					GameManager.finish(game, worstRank);
 					worstRank = GameManager.getWorstRank();
+					GameManager.applyToPlayers((playerGame) -> {
+						playerGame.player.sendMessage(LangManager.getMsgLang("GAME_ABANDONED", playerGame.configLang).replace("<#>", ChatColor.GOLD + "" + ChatColor.BOLD + game.player.getName() + ChatColor.BLUE));
+					});
 				}
 			} else if (game.finished) {
 				GameManager.playerRandomBarColor(game);
@@ -90,7 +97,9 @@ public class GameLoop {
 			GameManager.applyToPlayers((playerGame) -> {
 				playerGame.player.sendMessage(LangManager.getMsgLang("GAME_COMPLETE", playerGame.configLang).replace("<#>", ChatColor.GOLD + "" + ChatColor.BOLD + game.player.getName() + ChatColor.BLUE));
 			});
-		} else if ((!Config.getTeam() && game.targetCount >= (Config.getTargetPerAge() + 1)) || (Config.getTeam() && checkTeamMates(game))) {
+		} else if (!Config.getTeam() && game.targetCount >= (Config.getTargetPerAge() + 1)) {
+			GameManager.nextPlayerAge(game);
+		} else if (Config.getTeam() && game.targetCount >= (Config.getTargetPerAge() + 1) && checkTeamMates(game)) {
 			GameManager.nextPlayerAge(game);
 		} else {
 			newItem(game);
@@ -117,7 +126,7 @@ public class GameLoop {
 	}
 
 	private void printTimerTarget(Game tmpGame) {
-		if (Config.getTeam() && tmpGame.targetCount >= Config.getTargetPerAge()) {
+		if (Config.getTeam() && tmpGame.targetCount >= (Config.getTargetPerAge() + 1)) {
 			ActionBar.sendMessage(ChatColor.LIGHT_PURPLE + LangManager.getMsgLang("TEAM_WAIT", tmpGame.configLang), tmpGame.player);
 			return ;
 		}

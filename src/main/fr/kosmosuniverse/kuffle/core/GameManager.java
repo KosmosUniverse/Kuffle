@@ -676,7 +676,10 @@ public class GameManager {
 
 		updatePlayerListName(game.player.getName());
 
-		printPlayer(game.player.getName(), game.player.getName());
+		if (Config.getPrintTab()) {
+			printPlayer(game.player.getName(), game.player.getName());
+		}
+		
 		logPlayer(game.player.getName());
 	}
 	
@@ -1444,18 +1447,25 @@ public class GameManager {
 		sb.append(ChatColor.BLUE + LangManager.getMsgLang("TEMPLATE_COUNT", receiverLang).replace("%i", "" + ChatColor.RESET + game.sbttCount)).append("\n");
 		sb.append(ChatColor.BLUE + LangManager.getMsgLang("TIME_TAB", receiverLang)).append("\n");
 
-		for (int i = 0; i < Config.getLastAge().number; i++) {
+		for (int i = 0; i < (Config.getLastAge().number + 1); i++) {
 			Age age = AgeManager.getAgeByNumber(i);
 
 			if (game.times.get(age.name) == -1) {
-				sb.append(LangManager.getMsgLang("FINISH_ABANDON", receiverLang).replace("%s", age.color + age.name.replace("_Age", "") + ChatColor.RESET)).append("\n");
+				sb.append(LangManager.getMsgLang("FINISH_ABANDON", receiverLang).replace("%s", age.color + age.name.replace("_Age", "") + ChatColor.BLUE)).append("\n");
+				total = -1;
+				break;
 			} else {
 				sb.append(LangManager.getMsgLang("FINISH_TIME", receiverLang).replace("%s", age.color + age.name.replace("_Age", "") + ChatColor.BLUE).replace("%t", ChatColor.RESET + Utils.getTimeFromSec(game.times.get(age.name) / 1000))).append("\n");
 				total += game.times.get(age.name) / 1000;
 			}
 		}
-
-		sb.append(ChatColor.BLUE + LangManager.getMsgLang("FINISH_TOTAL", receiverLang).replace("%t", ChatColor.RESET + Utils.getTimeFromSec(total)));
+		
+		if (total == -1) {
+			sb.append(ChatColor.BLUE + LangManager.getMsgLang("FINISH_TOTAL", receiverLang).replace("%t", ChatColor.RESET + LangManager.getMsgLang("ABANDONED", receiverLang)));
+		} else {
+			sb.append(ChatColor.BLUE + LangManager.getMsgLang("FINISH_TOTAL", receiverLang).replace("%t", ChatColor.RESET + Utils.getTimeFromSec(total)));
+		}
+		
 		games.get(toSend).player.sendMessage(sb.toString());
 	}
 	
@@ -1476,18 +1486,25 @@ public class GameManager {
 		sb.append(LangManager.getMsgLang("TEMPLATE_COUNT", configLang).replace("%i", "" + game.sbttCount)).append("\n");
 		sb.append(LangManager.getMsgLang("TIME_TAB", configLang)).append("\n");
 
-		for (int i = 0; i < Config.getLastAge().number; i++) {
+		for (int i = 0; i < (Config.getLastAge().number + 1); i++) {
 			Age age = AgeManager.getAgeByNumber(i);
 
 			if (game.times.get(age.name) == -1) {
 				sb.append(LangManager.getMsgLang("FINISH_ABANDON", configLang).replace("%s", age.name.replace("_Age", ""))).append("\n");
+				total = -1;
+				break;
 			} else {
 				sb.append(LangManager.getMsgLang("FINISH_TIME", configLang).replace("%s", age.name.replace("_Age", "")).replace("%t", Utils.getTimeFromSec(game.times.get(age.name) / 1000))).append("\n");
 				total += game.times.get(age.name) / 1000;
 			}
 		}
 
-		sb.append(LangManager.getMsgLang("FINISH_TOTAL", configLang).replace("%t", Utils.getTimeFromSec(total)));
+		if (total == -1) {
+			sb.append(LangManager.getMsgLang("FINISH_TOTAL", configLang).replace("%t", LangManager.getMsgLang("ABANDONED", configLang)));
+		} else {
+			sb.append(LangManager.getMsgLang("FINISH_TOTAL", configLang).replace("%t", Utils.getTimeFromSec(total)));
+		}
+
 		LogManager.getInstanceGame().logSystemMsg(sb.toString());
 	}
 	
