@@ -130,10 +130,9 @@ public class KuffleStart implements CommandExecutor {
 		}, 100 + spread);
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
-			ItemStack box = getStartBox();
-
 			GameManager.applyToPlayers((game) -> {
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + "GO!" + ChatColor.RESET, game.player);
+				ItemStack box = getStartBox(game.player.getName());
 				game.player.getInventory().addItem(box);
 			});
 
@@ -202,7 +201,7 @@ public class KuffleStart implements CommandExecutor {
 	 * 
 	 * @return the shulker box ItemStack
 	 */
-	static ItemStack getStartBox() {
-		return ItemUtils.itemMaker(Material.WHITE_SHULKER_BOX, 1, "Start Box");
+	static ItemStack getStartBox(String player) {
+		return ItemUtils.itemMaker(Material.WHITE_SHULKER_BOX, 1, "Start Box", "Owner:" + player);
 	}
 }

@@ -115,7 +115,7 @@ public class KuffleAddDuringGame implements CommandExecutor {
 
 		KuffleMain.paused = false;
 
-		player.getInventory().addItem(KuffleStart.getStartBox());
+		player.getInventory().addItem(KuffleStart.getStartBox(player.getName()));
 
 		if (Config.getSaturation()) {
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 999999, 10, false, false, false));

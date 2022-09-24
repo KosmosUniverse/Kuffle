@@ -1,5 +1,7 @@
 package main.fr.kosmosuniverse.kuffle.listeners;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -38,9 +40,15 @@ public class ItemsPlayerInteract extends PlayerInteract {
 	 * Manages the behavior of player left click specific for Items Kuffle type
 	 * 
 	 * @param event	The PlayerInteractEvent
+	 * @throws ClassNotFoundException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
 	 */
 	@EventHandler
-	public void onLeftClick(PlayerInteractEvent event) {
+	public void onLeftClick(PlayerInteractEvent event) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
 		try {
 			if (onLeftClickGeneric(event)) {
 				return ;

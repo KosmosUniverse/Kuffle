@@ -11,6 +11,7 @@ import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
@@ -45,7 +46,6 @@ public class ItemEvent implements Listener {
 			return ;
 		}
 		
-		item.setOwner(player.getUniqueId());
 		item.setInvulnerable(true);
 	}
 	
@@ -60,7 +60,6 @@ public class ItemEvent implements Listener {
 			return ;
 		}
 		
-		Player player = event.getPlayer();
 		List<Item> items = event.getItems();
 
 		if (items.size() != 1) {
@@ -71,7 +70,6 @@ public class ItemEvent implements Listener {
 		ItemStack itemStack = item.getItemStack();
 		
 		if (itemStack.getType().name().toLowerCase().contains("shulker_box")) {
-			item.setOwner(player.getUniqueId());
 			item.setInvulnerable(true);
 		}
 	}
@@ -88,8 +86,16 @@ public class ItemEvent implements Listener {
 		}
 		
 		Item item = event.getEntity();
+		Player player = null;
 		
-		Player player = Bukkit.getPlayer(item.getOwner());
+		if (item.getItemStack().hasItemMeta() && item.getItemStack().getItemMeta().hasLore()) {
+			ItemMeta itM = item.getItemStack().getItemMeta();
+			String lore = itM.getLore().get(0);
+			
+			if (lore.contains(":")) {
+				player = Bukkit.getPlayer(lore.split(":")[1]);
+			}
+		}
 		
 		if (player == null || !GameManager.hasPlayer(player.getName())) {
 			return ;

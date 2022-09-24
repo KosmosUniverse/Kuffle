@@ -140,7 +140,11 @@ public class ItemUtils {
 	public static boolean itemComparison(ItemStack first, ItemStack second) {
 		boolean retValue = true;
 		
-		retValue = first.getType() == second.getType();
+		retValue = !(first == null || second == null);
+		
+		if (retValue) {
+			retValue = first.getType() == second.getType();
+		}
 		
 		if (retValue) {
 			retValue = first.hasItemMeta() == second.hasItemMeta();

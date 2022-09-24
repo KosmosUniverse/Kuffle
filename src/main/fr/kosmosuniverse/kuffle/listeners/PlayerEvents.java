@@ -59,7 +59,6 @@ public class PlayerEvents implements Listener {
 			GameManager.loadPlayerGame(player);
 		} catch (IOException | ParseException e) {
 			Utils.logException(e);
-			player.sendMessage();
 		}
 		
 		for (ACraft item : CraftManager.getRecipeList()) {

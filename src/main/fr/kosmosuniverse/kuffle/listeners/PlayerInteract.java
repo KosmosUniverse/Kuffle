@@ -1,5 +1,6 @@
 package main.fr.kosmosuniverse.kuffle.listeners;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.CompassMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.json.simple.JSONObject;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
@@ -29,6 +30,7 @@ import main.fr.kosmosuniverse.kuffle.core.CraftManager;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
+import main.fr.kosmosuniverse.kuffle.core.VersionManager;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleEventNotUsableException;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 
@@ -101,8 +103,14 @@ public class PlayerInteract implements Listener  {
 	 * @return True if it was managed by the method, False instead
 	 * 
 	 * @throws KuffleEventNotUsableException if event is not usable by Kuffle plugin
+	 * @throws ClassNotFoundException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
 	 */
-	protected boolean onLeftClickGeneric(PlayerInteractEvent event) throws KuffleEventNotUsableException {
+	protected boolean onLeftClickGeneric(PlayerInteractEvent event) throws KuffleEventNotUsableException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
 		boolean ret = true;
 		
 		if (!KuffleMain.gameStarted) {
@@ -133,8 +141,8 @@ public class PlayerInteract implements Listener  {
 		
 		ItemStack item = event.getItem();
 		
-		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("CoralCompass"))) {
-			if (!((CompassMeta) item.getItemMeta()).hasLodestone()) {
+		if (VersionManager.isVersionValid("1.17", null) && ItemUtils.itemComparison(item, CraftManager.findItemByName("CoralCompass"))) {
+			if (!Boolean.valueOf((Class.forName("org.bukkit.inventory.meta.CompassMeta").getClass().getMethod("hasLodestone").invoke(Class.forName("org.bukkit.inventory.meta.CompassMeta").cast(item.getItemMeta())).toString()))) {
 				coralCompass(player, item);
 				
 			} else {
@@ -349,8 +357,14 @@ public class PlayerInteract implements Listener  {
 	 * 
 	 * @param player	The player that searching warm ocean
 	 * @param compass	The compass item
+	 * @throws ClassNotFoundException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
 	 */
-	private void coralCompass(Player player, ItemStack compass) {
+	private void coralCompass(Player player, ItemStack compass) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
 		Location tmp = player.getLocation();
 		
 		if (findCoralBiome(tmp, compass)) {
@@ -378,19 +392,24 @@ public class PlayerInteract implements Listener  {
 	 * @param compass	The compass item
 	 * 
 	 * @return True if warm ocean is found, False instead
+	 * @throws ClassNotFoundException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
 	 */
-	private boolean findCoralBiome(Location loc, ItemStack compass) {
+	private boolean findCoralBiome(Location loc, ItemStack compass) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
 		Chunk baseChunk = loc.getChunk();
 
 		for (int radius = 0; radius <= 10; radius++) {
 			Location found = searchWarmRadius(baseChunk, radius);
 			
 			if (found != null) {
-				CompassMeta cm = (CompassMeta) compass.getItemMeta();
-				
-				cm.setLodestone(found);
-				cm.getLore().add("Location : " + found.getBlockX() + ", " + found.getBlockY() + ", " + found.getBlockZ());
-				compass.setItemMeta(cm);
+				Class.forName("org.bukkit.inventory.meta.CompassMeta").getMethod("setLodestone", Boolean.class).invoke(Class.forName("org.bukkit.inventory.meta.CompassMeta").cast(compass.getItemMeta()), found);
+				ItemMeta itM = compass.getItemMeta();
+				itM.getLore().add("Location : " + found.getBlockX() + ", " + found.getBlockY() + ", " + found.getBlockZ());
+				compass.setItemMeta(itM);
 				
 				return true;
 			}
@@ -416,7 +435,7 @@ public class PlayerInteract implements Listener  {
 					Biome biome = baseChunk.getWorld().getBiome(blockLoc.getBlockX(), blockLoc.getBlockY(), blockLoc.getBlockZ());
 					
 					if (biome == Biome.WARM_OCEAN || biome == Biome.DEEP_WARM_OCEAN) {
-						blockLoc.getBlock().setType(Material.LODESTONE);
+						blockLoc.getBlock().setType(Material.matchMaterial("LODESTONE"));
 						return blockLoc;
 					}
 				}

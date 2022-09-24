@@ -81,7 +81,7 @@
 		"Name" : "CoralCompass",
 		"Type": "WorkBench",
 		"Shape": "DLD-PSP-DLD",
-		"Version": "1.15",
+		"Version": "1.17",
 		"Mandatory": false,
 		"KuffleType": "BOTH",
 		"Result": {
@@ -141,7 +141,7 @@
 		"KuffleType": "BOTH",
 		"Result": {
 			"Type": "bell",
-			"Amount": 1,
+			"Amount": 1
 		},
 		"Ingredients": {
 			"A": {
@@ -580,7 +580,7 @@
 		"Name" : "GoldOre",
 		"Type": "WorkBench",
 		"Shape": "SGR-GSR-RRR",
-		"Version": "1.15",
+		"Version": "1.17",
 		"Mandatory": false,
 		"KuffleType": "BOTH",
 		"Result": {
@@ -622,7 +622,7 @@
 		"Name" : "IronOre",
 		"Type": "WorkBench",
 		"Shape": "SIR-CIR-RRR",
-		"Version": "1.15",
+		"Version": "1.17",
 		"Mandatory": false,
 		"KuffleType": "BOTH",
 		"Result": {

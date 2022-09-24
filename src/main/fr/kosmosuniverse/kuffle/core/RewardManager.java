@@ -12,12 +12,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 
 /**
  * 
@@ -112,7 +113,7 @@ public class RewardManager {
 		List<ItemStack> items = new ArrayList<>();
 		Map<String, RewardElem> ageReward = rewards.get(ageName);
 		
-		ItemStack container = new ItemStack(AgeManager.getAgeByName(ageName).box);
+		ItemStack container = ItemUtils.itemMaker(AgeManager.getAgeByName(ageName).box, 1, ageName, "Owner:" + player.getName());
 		
 		BlockStateMeta containerMeta = (BlockStateMeta) container.getItemMeta();
 		ShulkerBox box = (ShulkerBox) containerMeta.getBlockState();
@@ -138,10 +139,6 @@ public class RewardManager {
 		box.update();
 		containerMeta.setBlockState(box);
 		container.setItemMeta(containerMeta);
-		
-		ItemMeta itM = container.getItemMeta();
-		itM.setDisplayName(AgeManager.getAgeByName(ageName).name.replace("_", " "));
-		container.setItemMeta(itM);
 		
 		Map<Integer, ItemStack> ret = player.getInventory().addItem(container);
 		

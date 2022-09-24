@@ -87,10 +87,7 @@ public class CraftManager {
 	 */
 	public static void addCraft(ACraft craft) {
 		recipes.add(craft);
-		
-		if (KuffleMain.current.getServer().getRecipe(new NamespacedKey(KuffleMain.current, craft.getName())) == null) {
-			KuffleMain.current.getServer().addRecipe(craft.getRecipe());	
-		}
+		KuffleMain.current.getServer().addRecipe(craft.getRecipe());
 	}
 	
 	/**
