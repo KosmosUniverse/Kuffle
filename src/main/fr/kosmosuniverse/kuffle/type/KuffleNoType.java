@@ -21,6 +21,12 @@ public class KuffleNoType extends KuffleType {
 		super(plugin);
 	}
 	
+	public void setupSbtt() {
+	}
+	
+	public void clearSbtt() {
+	}
+	
 	@Override
 	public Type getType() {
 		return Type.NO_TYPE;

@@ -20,7 +20,7 @@ public class CraftImplTest {
 	/**
 	 * Contains path to files used in these tests
 	 */
-	private static final String DATA_PATH = "C:\\Users\\ducre\\Workspace\\Kuffle\\src\\test\\fr\\kosmosuniverse\\kuffle\\crafts\\resources\\";
+	private static final String DATA_PATH = ".\\src\\test\\fr\\kosmosuniverse\\kuffle\\crafts\\resources\\";
 	
 	@Test
 	public void testWShaped() {

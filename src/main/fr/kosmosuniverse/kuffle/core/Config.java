@@ -279,13 +279,13 @@ public class Config {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkFileEnd(FileConfiguration configFile) {
-		if (!configFile.contains("game_settings.print_player_tab.enable")) {
+		if (!configFile.contains("game_settings.print_player_tab.for_you")) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling game end tab display"));
-			configFile.set("game_settings.print_player_tab.enable", true);
+			configFile.set("game_settings.print_player_tab.for_you", true);
 		}
 		
 		if (!configFile.contains("game_settings.print_player_tab.for_all_players") &&
-				(!configFile.getBoolean("game_settings.print_player_tab.enable") && configFile.getBoolean("game_settings.print_player_tab.for_all_players"))) {
+				configFile.getBoolean("game_settings.print_player_tab.for_all_players")) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling game end tab for all display"));
 			configFile.set("game_settings.print_player_tab.for_all_players", true);
 		}
@@ -309,7 +309,7 @@ public class Config {
 		configValues.crafts = configFile.getBoolean("game_settings.custom_crafts");
 		configValues.team = configFile.getBoolean("game_settings.team.enable");
 		configValues.same = configFile.getBoolean("game_settings.modes.same");
-		configValues.printTab = configFile.getBoolean("game_settings.print_player_tab.enable");
+		configValues.printTab = configFile.getBoolean("game_settings.print_player_tab.for_you");
 		configValues.printTabAll = configFile.getBoolean("game_settings.print_player_tab.for_all_players");
 		configValues.endOne = configFile.getBoolean("game_settings.end_game_when_one_remains");
 		configValues.duoMode = configFile.getBoolean("game_settings.modes.double");
@@ -820,10 +820,6 @@ public class Config {
 	private static void setPrintTab(boolean configPrintTab) {
 		configValues.printTab = configPrintTab;
 		
-		if (!configValues.printTab) {
-			configValues.printTabAll = false;
-		}
-		
 		setRet = true;
 	}
 	
@@ -833,13 +829,9 @@ public class Config {
 	 * @param configPrintTabAll	value used to set printTabAll
 	 */
 	private static void setPrintTabAll(boolean configPrintTabAll) {
-		if (configPrintTabAll && !configValues.printTab) {
-			error = "Cannot enable PRINT_TAB_ALL if PRINT_TAB is Disable";
-			setRet = false;
-		} else {
-			configValues.printTabAll = configPrintTabAll;
-			setRet = true;
-		}
+		configValues.printTabAll = configPrintTabAll;
+		
+		setRet = true;
 	}
 	
 	/**

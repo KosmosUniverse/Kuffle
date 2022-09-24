@@ -96,7 +96,7 @@ public class TargetManager {
 	private static void setupTargets(String version, String age, JSONObject ageObj) {
 		for (Object target : ageObj.keySet()) {
 			JSONObject targetObj = (JSONObject) ageObj.get(target);
-			boolean sbtt = Boolean.valueOf(targetObj.get("Sbtt").toString());
+			boolean sbtt = Boolean.valueOf(targetObj.get("Sbtt").toString().toLowerCase());
 			
 			if (!targetObj.containsKey("remVersion") ||
 					VersionManager.isVersionValid(version, targetObj.get("remVersion").toString())) {
@@ -196,7 +196,7 @@ public class TargetManager {
 	 */
 	private static String newObject(Map<String, List<String>> objects, List<String> done, String ageName) {	
 		List<String> finalList = new ArrayList<>();
-
+		
 		objects.get(ageName).stream().filter(s -> !done.contains(s)).forEach(s -> finalList.add(s));
 		
 		if (finalList.size() == 1) {

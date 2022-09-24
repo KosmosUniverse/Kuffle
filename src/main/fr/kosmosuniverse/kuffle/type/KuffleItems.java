@@ -24,6 +24,14 @@ public class KuffleItems extends KuffleTypeDecorator {
 		setupKuffleType(plugin);
 	}
 	
+	public void setupSbtt() {
+		CraftManager.setupCraftTemplates();
+	}
+	
+	public void clearSbtt() {
+		CraftManager.removeCraftTemplates();
+	}
+	
 	/**
 	 * Setups the kuffle type
 	 * 
@@ -33,8 +41,6 @@ public class KuffleItems extends KuffleTypeDecorator {
 	 */
 	public void setupKuffleType(JavaPlugin plugin) throws KuffleFileLoadException {
 		setupType(plugin);
-		
-		CraftManager.setupCraftTemplates();
 		
 		playerInteract = new ItemsPlayerInteract();
 		plugin.getServer().getPluginManager().registerEvents(playerInteract, plugin);

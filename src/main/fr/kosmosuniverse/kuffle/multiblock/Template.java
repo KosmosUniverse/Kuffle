@@ -76,7 +76,7 @@ public class Template extends AMultiblock {
 		redPanePrev.setItemMeta(itM);
 		
 		for (int cnt = 0; cnt < compose.size(); cnt++) {
-			inv = Bukkit.createInventory(null, 27, "�8" + name + " Layer " + (cnt + 1));
+			inv = Bukkit.createInventory(null, 27, ChatColor.BLACK + name + " Layer " + (cnt + 1));
 			
 			for (int i = 0; i < 27; i++) {
 				if (i == 0) {

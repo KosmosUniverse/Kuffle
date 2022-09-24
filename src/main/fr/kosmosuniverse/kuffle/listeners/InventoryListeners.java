@@ -49,7 +49,7 @@ public class InventoryListeners implements Listener {
 		
 		if (event.getView().getTitle().contains(ChatColor.BLACK + "AllCustomCrafts")) {
 			event.setCancelled(true);
-			
+
 			if ((inv = CraftManager.getInventory(current, item)) != null) {
 				player.openInventory(inv);
 			} else if ((craft = CraftManager.getCraftByItem(item)) != null &&
@@ -76,7 +76,7 @@ public class InventoryListeners implements Listener {
 			if ((inv = multiblock.getInventory(current, item, MultiblockManager.getMultiblocksInventories(), false)) != null) {
 				player.openInventory(inv);
 			}
-		} else if (event.getView().getTitle() == (ChatColor.BLACK + "Players")) {
+		} else if (event.getView().getTitle().equals(ChatColor.BLACK + "Players")) {
 			event.setCancelled(true);
 			
 			playersInventory(player, item);

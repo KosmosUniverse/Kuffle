@@ -54,6 +54,10 @@ public abstract class KuffleType {
 	public KuffleType() {
 	}
 	
+	public abstract void setupSbtt();
+	
+	public abstract void clearSbtt();
+	
 	/**
 	 * Constructor
 	 * 
@@ -212,10 +216,6 @@ public abstract class KuffleType {
 	 */
 	public final void clear() {
 		clearType();
-		
-		if (kuffleSetType != null) {
-			kuffleSetType.clear();
-		}
 		
 		if (kuffleAgeTargetsTab != null) {
 			kuffleAgeTargetsTab.clear();

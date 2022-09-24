@@ -1,7 +1,5 @@
 package main.fr.kosmosuniverse.kuffle.commands;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -19,6 +17,7 @@ import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
 import main.fr.kosmosuniverse.kuffle.type.KuffleBlocks;
 import main.fr.kosmosuniverse.kuffle.type.KuffleItems;
 import main.fr.kosmosuniverse.kuffle.type.KuffleType;
+import main.fr.kosmosuniverse.kuffle.utils.Pair;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 /**
@@ -27,14 +26,7 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  *
  */
 public class KuffleSetType implements CommandExecutor  {
-	private Map<UUID, String> confirm = new HashMap<>();
-	
-	/**
-	 * Clears <confirm> map
-	 */
-	public void clear() {
-		confirm.clear();
-	}
+	private Pair confirm = null;
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cnd, String msg, String[] args) {
@@ -73,27 +65,31 @@ public class KuffleSetType implements CommandExecutor  {
 			return true;
 		}
 		
-		if (!confirm.containsKey(player.getUniqueId())) {				
+		if (confirm == null) {				
 			LogManager.getInstanceSystem().writeMsg(player, "[Warning] : Change Kuffle type takes few seconds to reload resource files.");
 			
 			if (KuffleMain.type.getType() != KuffleType.Type.NO_TYPE) {
 				LogManager.getInstanceSystem().writeMsg(player, "[Warning] : Kuffle type is already set. This action will unload current Kuffle type {" + KuffleMain.type.getType() + "}.");
 			}
 			
-			confirm.put(player.getUniqueId(), msg+args[0]);
+			confirm = new Pair(player.getUniqueId(), msg+args[0]);
 			LogManager.getInstanceSystem().writeMsg(player, "Please, re-send the exact same command within 10sec to confirm.");
 			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
-				if (confirm.containsKey(player.getUniqueId())) {
-					confirm.remove(player.getUniqueId());
+				if (confirm != null && ((UUID) confirm.getKey()) == player.getUniqueId()) {
+					confirm = null;
 					LogManager.getInstanceSystem().writeMsg(player, "[Warning] : Command /k-set-type cancelled.");
 				}
 			}, 100);
 		} else {
-			if (!confirm.get(player.getUniqueId()).equals(msg+args[0])) {
+			if (((UUID) confirm.getKey()) != player.getUniqueId()) {
+				LogManager.getInstanceSystem().writeMsg(player, "Please wait because another player in setting the kuffle game type.");
+				return true;
+			} else if (!confirm.getValue().toString().equals(msg+args[0])) {
+				LogManager.getInstanceSystem().writeMsg(player, "Please send the exact same command as before or wait for the end of the 10s to choose another Kuffle Type.");
 				return true;
 			}
 			
-			confirm.remove(player.getUniqueId());
+			confirm = null;
 			
 			try {
 				changeKuffleType(player, type);

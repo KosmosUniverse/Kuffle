@@ -190,7 +190,7 @@ public class GameLoop {
 			tmpGame.currentTarget = newItemSingle(tmpGame);
 		}
 		
-		updatePlayerDisplayTarget(tmpGame);
+		GameManager.updatePlayerDisplayTarget(tmpGame);
 	}
 
 	private String newItemSingle(Game tmpGame) {
@@ -210,26 +210,6 @@ public class GameLoop {
 		}
 
 		return ret;
-	}
-	
-	private static void updatePlayerDisplayTarget(Game tmpGame) {
-		if (tmpGame.currentTarget == null) {
-			return ;
-		}
-
-		tmpGame.timeShuffle = System.currentTimeMillis();
-		
-		if (Config.getDouble()) {
-			tmpGame.targetDisplay = LangManager.getTargetLang(tmpGame.currentTarget.split("/")[0], tmpGame.configLang) + "/" + LangManager.getTargetLang(tmpGame.currentTarget.split("/")[1], tmpGame.configLang);
-		} else {
-			if (!tmpGame.alreadyGot.contains(tmpGame.currentTarget)) {
-				tmpGame.alreadyGot.add(tmpGame.currentTarget);
-			}
-			
-			tmpGame.targetDisplay = LangManager.getTargetLang(tmpGame.currentTarget, tmpGame.configLang);
-		}
-		
-		GameManager.updatePlayersHeadData(tmpGame.player.getName(), tmpGame.targetDisplay);
 	}
 
 	public void kill() {

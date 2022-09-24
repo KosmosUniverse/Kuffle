@@ -72,6 +72,7 @@ public class ItemsPlayerInteract extends PlayerInteract {
 			event.setCancelled(true);
 			consumeItem(player, event.getHand());
 			GameManager.playerFoundSBTT(player.getName());
+			CraftManager.reloadTemplate(item.getItemMeta().getDisplayName());
 			LogManager.getInstanceGame().logMsg(player.getName(), "just used " + item.getItemMeta().getDisplayName() + " !");
 			
 			return ;

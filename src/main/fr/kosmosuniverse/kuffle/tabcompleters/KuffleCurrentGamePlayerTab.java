@@ -21,7 +21,7 @@ public class KuffleCurrentGamePlayerTab implements TabCompleter {
 		if (!(sender instanceof Player))
 			return new ArrayList<>();
 		
-		if (args.length == 1) {
+		if (GameManager.getGames() != null && args.length == 1) {
 			List<String> list = new ArrayList<>();
 			
 			GameManager.applyToPlayers((game) -> {

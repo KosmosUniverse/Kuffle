@@ -8,7 +8,6 @@ import org.bukkit.potion.PotionEffect;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Config;
-import main.fr.kosmosuniverse.kuffle.core.CraftManager;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
@@ -49,7 +48,10 @@ public class KuffleStop implements CommandExecutor {
 			GameManager.resetPlayerBar(game);
 		});
 
-		CraftManager.removeCraftTemplates();
+		if (Config.getSBTT()) {
+			KuffleMain.type.clearSbtt();
+		}
+		
 		ScoreManager.clear();
 		
 		if (Config.getTeam()) {

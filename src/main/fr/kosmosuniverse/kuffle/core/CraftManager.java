@@ -73,6 +73,11 @@ public class CraftManager {
 		if (recipes != null) {
 			removeCrafts();
 		}
+		
+		if (inventories != null) {
+			inventories.forEach(i -> i.clear());
+			inventories.clear();
+		}
 	}
 	
 	/**
@@ -82,6 +87,7 @@ public class CraftManager {
 	 */
 	public static void addCraft(ACraft craft) {
 		recipes.add(craft);
+		
 		if (KuffleMain.current.getServer().getRecipe(new NamespacedKey(KuffleMain.current, craft.getName())) == null) {
 			KuffleMain.current.getServer().addRecipe(craft.getRecipe());	
 		}
@@ -129,8 +135,11 @@ public class CraftManager {
 	}
 	
 	private static void setupCraftsInventories() {
-		int recipesCnt = recipes.size();
+		int recipesCnt = recipes.size();		
 		int nbRows = recipesCnt / 9;
+		
+		nbRows = nbRows + (recipesCnt % 9 > 0 ? 1 : 0);
+		
 		int nbInvTotal = nbRows / 5;
 		int nbRowsRest = nbRows % 5;
 		int cnt = 1;
@@ -159,7 +168,7 @@ public class CraftManager {
 				inv.setItem(i, bluePane);
 			} else if (i >= 0 && i < 9) {
 				inv.setItem(i, limePane);
-			} else {
+			} else if (slotCnt < recipes.size()) {
 				inv.setItem(i, recipes.get(slotCnt).getItem());
 				slotCnt++;
 			}
@@ -277,30 +286,33 @@ public class CraftManager {
 	public static void setupCraftTemplates() {
 		List<Template> templates = new ArrayList<>();
 
-		for (int i = 0; i < Config.getLastAge().number; i++)  {
+		for (int i = 0; i <= Config.getLastAge().number; i++)  {
 			String name = AgeManager.getAgeByNumber(i).name;
 
-			name = name.replace("_Age", "");
+			name = name.replace("_Age", "Template");
 			templates.add(new Template(name, getMaterials(AgeManager.getAgeByNumber(i).name)));
 		}
 
 		for (Template t : templates) {
 			addCraft(t);
 		}
+		
+		reloadInventories();
 	}
 
 	/**
 	 * Removes the template items
 	 */
 	public static void removeCraftTemplates() {
-		for (int i = 0; i < Config.getLastAge().number; i++)  {
+		for (int i = 0; i <= Config.getLastAge().number; i++)  {
 			String name = AgeManager.getAgeByNumber(i).name;
 			
-			name = name.replace("_Age", "");
-			name = name + "Template";
+			name = name.replace("_Age", "Template");
 
 			removeCraft(name);
 		}
+		
+		reloadInventories();
 	}
 	
 	/**
@@ -308,7 +320,9 @@ public class CraftManager {
 	 */
 	public static void reloadTemplates() {
 		for (Age age : AgeManager.getAges()) {
-			reloadTemplate(age.name.replace("_Age", "Template"), age.name);
+			if (age.number != -1) {
+				reloadTemplate(age.name.replace("_Age", "Template"));
+			}
 		}
 	}
 	
@@ -316,18 +330,28 @@ public class CraftManager {
 	 * Reloads the templates
 	 * 
 	 * @param name	The old template name
-	 * @param age	The Age for the new template
 	 */
-	public static void reloadTemplate(String name, String age) {
-		removeCraft(name);
+	public static void reloadTemplate(String name) {
+		String tmpName = name.replace("" + ChatColor.DARK_RED, "");
+		
+		
+		removeCraft(tmpName);
 
-		Template t = new Template(name, getMaterials(age));
+		Template t = new Template(tmpName, getMaterials(tmpName.replace("Template", "_Age")));
 
 		addCraft(t);
 
 		GameManager.getGames().forEach((playerName, game) ->
 			game.player.discoverRecipe(new NamespacedKey(KuffleMain.current, t.getName()))
 		);
+		
+		reloadInventories();
+	}
+	
+	private static void reloadInventories() {
+		inventories.forEach(i -> i.clear());
+		inventories.clear();
+		setupCraftsInventories();
 	}
 	
 	/**

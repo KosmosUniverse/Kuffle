@@ -163,8 +163,8 @@ public abstract class ACraft {
 	/**
 	 * Creates this craft recipe inventory base
 	 */
-	private void setupInventoryBase() {
-		inv = Bukkit.createInventory(null,  27, ChatColor.BLACK + name);
+	protected final void setupInventoryBase() {
+		inv = Bukkit.createInventory(null, 27, ChatColor.BLACK + name);
 		
 		for (int i = 0; i < 27; i++) {
 			if (i == 0) {
@@ -182,7 +182,7 @@ public abstract class ACraft {
 	 * 
 	 * @param ings	The recipe components
 	 */
-	private void addInvItems(List<ItemStack> ings) {
+	protected final void addInvItems(List<ItemStack> ings) {
 		int cnt = 0;
 		int i = 3;
 		

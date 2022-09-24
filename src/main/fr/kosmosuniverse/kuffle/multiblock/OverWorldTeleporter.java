@@ -10,6 +10,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import net.md_5.bungee.api.ChatColor;
+
 /**
  * 
  * @author KosmosUniverse
@@ -89,7 +91,7 @@ public class OverWorldTeleporter extends AMultiblock {
 
 	@Override
 	public void createInventories() {
-		Inventory inv = Bukkit.createInventory(null, 27, "�8" + name + " Layer 1");
+		Inventory inv = Bukkit.createInventory(null, 27, ChatColor.BLACK + name + " Layer 1");
 		
 		ItemStack grayPane = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
 		ItemStack limePane = new ItemStack(Material.LIME_STAINED_GLASS_PANE);

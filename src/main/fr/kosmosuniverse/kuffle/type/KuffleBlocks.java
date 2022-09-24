@@ -4,7 +4,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import main.fr.kosmosuniverse.kuffle.commands.KuffleMultiBlocks;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleSpawnMuliblock;
-import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
 import main.fr.kosmosuniverse.kuffle.multiblock.MultiblockManager;
 import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleSpawnMultiBlocksTab;
@@ -27,6 +26,14 @@ public class KuffleBlocks extends KuffleTypeDecorator {
 		setupKuffleType(plugin);
 	}
 	
+	public void setupSbtt() {
+		MultiblockManager.createTemplates();
+	}
+	
+	public void clearSbtt() {
+		MultiblockManager.removeTemplates();
+	}
+	
 	/**
 	 * Setups the kuffle type
 	 * 
@@ -38,10 +45,6 @@ public class KuffleBlocks extends KuffleTypeDecorator {
 		setupType(plugin);
 		
 		MultiblockManager.setup();
-		
-		if (Config.getSBTT()) {
-			MultiblockManager.createTemplates();
-		}
 		
 		plugin.getCommand("k-multiblocks").setExecutor(new KuffleMultiBlocks());
 		plugin.getCommand("k-spawn-multiblock").setExecutor(new KuffleSpawnMuliblock());

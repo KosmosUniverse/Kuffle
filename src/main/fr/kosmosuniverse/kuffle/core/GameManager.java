@@ -192,7 +192,7 @@ public class GameManager {
 	 * @return the games map as an unmodifiable map
 	 */
 	public static Map<String, Game> getGames() {
-		return Collections.unmodifiableMap(games);
+		return games == null ? null : Collections.unmodifiableMap(games);
 	}
 	
 	/**
@@ -411,6 +411,8 @@ public class GameManager {
 		JSONParser parser = new JSONParser();
 		Game tmpGame = new Game(player);
 
+		setupPlayer(tmpGame);
+		
 		try (FileReader reader = new FileReader(KuffleMain.current.getDataFolder().getPath() + File.separator + player.getName() + ".ki")) {
 			JSONObject mainObject = (JSONObject) parser.parse(reader);
 
@@ -436,6 +438,8 @@ public class GameManager {
 			mainObject.clear();
 		}
 		
+		updatePlayerDisplayTarget(tmpGame);
+		
 		games.put(player.getName(), tmpGame);
 		
 		String playerName = player.getName();
@@ -449,7 +453,6 @@ public class GameManager {
 			Utils.fileDelete(KuffleMain.current.getDataFolder().getPath(), playerName + ".yml");
 		}
 
-		
 		if (game.dead) {
 			teleportAutoBack(playerName);
 		}
@@ -463,6 +466,26 @@ public class GameManager {
 		updatePlayerListName(playerName);
 		
 		game.score.setScore(game.targetCount);
+	}
+	
+	public static void updatePlayerDisplayTarget(Game tmpGame) {
+		if (tmpGame.currentTarget == null) {
+			return ;
+		}
+
+		tmpGame.timeShuffle = System.currentTimeMillis();
+		
+		if (Config.getDouble()) {
+			tmpGame.targetDisplay = LangManager.getTargetLang(tmpGame.currentTarget.split("/")[0], tmpGame.configLang) + "/" + LangManager.getTargetLang(tmpGame.currentTarget.split("/")[1], tmpGame.configLang);
+		} else {
+			if (!tmpGame.alreadyGot.contains(tmpGame.currentTarget)) {
+				tmpGame.alreadyGot.add(tmpGame.currentTarget);
+			}
+			
+			tmpGame.targetDisplay = LangManager.getTargetLang(tmpGame.currentTarget, tmpGame.configLang);
+		}
+		
+		updatePlayersHeadData(tmpGame.player.getName(), tmpGame.targetDisplay);
 	}
 	
 	/**
@@ -497,7 +520,7 @@ public class GameManager {
 			return ;
 		}
 
-		if (game.finished) {
+		if (game.finished || game.age == (Config.getLastAge().number + 1)) {
 			game.ageDisplay.setProgress(1.0);
 			game.ageDisplay.setTitle(LangManager.getMsgLang("GAME_DONE", game.configLang).replace("%i", "" + game.gameRank));
 
@@ -606,13 +629,17 @@ public class GameManager {
 			if (game.age > 0) {
 				RewardManager.removePreviousRewardEffects(AgeManager.getAgeByNumber(game.age - 1).name, game.player);
 			}
-
-			RewardManager.givePlayerReward(AgeManager.getAgeByNumber(game.age).name, game.player);
+			
+			if (game.age < (Config.getLastAge().number + 1)) {
+				RewardManager.givePlayerReward(AgeManager.getAgeByNumber(game.age).name, game.player);
+			}
 		}
-
+		
 		game.times.put(AgeManager.getAgeByNumber(game.age).name, System.currentTimeMillis() - game.timeBase);
 		game.totalTime += game.times.get(AgeManager.getAgeByNumber(game.age).name) / 1000;
 
+		game.player.sendMessage(LangManager.getMsgLang("TIME_AGE", game.configLang).replace("%t", Utils.getTimeFromSec(game.totalTime)));
+		
 		game.timeBase = System.currentTimeMillis();
 		game.alreadyGot.clear();
 		game.currentTarget = null;
@@ -622,13 +649,17 @@ public class GameManager {
 		game.time = game.time + Config.getAddedTime();
 		game.player.playSound(game.player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f);
 		game.score.setScore(game.targetCount);
+		
+		if (game.age == (Config.getLastAge().number + 1)) {
+			return ;
+		}
+		
 		updatePlayerListName(game.player.getName());
 		updatePlayerBar(game);
 
 		Age tmpAge = AgeManager.getAgeByNumber(game.age);
 
 		games.forEach((playerName, playerGame) -> playerGame.player.sendMessage(LangManager.getMsgLang("AGE_MOVED", game.configLang).replace("<#>", ChatColor.BLUE + "<" + ChatColor.GOLD + game.player.getName() + ChatColor.BLUE + ">").replace("<##>", "<" + tmpAge.color + tmpAge.name.replace("_Age", "") + ChatColor.BLUE + ">")));
-		game.player.sendMessage(LangManager.getMsgLang("TIME_AGE", game.configLang).replace("%t", Utils.getTimeFromSec(game.totalTime)));
 	}
 	
 	/**

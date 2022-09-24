@@ -15,7 +15,6 @@ import org.bukkit.potion.PotionEffectType;
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.ActionBar;
 import main.fr.kosmosuniverse.kuffle.core.Config;
-import main.fr.kosmosuniverse.kuffle.core.CraftManager;
 import main.fr.kosmosuniverse.kuffle.core.GameLoop;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
@@ -99,7 +98,7 @@ public class KuffleStart implements CommandExecutor {
 			);
 
 			if (Config.getSBTT()) {
-				CraftManager.reloadTemplates();
+				KuffleMain.type.setupSbtt();
 			}
 		}, 20 + spread);
 		
