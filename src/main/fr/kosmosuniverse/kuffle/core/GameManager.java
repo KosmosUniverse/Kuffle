@@ -630,7 +630,7 @@ public class GameManager {
 				RewardManager.removePreviousRewardEffects(AgeManager.getAgeByNumber(game.age - 1).name, game.player);
 			}
 			
-			if (game.age < (Config.getLastAge().number + 1)) {
+			if (game.age < Config.getLastAge().number) {
 				RewardManager.givePlayerReward(AgeManager.getAgeByNumber(game.age).name, game.player);
 			}
 		}
@@ -1283,7 +1283,7 @@ public class GameManager {
 	public static void teleportAutoBack(String player) {
 		Game game = games.get(player);
 		
-		game.player.sendMessage("You will be tp back to your death spot in " + Config.getLevel().seconds + " seconds.");
+		game.player.sendMessage(LangManager.getMsgLang("TP_BACK", game.configLang).replace("%i", "" + Config.getLevel().seconds));
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
 			Location loc = game.deathLoc;

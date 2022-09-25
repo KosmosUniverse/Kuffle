@@ -52,11 +52,6 @@ public class KuffleSave implements CommandExecutor {
 			
 			return false;
 		}
-
-		if (KuffleMain.type.getType() == KuffleType.Type.NO_TYPE) {
-			LogManager.getInstanceSystem().writeMsg(player, "Kuffle type not configured, please set it with /k-set-type");
-			return true;
-		}
 		
 		if (!KuffleMain.gameStarted) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", Config.getLang()));

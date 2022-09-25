@@ -319,15 +319,15 @@
 		"en" : "<#>  complete this game !",
 		"fr" : "<#> a fini sa partie !"
 	},
-	"ITEM_NOT_FOUND" : {
-		"en" : "You didn't find your item. Let's give you another one.",
-		"fr" : "Vous n'avez pas trouvé votre objet. En voici un nouveau."
+	"TARGET_NOT_FOUND" : {
+		"en" : "You didn't find your target. Let's give you another one.",
+		"fr" : "Vous n'avez pas trouvé votre cible. En voici une nouvelle."
 	},
 	"TEAM_WAIT" : {
 		"en" : "Waiting for other players of the team.",
 		"fr" : "En attente des autres joueurs de l'équipe."
 	},
-	"ITEM_DOUBLE" : {
+	"TARGET_DOUBLE" : {
 		"en" : "[#] or [##]",
 		"fr" : "[#] ou [##]"
 	},
@@ -366,5 +366,57 @@
 	"GAME_ABANDONED" : {
 		"en" : "<#> abandoned !",
 		"fr" : "<#> a abandonné !"
+	},
+	"KUFFLE_TYPE_NOT_CONFIG" : {
+		"en" : "Kuffle type not configured, please set it with /k-set-type",
+		"fr" : "Le type de Kuffle n'est pas configuré, définissez le via /k-set-type"
+	},
+	"TP_BACK" : {
+		"en" : "You will be tp back to your death spot in %i seconds.",
+		"fr" : "Vous allez être téléporté à votre lieu de mort dans %i secondes."
+	},
+	"TP_END" : {
+		"en" : "Teleported to the End.",
+		"fr" : "Téléportation dans l'End"
+	},
+	"TP_OVERWORLD" : {
+		"en" : "Teleported to the Overworld.",
+		"fr" : "Téléportation dans l'Overworld"
+	},
+	"GAME_RELOADED" : {
+		"en" : "[Kuffle] <%s> game is reloaded.",
+		"fr" : "[Kuffle] La partie de <%s> est chargée."
+	},
+	"GAME_SAVED" : {
+		"en" : "[Kuffle] <%s> game is saved.",
+		"fr" : "[Kuffle] La partie de <%s> est sauvegardée."
+	},
+	"ALL_DISCONNECTED" : {
+		"en" : "No player remain connected, game saved.",
+		"fr" : "Tous les joueurs se sont déconnectés, la partie a été sauvegardée."
+	},
+	"YOU_LOSE" : {
+		"en" : "YOU LOSE !",
+		"fr" : "VOUS AVEZ PERDU !"
+	},
+	"COMPASS_PAIRED" : {
+		"en" : "This CoralCompass is already paired to a warm ocean.",
+		"fr" : "Ce CoralCompass est déjà lié a un océan chaud."
+	},
+	"WARM_FOUND" : {
+		"en" : "Warm ocean found, follow the compass.",
+		"fr" : "Océan chaud trouvé, suivez la boussole."
+	},
+	"WARM_NOT_FOUND" : {
+		"en" : "Warm ocean not found, move away and try again.",
+		"fr" : "Océan chaud non trouvé, déplacez-vous et réessayez."
+	},
+	"CONSTRUCTED" : {
+		"en" : "You have just constructed %s.",
+		"fr" : "Vous venez de construire %s."
+	},
+	"ACTIVATED" : {
+		"en" : "You have just activated %s.",
+		"fr" : "Vous venez d'activer %s."
 	}
 }

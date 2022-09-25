@@ -108,7 +108,7 @@ public class GameLoop {
 	
 	private void resetOrDisplayTarget(Game game, ThreadLocalRandom random) {
 		if (System.currentTimeMillis() - game.timeShuffle > (game.time * 60000)) {
-			game.player.sendMessage(ChatColor.RED + LangManager.getMsgLang("ITEM_NOT_FOUND", game.configLang));
+			game.player.sendMessage(ChatColor.RED + LangManager.getMsgLang("TARGET_NOT_FOUND", game.configLang));
 			LogManager.getInstanceGame().logSystemMsg("Player : " + game.player.getName() + " did not found target : " + game.currentTarget);
 			newItem(game);
 		} else if (Config.getDouble() && !game.currentTarget.contains("/")) {
@@ -141,7 +141,7 @@ public class GameLoop {
 			dispCuritem = LangManager.getMsgLang("SOMETHING_NEW", tmpGame.configLang);
 		} else {
 			if (tmpGame.targetDisplay.contains("/")) {
-				dispCuritem = LangManager.getMsgLang("ITEM_DOUBLE", tmpGame.configLang).replace("[#]", tmpGame.targetDisplay.split("/")[0]).replace("[##]", tmpGame.targetDisplay.split("/")[1]);
+				dispCuritem = LangManager.getMsgLang("TARGET_DOUBLE", tmpGame.configLang).replace("[#]", tmpGame.targetDisplay.split("/")[0]).replace("[##]", tmpGame.targetDisplay.split("/")[1]);
 			} else {
 				dispCuritem = tmpGame.targetDisplay;
 			}

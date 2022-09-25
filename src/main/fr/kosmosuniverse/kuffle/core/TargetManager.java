@@ -19,6 +19,7 @@ import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Pair;
+import net.md_5.bungee.api.ChatColor;
 
 /**
  * 
@@ -254,9 +255,9 @@ public class TargetManager {
 		boolean hasNext = ageTargets.size() > 45;
 
 		if (ageTargets.size() > 45) {
-			inv = Bukkit.createInventory(null, 54, "�8" + age + " Targets Tab 1");
+			inv = Bukkit.createInventory(null, 54, ChatColor.BLACK + age + " Targets Tab 1");
 		} else {
-			inv = Bukkit.createInventory(null, 54, "�8" + age + " Targets");
+			inv = Bukkit.createInventory(null, 54, ChatColor.BLACK + age + " Targets");
 		}
 		
 		setupFirstRow(inv, true, hasNext);
@@ -268,7 +269,7 @@ public class TargetManager {
 				invCnt = 0;
 				invs.add(inv);
 				nbInv++;
-				inv = Bukkit.createInventory(null, 54, "�8" + age + " Targets Tab " + nbInv);
+				inv = Bukkit.createInventory(null, 54, ChatColor.BLACK + age + " Targets Tab " + nbInv);
 				
 				setupFirstRow(inv, false, hasNext);
 			} else {

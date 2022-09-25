@@ -33,16 +33,12 @@ public class KuffleSpawnMuliblock implements CommandExecutor {
 			return false;
 		}
 		
-		System.out.println("tauk");
-		
 		if (KuffleMain.type.getType() == KuffleType.Type.NO_TYPE) {
-			LogManager.getInstanceSystem().writeMsg(player, "Kuffle type not configured, please set it with /k-set-type");
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("KUFFLE_TYPE_NOT_CONFIG", Config.getLang()));
 			return true;
 		}
 		
-		System.out.println("teauk");
-		
-		if (args.length != 1) {
+		if (KuffleMain.type.getType() != KuffleType.Type.BLOCKS || args.length != 1) {
 			return false;
 		}
 		

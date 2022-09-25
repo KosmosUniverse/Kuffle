@@ -28,6 +28,7 @@ import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
 import main.fr.kosmosuniverse.kuffle.core.VersionManager;
@@ -146,7 +147,7 @@ public class PlayerInteract implements Listener  {
 				coralCompass(player, item);
 				
 			} else {
-				LogManager.getInstanceGame().writeMsg(player, "This CoralCompass is already paired to a warm ocean.");
+				LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("COMPASS_PAIRED", GameManager.getPlayerLang(player.getName())));
 			}
 			
 			ret = true;
@@ -368,7 +369,7 @@ public class PlayerInteract implements Listener  {
 		Location tmp = player.getLocation();
 		
 		if (findCoralBiome(tmp, compass)) {
-			LogManager.getInstanceGame().writeMsg(player, "Warm ocean found, follow the compass.");
+			LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("WARM_FOUND", GameManager.getPlayerLang(player.getName())));
 			
 			if (xpActivables.get("CoralCompass") > 1) {
 				int tmpXp = xpActivables.get("CoralCompass");
@@ -381,7 +382,7 @@ public class PlayerInteract implements Listener  {
 				xpActivables.put("CoralCompass", tmpXp < 1 ? 1 : tmpXp);
 			}
 		} else {
-			LogManager.getInstanceGame().writeMsg(player, "Warm ocean not found, move away and try again.");	
+			LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("WARM_NOT_FOUND", GameManager.getPlayerLang(player.getName())));
 		}
 	}
 	

@@ -25,6 +25,7 @@ import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
@@ -65,7 +66,7 @@ public class PlayerEvents implements Listener {
 			player.discoverRecipe(new NamespacedKey(KuffleMain.current, item.getName()));
 		}
 		
-		GameManager.sendMsgToPlayers("[" + KuffleMain.current.getName() + "] : <" + player.getName() + "> game is reloaded !");
+		GameManager.sendMsgToPlayers(LangManager.getMsgLang("GAME_RELOADED", GameManager.getPlayerLang(player.getName())).replace("%s", player.getName()));
 		LogManager.getInstanceSystem().logMsg(KuffleMain.current.getName(), "<" + player.getName() + "> game is reloaded !");
 	}
 	
@@ -97,7 +98,7 @@ public class PlayerEvents implements Listener {
 		GameManager.stopPlayer(player.getName());
 		GameManager.removePlayer(player.getName());
 		GameManager.updatePlayersHeads();
-		GameManager.sendMsgToPlayers("[" + KuffleMain.current.getName() + "] : <" + player.getName() + "> game is saved.");
+		GameManager.sendMsgToPlayers(LangManager.getMsgLang("GAME_SAVED", Config.getLang()).replace("%s", player.getName()));
 		
 		if (GameManager.getGames().size() == 0) {
 			if (Config.getTeam()) {
@@ -131,8 +132,8 @@ public class PlayerEvents implements Listener {
 			KuffleMain.loop.kill();
 			KuffleMain.paused = false;
 			KuffleMain.gameStarted = false;
-			LogManager.getInstanceSystem().logSystemMsg("No player remain connected, game saved.");
-			LogManager.getInstanceGame().logSystemMsg("No player remain connected, game saved.");
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("ALL_DISCONNECTED", Config.getLang()));
+			LogManager.getInstanceGame().logSystemMsg(LangManager.getMsgLang("ALL_DISCONNECTED", Config.getLang()));
 		}
 	}
 	
@@ -188,7 +189,7 @@ public class PlayerEvents implements Listener {
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
 			if (Config.getLevel().losable) {
-				player.sendMessage(ChatColor.RED + "YOU LOSE !");
+				player.sendMessage(ChatColor.RED + LangManager.getMsgLang("YOU_LOSE", GameManager.getPlayerLang(player.getName())));
 			} else {
 				GameManager.teleportAutoBack(player.getName());
 				GameManager.giveEffectsToPlayer(player.getName(), new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 1), new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 999999, 10));

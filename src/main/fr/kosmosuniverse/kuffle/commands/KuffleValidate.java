@@ -10,7 +10,6 @@ import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
-import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 
 public class KuffleValidate implements CommandExecutor {
 	@Override
@@ -19,11 +18,6 @@ public class KuffleValidate implements CommandExecutor {
 			return false;
 		
 		Player player = (Player) sender;
-		
-		if (KuffleMain.type.getType() == KuffleType.Type.NO_TYPE) {
-			LogManager.getInstanceSystem().writeMsg(player, "Kuffle type not configured, please set it with /k-set-type");
-			return true;
-		}
 		
 		if (!KuffleMain.gameStarted) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", Config.getLang()));

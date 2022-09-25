@@ -10,6 +10,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import net.md_5.bungee.api.ChatColor;
 
 /**
@@ -73,10 +75,10 @@ public class OverWorldTeleporter extends AMultiblock {
 	@Override
 	public void onActivate(Player player, ActivationType type) {
 		if (type == ActivationType.ASSEMBLE) {
-			player.sendMessage("You just constructed " + name);
+			player.sendMessage(LangManager.getMsgLang("CONSTRUCTED", GameManager.getPlayerLang(player.getName())).replace("%s", name));
 		} else if (type == ActivationType.ACTIVATE) {
 			if (world != null) {
-				player.sendMessage("You just activated " + name);
+				player.sendMessage(LangManager.getMsgLang("ACTIVATED", GameManager.getPlayerLang(player.getName())).replace("%s", name));
 				player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 50, false, false, false));
 				
 				Location tmp = new Location(Bukkit.getWorld(world.getName()), player.getLocation().getX() - 1000, 80.0, player.getLocation().getZ() - 1000);
@@ -135,7 +137,7 @@ public class OverWorldTeleporter extends AMultiblock {
 		itM.setDisplayName("<- Previous");
 		redPane.setItemMeta(itM);
 		
-		inv = Bukkit.createInventory(null, 27, "�8" + name + " Layer 2");
+		inv = Bukkit.createInventory(null, 27, ChatColor.BLACK + name + " Layer 2");
 		
 		for (int i = 0; i < 27; i++) {
 			if (i == 0) {
@@ -157,7 +159,7 @@ public class OverWorldTeleporter extends AMultiblock {
 		
 		invs.add(inv);
 		
-		inv = Bukkit.createInventory(null, 27, "�8" + name + " Layer 3");
+		inv = Bukkit.createInventory(null, 27, ChatColor.BLACK + name + " Layer 3");
 		
 		for (int i = 0; i < 27; i++) {
 			if (i == 0) {

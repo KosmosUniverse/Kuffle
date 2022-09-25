@@ -407,8 +407,29 @@
 			}
 		}
 	},
-
+	
 	"19": {
+		"Name" : "RedNetherBricks",
+		"Type": "WorkBench",
+		"Shape": "NDR-DNR-RRR",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "RED_NETHER_BRICKS",
+			"Amount": 2
+		},
+		"Ingredients": {
+			"N": {
+				"Type": "NETHER_BRICKS"
+			},
+			"D": {
+				"Type": "RED_DYE"
+			}
+		}
+	},
+
+	"20": {
 		"Name" : "CoalOre",
 		"Type": "WorkBench",
 		"Shape": "SCR-CSR-RRR",
@@ -429,7 +450,7 @@
 		}
 	},
 
-	"20": {
+	"21": {
 		"Name" : "CoalOreDeepslate",
 		"Type": "WorkBench",
 		"Shape": "DCR-CDR-RRR",
@@ -450,7 +471,7 @@
 		}
 	},
 
-	"21": {
+	"22": {
 		"Name" : "CopperOre",
 		"Type": "WorkBench",
 		"Shape": "CSC-SRS-CSC",
@@ -471,7 +492,7 @@
 		}
 	},
 
-	"22": {
+	"23": {
 		"Name" : "CopperOreDeepslate",
 		"Type": "WorkBench",
 		"Shape": "CDC-DRD-CDC",
@@ -492,7 +513,7 @@
 		}
 	},
 
-	"23": {
+	"24": {
 		"Name" : "DiamondOre",
 		"Type": "WorkBench",
 		"Shape": "SDR-DSR-RRR",
@@ -513,7 +534,7 @@
 		}
 	},
 
-	"24": {
+	"25": {
 		"Name" : "DiamondOreDeepslate",
 		"Type": "WorkBench",
 		"Shape": "DCR-CDR-RRR",
@@ -534,7 +555,7 @@
 		}
 	},
 
-	"25": {
+	"26": {
 		"Name" : "EmeraldOre",
 		"Type": "WorkBench",
 		"Shape": "SER-ESR-RRR",
@@ -555,7 +576,7 @@
 		}
 	},
 
-	"26": {
+	"27": {
 		"Name" : "EmeraldOreDeepslate",
 		"Type": "WorkBench",
 		"Shape": "DCR-CDR-RRR",
@@ -576,7 +597,7 @@
 		}
 	},
 
-	"27": {
+	"28": {
 		"Name" : "GoldOre",
 		"Type": "WorkBench",
 		"Shape": "SGR-GSR-RRR",
@@ -597,7 +618,7 @@
 		}
 	},
 
-	"28": {
+	"29": {
 		"Name" : "GoldOreDeepslate",
 		"Type": "WorkBench",
 		"Shape": "DCR-CDR-RRR",
@@ -618,7 +639,7 @@
 		}
 	},
 
-	"29": {
+	"30": {
 		"Name" : "IronOre",
 		"Type": "WorkBench",
 		"Shape": "SIR-CIR-RRR",
@@ -639,7 +660,7 @@
 		}
 	},
 
-	"30": {
+	"31": {
 		"Name" : "IronOreDeepslate",
 		"Type": "WorkBench",
 		"Shape": "DCR-CDR-RRR",
@@ -660,7 +681,7 @@
 		}
 	},
 
-	"31": {
+	"32": {
 		"Name" : "LapisOre",
 		"Type": "WorkBench",
 		"Shape": "LSL-LSL-LSL",
@@ -681,7 +702,7 @@
 		}
 	},
 
-	"32": {
+	"33": {
 		"Name" : "LapisOreDeepslate",
 		"Type": "WorkBench",
 		"Shape": "LSL-LSL-LSL",
@@ -702,7 +723,7 @@
 		}
 	},
 
-	"33": {
+	"34": {
 		"Name" : "RedstoneOre",
 		"Type": "WorkBench",
 		"Shape": "RSR-SRS-RSR",
@@ -723,7 +744,7 @@
 		}
 	},
 
-	"34": {
+	"35": {
 		"Name" : "RedstoneOreDeepslate",
 		"Type": "WorkBench",
 		"Shape": "RSR-SRS-RSR",
@@ -744,7 +765,7 @@
 		}
 	},
 
-	"35": {
+	"36": {
 		"Name" : "QuartzOre",
 		"Type": "WorkBench",
 		"Shape": "SCR-CSR-RRR",
@@ -765,7 +786,7 @@
 		}
 	},
 
-	"36": {
+	"37": {
 		"Name" : "Coal",
 		"Type": "WorkBench",
 		"Version": "1.15",
@@ -783,7 +804,7 @@
 		}
 	},
 
-	"37": {
+	"38": {
 		"Name" : "Coal",
 		"Type": "WorkBench",
 		"Version": "1.17",
@@ -801,7 +822,7 @@
 		}
 	},
 
-	"38": {
+	"39": {
 		"Name" : "Diamond",
 		"Type": "WorkBench",
 		"Version": "1.15",
@@ -819,7 +840,7 @@
 		}
 	},
 
-	"39": {
+	"40": {
 		"Name" : "Diamond",
 		"Type": "WorkBench",
 		"Version": "1.17",
@@ -837,7 +858,7 @@
 		}
 	},
 
-	"40": {
+	"41": {
 		"Name" : "Emerald",
 		"Type": "WorkBench",
 		"Version": "1.15",
@@ -855,7 +876,7 @@
 		}
 	},
 
-	"41": {
+	"42": {
 		"Name" : "Emerald",
 		"Type": "WorkBench",
 		"Version": "1.17",
@@ -873,7 +894,7 @@
 		}
 	},
 
-	"42": {
+	"43": {
 		"Name" : "Lapis",
 		"Type": "WorkBench",
 		"Version": "1.15",
@@ -891,7 +912,7 @@
 		}
 	},
 
-	"43": {
+	"44": {
 		"Name" : "Lapis",
 		"Type": "WorkBench",
 		"Version": "1.17",
@@ -909,7 +930,7 @@
 		}
 	},
 
-	"46": {
+	"45": {
 		"Name" : "Quartz",
 		"Type": "WorkBench",
 		"Version": "1.15",
@@ -926,7 +947,7 @@
 		}
 	},
 
-	"44": {
+	"46": {
 		"Name" : "Redstone",
 		"Type": "WorkBench",
 		"Version": "1.15",
@@ -944,7 +965,7 @@
 		}
 	},
 
-	"45": {
+	"47": {
 		"Name" : "Redstone",
 		"Type": "WorkBench",
 		"Version": "1.17",
@@ -962,7 +983,7 @@
 		}
 	},
 
-	"47": {
+	"48": {
 		"Name" : "RawCopper",
 		"Type": "WorkBench",
 		"Version": "1.17",
@@ -980,7 +1001,7 @@
 		}
 	},
 
-	"48": {
+	"49": {
 		"Name" : "RawGold",
 		"Type": "WorkBench",
 		"Version": "1.17",
@@ -998,7 +1019,7 @@
 		}
 	},
 
-	"49": {
+	"50": {
 		"Name" : "RawIron",
 		"Type": "WorkBench",
 		"Version": "1.17",
@@ -1016,7 +1037,7 @@
 		}
 	},
 
-	"50": {
+	"51": {
 		"Name" : "ExposedCopper",
 		"Type": "WorkBench",
 		"Version": "1.17",
@@ -1036,7 +1057,7 @@
 		}
 	},
 
-	"51": {
+	"52": {
 		"Name" : "WeatheredCopper",
 		"Type": "WorkBench",
 		"Version": "1.17",
@@ -1059,7 +1080,7 @@
 		}
 	},
 
-	"52": {
+	"53": {
 		"Name" : "OxidizedCopper",
 		"Type": "WorkBench",
 		"Version": "1.17",
@@ -1085,7 +1106,7 @@
 		}
 	},
 
-	"53": {
+	"54": {
 		"Name" : "BrainCoralBlock",
 		"Type": "WorkBench",
 		"Shape": "CCC-CRC-CCC",
@@ -1104,7 +1125,7 @@
 		}
 	},
 
-	"54": {
+	"55": {
 		"Name" : "BubbleCoralBlock",
 		"Type": "WorkBench",
 		"Shape": "CCC-CRC-CCC",
@@ -1123,7 +1144,7 @@
 		}
 	},
 
-	"55": {
+	"56": {
 		"Name" : "FireCoralBlock",
 		"Type": "WorkBench",
 		"Shape": "CCC-CRC-CCC",
@@ -1142,7 +1163,7 @@
 		}
 	},
 
-	"56": {
+	"57": {
 		"Name" : "HornCoralBlock",
 		"Type": "WorkBench",
 		"Shape": "CCC-CRC-CCC",
@@ -1161,7 +1182,7 @@
 		}
 	},
 
-	"57": {
+	"58": {
 		"Name" : "TubeCoralBlock",
 		"Type": "WorkBench",
 		"Shape": "CCC-CRC-CCC",
@@ -1180,7 +1201,7 @@
 		}
 	},
 
-	"58": {
+	"59": {
 		"Name" : "BuddingAmethyst",
 		"Type": "WorkBench",
 		"Shape": "ARA-RAR-ARA",
@@ -1198,7 +1219,7 @@
 		}
 	},
 
-	"59": {
+	"60": {
 		"Name" : "MossBlock",
 		"Type": "WorkBench",
 		"Shape": "SSS-SSS-SSS",
@@ -1216,7 +1237,7 @@
 		}
 	},
 
-	"60": {
+	"61": {
 		"Name" : "SmallDripleaf",
 		"Type": "WorkBench",
 		"Shape": "RNR-RVN-NVR",
@@ -1237,7 +1258,7 @@
 		}
 	},
 
-	"61": {
+	"62": {
 		"Name" : "PointedDripstone",
 		"Type": "WorkBench",
 		"Version": "1.17",
@@ -1254,7 +1275,7 @@
 		}
 	},
 
-	"62": {
+	"63": {
 		"Name" : "PowderSnowBucket",
 		"Type": "WorkBench",
 		"Shape": "RSR-SBS-RSR",

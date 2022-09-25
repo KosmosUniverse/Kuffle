@@ -15,6 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.Team;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
@@ -103,7 +104,7 @@ public class ItemsPlayerInteract extends PlayerInteract {
 			tmp.add(10, 0, 10);
 		}
 		
-		teleport(tmp, player, "Teleported to the End.");
+		teleport(tmp, player, LangManager.getMsgLang("TP_END", GameManager.getPlayerLang(player.getName())));
 		
 		if (xpActivables.get("EndTeleporter") > 1) {
 			xpActivables.put("EndTeleporter", xpActivables.get("EndTeleporter") - 1);
@@ -118,7 +119,7 @@ public class ItemsPlayerInteract extends PlayerInteract {
 	private void overworldTeleporter(Player player) {
 		Location tmp = new Location(Bukkit.getWorld(Utils.findNormalWorld().getName()), player.getLocation().getX() - 1000, 80.0, player.getLocation().getZ() - 1000);
 		
-		teleport(tmp, player, "Teleported to the Overworld.");
+		teleport(tmp, player, LangManager.getMsgLang("TP_OVERWORLD", GameManager.getPlayerLang(player.getName())));
 		
 		if (xpActivables.get("OverworldTeleporter") > 1) {
 			int tmpXp = xpActivables.get("OverworldTeleporter") - 2;

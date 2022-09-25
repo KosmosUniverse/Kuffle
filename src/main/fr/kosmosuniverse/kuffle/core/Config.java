@@ -51,7 +51,7 @@ public class Config {
 		configElems.put("PASSIVE_TEAM", (String b) -> setPassiveTeam(Boolean.valueOf(b)));
 		configElems.put("SPREAD_MIN_DISTANCE", (String i) -> setSpreadDistance(Integer.parseInt(i)));
 		configElems.put("SPREAD_MIN_RADIUS", (String i) -> setSpreadRadius(Integer.parseInt(i)));
-		configElems.put("TARGET_PER_AGE", (String i) -> setItemAge(Integer.parseInt(i)));
+		configElems.put("TARGET_PER_AGE", (String i) -> setTargetAge(Integer.parseInt(i)));
 		configElems.put("START_DURATION", (String i) -> setStartTime(Integer.parseInt(i)));
 		configElems.put("ADDED_DURATION", (String i) -> setAddedTime(Integer.parseInt(i)));
 		configElems.put("TEAMSIZE", (String i) -> setTeamSize(Integer.parseInt(i)));
@@ -922,7 +922,7 @@ public class Config {
 	 * 
 	 * @param configTargetPerAge	value used to set target per age
 	 */
-	private static void setItemAge(int configTargetPerAge) {
+	private static void setTargetAge(int configTargetPerAge) {
 		if (configTargetPerAge < 1) {
 			error = "Cannot have less than one target per Age !";
 			setRet = false;
@@ -1029,7 +1029,10 @@ public class Config {
 	 * @param configLastAge	value used to set last age
 	 */
 	private static void setLastAge(String configLastAge) {
-		if (!AgeManager.ageExists(configLastAge)) {
+		if (KuffleMain.gameStarted) {
+			error = "Game already started, you cannot modify last Age";
+			setRet = false;
+		} else if (!AgeManager.ageExists(configLastAge)) {
 			error = "Unknown Age !";
 			setRet = false;
 		} else {
@@ -1044,7 +1047,10 @@ public class Config {
 	 * @param configSkipAge	value used to set skip age
 	 */
 	private static void setFirstSkip(String configSkipAge) {
-		if (!AgeManager.ageExists(configSkipAge)) {
+		if (KuffleMain.gameStarted) {
+			error = "Game already started, you cannot modify skip Age";
+			setRet = false;
+		} else if (!AgeManager.ageExists(configSkipAge)) {
 			error = "Unknown Age !";
 			setRet = false;
 		} else if (AgeManager.getAgeByName(configSkipAge).number > configValues.lastAge) {
