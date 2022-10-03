@@ -1,12 +1,38 @@
 package main.fr.kosmosuniverse.kuffle.type;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
-import main.fr.kosmosuniverse.kuffle.commands.*;
-import main.fr.kosmosuniverse.kuffle.tabcompleters.*;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleAbandon;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleAddDuringGame;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleAgeTargets;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleConfig;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleCrafts;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleLang;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleList;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleLoad;
+import main.fr.kosmosuniverse.kuffle.commands.KufflePause;
+import main.fr.kosmosuniverse.kuffle.commands.KufflePlayers;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleResume;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleSave;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleSetType;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleSkip;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleStart;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleStop;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleTeamAffectPlayer;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleTeamColor;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleTeamCreate;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleTeamDelete;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleTeamRandomPlayer;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleTeamRemovePlayer;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleTeamResetPlayers;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleTeamShow;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleValidate;
 import main.fr.kosmosuniverse.kuffle.core.AgeManager;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
@@ -21,8 +47,22 @@ import main.fr.kosmosuniverse.kuffle.core.VersionManager;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
 import main.fr.kosmosuniverse.kuffle.listeners.InventoryListeners;
 import main.fr.kosmosuniverse.kuffle.listeners.ItemEvent;
-import main.fr.kosmosuniverse.kuffle.listeners.ItemsPlayerInteract;
 import main.fr.kosmosuniverse.kuffle.listeners.PlayerEvents;
+import main.fr.kosmosuniverse.kuffle.listeners.PlayerInteract;
+import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleAddDuringGameTab;
+import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleAgeTargetsTab;
+import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleConfigTab;
+import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleCurrentGamePlayerTab;
+import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleLangTab;
+import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleListTab;
+import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleSetTypeTab;
+import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleTeamAffectPlayerTab;
+import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleTeamColorTab;
+import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleTeamCreateTab;
+import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleTeamDeleteTab;
+import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleTeamRemovePlayerTab;
+import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleTeamResetPlayersTab;
+import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleTeamShowTab;
 import main.fr.kosmosuniverse.kuffle.utils.FilesConformity;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
@@ -32,7 +72,9 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  *
  */
 public abstract class KuffleType {
-	protected static ItemsPlayerInteract playerInteract;
+	protected static Map<String, Integer> xpActivables = null;
+	protected static PlayerInteract playerInteractItems = null;
+	protected static PlayerInteract playerInteractBlocks = null;
 	protected static KuffleSetType kuffleSetType;
 	protected static KuffleAgeTargetsTab kuffleAgeTargetsTab = null;
 	protected static KuffleSetTypeTab kuffleSetTypeTab = null;
@@ -106,6 +148,8 @@ public abstract class KuffleType {
 		}
 		
 		Config.setupConfig(plugin.getConfig());
+		
+		xpActivables = new HashMap<>();
 		
 		kuffleSetType = new KuffleSetType();
 		kuffleSetTypeTab = new KuffleSetTypeTab();
@@ -239,13 +283,45 @@ public abstract class KuffleType {
 	 */
 	public abstract KuffleType clearType();
 	
+	public Integer getXpActivable(String activable) {
+		if (xpActivables != null && xpActivables.containsKey(activable)) {
+			return xpActivables.get(activable);
+		}
+		
+		return 0;
+	}
+	
+	public void setXpActivable(String activable, int xp) {
+		if (xpActivables != null) {
+			xpActivables.put(activable, xp);
+		}
+	}
+	
 	/**
-	 * Gets the ItemsPlayerInteract class
+	 * Loads xpActivables map from JSON Object
 	 * 
-	 * @return the playerInteract object
+	 * @param xpMax	The JSON object representing xpActivales to load from previous save
 	 */
-	public ItemsPlayerInteract getPlayerInteract() {
-		return playerInteract;
+	public void loadXpMax(JSONObject xpMax) {
+		xpActivables.clear();
+		
+		for (Object key : xpMax.keySet()) {
+			xpActivables.put((String) key, Integer.parseInt((String) xpMax.get(key)));
+		}
+	}
+	
+	/**
+	 * Saves xpActivales map to load it later
+	 * 
+	 * @return the JSONObject containing the xpActivables map
+	 */
+	@SuppressWarnings("unchecked")
+	public JSONObject saveXpMax() {
+		JSONObject xpMaxObj = new JSONObject();
+		
+		xpActivables.forEach((k, v) -> xpMaxObj.put(k, v));
+
+		return xpMaxObj;
 	}
 	
 	/**

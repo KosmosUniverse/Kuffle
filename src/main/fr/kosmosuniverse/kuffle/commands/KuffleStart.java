@@ -81,7 +81,10 @@ public class KuffleStart implements CommandExecutor {
 			game.player.sendMessage(LangManager.getMsgLang("GAME_STARTED", game.configLang));
 		});
 
-
+		KuffleMain.type.setXpActivable("EndTeleporter", Config.getXpEnd());
+		KuffleMain.type.setXpActivable("OverworldTeleporter", Config.getXpOverworld());
+		KuffleMain.type.setXpActivable("CoralCompass", Config.getXpCoral());
+		
 		LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("GAME_STARTED", Config.getLang()));
 
 		int spread = spreadAndSpawn(player);

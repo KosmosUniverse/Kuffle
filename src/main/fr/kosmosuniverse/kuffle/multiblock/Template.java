@@ -40,13 +40,19 @@ public class Template extends AMultiblock {
 	
 	@Override
 	public void onActivate(Player player, ActivationType type) {
-		if (type == ActivationType.ACTIVATE) {
-			String age = GameManager.getPlayerAge(name).name;
-		
-			GameManager.sendMsgToPlayers(ChatColor.GOLD + "" + ChatColor.BOLD + player.getName() + ChatColor.RESET + "" + ChatColor.BLUE + " just used Template !");
-			GameManager.playerFoundSBTT(player.getName());
-			MultiblockManager.reloadTemplate(age);
+		if (type != ActivationType.ACTIVATE) {
+			return;
 		}
+
+		String age = GameManager.getPlayerAge(player.getName()).name;
+	
+		if (!name.contains(age)) {
+			return ;
+		}
+		
+		GameManager.sendMsgToPlayers(ChatColor.GOLD + "" + ChatColor.BOLD + player.getName() + ChatColor.RESET + "" + ChatColor.BLUE + " just used Template !");
+		GameManager.playerFoundSBTT(player.getName());
+		MultiblockManager.reloadTemplate(age);
 	}
 
 	@Override

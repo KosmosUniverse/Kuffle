@@ -6,7 +6,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleEventNotUsableException;
+import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 
 /**
  * 
@@ -35,6 +37,10 @@ public class BlocksPlayerInteract extends PlayerInteract implements Listener {
 	 */
 	@EventHandler
 	public void onLeftClick(PlayerInteractEvent event) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
+		if (KuffleMain.type.getType() != KuffleType.Type.BLOCKS) {
+			return ;
+		}
+		
 		try {
 			if (onLeftClickGeneric(event)) {
 				return ;

@@ -5,6 +5,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleMultiBlocks;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleSpawnMuliblock;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
+import main.fr.kosmosuniverse.kuffle.listeners.BlocksPlayerInteract;
+import main.fr.kosmosuniverse.kuffle.listeners.PlayerMove;
 import main.fr.kosmosuniverse.kuffle.multiblock.MultiblockManager;
 import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleSpawnMultiBlocksTab;
 
@@ -43,6 +45,13 @@ public class KuffleBlocks extends KuffleTypeDecorator {
 	 */
 	public void setupKuffleType(JavaPlugin plugin) throws KuffleFileLoadException {
 		setupType(plugin);
+		
+		if (playerInteractBlocks == null) {
+			playerInteractBlocks = new BlocksPlayerInteract();
+			plugin.getServer().getPluginManager().registerEvents(playerInteractBlocks, plugin);
+		}
+		
+		plugin.getServer().getPluginManager().registerEvents(new PlayerMove(), plugin);
 		
 		MultiblockManager.setup();
 		

@@ -3,11 +3,13 @@ package main.fr.kosmosuniverse.kuffle.core;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
+import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 import main.fr.kosmosuniverse.kuffle.utils.Pair;
 
 public class GameLoop {
@@ -122,6 +124,32 @@ public class GameLoop {
 			game.currentTarget = array[random.nextInt(2)];
 			String tmp = game.currentTarget.equals(array[0]) ? array[1] : array[0];
 			GameManager.removeFromList(game, tmp);
+		}
+		
+		if (KuffleMain.type.getType() == KuffleType.Type.BLOCKS) {
+			checkBlock(game);
+		}
+	}
+	
+	private void checkBlock(Game game) {
+		Location pPosition = game.player.getLocation().clone().add(0, -1, 0);
+		double pY = pPosition.getY();
+		
+		for (double y = pY; y < (pY + 3); y++) {
+			pPosition.setY(y);
+			
+			if (Config.getDouble()) {
+				String[] targets = game.currentTarget.split("/");
+				
+				if (targets[0].equals(pPosition.getBlock().getType().name().toLowerCase()) ||
+						targets[1].equals(pPosition.getBlock().getType().name().toLowerCase())) {
+					GameManager.playerFoundTarget(game);
+					break;
+				}
+			} else if (game.currentTarget.equals(pPosition.getBlock().getType().name().toLowerCase())) {
+				GameManager.playerFoundTarget(game);
+				break;
+			}
 		}
 	}
 

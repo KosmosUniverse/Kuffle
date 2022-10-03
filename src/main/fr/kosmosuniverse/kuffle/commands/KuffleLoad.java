@@ -81,7 +81,7 @@ public class KuffleLoad implements CommandExecutor {
 				mainObject = (JSONObject) parser.parse(reader);
 				Config.loadConfig((JSONObject) mainObject.get("config"));
 				GameManager.loadRanks((JSONObject) mainObject.get("ranks"));
-				KuffleMain.type.getPlayerInteract().loadXpMax((JSONObject) mainObject.get("xpMax"));
+				KuffleMain.type.loadXpMax((JSONObject) mainObject.get("xpMax"));
 				mainObject.clear();
 			} catch (IOException | ParseException e) {
 				Utils.logException(e);

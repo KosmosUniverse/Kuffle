@@ -75,7 +75,7 @@ public class KuffleSave implements CommandExecutor {
 
 			global.put("config", Config.saveConfig());
 			global.put("ranks", GameManager.saveRanks());
-			global.put("xpMax", KuffleMain.type.getPlayerInteract().saveXpMax());
+			global.put("xpMax", KuffleMain.type.saveXpMax());
 			
 			writer.write(global.toJSONString());
 			

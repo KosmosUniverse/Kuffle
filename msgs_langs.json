@@ -387,7 +387,7 @@
 		"en" : "[Kuffle] <%s> game is reloaded.",
 		"fr" : "[Kuffle] La partie de <%s> est chargée."
 	},
-	"GAME_SAVED" : {
+	"PLAYER_GAME_SAVED" : {
 		"en" : "[Kuffle] <%s> game is saved.",
 		"fr" : "[Kuffle] La partie de <%s> est sauvegardée."
 	},

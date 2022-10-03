@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
@@ -21,6 +22,7 @@ import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.Team;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleEventNotUsableException;
+import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
@@ -37,7 +39,7 @@ public class ItemsPlayerInteract extends PlayerInteract {
 	public ItemsPlayerInteract() {
 		super();
 	}
-	
+		
 	/**
 	 * Manages the behavior of player left click specific for Items Kuffle type
 	 * 
@@ -51,6 +53,10 @@ public class ItemsPlayerInteract extends PlayerInteract {
 	 */
 	@EventHandler
 	public void onLeftClick(PlayerInteractEvent event) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
+		if (KuffleMain.type.getType() != KuffleType.Type.ITEMS) {
+			return ;
+		}
+		
 		try {
 			if (onLeftClickGeneric(event)) {
 				return ;
@@ -112,9 +118,10 @@ public class ItemsPlayerInteract extends PlayerInteract {
 		
 		teleport(tmp, player, LangManager.getMsgLang("TP_END", GameManager.getPlayerLang(player.getName())));
 		
-		if (xpActivables.get("EndTeleporter") > 1) {
-			xpActivables.put("EndTeleporter", xpActivables.get("EndTeleporter") - 1);
-		}
+		int xpAmount = KuffleMain.type.getXpActivable("EndTeleporter");
+		xpAmount = (xpAmount - 1) < 1 ? 1 : (xpAmount - 1);
+		KuffleMain.type.setXpActivable("EndTeleporter", xpAmount);
+		
 	}
 
 	/**
@@ -127,10 +134,9 @@ public class ItemsPlayerInteract extends PlayerInteract {
 		
 		teleport(tmp, player, LangManager.getMsgLang("TP_OVERWORLD", GameManager.getPlayerLang(player.getName())));
 		
-		if (xpActivables.get("OverworldTeleporter") > 1) {
-			int tmpXp = xpActivables.get("OverworldTeleporter") - 2;
-			xpActivables.put("OverworldTeleporter", tmpXp < 1 ? 1 : tmpXp);
-		}
+		int xpAmount = KuffleMain.type.getXpActivable("OverworldTeleporter");
+		xpAmount = (xpAmount - 2) < 2 ? 2 : (xpAmount - 2);
+		KuffleMain.type.setXpActivable("OverWorldTeleporter", xpAmount);
 	}
 	
 	/**

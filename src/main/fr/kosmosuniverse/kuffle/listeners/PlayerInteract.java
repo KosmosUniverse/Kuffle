@@ -24,7 +24,6 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.json.simple.JSONObject;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Config;
@@ -43,46 +42,7 @@ import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
  *
  */
 public class PlayerInteract implements Listener  {
-	protected Map<String, Integer> xpActivables;
 	protected Map<Location, String> shulkers = new HashMap<>();
-
-	/**
-	 * Constructor
-	 */
-	protected PlayerInteract() {
-		xpActivables = new HashMap<>();
-		
-		xpActivables.put("EndTeleporter", Config.getXpEnd());
-		xpActivables.put("OverworldTeleporter", Config.getXpOverworld());
-		xpActivables.put("CoralCompass", Config.getXpCoral());
-	}
-	
-	/**
-	 * Loads xpActivables map from JSON Object
-	 * 
-	 * @param xpMax	The JSON object representing xpActivales to load from previous save
-	 */
-	public void loadXpMax(JSONObject xpMax) {
-		xpActivables.clear();
-		
-		for (Object key : xpMax.keySet()) {
-			xpActivables.put((String) key, Integer.parseInt((String) xpMax.get(key)));
-		}
-	}
-	
-	/**
-	 * Saves xpActivales map to load it later
-	 * 
-	 * @return the JSONObject containing the xpActivables map
-	 */
-	@SuppressWarnings("unchecked")
-	public JSONObject saveXpMax() {
-		JSONObject xpMaxObj = new JSONObject();
-		
-		xpActivables.forEach((k, v) -> xpMaxObj.put(k, v));
-
-		return xpMaxObj;
-	}
 	
 	/**
 	 * Delete the player's item from its hand
@@ -290,11 +250,15 @@ public class PlayerInteract implements Listener  {
 		Player player = (Player) event.getWhoClicked();
 
 		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("CoralCompass"))) {
-			if (player.getLevel() < xpActivables.get("CoralCompass")) {
+			int xpAmount = KuffleMain.type.getXpActivable("CoralCompass");
+			
+			if (player.getLevel() < xpAmount) {
 				event.setCancelled(true);
-				player.sendMessage("You need " + xpActivables.get("CoralCompass") + " xp levels to craft this item.");
+				player.sendMessage("You need " + xpAmount + " xp levels to craft this item.");
 			} else {
-				player.setLevel(player.getLevel() - xpActivables.get("CoralCompass"));
+				player.setLevel(player.getLevel() - xpAmount);
+				xpAmount = (xpAmount - 5) < 5 ? 5 : (xpAmount - 5);
+				
 				LogManager.getInstanceGame().logMsg(player.getName(), "Crafted CoralCompass.");
 			}
 		}
@@ -393,17 +357,6 @@ public class PlayerInteract implements Listener  {
 		
 		if (findCoralBiome(tmp, compass)) {
 			LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("WARM_FOUND", GameManager.getPlayerLang(player.getName())));
-			
-			if (xpActivables.get("CoralCompass") > 1) {
-				int tmpXp = xpActivables.get("CoralCompass");
-				
-				if (tmpXp % 2 == 1) {
-					tmpXp++;
-				}
-				
-				tmpXp = tmpXp / 2;
-				xpActivables.put("CoralCompass", tmpXp < 1 ? 1 : tmpXp);
-			}
 		} else {
 			LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("WARM_NOT_FOUND", GameManager.getPlayerLang(player.getName())));
 		}

@@ -57,7 +57,7 @@ public class KuffleAgeTargets implements CommandExecutor  {
 				
 				age = GameManager.getPlayerAge(player.getName()).name;
 			} else {
-				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", GameManager.getPlayerLang(player.getName())));			
+				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", Config.getLang()));			
 				return true;
 			}
 		} else {

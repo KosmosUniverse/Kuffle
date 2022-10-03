@@ -98,7 +98,7 @@ public class PlayerEvents implements Listener {
 		GameManager.stopPlayer(player.getName());
 		GameManager.removePlayer(player.getName());
 		GameManager.updatePlayersHeads();
-		GameManager.sendMsgToPlayers(LangManager.getMsgLang("GAME_SAVED", Config.getLang()).replace("%s", player.getName()));
+		GameManager.sendMsgToPlayers(LangManager.getMsgLang("PLAYER_GAME_SAVED", Config.getLang()).replace("%s", player.getName()));
 		
 		if (GameManager.getGames().size() == 0) {
 			if (Config.getTeam()) {
@@ -114,7 +114,7 @@ public class PlayerEvents implements Listener {
 
 				global.put("config", Config.saveConfig());
 				global.put("ranks", GameManager.saveRanks());
-				global.put("xpMax", KuffleMain.type.getPlayerInteract().saveXpMax());
+				global.put("xpMax", KuffleMain.type.saveXpMax());
 				
 				writer.write(global.toJSONString());
 				

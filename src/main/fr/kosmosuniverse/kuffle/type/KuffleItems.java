@@ -42,8 +42,10 @@ public class KuffleItems extends KuffleTypeDecorator {
 	public void setupKuffleType(JavaPlugin plugin) throws KuffleFileLoadException {
 		setupType(plugin);
 		
-		playerInteract = new ItemsPlayerInteract();
-		plugin.getServer().getPluginManager().registerEvents(playerInteract, plugin);
+		if (playerInteractItems == null) {
+			playerInteractItems = new ItemsPlayerInteract();
+			plugin.getServer().getPluginManager().registerEvents(playerInteractItems, plugin);
+		}
 	}
 	
 	/**
