@@ -23,7 +23,7 @@ public class Template extends ACraft {
 		
 		recipe = new ShapelessRecipe(new NamespacedKey(KuffleMain.current, name), item);
 		
-		setupInventoryBase();
+		setupInventoryBase(Type.WORKBENCH);
 		
 		List<ItemStack> ings = new ArrayList<>();
 		

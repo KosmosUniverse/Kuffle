@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -60,6 +61,11 @@ public class ItemsPlayerInteract extends PlayerInteract {
 		
 		Player player = event.getPlayer();
 		ItemStack item = event.getItem();
+		EquipmentSlot hand = event.getHand();
+		
+		if (hand != EquipmentSlot.HAND) {
+			return ;
+		}
 		
 		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("EndTeleporter"))) {
 			consumeItem(player, event.getHand());
@@ -86,7 +92,7 @@ public class ItemsPlayerInteract extends PlayerInteract {
 			
 			return ;
 		}
-				
+		
 		if (GameManager.checkPlayerTarget(player.getName(), item)) {
 			GameManager.playerFoundTarget(player.getName());
 		}

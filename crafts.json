@@ -1294,5 +1294,38 @@
 				"Type": "BUCKET"
 			}
 		}
+	},
+	"64": {
+		"Name" : "Cobweb",
+		"Type": "WorkBench",
+		"Shape": "SSS-SSS-SSS",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "COBWEB",
+			"Amount": 1
+		},
+		"Ingredients": {
+			"S": {
+				"Type": "STRING"
+			}
+		}
+	},
+	"65": {
+		"Name" : "String",
+		"Type": "WorkBench",
+		"Version": "1.15",
+		"Mandatory": false,
+		"KuffleType": "BOTH",
+		"Result": {
+			"Type": "STRING",
+			"Amount": 9
+		},
+		"Ingredients": {
+			"S": {
+				"Type": "COBWEB"
+			}
+		}
 	}
 }

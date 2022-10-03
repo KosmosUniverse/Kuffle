@@ -87,7 +87,7 @@ public abstract class ACraft {
 	 * @param ingredients	Recipe components
 	 */
 	protected void setupRecipe(Type recipeType, String shape, Map<String, Map<String, String>> ingredients) {
-		setupInventoryBase();
+		setupInventoryBase(recipeType);
 		List<ItemStack> ings = new ArrayList<>();
 		
 		if (recipeType == Type.STONECUTTER) {
@@ -162,9 +162,11 @@ public abstract class ACraft {
 	
 	/**
 	 * Creates this craft recipe inventory base
+	 * 
+	 * @param recipeType	The recipe type to put in inventory title
 	 */
-	protected final void setupInventoryBase() {
-		inv = Bukkit.createInventory(null, 27, ChatColor.BLACK + name);
+	protected final void setupInventoryBase(Type recipeType) {
+		inv = Bukkit.createInventory(null, 27, ChatColor.BLACK + name + " - " + recipeType.toString());
 		
 		for (int i = 0; i < 27; i++) {
 			if (i == 0) {

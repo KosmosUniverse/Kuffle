@@ -755,10 +755,10 @@ public class GameManager {
 	 */
 	public static boolean skipPlayerTarget(String player, boolean malus) {
 		Game game = games.get(player);
-		
-		game.skipCount++;
 
 		if (malus) {
+			game.skipCount++;
+			
 			if ((game.age + 1) < Config.getSkipAge().number) {
 				LogManager.getInstanceGame().writeMsg(game.player, LangManager.getMsgLang("CANT_SKIP_AGE", game.configLang));
 
@@ -839,8 +839,6 @@ public class GameManager {
 	 */
 	public static void restorePlayerInv(String player) {
 		Game game = games.get(player);
-		
-		game.player.getInventory().clear();
 		
 		for (ItemStack item : game.deathInv.getContents()) {
 			if (item != null) {
@@ -943,10 +941,13 @@ public class GameManager {
 	public static void playerDied(String player, Location deathLoc) {
 		Game game = games.get(player);
 		
+		game.deathCount++;
+		
 		if (Config.getLevel().losable) {
 			game.lose = true;
 		} else {
 			savePlayerInv(player);
+			game.player.getInventory().clear();
 		}
 		
 		game.deathLoc = deathLoc;
@@ -1567,6 +1568,10 @@ public class GameManager {
 	public static boolean checkPlayerTarget(String player, ItemStack target) {
 		Game game = games.get(player);
 		boolean ret = false;
+		
+		if (game.currentTarget == null) {
+			return ret;
+		}
 		
 		if (Config.getDouble()) {
 			String[] targets = game.currentTarget.split("/");

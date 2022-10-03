@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,6 +20,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -154,6 +156,27 @@ public class PlayerInteract implements Listener  {
 		}
 		
 		return ret;
+	}
+	
+	/**
+	 * Manages the behavior when player drink milk to reload its game effects
+	 * 
+	 * @param event	The PlayerItemConsumeEvent
+	 */
+	@EventHandler
+	public void onDrinkMilk(PlayerItemConsumeEvent event) {
+		if (!KuffleMain.gameStarted) {
+			return ;
+		}
+		
+		Player player = event.getPlayer();
+		
+		if (GameManager.hasPlayer(player.getName()) &&
+				event.getItem().getType() == Material.MILK_BUCKET) {
+			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
+				GameManager.reloadPlayerEffects(player.getName());
+			}, 20);
+		}
 	}
 	
 	/**
