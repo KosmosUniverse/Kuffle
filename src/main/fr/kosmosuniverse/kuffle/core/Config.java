@@ -446,7 +446,7 @@ public class Config {
 		configValues.teamSize = Integer.parseInt(configObj.get("teamSize").toString());
 		configValues.spreadDistance = Integer.parseInt(configObj.get("spreadMin").toString());
 		configValues.spreadRadius = Integer.parseInt(configObj.get("spreadMax").toString());
-		configValues.targetPerAge = Integer.parseInt(configObj.get("itemPerAge").toString());
+		configValues.targetPerAge = Integer.parseInt(configObj.get("targetPerAge").toString());
 		configValues.startTime = Integer.parseInt(configObj.get("startTime").toString());
 		configValues.addedTime = Integer.parseInt(configObj.get("addedTime").toString());
 		configValues.xpEnd = Integer.parseInt(configObj.get("xpEnd").toString());

@@ -418,5 +418,13 @@
 	"ACTIVATED" : {
 		"en" : "You have just activated %s.",
 		"fr" : "Vous venez d'activer %s."
+	},
+	"LOAD_FAIL" : {
+		"en" : "Load failed due to : %s",
+		"fr" : "Chargement en échec a cause de : %s"
+	},
+	"WRONG_TYPE" : {
+		"en" : "You try to load a game with a different type of the current one.",
+		"fr" : "Vous essayez de charger une partie d'un type de Kuffle différent a celui chargé actuellement."
 	}
 }

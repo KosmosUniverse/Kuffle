@@ -20,11 +20,13 @@ import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.ActionBar;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
+import main.fr.kosmosuniverse.kuffle.core.GameLoop;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
 import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
@@ -35,7 +37,7 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  */
 public class KuffleLoad implements CommandExecutor {
 	private File dataFolder;
-	private static final String GAME_FILE = "Game.k";
+	private static final String GAME_FILE = "Games.k";
 	
 	/**
 	 * Constructor
@@ -60,15 +62,10 @@ public class KuffleLoad implements CommandExecutor {
 			return false;
 		}
 		
-		if (KuffleMain.type.getType() == KuffleType.Type.NO_TYPE) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("KUFFLE_TYPE_NOT_CONFIG", Config.getLang()));
-			return true;
-		}
-		
 		if (KuffleMain.gameStarted) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
 			return true;
-		} else if (GameManager.getGames().size() != 0) {
+		} else if (GameManager.getGames() != null && GameManager.getGames().size() != 0) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("LIST_NOT_EMPTY", Config.getLang()) + ".");
 			return true;
 		}
@@ -79,12 +76,26 @@ public class KuffleLoad implements CommandExecutor {
 		if (Utils.fileExists(dataFolder.getPath(), GAME_FILE)) {
 			try (FileReader reader = new FileReader(dataFolder.getPath() + File.separator + GAME_FILE)) {
 				mainObject = (JSONObject) parser.parse(reader);
+				
+				KuffleType.Type type = KuffleType.Type.valueOf(mainObject.get("type").toString().toUpperCase());
+
+				if (KuffleMain.type.getType() != type &&
+						KuffleMain.type.getType() != KuffleType.Type.NO_TYPE) {
+					LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("WRONG_TYPE", Config.getLang()));
+					reader.close();
+					return true;
+				} else if (KuffleMain.type.getType() == KuffleType.Type.NO_TYPE) {
+					KuffleSetType.changeKuffleType(player, type);	
+				}
+				
 				Config.loadConfig((JSONObject) mainObject.get("config"));
 				GameManager.loadRanks((JSONObject) mainObject.get("ranks"));
 				KuffleMain.type.loadXpMax((JSONObject) mainObject.get("xpMax"));
 				mainObject.clear();
-			} catch (IOException | ParseException e) {
+			} catch (IOException | ParseException | KuffleFileLoadException e) {
 				Utils.logException(e);
+				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("LOAD_FAIL", Config.getLang()).replace("%s", e.getMessage()));
+				return true;
 			}
 		}
 		
@@ -92,6 +103,7 @@ public class KuffleLoad implements CommandExecutor {
 			GameManager.loadPlayers(dataFolder.getPath());
 		} catch (IOException | ParseException e) {
 			Utils.logException(e);
+			return true;
 		}
 		
 		GameManager.updatePlayersHeads();
@@ -149,6 +161,11 @@ public class KuffleLoad implements CommandExecutor {
 			);
 			
 			GameManager.updatePlayersHeads();
+			
+			if (KuffleMain.loop == null) {
+				KuffleMain.loop = new GameLoop();
+			}
+			
 			KuffleMain.loop.startRunnable();
 			KuffleMain.gameStarted = true;
 			KuffleMain.paused = false;

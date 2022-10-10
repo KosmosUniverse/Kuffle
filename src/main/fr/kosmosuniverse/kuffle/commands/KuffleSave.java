@@ -73,6 +73,7 @@ public class KuffleSave implements CommandExecutor {
 		try (FileWriter writer = new FileWriter(dataFolder.getPath() + File.separator + "Games.k");) {				
 			JSONObject global = new JSONObject();
 
+			global.put("type", KuffleMain.type.getType().toString());
 			global.put("config", Config.saveConfig());
 			global.put("ranks", GameManager.saveRanks());
 			global.put("xpMax", KuffleMain.type.saveXpMax());

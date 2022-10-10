@@ -306,7 +306,7 @@ public abstract class KuffleType {
 		xpActivables.clear();
 		
 		for (Object key : xpMax.keySet()) {
-			xpActivables.put((String) key, Integer.parseInt((String) xpMax.get(key)));
+			xpActivables.put((String) key, Integer.parseInt(xpMax.get(key).toString()));
 		}
 	}
 	

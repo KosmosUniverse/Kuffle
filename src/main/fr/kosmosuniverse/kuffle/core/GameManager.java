@@ -259,7 +259,7 @@ public class GameManager {
 	 */
 	public static void savePlayers(String path) {
 		games.forEach((playerName, playerGame) -> {
-			try (FileWriter writer = new FileWriter(path + File.separator + playerName + ".ki");) {				
+			try (FileWriter writer = new FileWriter(path + File.separator + playerName + ".k");) {				
 				writer.write(savePlayer(playerGame));
 			} catch (IOException e) {
 				LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
@@ -390,7 +390,7 @@ public class GameManager {
 		List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
 		
 		for (Player p : players) {
-			if (Utils.fileExists(path, p.getName() + ".ki")) {
+			if (Utils.fileExists(path, p.getName() + ".k")) {
 				loadPlayerGame(p);
 			}
 		}
@@ -413,7 +413,7 @@ public class GameManager {
 
 		setupPlayer(tmpGame);
 		
-		try (FileReader reader = new FileReader(KuffleMain.current.getDataFolder().getPath() + File.separator + player.getName() + ".ki")) {
+		try (FileReader reader = new FileReader(KuffleMain.current.getDataFolder().getPath() + File.separator + player.getName() + ".k")) {
 			JSONObject mainObject = (JSONObject) parser.parse(reader);
 
 			tmpGame.dead = (boolean) mainObject.get("isDead");
@@ -1223,7 +1223,7 @@ public class GameManager {
 	 */
 	public static void updatePlayersHeads() {
 		int slots = Utils.getNbInventoryRows(games.size());
-		Inventory newInv = Bukkit.createInventory(null, slots == 0 ? 1 : slots, ChatColor.BLACK + "Players");
+		Inventory newInv = Bukkit.createInventory(null, slots == 0 ? 9 : slots, ChatColor.BLACK + "Players");
 		
 		for (String playerName : games.keySet()) {
 			newInv.addItem(Utils.getHead(games.get(playerName).player, games.get(playerName).targetDisplay));
@@ -1658,7 +1658,7 @@ public class GameManager {
 	public static int getWorstRank() {
 		int cntRank = playersRanks.size();
 
-		while (cntRank >= 1 && playersRanks.containsValue(cntRank)) {
+		while (cntRank > 1 && playersRanks.containsValue(cntRank)) {
 			cntRank--;
 		}
 

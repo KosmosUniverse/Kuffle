@@ -52,7 +52,7 @@ public class PlayerEvents implements Listener {
 			return;
 		}
 		
-		if (!Utils.fileExists(KuffleMain.current.getDataFolder().getPath(), player.getName() + ".ki")) {
+		if (!Utils.fileExists(KuffleMain.current.getDataFolder().getPath(), player.getName() + ".k")) {
 			return;
 		}
 
@@ -88,7 +88,7 @@ public class PlayerEvents implements Listener {
 			player.undiscoverRecipe(new NamespacedKey(KuffleMain.current, item.getName()));
 		}
 		
-		try (FileWriter writer = new FileWriter(KuffleMain.current.getDataFolder().getPath() + File.separator + player.getName() + ".ki")) {			
+		try (FileWriter writer = new FileWriter(KuffleMain.current.getDataFolder().getPath() + File.separator + player.getName() + ".k")) {			
 			writer.write(GameManager.savePlayer(player.getName()));			
 			LogManager.getInstanceSystem().logMsg(KuffleMain.current.getName(), "<" + player.getName() + "> game is saved.");
 		} catch (IOException e) {
@@ -112,6 +112,7 @@ public class PlayerEvents implements Listener {
 			try (FileWriter writer = new FileWriter(KuffleMain.current.getDataFolder().getPath() + File.separator + "Games.k");) {				
 				JSONObject global = new JSONObject();
 
+				global.put("type", KuffleMain.type.getType().toString());
 				global.put("config", Config.saveConfig());
 				global.put("ranks", GameManager.saveRanks());
 				global.put("xpMax", KuffleMain.type.saveXpMax());

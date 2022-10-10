@@ -102,7 +102,7 @@ public class KuffleSetType implements CommandExecutor  {
 		return true;
 	}
 	
-	private void changeKuffleType(Player player, KuffleType.Type type) throws KuffleFileLoadException {
+	public static void changeKuffleType(Player player, KuffleType.Type type) throws KuffleFileLoadException {
 		KuffleMain.type = KuffleMain.type.clearType();
 		
 		switch (type) {
