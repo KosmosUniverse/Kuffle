@@ -178,12 +178,23 @@ public class GameManager {
 	/**
 	 * Checks if games map contains a specific player
 	 * 
-	 * @param playe	The player to check
+	 * @param player	The player to check
 	 * 
 	 * @return True if games has player key, False instead
 	 */
 	public static boolean hasPlayer(String player) {
 		return games.containsKey(player);
+	}
+	
+	/**
+	 * Checks if player has already finished
+	 * 
+	 * @param player	The player
+	 * 
+	 * @return True if player has finished, False instead
+	 */
+	public static boolean hasPlayerFinished(String player) {
+		return games.get(player).finished;
 	}
 	
 	/**

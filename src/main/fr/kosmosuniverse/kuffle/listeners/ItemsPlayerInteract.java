@@ -106,6 +106,14 @@ public class ItemsPlayerInteract extends PlayerInteract {
 		}
 	}
 	
+	/**
+	 * Checks if player has enough xp levels
+	 * 
+	 * @param player	The player to check
+	 * @param xpMin		The Xp minimum amount the player must have
+	 * 
+	 * @return True if the player has enough xp levels, False instead
+	 */
 	private boolean checkXp(Player player, int xpMin) {
 		boolean ret = false;
 		

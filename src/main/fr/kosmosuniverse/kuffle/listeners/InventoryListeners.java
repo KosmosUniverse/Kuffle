@@ -92,7 +92,8 @@ public class InventoryListeners implements Listener {
 	 * @param item		The clicked item to determine if he clicked on another player head or not
 	 */
 	private void playersInventory(Player player, ItemStack item) {
-		if (item.getType() == Material.PLAYER_HEAD && item.hasItemMeta() &&
+		if (GameManager.hasPlayerFinished(player.getName()) && 
+				item.getType() == Material.PLAYER_HEAD && item.hasItemMeta() &&
 				!item.getItemMeta().getDisplayName().equals(player.getName())) {
 			player.setGameMode(GameMode.SPECTATOR);
 			GameManager.teleportPlayerToPlayer(player, item.getItemMeta().getDisplayName());
