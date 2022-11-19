@@ -190,7 +190,7 @@ public class GameLoop {
 
 	private boolean checkTeamMates(Game tmpGame) {
 		boolean ret = true;
-		Team team = TeamManager.findTeamByPlayer(tmpGame.player.getName());
+		Team team = TeamManager.getInstance().findTeamByPlayer(tmpGame.player.getName());
 		
 		for (Player player : team.players) {
 			Game game = GameManager.getGames().get(player.getName());

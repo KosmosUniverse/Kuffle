@@ -51,11 +51,11 @@ public class KuffleTeamColor implements CommandExecutor {
 			return false;
 		}
 		
-		if (!TeamManager.hasTeam(args[0])) {
+		if (!TeamManager.getInstance().hasTeam(args[0])) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 			return true;
 		}
-		if (TeamManager.getTeam(args[0]).hasPlayer(args[1])) {
+		if (TeamManager.getInstance().getTeam(args[0]).hasPlayer(args[1])) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_PLAYER", Config.getLang()));
 			return true;
 		}
@@ -67,7 +67,7 @@ public class KuffleTeamColor implements CommandExecutor {
 			return true;
 		}
 		
-		List<String> colorUsed = TeamManager.getTeamColors();
+		List<String> colorUsed = TeamManager.getInstance().getTeamColors();
 		
 		if (colorUsed.contains(tmp.name())) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("COLOR_ALREADY_USED", Config.getLang()).replace("[#]", "[" + tmp.name() + "]"));
@@ -77,9 +77,9 @@ public class KuffleTeamColor implements CommandExecutor {
 		
 		colorUsed.clear();
 
-		String tmpColor = TeamManager.getTeam(args[0]).color.name();
+		String tmpColor = TeamManager.getInstance().getTeam(args[0]).color.name();
 		
-		TeamManager.changeTeamColor(args[0], tmp);	
+		TeamManager.getInstance().changeTeamColor(args[0], tmp);	
 		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("COLOR_CHANGED", Config.getLang()).replace("[#]", "[" + tmpColor + "]").replace("[##]", "[" + tmp.name() + "]").replace("<#>",	"<" + args[0] + ">"));
 		
 		return true;

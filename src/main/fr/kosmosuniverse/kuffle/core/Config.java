@@ -1,4 +1,4 @@
- package main.fr.kosmosuniverse.kuffle.core;
+package main.fr.kosmosuniverse.kuffle.core;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -881,7 +881,7 @@ public class Config {
  			setRet = false;
  		}
  		
-		if (setRet && configValues.team && TeamManager.getTeams().size() > 0 && TeamManager.getMaxTeamSize() > configTeamSize) {
+		if (setRet && configValues.team && TeamManager.getInstance().getTeams().size() > 0 && TeamManager.getInstance().getMaxTeamSize() > configTeamSize) {
 			error = "Cannot set team size less than a current team size !";
 			setRet = false;
 		}

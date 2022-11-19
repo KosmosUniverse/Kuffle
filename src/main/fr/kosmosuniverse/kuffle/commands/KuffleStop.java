@@ -49,7 +49,7 @@ public class KuffleStop implements CommandExecutor {
 		ScoreManager.clear();
 		
 		if (Config.getTeam()) {
-			TeamManager.clear();
+			TeamManager.getInstance().clear();
 		}
 		
 		GameManager.clear();

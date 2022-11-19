@@ -37,7 +37,7 @@ public class SpreadPlayer {
             return ;
         }
         
-        List<Team> teams = TeamManager.getTeams();
+        List<Team> teams = TeamManager.getInstance().getTeams();
         
         int spreadSize;
         

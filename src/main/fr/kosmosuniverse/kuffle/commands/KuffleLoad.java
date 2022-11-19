@@ -185,7 +185,7 @@ public class KuffleLoad implements CommandExecutor {
 		
 		try (FileReader reader = new FileReader(dataFolder.getPath() + File.separator + "Teams.k")) {
 			mainObject = (JSONObject) parser.parse(reader);
-			TeamManager.loadTeams(mainObject, GameManager.getGames());
+			TeamManager.getInstance().loadTeams(mainObject, GameManager.getGames());
 			mainObject.clear();
 		} catch (IOException | ParseException e) {
 			LogManager.getInstanceSystem().logSystemMsg(e.getMessage());

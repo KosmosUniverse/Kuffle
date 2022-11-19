@@ -74,18 +74,18 @@ public class KuffleTeamRandomPlayer implements CommandExecutor {
 		while (players.size() > 0) {
 			int idx = random.nextInt(players.size());
 			
-			TeamManager.affectPlayer(TeamManager.getTeams().get(cnt).name, players.get(idx));
+			TeamManager.getInstance().affectPlayer(TeamManager.getInstance().getTeams().get(cnt).name, players.get(idx));
 			
 			players.remove(idx);
 			
 			cnt++;
 			
-			if (cnt >= TeamManager.getTeams().size()) {
+			if (cnt >= TeamManager.getInstance().getTeams().size()) {
 				cnt = 0;
 			}
 		}
 		
-		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("RANDOM", Config.getLang()).replace("%i", "" + GameManager.getPlayerNames().size()).replace("%j", "" + TeamManager.getTeams().size()));
+		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("RANDOM", Config.getLang()).replace("%i", "" + GameManager.getPlayerNames().size()).replace("%j", "" + TeamManager.getInstance().getTeams().size()));
 
 		return true;
 	}
@@ -96,7 +96,7 @@ public class KuffleTeamRandomPlayer implements CommandExecutor {
 	 * @return the multiplication of Config team size and team number
 	 */
 	public int calcMaxPlayers() {
-		return (Config.getTeamSize() * TeamManager.getTeams().size());
+		return (Config.getTeamSize() * TeamManager.getInstance().getTeams().size());
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class KuffleTeamRandomPlayer implements CommandExecutor {
 	 * @return True if all team are empty, False instead
 	 */
 	public boolean checkEmptyTeams() {
-		for (Team item : TeamManager.getTeams()) {
+		for (Team item : TeamManager.getInstance().getTeams()) {
 			if (item.players.size() != 0) {
 				return false;
 			}

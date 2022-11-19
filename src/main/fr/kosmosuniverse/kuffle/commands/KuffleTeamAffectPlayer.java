@@ -47,12 +47,12 @@ public class KuffleTeamAffectPlayer implements CommandExecutor {
 			return false;
 		}
 		
-		if (!TeamManager.hasTeam(args[0])) {
+		if (!TeamManager.getInstance().hasTeam(args[0])) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 			return true;
 		}
 		
-		if (TeamManager.getTeam(args[0]).players.size() == Config.getTeamSize()) {
+		if (TeamManager.getInstance().getTeam(args[0]).players.size() == Config.getTeamSize()) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_FULL", Config.getLang()));
 			return true;
 		}
@@ -62,7 +62,7 @@ public class KuffleTeamAffectPlayer implements CommandExecutor {
 			return true;
 		}
 		
-		TeamManager.affectPlayer(args[0], GameManager.getPlayer(args[1]));
+		TeamManager.getInstance().affectPlayer(args[0], GameManager.getPlayer(args[1]));
 		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_ADD_PLAYER", Config.getLang()).replace("<#>", "<" + args[1] + ">").replace("<##>", "<" + args[0] + ">"));
 		
 		return true;

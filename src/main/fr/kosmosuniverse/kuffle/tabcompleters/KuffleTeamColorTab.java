@@ -27,14 +27,14 @@ public class KuffleTeamColorTab implements TabCompleter {
 		if (args.length == 1) {
 			List<String> ret = new ArrayList<>();
 			
-			for (Team item : TeamManager.getTeams()) {
+			for (Team item : TeamManager.getInstance().getTeams()) {
 				ret.add(item.name);
 			}
 			
 			return ret;
 		} else if (args.length == 2) {
 			List<String> colorList = new ArrayList<>();
-			List<String> colorUsed = TeamManager.getTeamColors();
+			List<String> colorUsed = TeamManager.getInstance().getTeamColors();
 			
 			for (ChatColor item : ChatColor.values()) {
 				if (!colorUsed.contains(item.name())) {

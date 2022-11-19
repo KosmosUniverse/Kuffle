@@ -42,10 +42,10 @@ public class KuffleTeamShow implements CommandExecutor {
 		}
 		
 		if (args.length == 0) {
-			LogManager.getInstanceSystem().writeMsg(player, TeamManager.printTeams());
+			LogManager.getInstanceSystem().writeMsg(player, TeamManager.getInstance().printTeams());
 		} else if (args.length == 1) {
-			if (TeamManager.hasTeam(args[0])) {
-				LogManager.getInstanceSystem().writeMsg(player, TeamManager.printTeam(args[0]));
+			if (TeamManager.getInstance().hasTeam(args[0])) {
+				LogManager.getInstanceSystem().writeMsg(player, TeamManager.getInstance().printTeam(args[0]));
 			} else {
 				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 			}

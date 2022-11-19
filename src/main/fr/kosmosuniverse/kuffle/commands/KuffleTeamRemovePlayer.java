@@ -47,17 +47,17 @@ public class KuffleTeamRemovePlayer implements CommandExecutor {
 			return false;
 		}
 		
-		if (!TeamManager.hasTeam(args[0])) {
+		if (!TeamManager.getInstance().hasTeam(args[0])) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 			return true;
 		}
 		
-		if (!TeamManager.getTeam(args[0]).hasPlayer(args[1])) {
+		if (!TeamManager.getInstance().getTeam(args[0]).hasPlayer(args[1])) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NO_PLAYER", Config.getLang()));
 			return true;
 		}
 		
-		TeamManager.removePlayer(args[0], GameManager.getPlayer(args[1]));
+		TeamManager.getInstance().removePlayer(args[0], GameManager.getPlayer(args[1]));
 		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_REMOVED", Config.getLang()).replace("<#>", "<" + args[1] + ">").replace("<##>", "<" + args[0] + ">"));
 		
 		return true;

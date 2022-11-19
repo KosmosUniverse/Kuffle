@@ -26,7 +26,7 @@ public class KuffleTeamResetPlayersTab implements TabCompleter {
 		if (args.length == 1) {
 			List<String> ret = new ArrayList<>();
 			
-			for (Team item : TeamManager.getTeams()) {
+			for (Team item : TeamManager.getInstance().getTeams()) {
 				if (item.players.size() != 0) {
 					ret.add(item.name);	
 				}

@@ -35,7 +35,7 @@ public class KuffleAddDuringGameTab implements TabCompleter {
 				}
 			}
 		} else if (args.length == 2 && Config.getTeam()) {
-			for (Team team : TeamManager.getTeams()) {
+			for (Team team : TeamManager.getInstance().getTeams()) {
 				if (Config.getTeamSize() > team.players.size()) {
 					ret.add(team.name);
 				}

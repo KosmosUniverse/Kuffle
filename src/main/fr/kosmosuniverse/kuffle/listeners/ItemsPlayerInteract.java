@@ -73,7 +73,8 @@ public class ItemsPlayerInteract extends PlayerInteract {
 			return ;
 		}
 		
-		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("EndTeleporter"))) {
+		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("EndTeleporter")) &&
+				checkXp(player, KuffleMain.type.getXpActivable("EndTeleporter"))) {
 			consumeItem(player, event.getHand());
 			
 			endTeleporter(player);
@@ -81,7 +82,8 @@ public class ItemsPlayerInteract extends PlayerInteract {
 			return ;
 		}
 		
-		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("OverworldTeleporter"))) {
+		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("OverworldTeleporter")) &&
+				checkXp(player, KuffleMain.type.getXpActivable("OverworldTeleporter"))) {
 			consumeItem(player, event.getHand());
 			
 			overworldTeleporter(player);
@@ -102,6 +104,20 @@ public class ItemsPlayerInteract extends PlayerInteract {
 		if (GameManager.checkPlayerTarget(player.getName(), item)) {
 			GameManager.playerFoundTarget(player.getName());
 		}
+	}
+	
+	private boolean checkXp(Player player, int xpMin) {
+		boolean ret = false;
+		
+		if (player.getLevel() < xpMin) {
+			ret = false;
+			player.sendMessage(LangManager.getMsgLang("XP_NEEDED", GameManager.getPlayerLang(player.getName())).replace("<#>", "" + xpMin));
+		} else {
+			ret = true;
+			player.setLevel(player.getLevel() - xpMin);
+		}
+		
+		return ret;
 	}
 	
 	/**
@@ -136,7 +152,7 @@ public class ItemsPlayerInteract extends PlayerInteract {
 		
 		int xpAmount = KuffleMain.type.getXpActivable("OverworldTeleporter");
 		xpAmount = (xpAmount - 2) < 2 ? 2 : (xpAmount - 2);
-		KuffleMain.type.setXpActivable("OverWorldTeleporter", xpAmount);
+		KuffleMain.type.setXpActivable("OverworldTeleporter", xpAmount);
 	}
 	
 	/**
@@ -150,7 +166,7 @@ public class ItemsPlayerInteract extends PlayerInteract {
 		loc.setY((double) loc.getWorld().getHighestBlockAt(loc).getY());
 		
 		if (Config.getTeam()) {
-			Team team = TeamManager.findTeamByPlayer(player.getName());
+			Team team = TeamManager.getInstance().findTeamByPlayer(player.getName());
 			
 			team.getPlayers().forEach((p) -> {
 				p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 50, false, false, false));

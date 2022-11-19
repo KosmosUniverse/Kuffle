@@ -25,7 +25,7 @@ public class KuffleTeamCreateTab implements TabCompleter {
 		
 		if (args.length == 2) {
 			List<String> colorList = new ArrayList<>();
-			List<String> colorUsed = TeamManager.getTeamColors();
+			List<String> colorUsed = TeamManager.getInstance().getTeamColors();
 			
 			for (ChatColor item : ChatColor.values()) {
 				if (!colorUsed.contains(item.name())) {

@@ -426,5 +426,9 @@
 	"WRONG_TYPE" : {
 		"en" : "You try to load a game with a different type of the current one.",
 		"fr" : "Vous essayez de charger une partie d'un type de Kuffle différent a celui chargé actuellement."
+	},
+	"XP_NEEDED" : {
+		"en" : "You need <#> xp levels to use this item.",
+		"fr" : "Vous devez avoir <#> niveau(x) d'xp pour utiliser cet objet."
 	}
 }

@@ -53,10 +53,10 @@ public class KuffleAddDuringGame implements CommandExecutor {
 		}
 
 		if (Config.getTeam() && args.length == 2) {
-			if (!TeamManager.hasTeam(args[1])) {
+			if (!TeamManager.getInstance().hasTeam(args[1])) {
 				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + args[1] + ">"));
 				return true;
-			} else if (TeamManager.getTeam(args[1]).players.size() == Config.getTeamSize()) {
+			} else if (TeamManager.getInstance().getTeam(args[1]).players.size() == Config.getTeamSize()) {
 				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_FULL", Config.getLang()));
 				return true;
 			}
@@ -86,16 +86,16 @@ public class KuffleAddDuringGame implements CommandExecutor {
 		LogManager.getInstanceSystem().writeMsg(sender, LangManager.getMsgLang("ADDED_ONE_LIST", Config.getLang()));
 
 		if (team != null) {
-			TeamManager.affectPlayer(team, player);
+			TeamManager.getInstance().affectPlayer(team, player);
 			LogManager.getInstanceSystem().writeMsg(sender, LangManager.getMsgLang("TEAM_ADD_PLAYER", Config.getLang()).replace("<#>", "<" + team + ">").replace("<##>", "<" + player.getName() + ">"));
 
 			GameManager.applyToPlayer(player.getName(), (game) -> {
 				game.teamName = team;
-				game.spawnLoc = GameManager.getPlayerSpawnLoc(TeamManager.getTeam(team).getPlayersName().get(0));
+				game.spawnLoc = GameManager.getPlayerSpawnLoc(TeamManager.getInstance().getTeam(team).getPlayersName().get(0));
 			});
 
 			player.setBedSpawnLocation(GameManager.getPlayerSpawnLoc(player.getName()), true);
-			player.teleport(GameManager.getPlayer(TeamManager.getTeam(team).getPlayersName().get(0)).getPlayer());
+			player.teleport(GameManager.getPlayer(TeamManager.getInstance().getTeam(team).getPlayersName().get(0)).getPlayer());
 		} else {
 			GameManager.applyToPlayer(player.getName(), (game) -> {
 				game.spawnLoc = player.getLocation();

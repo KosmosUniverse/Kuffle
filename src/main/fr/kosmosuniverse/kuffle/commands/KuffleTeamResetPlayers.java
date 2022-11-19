@@ -47,12 +47,12 @@ public class KuffleTeamResetPlayers implements CommandExecutor {
 			return false;
 		}
 		
-		if (!TeamManager.hasTeam(args[0])) {
+		if (!TeamManager.getInstance().hasTeam(args[0])) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 			return true;
 		}
 		
-		TeamManager.getTeam(args[0]).players.clear();
+		TeamManager.getInstance().getTeam(args[0]).players.clear();
 		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_RESETED", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 		
 		return true;

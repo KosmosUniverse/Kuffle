@@ -26,7 +26,7 @@ public class KuffleTeamDeleteTab implements TabCompleter {
 		if (args.length == 1) {
 			List<String> ret = new ArrayList<>();
 			
-			for (Team item : TeamManager.getTeams()) {
+			for (Team item : TeamManager.getInstance().getTeams()) {
 				ret.add(item.name);
 			}
 			

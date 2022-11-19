@@ -869,7 +869,7 @@ public class GameManager {
 		Game game = games.get(player);
 		
 		if (Config.getTeam()) {
-			game.player.setPlayerListName("[" + TeamManager.getTeam(game.teamName).color + game.teamName + ChatColor.RESET + "] - " + AgeManager.getAgeByNumber(game.age).color + player);
+			game.player.setPlayerListName("[" + TeamManager.getInstance().getTeam(game.teamName).color + game.teamName + ChatColor.RESET + "] - " + AgeManager.getAgeByNumber(game.age).color + player);
 		} else {
 			game.player.setPlayerListName(AgeManager.getAgeByNumber(game.age).color + player);
 		}
@@ -1718,7 +1718,7 @@ public class GameManager {
 		playersRanks.clear();
 		
 		if (Config.getTeam()) {
-			TeamManager.getTeams().forEach((team) -> playersRanks.put(team.name, 0));
+			TeamManager.getInstance().getTeams().forEach((team) -> playersRanks.put(team.name, 0));
 		} else {
 			games.forEach((playerName, playerGame) -> playersRanks.put(playerName, 0));
 		}
@@ -1748,7 +1748,7 @@ public class GameManager {
 	 */
 	public static boolean checkTeams() {
 		for (String playerName : games.keySet()) {
-			if (!TeamManager.isInTeam(playerName)) {
+			if (!TeamManager.getInstance().isInTeam(playerName)) {
 				return false;
 			}
 		}
@@ -1789,7 +1789,7 @@ public class GameManager {
 		
 		for (String name : playersRanks.keySet()) {
 			if ((!Config.getTeam() && hasPlayer(name)) ||
-			(Config.getTeam() && TeamManager.hasTeam(name))) {
+			(Config.getTeam() && TeamManager.getInstance().hasTeam(name))) {
 				rankObj.put(name, playersRanks.get(name));
 			}
 		}

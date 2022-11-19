@@ -56,13 +56,13 @@ public class KuffleTeamCreate implements CommandExecutor {
 			return false;
 		}
 		
-		if (TeamManager.hasTeam(args[0])) {
+		if (TeamManager.getInstance().hasTeam(args[0])) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_EXISTS", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 			return true;
 		}
 		
 		if (args.length == 1) {
-			TeamManager.createTeam(args[0]);
+			TeamManager.getInstance().createTeam(args[0]);
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_CREATED", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 		} else if (args.length == 2) {
 			ChatColor tmp;
@@ -72,7 +72,7 @@ public class KuffleTeamCreate implements CommandExecutor {
 				return true;
 			}
 			
-			List<String> colorUsed = TeamManager.getTeamColors();
+			List<String> colorUsed = TeamManager.getInstance().getTeamColors();
 			
 			if (colorUsed.contains(tmp.name())) {
 				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("COLOR_ALREADY_USED", Config.getLang()).replace("[#]", "[" + tmp.name() + "]"));
@@ -81,7 +81,7 @@ public class KuffleTeamCreate implements CommandExecutor {
 			}
 			
 			colorUsed.clear();
-			TeamManager.createTeam(args[0], tmp);
+			TeamManager.getInstance().createTeam(args[0], tmp);
 			
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_CREATED", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 		}

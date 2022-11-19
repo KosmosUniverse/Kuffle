@@ -64,7 +64,7 @@ public class KuffleSave implements CommandExecutor {
 				
 		if (Config.getTeam()) {
 			try (FileWriter writer = new FileWriter(dataFolder.getPath() + File.separator + "Teams.k");) {				
-				writer.write(TeamManager.saveTeams());
+				writer.write(TeamManager.getInstance().saveTeams());
 			} catch (IOException e) {
 				LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
 			}

@@ -68,7 +68,7 @@ public class KuffleStart implements CommandExecutor {
 			
 			return true;
 		} else if (!Config.getTeam()) {
-			TeamManager.clear();
+			TeamManager.getInstance().clear();
 		}
 		
 		GameManager.applyToPlayers((game) -> {
@@ -164,7 +164,7 @@ public class KuffleStart implements CommandExecutor {
 
 			GameManager.applyToPlayers((game) -> {
 				if (Config.getTeam()) {
-					game.teamName = TeamManager.findTeamByPlayer(game.player.getName()).name;
+					game.teamName = TeamManager.getInstance().findTeamByPlayer(game.player.getName()).name;
 				}
 
 				game.player.setBedSpawnLocation(game.player.getLocation(), true);
@@ -178,7 +178,7 @@ public class KuffleStart implements CommandExecutor {
 
 			GameManager.applyToPlayers(spawn, (game, spawnLoc) -> {
 				if (Config.getTeam()) {
-					game.teamName = TeamManager.findTeamByPlayer(game.player.getName()).name;
+					game.teamName = TeamManager.getInstance().findTeamByPlayer(game.player.getName()).name;
 				}
 
 				if (((Location) spawnLoc).getY() < 0) {

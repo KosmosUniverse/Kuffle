@@ -26,15 +26,15 @@ public class KuffleTeamRemovePlayerTab implements TabCompleter {
 		if (args.length == 1) {
 			List<String> ret = new ArrayList<>();
 			
-			for (Team item : TeamManager.getTeams()) {
+			for (Team item : TeamManager.getInstance().getTeams()) {
 				if (item.players.size() != 0) {
 					ret.add(item.name);
 				}
 			}
 			
 			return ret;
-		} else if (args.length == 2 && TeamManager.hasTeam(args[0])) {
-			return TeamManager.getTeam(args[0]).getPlayersName();
+		} else if (args.length == 2 && TeamManager.getInstance().hasTeam(args[0])) {
+			return TeamManager.getInstance().getTeam(args[0]).getPlayersName();
 		}
 
 		return new ArrayList<>();

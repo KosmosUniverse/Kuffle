@@ -47,12 +47,12 @@ public class KuffleTeamDelete implements CommandExecutor {
 			return false;
 		}
 		
-		if (!TeamManager.hasTeam(args[0])) {
+		if (!TeamManager.getInstance().hasTeam(args[0])) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 			return true;
 		}
 		
-		TeamManager.deleteTeam(args[0]);
+		TeamManager.getInstance().deleteTeam(args[0]);
 		
 		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_DELETED", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 		

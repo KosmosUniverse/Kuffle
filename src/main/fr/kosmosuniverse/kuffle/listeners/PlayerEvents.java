@@ -103,7 +103,7 @@ public class PlayerEvents implements Listener {
 		if (GameManager.getGames().size() == 0) {
 			if (Config.getTeam()) {
 				try (FileWriter writer = new FileWriter(KuffleMain.current.getDataFolder().getPath() + File.separator + "Teams.k");) {				
-					writer.write(TeamManager.saveTeams());
+					writer.write(TeamManager.getInstance().saveTeams());
 				} catch (IOException e) {
 					LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
 				}

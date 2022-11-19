@@ -17,14 +17,23 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  *
  */
 public class TeamManager {
-	private static List<Team> teams = null;
+	private static TeamManager instance;
+	private List<Team> teams;
 
+	public static synchronized TeamManager getInstance() {
+		if (instance == null) {
+			instance = new TeamManager();
+		}
+		
+		return instance;
+	}
+	
 	/**
 	 * Create Team with name
 	 * 
 	 * @param name	Team name
 	 */
-	public static void createTeam(String name) {
+	public void createTeam(String name) {
 		if (teams == null) {
 			teams = new ArrayList<>();
 		}
@@ -38,7 +47,7 @@ public class TeamManager {
 	 * @param name	Team name
 	 * @param color	Team color
 	 */
-	public static void createTeam(String name, ChatColor color) {
+	public void createTeam(String name, ChatColor color) {
 		if (teams == null) {
 			teams = new ArrayList<>();
 		}
@@ -53,7 +62,7 @@ public class TeamManager {
 	 * 
 	 * @return True if Team exists, False instead
 	 */
-	public static boolean hasTeam(String teamName) {
+	public boolean hasTeam(String teamName) {
 		if (teams != null) {
 			for (Team item : teams) {
 				if (item.name.equals(teamName)) {
@@ -70,7 +79,7 @@ public class TeamManager {
 	 * 
 	 * @param name	Team name to delete
 	 */
-	public static void deleteTeam(String teamName) {
+	public void deleteTeam(String teamName) {
 		if (teams != null) {
 			for (Team item : teams) {
 				if (item.name.equals(teamName)) {
@@ -88,7 +97,7 @@ public class TeamManager {
 	 * @param teamName	The team concerned by color change
 	 * @param teamColor	The new color to set
 	 */
-	public static void changeTeamColor(String teamName, ChatColor teamColor) {
+	public void changeTeamColor(String teamName, ChatColor teamColor) {
 		if (teams != null) {
 			for (Team item : teams) {
 				if (item.name.equals(teamName)) {
@@ -105,7 +114,7 @@ public class TeamManager {
 	 * @param teamName	The team in which the player will be added
 	 * @param player	The player to add
 	 */
-	public static void affectPlayer(String teamName, Player player) {
+	public void affectPlayer(String teamName, Player player) {
 		if (teams != null) {
 			for (Team item : teams) {
 				if (item.name.equals(teamName)) {
@@ -122,7 +131,7 @@ public class TeamManager {
 	 * @param teamName	The team where the player will be removed
 	 * @param player	The player to remove
 	 */
-	public static void removePlayer(String teamName, Player player) {
+	public void removePlayer(String teamName, Player player) {
 		if (teams != null) {
 			for (Team item : teams) {
 				if (item.name.equals(teamName)) {
@@ -140,7 +149,7 @@ public class TeamManager {
 	 * 
 	 * @return True if the player is in a team, False instead
 	 */
-	public static boolean isInTeam(String player) {
+	public boolean isInTeam(String player) {
 		if (teams != null) {
 			for (Team teamItem : teams) {
 				if (teamItem.hasPlayer(player)) {
@@ -157,7 +166,7 @@ public class TeamManager {
 	 * 
 	 * @return the list of current team colors
 	 */
-	public static List<String> getTeamColors() {
+	public List<String> getTeamColors() {
 		List<String> teamColors = new ArrayList<>();
 		
 		if (teams != null) {
@@ -174,7 +183,7 @@ public class TeamManager {
 	 * 
 	 * @return the player number
 	 */
-	public static int getMaxTeamSize() {
+	public int getMaxTeamSize() {
 		int max = 0;
 		
 		for (Team teamItem : teams) {
@@ -191,7 +200,7 @@ public class TeamManager {
 	 * 
 	 * @return The Team object that contains this player, null if player is not in a team
 	 */
-	public static Team findTeamByPlayer(String player) {
+	public Team findTeamByPlayer(String player) {
 		if (teams != null) {
 			for (Team teamItem : teams) {
 				for (Player playerItem : teamItem.players) {
@@ -208,7 +217,7 @@ public class TeamManager {
 	/**
 	 * Clears teams list
 	 */
-	public static void clear() {
+	public void clear() {
 		if (teams != null) {
 			teams.forEach((t) -> t.players.clear());			
 			teams.clear();
@@ -222,7 +231,7 @@ public class TeamManager {
 	 * 
 	 * @return string that represent Team teamName, null if team not exists
 	 */
-	public static String printTeam(String teamName) {
+	public String printTeam(String teamName) {
 		if (teams != null) {
 			for (Team item : teams) {
 				if (item.name.equals(teamName)) {
@@ -239,7 +248,7 @@ public class TeamManager {
 	 * 
 	 * @return string representation of all teams
 	 */
-	public static String printTeams() {
+	public String printTeams() {
 		StringBuilder sb = new StringBuilder();
 		
 		if (teams != null && teams.size() != 0) {
@@ -263,7 +272,7 @@ public class TeamManager {
 	 * @return the JSON string
 	 */
 	@SuppressWarnings("unchecked")
-	public static String saveTeams() {
+	public String saveTeams() {
 		JSONObject global = new JSONObject();
 		
 		for (Team item : teams) {
@@ -290,7 +299,7 @@ public class TeamManager {
 	 * @param global	JSONObject that represents previously saved teams
 	 * @param games		map of currently playing players
 	 */
-	public static void loadTeams(JSONObject global, Map<String, Game> games) {
+	public void loadTeams(JSONObject global, Map<String, Game> games) {
 		for (Object key : global.keySet()) {
 			String name = (String) key;
 			JSONObject tmp = (JSONObject) global.get(key);
@@ -320,7 +329,7 @@ public class TeamManager {
 	 * 
 	 * @return the teams list
 	 */
-	public static List<Team> getTeams() {
+	public List<Team> getTeams() {
 		return teams;
 	}
 	
@@ -331,7 +340,7 @@ public class TeamManager {
 	 * 
 	 * @return Team object found, null if not found
 	 */
-	public static Team getTeam(String name) {
+	public Team getTeam(String name) {
 		for (Team item : teams) {
 			if (item.name.equals(name)) {
 				return item;
@@ -341,7 +350,7 @@ public class TeamManager {
 		return null;
 	}
 	
-	public static boolean sameTeam(String player1, String player2) {
+	public boolean sameTeam(String player1, String player2) {
 		Team team = findTeamByPlayer(player1);
 		boolean ret = false;
 		

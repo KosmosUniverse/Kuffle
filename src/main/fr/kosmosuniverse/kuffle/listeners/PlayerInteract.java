@@ -185,7 +185,7 @@ public class PlayerInteract implements Listener  {
 		String placerName = shulkers.get(block.getLocation());
 		
 		if (!(GameManager.hasPlayer(player.getName()) && (placerName.equals(player.getName()) ||
-				(Config.getTeam() && TeamManager.sameTeam(placerName, player.getName()))))) {
+				(Config.getTeam() && TeamManager.getInstance().sameTeam(placerName, player.getName()))))) {
 			event.setCancelled(true);
 		}
 	}
@@ -212,7 +212,7 @@ public class PlayerInteract implements Listener  {
 		String placerName = shulkers.get(location);
 		
 		if (GameManager.hasPlayer(player.getName()) && (placerName.equals(player.getName()) ||
-				(Config.getTeam() && TeamManager.sameTeam(placerName, player.getName())))) {
+				(Config.getTeam() && TeamManager.getInstance().sameTeam(placerName, player.getName())))) {
 			event.setCancelled(true);
 		}
 	}
@@ -295,7 +295,7 @@ public class PlayerInteract implements Listener  {
 			return ;
 		}
 		
-		if (Config.getPassiveTeam() && Config.getTeam() && TeamManager.sameTeam(damager.getName(), damagee.getName())) {
+		if (Config.getPassiveTeam() && Config.getTeam() && TeamManager.getInstance().sameTeam(damager.getName(), damagee.getName())) {
 			event.setCancelled(true);
 		}
 	}

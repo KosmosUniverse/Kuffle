@@ -27,7 +27,7 @@ public class KuffleTeamAffectPlayerTab implements TabCompleter {
 		if (args.length == 1) {
 			List<String> ret = new ArrayList<>();
 			
-			for (Team item : TeamManager.getTeams()) {
+			for (Team item : TeamManager.getInstance().getTeams()) {
 				ret.add(item.name);
 			}
 			
@@ -36,7 +36,7 @@ public class KuffleTeamAffectPlayerTab implements TabCompleter {
 			List<String> ret = new ArrayList<>();
 			
 			for (String item : GameManager.getPlayerNames()) {
-				if (!TeamManager.isInTeam(item)) {
+				if (!TeamManager.getInstance().isInTeam(item)) {
 					ret.add(item);
 				}
 			}
