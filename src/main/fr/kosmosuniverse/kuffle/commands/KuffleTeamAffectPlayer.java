@@ -62,6 +62,11 @@ public class KuffleTeamAffectPlayer implements CommandExecutor {
 			return true;
 		}
 		
+		if (TeamManager.getInstance().getTeam(args[0]).hasPlayer(args[1])) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_PLAYER", Config.getLang()));
+			return true;
+		}
+		
 		TeamManager.getInstance().affectPlayer(args[0], GameManager.getPlayer(args[1]));
 		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_ADD_PLAYER", Config.getLang()).replace("<#>", "<" + args[1] + ">").replace("<##>", "<" + args[0] + ">"));
 		

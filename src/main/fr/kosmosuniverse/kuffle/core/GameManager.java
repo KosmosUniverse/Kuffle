@@ -622,6 +622,20 @@ public class GameManager {
 	}
 	
 	/**
+	 * Finish an Age for a player
+	 * 
+	 * @param player	The player
+	 */
+	public static void finishAge(String player) {
+		Game game = games.get(player);
+		
+		game.targetCount = Config.getTargetPerAge() + 1;
+		game.currentTarget = null;
+		game.score.setScore(game.targetCount);
+		updatePlayerBar(game);
+	}
+	
+	/**
 	 * Player goes to the next Age
 	 * 
 	 * @param player	The name of the player that is moving to the next Age

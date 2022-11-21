@@ -65,7 +65,7 @@ public class KuffleValidate implements CommandExecutor {
 			}
 
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("AGE_VALIDATED", Config.getLang()).replace("[#]", "[" + GameManager.getPlayerAge(args[0]).name + "]").replace("<#>", "<" + args[0] + ">"));
-			GameManager.nextPlayerAge(args[0]);
+			GameManager.finishAge(args[0]);
 		}
 		
 		return true;

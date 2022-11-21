@@ -101,8 +101,10 @@ public class GameLoop {
 			});
 		} else if (!Config.getTeam() && game.targetCount >= (Config.getTargetPerAge() + 1)) {
 			GameManager.nextPlayerAge(game);
-		} else if (Config.getTeam() && game.targetCount >= (Config.getTargetPerAge() + 1) && checkTeamMates(game)) {
-			GameManager.nextPlayerAge(game);
+		} else if (Config.getTeam() && game.targetCount >= (Config.getTargetPerAge() + 1)) {
+			if (checkTeamMates(game)) {
+				GameManager.nextPlayerAge(game);	
+			}
 		} else {
 			newItem(game);
 		}
