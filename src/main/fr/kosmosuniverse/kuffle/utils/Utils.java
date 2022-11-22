@@ -326,7 +326,7 @@ public final class Utils {
 		Player retPlayer = null;
 
 		for (Player player : players) {
-			if (player.getName().contains(name)) {
+			if (player.getName().equals(name)) {
 				retPlayer = player;
 			}
 		}

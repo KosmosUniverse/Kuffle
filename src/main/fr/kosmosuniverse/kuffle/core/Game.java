@@ -1,5 +1,9 @@
 package main.fr.kosmosuniverse.kuffle.core;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +20,9 @@ import org.bukkit.scoreboard.Score;
  * @author KosmosUniverse
  *
  */
-public class Game {
+public class Game implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	public List<String> alreadyGot = null;
 	public Map<String, Long> times = null;
 
@@ -74,5 +80,13 @@ public class Game {
 	public void clear() {
 		alreadyGot.clear();
 		times.clear();
+	}
+	
+	private void writeObject(ObjectOutputStream aOutputStream) throws IOException {
+		
+	}
+	
+	private void readObject(ObjectInputStream aInputStream) throws ClassNotFoundException, IOException  {
+		
 	}
 }
