@@ -95,7 +95,7 @@ public class KuffleStart implements CommandExecutor {
 
 		KuffleMain.paused = true;
 
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			GameManager.applyToPlayers((game) ->
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.RED + "5" + ChatColor.RESET, game.player)
 			);
@@ -105,25 +105,25 @@ public class KuffleStart implements CommandExecutor {
 			}
 		}, 20 + spread);
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () ->
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
 			GameManager.applyToPlayers((game) ->
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GOLD + "4" + ChatColor.RESET, game.player)
 			)
 		, 40 + spread);
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () ->
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
 			GameManager.applyToPlayers((game) ->
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "3" + ChatColor.RESET, game.player)
 			)
 		, 60 + spread);
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () ->
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
 			GameManager.applyToPlayers((game) ->
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GREEN + "2" + ChatColor.RESET, game.player)
 			)
 		, 80 + spread);
 
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			GameManager.applyToPlayers((game) -> {
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.BLUE + "1" + ChatColor.RESET, game.player);
 				GameManager.setupPlayer(game);
@@ -132,7 +132,7 @@ public class KuffleStart implements CommandExecutor {
 			ScoreManager.setupPlayersScores();
 		}, 100 + spread);
 
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			GameManager.applyToPlayers((game) -> {
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + "GO!" + ChatColor.RESET, game.player);
 				ItemStack box = getStartBox(game.player.getName());

@@ -41,7 +41,7 @@ public class MultiblockManager {
 	/**
 	 * Gets the multiblocks List
 	 * 
-	 * @return <multiblocks> List
+	 * @return the @multiblocks List
 	 */
 	public static List<AMultiblock> getMultiblocks() {
 		return Collections.unmodifiableList(multiblocks);
@@ -59,7 +59,7 @@ public class MultiblockManager {
 	}
 	
 	/**
-	 * Checks if <name> multiblock exists
+	 * Checks if @name multiblock exists
 	 * 
 	 * @param name	The name to check
 	 * 
@@ -70,7 +70,7 @@ public class MultiblockManager {
 	}
 	
 	/**
-	 * Clears <multiblocks> list
+	 * Clears @multiblocks list
 	 */
 	public static void clear() {
 		multiblocks.forEach(mb -> {
@@ -125,7 +125,7 @@ public class MultiblockManager {
 	}
 	
 	/**
-	 * Reloads template for a specific <age>
+	 * Reloads template for a specific @age
 	 * 
 	 * @param age	The age to reload
 	 */
@@ -205,7 +205,7 @@ public class MultiblockManager {
 	/**
 	 * Searches a multiblock by its inventory name
 	 * 
-	 * @param name	The name to search for
+	 * @param invName	The inventory name to search for
 	 * 
 	 * @return The Multiblock
 	 */

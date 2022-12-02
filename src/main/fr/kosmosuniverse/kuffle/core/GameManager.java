@@ -1,10 +1,11 @@
 package main.fr.kosmosuniverse.kuffle.core;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,8 +22,6 @@ import org.bukkit.Sound;
 import org.bukkit.block.Sign;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -35,8 +34,6 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
@@ -270,14 +267,43 @@ public class GameManager {
 	 */
 	public static void savePlayers(String path) {
 		games.forEach((playerName, playerGame) -> {
+			savePlayer(path, playerGame);
+			/*
 			try (FileWriter writer = new FileWriter(path + File.separator + playerName + ".k");) {				
 				writer.write(savePlayer(playerGame));
 			} catch (IOException e) {
 				LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
-			}
+			}*/
 			
 			stopPlayer(playerGame);
 		});
+	}
+
+	/**
+	 * Save Player game in a file
+	 * 
+	 * @param path		File Path
+	 * @param player	The player linked to the game to save
+	 */
+	public static void savePlayer(String path, String player) {
+		savePlayer(path, games.get(player));
+	}
+	
+	/**
+	 * Save Player game in a file
+	 * 
+	 * @param path	File Path
+	 * @param game	The game to save
+	 */
+	public static void savePlayer(String path, Game game) {
+		try (FileOutputStream fos = new FileOutputStream(path + File.separator + game.player.getName() + ".k")) {
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(game);
+			oos.flush();
+			oos.close();
+		} catch (IOException e) {
+			Utils.logException(e);
+		}
 	}
 	
 	/**
@@ -287,19 +313,19 @@ public class GameManager {
 	 * 
 	 * @return the JSON formatted string of player's data
 	 */
-	public static String savePlayer(String player) {
-		return (savePlayer(games.get(player)));
+	public static String createPlayerSaveString(String player) {
+		return (createPlayerSaveString(games.get(player)));
 	}
 	
 	/**
 	 * Convert player datas into a stringify JSON
 	 * 
-	 * @param player	The player to save
+	 * @param game	The game that contains the player to save
 	 * 
 	 * @return the JSON formatted string of player's data
 	 */
-	@SuppressWarnings("unchecked")
-	public static String savePlayer(Game game) {
+	@SuppressWarnings("unchecked")	
+	public static String createPlayerSaveString(Game game) {
 		JSONObject jsonSpawn = new JSONObject();
 
 		jsonSpawn.put("World", game.spawnLoc.getWorld().getName());
@@ -319,13 +345,13 @@ public class GameManager {
 
 		JSONObject global = new JSONObject();
 
-		if (game.deathInv != null) {
+		/*if (game.deathInv != null) {
 			try {
-				savePlayerInventory(game);
+				//savePlayerInventory(game);
 			} catch (IOException e) {
 				LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
 			}
-		}
+		}*/
 
 		global.put("age", game.age);
 		global.put("current", game.currentTarget);
@@ -360,33 +386,33 @@ public class GameManager {
 
 		return (global.toString());
 	}
-	
-	public static void savePlayerInventory(String player) throws IOException {
+		
+	/*public static void savePlayerInventory(String player) throws IOException {
 		savePlayerInventory(games.get(player));
-	}
+	}*/
 	
 	/**
 	 * Saves a player's inventory in a YAML file
 	 * 
-	 * @param player	The player to whom the inventory will be saved
+	 * param player	The player to whom the inventory will be saved
 	 * 
-	 * @throws IOException if FileConfiguration.save() fails
+	 * throws IOException if FileConfiguration.save() fails
 	 */
-	public static void savePlayerInventory(Game game) throws IOException {
+	/*public static void savePlayerInventory(Game game) throws IOException {
         File f = new File(KuffleMain.current.getDataFolder().getPath(), game.player.getName() + ".yml");
         FileConfiguration c = YamlConfiguration.loadConfiguration(f);
         
         c.set("inventory.content", game.deathInv.getContents());
         c.save(f);
-    }
+    }*/
 	
 	/**
 	 * loads a player's inventory from a YAML file
 	 * 
-	 * @param player	The player to whom the inventory will be loaded
+	 * param player	The player to whom the inventory will be loaded
 	 */
-	@SuppressWarnings("unchecked")
-	public static void loadPlayerInventory(String player) {
+	//s@SuppressWarnings("unchecked")
+	/*public static void loadPlayerInventory(String player) {
 		Game game = games.get(player);
 		File f = new File(KuffleMain.current.getDataFolder().getPath(), game.player.getName() + ".yml");
         FileConfiguration c = YamlConfiguration.loadConfiguration(f);
@@ -395,18 +421,30 @@ public class GameManager {
 
         ItemStack[] content = ((List<ItemStack>) c.get("inventory.content")).toArray(new ItemStack[0]);
         game.deathInv.setContents(content);
-    }
+    }*/
 	
-	public static void loadPlayers(String path) throws FileNotFoundException, IOException, ParseException {
+	public static void loadPlayers(String path) throws IOException, ClassNotFoundException {
 		List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
 		
-		for (Player p : players) {
-			if (Utils.fileExists(path, p.getName() + ".k")) {
-				loadPlayerGame(p);
+		for (Player player : players) {
+			if (Utils.fileExists(path, player.getName() + ".k")) {
+				loadPlayerGame(path, player);
 			}
 		}
 		
 		players.clear();
+	}
+	
+	public static void loadPlayer(String path, Player player) throws IOException, ClassNotFoundException {
+		try (FileInputStream fos = new FileInputStream(path + File.separator + player.getName() + ".k")) {
+			ObjectInputStream ois = new ObjectInputStream(fos);
+			
+			Game game = (Game) ois.readObject();
+			ois.close();
+			
+			game.setupPostLoad(player);
+			games.put(player.getName(), game);
+		}
 	}
 	
 	/**
@@ -415,54 +453,17 @@ public class GameManager {
 	 * @param player	The player that will be loaded
 	 * 
 	 * @throws IOException if FileReader fails
-	 * @throws FileNotFoundException if FileReader does not find the player file
-	 * @throws ParseException if JSONParser.parse fails
+	 * @throws ClassNotFoundException 
 	 */
-	public static void loadPlayerGame(Player player) throws FileNotFoundException, IOException, ParseException {
-		JSONParser parser = new JSONParser();
-		Game tmpGame = new Game(player);
-
-		setupPlayer(tmpGame);
+	public static void loadPlayerGame(String path, Player player) throws IOException, ClassNotFoundException {
 		
-		try (FileReader reader = new FileReader(KuffleMain.current.getDataFolder().getPath() + File.separator + player.getName() + ".k")) {
-			JSONObject mainObject = (JSONObject) parser.parse(reader);
-
-			tmpGame.dead = (boolean) mainObject.get("isDead");
-			tmpGame.finished = (boolean) mainObject.get("finished");
-			tmpGame.lose = (boolean) mainObject.get("lose");
-
-			tmpGame.age = Integer.parseInt(((Long) mainObject.get("age")).toString());
-			tmpGame.currentTarget = (String) mainObject.get("current");
-			tmpGame.timeShuffle = System.currentTimeMillis() - (Long) mainObject.get("interval");
-			tmpGame.time = Integer.parseInt(((Long) mainObject.get("time")).toString());
-			tmpGame.targetCount = Integer.parseInt(((Long) mainObject.get("itemCount")).toString());
-			tmpGame.teamName = (String) mainObject.get("teamName");
-			tmpGame.sameIdx = Integer.parseInt(((Long) mainObject.get("sameIdx")).toString());
-			tmpGame.deathCount = Integer.parseInt(mainObject.get("deathCount").toString());
-			tmpGame.skipCount = Integer.parseInt(mainObject.get("skipCount").toString());
-
-			tmpGame.alreadyGot = getAlreadyGotListFromJSON((JSONArray) mainObject.get("alreadyGot"));
-			tmpGame.times = getTimesMapFromJSON((JSONObject) mainObject.get("times"));
-			tmpGame.spawnLoc = getLocationFromJSON((JSONObject) mainObject.get("spawn"));
-			tmpGame.deathLoc = getLocationFromJSON((JSONObject) mainObject.get("death"));
-						
-			mainObject.clear();
-		}
-		
-		updatePlayerDisplayTarget(tmpGame);
-		
-		games.put(player.getName(), tmpGame);
+		loadPlayer(path, player);
 		
 		String playerName = player.getName();
 		Game game = games.get(playerName);
 		
+		updatePlayerDisplayTarget(game);		
 		updatePlayersHeads();
-		setupPlayerScores(playerName, ScoreManager.getScoreboard(), ScoreManager.getPlayerScore(playerName));
-		
-		if (Utils.fileExists(KuffleMain.current.getDataFolder().getPath(), playerName + ".yml")) {
-			loadPlayerInventory(player.getName());
-			Utils.fileDelete(KuffleMain.current.getDataFolder().getPath(), playerName + ".yml");
-		}
 
 		if (game.dead) {
 			teleportAutoBack(playerName);
@@ -475,8 +476,6 @@ public class GameManager {
 		updatePlayerBar(game);
 		reloadPlayerEffects(playerName);
 		updatePlayerListName(playerName);
-		
-		game.score.setScore(game.targetCount);
 	}
 	
 	public static void updatePlayerDisplayTarget(Game tmpGame) {
@@ -602,7 +601,7 @@ public class GameManager {
 	/**
 	 * Player found its target
 	 * 
-	 * @param game	The Game of player that found
+	 * @param playerName	The name of player that found
 	 */
 	public static void playerFoundTarget(String playerName) {
 		playerFoundTarget(games.get(playerName));
@@ -762,7 +761,7 @@ public class GameManager {
 	/**
 	 * Set player BossBar color randomly
 	 * 
-	 * @param player
+	 * @param game	The game for which it will change bossBar color
 	 */
 	public static void playerRandomBarColor(Game game) {
 		BarColor[] colors = BarColor.values();
@@ -848,11 +847,11 @@ public class GameManager {
 	public static void savePlayerInv(String player) {
 		Game game = games.get(player);
 		
-		game.deathInv = Bukkit.createInventory(null, 54);
+		game.deathInv = new ArrayList<>();
 
 		for (ItemStack item : game.player.getInventory().getContents()) {
 			if (item != null) {
-				game.deathInv.addItem(item);
+				game.deathInv.add(item);
 			}
 		}
 	}
@@ -865,18 +864,16 @@ public class GameManager {
 	public static void restorePlayerInv(String player) {
 		Game game = games.get(player);
 		
-		for (ItemStack item : game.deathInv.getContents()) {
-			if (item != null) {
-				HashMap<Integer, ItemStack> ret = game.player.getInventory().addItem(item);
-				
-				if (!ret.isEmpty()) {
-					for (Integer cnt : ret.keySet()) {
-						game.player.getWorld().dropItem(game.player.getLocation(), ret.get(cnt));
-					}
+		for (ItemStack item : game.deathInv) {
+			HashMap<Integer, ItemStack> ret = game.player.getInventory().addItem(item);
+			
+			if (!ret.isEmpty()) {
+				for (Integer cnt : ret.keySet()) {
+					game.player.getWorld().dropItem(game.player.getLocation(), ret.get(cnt));
 				}
-				
-				ret.clear();
 			}
+			
+			ret.clear();
 		}
 
 		game.deathInv.clear();
@@ -1138,7 +1135,7 @@ public class GameManager {
 	 * @param death		The inventory to set
 	 */
 	@Deprecated
-	public static void setPlayerDeathInv(String player, Inventory death) {
+	public static void setPlayerDeathInv(String player, List<ItemStack> death) {
 		games.get(player).deathInv = death;
 	}
 
@@ -1179,25 +1176,8 @@ public class GameManager {
 	}
 
 	/**
-	 * Gets location object from JSONObject
-	 * 
-	 * @param spawn	The JSON death location to transform to Location object
-	 */
-	private static Location getLocationFromJSON(JSONObject spawn) {
-		if (spawn == null) {
-			return null;
-		} else {
-			return new Location(Bukkit.getWorld((String) spawn.get("World")),
-					(double) spawn.get("X"),
-					(double) spawn.get("Y"),
-					(double) spawn.get("Z"));
-		}
-	}
-
-	/**
 	 * Sets player times map
 	 * 
-	 * @param player	The player
 	 * @param gameTimes	The times map to set as JSONObject
 	 */
 	public static Map<String, Long> getTimesMapFromJSON(JSONObject gameTimes) {
@@ -1311,7 +1291,7 @@ public class GameManager {
 		
 		game.player.sendMessage(LangManager.getMsgLang("TP_BACK", game.configLang).replace("%i", "" + Config.getLevel().seconds));
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			Location loc = game.deathLoc;
 				
 			if (loc.getWorld().getName().contains("the_end") && loc.getY() < 0) {
@@ -1404,7 +1384,7 @@ public class GameManager {
 			
 			Sign sign = (Sign) loc.getBlock().getState();
 			
-			sign.setLine(0, "[" + KuffleMain.current.getName() + "]");
+			sign.setLine(0, "[" + KuffleMain.getInstance().getName() + "]");
 			sign.setLine(1, LangManager.getMsgLang("HERE_DIES", games.get(playerName).configLang));
 			sign.setLine(2, playerName);
 			sign.update(true);
@@ -1431,6 +1411,14 @@ public class GameManager {
 	 * Setup scores for a specific player
 	 * 
 	 * @param game	The Game object of the player
+	 */
+	
+	/**
+	 * Setup scores for a specific player
+	 * 
+	 * @param player		The player for whom the score will be set
+	 * @param scoreboard	The scoreboard to apply to the player
+	 * @param score			The score to apply
 	 */
 	public static void setupPlayerScores(String player, Scoreboard scoreboard, Score score) {
 		Game game = games.get(player);
@@ -1588,7 +1576,7 @@ public class GameManager {
 	 * @param player	The player
 	 * @param target	The target to check
 	 * 
-	 * @return True if <target> is the <player>'s target
+	 * @return True if @target is the @player's target
 	 */
 	public static boolean checkPlayerTarget(String player, ItemStack target) {
 		Game game = games.get(player);
@@ -1822,6 +1810,18 @@ public class GameManager {
 		return rankObj;
 	}
 	
+	public static void loadRanks(Map<String, Integer> ranks) {
+		if (playersRanks == null) {
+			playersRanks = new HashMap<>();
+		}
+		
+		if (playersRanks.size() != 0) {
+			playersRanks.clear();
+		}
+		
+		ranks.forEach((k, v) -> playersRanks.put(k, v));
+	}
+	
 	/**
 	 * Loads ranks from JSONObject
 	 * 
@@ -1834,5 +1834,14 @@ public class GameManager {
 			
 			playersRanks.put(rankName, rank);
 		}
+	}
+	
+	/**
+	 * Gets the players ranks map
+	 * 
+	 * @return the ranks map
+	 */
+	public static Map<String, Integer> getRanks() {
+		return playersRanks;
 	}
 }

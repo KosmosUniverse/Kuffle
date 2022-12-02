@@ -297,6 +297,18 @@ public abstract class KuffleType {
 		}
 	}
 	
+	public void loadXpMax(Map<String, Integer> xpMax) {
+		if (xpActivables == null) {
+			xpActivables = new HashMap<>();
+		}
+		
+		if (xpActivables.size() != 0) {
+			xpActivables.clear();
+		}
+		
+		xpMax.forEach((k, v) -> xpActivables.put(k, v));
+	}
+	
 	/**
 	 * Loads xpActivables map from JSON Object
 	 * 
@@ -322,6 +334,15 @@ public abstract class KuffleType {
 		xpActivables.forEach((k, v) -> xpMaxObj.put(k, v));
 
 		return xpMaxObj;
+	}
+	
+	/**
+	 * Gets the current xp for all in-game activables
+	 * 
+	 * @return the xpActivables map 
+	 */
+	public Map<String, Integer> getXpMap() {
+		return xpActivables;
 	}
 	
 	/**

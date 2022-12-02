@@ -51,7 +51,7 @@ public class Level {
 	}
 	
 	/**
-	 * Turn <levelNS> and save it into <levelEW>
+	 * Turn @levelNS and save it into @levelEW
 	 */
 	public void turnLevel() {
 		List<Pattern> tmp = new ArrayList<>();
@@ -152,14 +152,14 @@ public class Level {
 	/**
 	 * Gets level index
 	 * 
-	 * @return <levelNb>
+	 * @return the @levelNb
 	 */
 	public double getLevelNb() {
 		return (levelNb);
 	}
 	
 	/**
-	 * Generate level at <loc> Location
+	 * Generate level at @loc Location
 	 * 
 	 * @param loc	The level center
 	 */

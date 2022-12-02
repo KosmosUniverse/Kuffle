@@ -66,12 +66,12 @@ public class PlayerInteract implements Listener  {
 	 * @return True if it was managed by the method, False instead
 	 * 
 	 * @throws KuffleEventNotUsableException if event is not usable by Kuffle plugin
-	 * @throws ClassNotFoundException 
-	 * @throws SecurityException 
-	 * @throws NoSuchMethodException 
-	 * @throws InvocationTargetException 
-	 * @throws IllegalArgumentException 
-	 * @throws IllegalAccessException 
+	 * @throws ClassNotFoundException 	 	NMS Exception
+	 * @throws SecurityException 		 	NMS Exception
+	 * @throws NoSuchMethodException  		NMS Exception
+	 * @throws InvocationTargetException  	NMS Exception
+	 * @throws IllegalArgumentException  	NMS Exception
+	 * @throws IllegalAccessException 	 	NMS Exception
 	 */
 	protected boolean onLeftClickGeneric(PlayerInteractEvent event) throws KuffleEventNotUsableException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
 		boolean ret = true;
@@ -133,7 +133,7 @@ public class PlayerInteract implements Listener  {
 		
 		if (GameManager.hasPlayer(player.getName()) &&
 				event.getItem().getType() == Material.MILK_BUCKET) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
+			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 				GameManager.reloadPlayerEffects(player.getName());
 			}, 20);
 		}
@@ -345,12 +345,13 @@ public class PlayerInteract implements Listener  {
 	 * 
 	 * @param player	The player that searching warm ocean
 	 * @param compass	The compass item
-	 * @throws ClassNotFoundException 
-	 * @throws SecurityException 
-	 * @throws NoSuchMethodException 
-	 * @throws InvocationTargetException 
-	 * @throws IllegalArgumentException 
-	 * @throws IllegalAccessException 
+	 * 
+	 * @throws ClassNotFoundException  		NMS Exception
+	 * @throws SecurityException  			NMS Exception
+	 * @throws NoSuchMethodException  		NMS Exception
+	 * @throws InvocationTargetException  	NMS Exception
+	 * @throws IllegalArgumentException  	NMS Exception
+	 * @throws IllegalAccessException  		NMS Exception
 	 */
 	private void coralCompass(Player player, ItemStack compass) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
 		Location tmp = player.getLocation();
@@ -369,12 +370,13 @@ public class PlayerInteract implements Listener  {
 	 * @param compass	The compass item
 	 * 
 	 * @return True if warm ocean is found, False instead
-	 * @throws ClassNotFoundException 
-	 * @throws SecurityException 
-	 * @throws NoSuchMethodException 
-	 * @throws InvocationTargetException 
-	 * @throws IllegalArgumentException 
-	 * @throws IllegalAccessException 
+	 * 
+	 * @throws ClassNotFoundException  		NMS Exception
+	 * @throws SecurityException  			NMS Exception
+	 * @throws NoSuchMethodException  		NMS Exception
+	 * @throws InvocationTargetException  	NMS Exception
+	 * @throws IllegalArgumentException 	NMS Exception
+	 * @throws IllegalAccessException		NMS Exception
 	 */
 	private boolean findCoralBiome(Location loc, ItemStack compass) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
 		Chunk baseChunk = loc.getChunk();

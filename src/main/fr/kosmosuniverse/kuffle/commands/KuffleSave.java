@@ -1,24 +1,26 @@
 package main.fr.kosmosuniverse.kuffle.commands;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.json.simple.JSONObject;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
+import main.fr.kosmosuniverse.kuffle.core.GameHolder;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
 import main.fr.kosmosuniverse.kuffle.type.KuffleType;
+import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 /**
  * 
@@ -37,7 +39,6 @@ public class KuffleSave implements CommandExecutor {
 		dataFolder = folder;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
 		if (!(sender instanceof Player))
@@ -63,14 +64,21 @@ public class KuffleSave implements CommandExecutor {
 		GameManager.savePlayers(dataFolder.getPath());
 				
 		if (Config.getTeam()) {
-			try (FileWriter writer = new FileWriter(dataFolder.getPath() + File.separator + "Teams.k");) {				
-				writer.write(TeamManager.getInstance().saveTeams());
-			} catch (IOException e) {
-				LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
-			}
+			TeamManager.getInstance().saveTeams(dataFolder.getPath());
 		}
 		
-		try (FileWriter writer = new FileWriter(dataFolder.getPath() + File.separator + "Games.k");) {				
+		GameHolder holder = new GameHolder(Config.getHolder(), KuffleMain.type.getType().toString(), GameManager.getRanks(), KuffleMain.type.getXpMap());
+		
+		try (FileOutputStream fos = new FileOutputStream(KuffleMain.getInstance().getDataFolder().getPath() + File.separator + "Game.k")) {
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(holder);
+			oos.flush();
+			oos.close();
+		} catch (IOException e) {
+			Utils.logException(e);
+		}
+		
+		/*try (FileWriter writer = new FileWriter(dataFolder.getPath() + File.separator + "Games.k");) {				
 			JSONObject global = new JSONObject();
 
 			global.put("type", KuffleMain.type.getType().toString());
@@ -83,7 +91,7 @@ public class KuffleSave implements CommandExecutor {
 			global.clear();
 		} catch (IOException e) {
 			LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
-		}
+		}*/
 		
 		if (KuffleMain.type.getType() == KuffleType.Type.ITEMS) {
 			CraftManager.removeCraftTemplates();

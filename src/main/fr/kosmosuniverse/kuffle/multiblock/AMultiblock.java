@@ -50,7 +50,7 @@ public abstract class AMultiblock {
 	 * @param current	The current inventory
 	 * @param item		The clicked item in the current inventory
 	 * @param master	The multiblock master inventory
-	 * @param first		True if <current> is the first inventory
+	 * @param first		True if @current is the first inventory
 	 * 
 	 * @return The inventory to diplay to player
 	 */
@@ -93,7 +93,7 @@ public abstract class AMultiblock {
 	}
 	
 	/**
-	 * Sets <world> to overworld
+	 * Sets @world to overworld
 	 */
 	public void findNormalWorld() {
 		for (World w : Bukkit.getWorlds()) {

@@ -5,7 +5,17 @@ import org.json.simple.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class CraftImpl extends ACraft {
+	/**
+	 * Test crafts.json reading
+	 * 
+	 * @param jsonRecipe	Json object that represents crafts
+	 */
 	public CraftImpl(JSONObject jsonRecipe) {
 		name = jsonRecipe.get("Name").toString();
 		setupResult((JSONObject) jsonRecipe.get("Result"));

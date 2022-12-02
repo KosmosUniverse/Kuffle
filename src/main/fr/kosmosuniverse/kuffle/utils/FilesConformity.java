@@ -73,12 +73,12 @@ public class FilesConformity {
 			content = getFromResource(file);
 			
 			if (content != null)  {
-				LogManager.getInstanceSystem().logMsg(KuffleMain.current.getName(), "Load " + file + " from Resource.");
+				LogManager.getInstanceSystem().logMsg(KuffleMain.getInstance().getName(), "Load " + file + " from Resource.");
 			} else {
-				LogManager.getInstanceSystem().logMsg(KuffleMain.current.getName(), "File : " + file + " does not exist.");
+				LogManager.getInstanceSystem().logMsg(KuffleMain.getInstance().getName(), "File : " + file + " does not exist.");
 			}
 		} else {
-			LogManager.getInstanceSystem().logMsg(KuffleMain.current.getName(), "Load " + file + " from File.");
+			LogManager.getInstanceSystem().logMsg(KuffleMain.getInstance().getName(), "Load " + file + " from File.");
 		}
 		
 		return content;
@@ -92,8 +92,8 @@ public class FilesConformity {
 	 * @return the file content as String, null if file does not exist and has been just created
 	 */
 	private static String getFromFile(String file) {
-		if (fileExistsInPluginVersionDirectory(KuffleMain.current.getDataFolder().getPath(), file)) {
-			try (FileReader reader = new FileReader(KuffleMain.current.getDataFolder().getPath() + File.separator + KuffleMain.current.getDescription().getVersion() + File.separator  + file)) {
+		if (fileExistsInPluginVersionDirectory(KuffleMain.getInstance().getDataFolder().getPath(), file)) {
+			try (FileReader reader = new FileReader(KuffleMain.getInstance().getDataFolder().getPath() + File.separator + KuffleMain.getInstance().getDescription().getVersion() + File.separator  + file)) {
 				JSONParser parser = new JSONParser();
 				
 				return ((JSONObject) parser.parse(reader)).toString();
@@ -113,11 +113,11 @@ public class FilesConformity {
 	 * @param fileName	The file name that will be created
 	 */
 	private static void createFromResource(String fileName) {
-		String path = KuffleMain.current.getDataFolder().getPath() + File.separator + KuffleMain.current.getDescription().getVersion();
+		String path = KuffleMain.getInstance().getDataFolder().getPath() + File.separator + KuffleMain.getInstance().getDescription().getVersion();
 		directoryExistsOrCreate(path);		
 		
 		try (FileWriter writer = new FileWriter(path + File.separator + fileName)) {
-			InputStream in = KuffleMain.current.getResource(fileName);
+			InputStream in = KuffleMain.getInstance().getResource(fileName);
 
 			writer.write(Utils.readFileContent(in));
 			in.close();
@@ -135,7 +135,7 @@ public class FilesConformity {
 	 */
 	private static String getFromResource(String file) {
 		try {
-			InputStream in = KuffleMain.current.getResource(file);
+			InputStream in = KuffleMain.getInstance().getResource(file);
 			String result = Utils.readFileContent(in);
 			JSONParser parser = new JSONParser();
 			JSONObject mainObject = (JSONObject) parser.parse(result);
@@ -231,7 +231,7 @@ public class FilesConformity {
 	 * Check an Age JSON object content
 	 * 
 	 * @param ageObj	The Age objetc to check
-	 * @param age		The current Age name
+	 * @param age		The getInstance() Age name
 	 * 
 	 * @return True if ageObj is valid, False instead
 	 */
@@ -677,7 +677,7 @@ public class FilesConformity {
 	 * @return True if the file exists, False instead
 	 */
 	public static boolean fileExistsInPluginVersionDirectory(String path, String fileName) {
-		File tmp = new File(path + File.separator + KuffleMain.current.getDescription().getVersion() + File.separator + fileName);
+		File tmp = new File(path + File.separator + KuffleMain.getInstance().getDescription().getVersion() + File.separator + fileName);
 		
 		return tmp.exists();
 	}

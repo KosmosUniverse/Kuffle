@@ -27,10 +27,10 @@ public abstract class KuffleTypeDecorator extends KuffleType {
 		RewardManager.clear();
 		TargetManager.clear();
 		
-		KuffleMain.current.getCommand("k-agetargets").setExecutor(null);
-		KuffleMain.current.getCommand("k-crafts").setExecutor(null);
+		KuffleMain.getInstance().getCommand("k-agetargets").setExecutor(null);
+		KuffleMain.getInstance().getCommand("k-crafts").setExecutor(null);
 		
-		KuffleMain.current.getCommand("k-agetargets").setTabCompleter(null);
+		KuffleMain.getInstance().getCommand("k-agetargets").setTabCompleter(null);
 		
 		return type;
 	}

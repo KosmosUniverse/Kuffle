@@ -28,7 +28,7 @@ public class KuffleSetTypeTab implements TabCompleter  {
 	}
 	
 	/**
-	 * Clears <types> List
+	 * Clears @types List
 	 */
 	public void clear() {
 		types.clear();

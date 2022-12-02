@@ -27,13 +27,14 @@ public class BlocksPlayerInteract extends PlayerInteract implements Listener {
 	/**
 	 * Manages the behavior of player left click specific for Blocks Kuffle type
 	 * 
-	 * @param event
-	 * @throws ClassNotFoundException 
-	 * @throws SecurityException 
-	 * @throws NoSuchMethodException 
-	 * @throws InvocationTargetException 
-	 * @throws IllegalArgumentException 
-	 * @throws IllegalAccessException 
+	 * @param event	The event called on player interaction
+	 * 
+	 * @throws ClassNotFoundException 	 	NMS Exception
+	 * @throws SecurityException 		 	NMS Exception
+	 * @throws NoSuchMethodException 	 	NMS Exception
+	 * @throws InvocationTargetException  	NMS Exception
+	 * @throws IllegalArgumentException  	NMS Exception
+	 * @throws IllegalAccessException 	 	NMS Exception
 	 */
 	@EventHandler
 	public void onLeftClick(PlayerInteractEvent event) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {

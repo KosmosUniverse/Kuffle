@@ -69,12 +69,12 @@ public class KuffleSetType implements CommandExecutor  {
 			LogManager.getInstanceSystem().writeMsg(player, "[Warning] : Change Kuffle type takes few seconds to reload resource files.");
 			
 			if (KuffleMain.type.getType() != KuffleType.Type.NO_TYPE) {
-				LogManager.getInstanceSystem().writeMsg(player, "[Warning] : Kuffle type is already set. This action will unload current Kuffle type {" + KuffleMain.type.getType() + "}.");
+				LogManager.getInstanceSystem().writeMsg(player, "[Warning] : Kuffle type is already set. This action will unload getInstance() Kuffle type {" + KuffleMain.type.getType() + "}.");
 			}
 			
 			confirm = new Pair(player.getUniqueId(), msg+args[0]);
 			LogManager.getInstanceSystem().writeMsg(player, "Please, re-send the exact same command within 10sec to confirm.");
-			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
+			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 				if (confirm != null && ((UUID) confirm.getKey()) == player.getUniqueId()) {
 					confirm = null;
 					LogManager.getInstanceSystem().writeMsg(player, "[Warning] : Command /k-set-type cancelled.");
@@ -107,10 +107,10 @@ public class KuffleSetType implements CommandExecutor  {
 		
 		switch (type) {
 			case ITEMS:
-				KuffleMain.type = new KuffleItems(KuffleMain.type, KuffleMain.current);
+				KuffleMain.type = new KuffleItems(KuffleMain.type, KuffleMain.getInstance());
 				break;
 			case BLOCKS:
-				KuffleMain.type = new KuffleBlocks(KuffleMain.type, KuffleMain.current);
+				KuffleMain.type = new KuffleBlocks(KuffleMain.type, KuffleMain.getInstance());
 				break;
 			case NO_TYPE:
 			default:

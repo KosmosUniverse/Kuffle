@@ -123,13 +123,13 @@ public final class Utils {
 			return null;
 		}
 
-		while (KuffleMain.current.getResource(file) == null && versionNb > 0) {
+		while (KuffleMain.getInstance().getResource(file) == null && versionNb > 0) {
 			versionNb -= 1;
 			version = VersionManager.getVersionByIndex(versionNb);
 			file = fileName.replace("%v", version);
 		}
 
-		if (KuffleMain.current.getResource(file)  == null) {
+		if (KuffleMain.getInstance().getResource(file)  == null) {
 			return null;
 		}
 
@@ -146,7 +146,7 @@ public final class Utils {
 	public static int getNbInventoryRows(int quantity) {
 		int rows = quantity / 9;
 		
-		if (quantity % 9 == 0) {
+		if (quantity % 9 == 0 && rows != 0) {
 			rows = rows * 9;
 		} else {
 			rows = (rows + 1) * 9;

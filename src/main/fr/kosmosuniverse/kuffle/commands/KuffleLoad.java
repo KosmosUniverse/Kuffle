@@ -1,8 +1,9 @@
 package main.fr.kosmosuniverse.kuffle.commands;
 
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,14 +13,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.ActionBar;
 import main.fr.kosmosuniverse.kuffle.core.Config;
-import main.fr.kosmosuniverse.kuffle.core.CraftManager;
+import main.fr.kosmosuniverse.kuffle.core.GameHolder;
 import main.fr.kosmosuniverse.kuffle.core.GameLoop;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
@@ -37,7 +35,7 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  */
 public class KuffleLoad implements CommandExecutor {
 	private File dataFolder;
-	private static final String GAME_FILE = "Games.k";
+	private static final String GAME_FILE = "Game.k";
 	
 	/**
 	 * Constructor
@@ -70,38 +68,36 @@ public class KuffleLoad implements CommandExecutor {
 			return true;
 		}
 		
-		JSONParser parser = new JSONParser();
-		JSONObject mainObject;
-		
 		if (Utils.fileExists(dataFolder.getPath(), GAME_FILE)) {
-			try (FileReader reader = new FileReader(dataFolder.getPath() + File.separator + GAME_FILE)) {
-				mainObject = (JSONObject) parser.parse(reader);
+			try (FileInputStream fis = new FileInputStream(dataFolder.getPath() + File.separator + GAME_FILE)) {
+				ObjectInputStream ois = new ObjectInputStream(fis);
+				GameHolder holder = (GameHolder) ois.readObject();
+				ois.close();
 				
-				KuffleType.Type type = KuffleType.Type.valueOf(mainObject.get("type").toString().toUpperCase());
+				KuffleType.Type type = KuffleType.Type.valueOf(holder.getKuffleType());
 
 				if (KuffleMain.type.getType() != type &&
 						KuffleMain.type.getType() != KuffleType.Type.NO_TYPE) {
 					LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("WRONG_TYPE", Config.getLang()));
-					reader.close();
 					return true;
 				} else if (KuffleMain.type.getType() == KuffleType.Type.NO_TYPE) {
 					KuffleSetType.changeKuffleType(player, type);	
 				}
 				
-				Config.loadConfig((JSONObject) mainObject.get("config"));
-				GameManager.loadRanks((JSONObject) mainObject.get("ranks"));
-				KuffleMain.type.loadXpMax((JSONObject) mainObject.get("xpMax"));
-				mainObject.clear();
-			} catch (IOException | ParseException | KuffleFileLoadException e) {
+				Config.loadConfig(holder.getConfig());
+				GameManager.loadRanks(holder.getRanks());
+				KuffleMain.type.loadXpMax(holder.getXpMap());
+				
+				holder.clear();
+			} catch (IOException | ClassNotFoundException | KuffleFileLoadException e) {
 				Utils.logException(e);
-				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("LOAD_FAIL", Config.getLang()).replace("%s", e.getMessage()));
-				return true;
 			}
 		}
 		
 		try {
 			GameManager.loadPlayers(dataFolder.getPath());
-		} catch (IOException | ParseException e) {
+		} catch (IOException | ClassNotFoundException e) {
+			LogManager.getInstanceSystem().writeMsg(player, "Cannot load game, please contact an administrator.");
 			Utils.logException(e);
 			return true;
 		}
@@ -109,22 +105,26 @@ public class KuffleLoad implements CommandExecutor {
 		GameManager.updatePlayersHeads();
 		
 		if (Config.getTeam()) {
-			loadTeams(parser);
+			try {
+				TeamManager.getInstance().loadTeams(dataFolder.getPath());
+			} catch (ClassNotFoundException | IOException e) {
+				Utils.logException(e);
+			}
 		}
 		
 		KuffleMain.paused = true;
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			GameManager.applyToPlayers((game) ->
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.RED + "5" + ChatColor.RESET, game.player)
 			);
 			
 			if (Config.getSBTT()) {
-				CraftManager.setupCraftTemplates();
+				KuffleMain.type.setupSbtt();
 			}
 		}, 20);
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			GameManager.applyToPlayers((game) -> {
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GOLD + "4" + ChatColor.RESET, game.player);
 				
@@ -134,28 +134,27 @@ public class KuffleLoad implements CommandExecutor {
 			});
 		}, 40);
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () ->
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
 			GameManager.applyToPlayers((game) ->
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "3" + ChatColor.RESET, game.player)
 			)
 		, 60);
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () ->
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
 			GameManager.applyToPlayers((game) ->
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GREEN + "2" + ChatColor.RESET, game.player)
 			)
 		, 80);
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			ScoreManager.setupPlayersScores();
 				
 			GameManager.applyToPlayers((game) -> {
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.BLUE + "1" + ChatColor.RESET, game.player);
-				//game.load();
 			});
 		}, 100);
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			GameManager.applyToPlayers((game) ->
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + "GO!" + ChatColor.RESET, game.player)
 			);
@@ -173,22 +172,5 @@ public class KuffleLoad implements CommandExecutor {
 		}, 120);
 		
 		return true;
-	}
-	
-	/**
-	 * Loads Teams from Teams file
-	 * 
-	 * @param parser	The JSONParser object that will parse Teams file
-	 */
-	private void loadTeams(JSONParser parser) {
-		JSONObject mainObject;
-		
-		try (FileReader reader = new FileReader(dataFolder.getPath() + File.separator + "Teams.k")) {
-			mainObject = (JSONObject) parser.parse(reader);
-			TeamManager.getInstance().loadTeams(mainObject, GameManager.getGames());
-			mainObject.clear();
-		} catch (IOException | ParseException e) {
-			LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
-		}
 	}
 }

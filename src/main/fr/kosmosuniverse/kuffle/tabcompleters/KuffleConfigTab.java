@@ -30,7 +30,7 @@ public class KuffleConfigTab implements TabCompleter {
 	 */
 	public KuffleConfigTab() {
 		try {
-			String rawValues = Utils.readFileContent(KuffleMain.current.getResource("configValuesDisplay.json"));
+			String rawValues = Utils.readFileContent(KuffleMain.getInstance().getResource("configValuesDisplay.json"));
 			processStringsToList(rawValues);
 		} catch (IOException | ParseException e) {
 			Utils.logException(e);

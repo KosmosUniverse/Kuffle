@@ -31,7 +31,7 @@ public class Pattern {
 	/**
 	 * Gets the material
 	 * 
-	 * @return the Material <m>
+	 * @return the Material
 	 */
 	public Material getMaterial() {
 		return this.m;

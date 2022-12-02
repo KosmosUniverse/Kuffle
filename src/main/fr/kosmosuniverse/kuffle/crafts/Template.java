@@ -21,7 +21,7 @@ public class Template extends ACraft {
 		name = _name;
 		item = ItemUtils.itemMaker(Material.EMERALD, 1, ChatColor.DARK_RED + name, "Single Use " + name.replace("Template", "") + " Template.", "Right click to validate your item.");
 		
-		recipe = new ShapelessRecipe(new NamespacedKey(KuffleMain.current, name), item);
+		recipe = new ShapelessRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item);
 		
 		setupInventoryBase(Type.WORKBENCH);
 		

@@ -45,25 +45,25 @@ public class KuffleResume implements CommandExecutor {
 			return false;
 		}
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () ->
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
 			GameManager.applyToPlayers((game) -> {
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.RED + "3" + ChatColor.RESET, game.player);
 			})
 		, 20);
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () ->
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
 			GameManager.applyToPlayers((game) -> {
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "2" + ChatColor.RESET, game.player);
 			})
 		, 40);
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () ->
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
 			GameManager.applyToPlayers((game) -> {
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GREEN + "1" + ChatColor.RESET, game.player);
 			})
 		, 60);
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			KuffleMain.paused = false;
 			
 			GameManager.applyToPlayers((game) -> {

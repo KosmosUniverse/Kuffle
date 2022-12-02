@@ -39,7 +39,7 @@ public class CraftManager {
 	 * 
 	 * @param gameType	The Game type to know which crafts to load
 	 * 
-	 * @throws ParseException 
+	 * @throws ParseException raised by JSON parser at crafts.json file reading
 	 */
 	public static void setupCrafts(KuffleType.Type gameType, String content) throws ParseException {
 		JSONParser parser = new JSONParser();
@@ -87,7 +87,7 @@ public class CraftManager {
 	 */
 	public static void addCraft(ACraft craft) {
 		recipes.add(craft);
-		KuffleMain.current.getServer().addRecipe(craft.getRecipe());
+		KuffleMain.getInstance().getServer().addRecipe(craft.getRecipe());
 	}
 	
 	/**
@@ -107,8 +107,8 @@ public class CraftManager {
 		if (craft != null) {
 			recipes.remove(craft);
 			
-			NamespacedKey n = new NamespacedKey(KuffleMain.current, name);
-			KuffleMain.current.getServer().removeRecipe(n);
+			NamespacedKey n = new NamespacedKey(KuffleMain.getInstance(), name);
+			KuffleMain.getInstance().getServer().removeRecipe(n);
 		}
 	}
 	
@@ -131,6 +131,9 @@ public class CraftManager {
 		return (recipes);
 	}
 	
+	/**
+	 * Setup inventories that contains all crafts
+	 */
 	private static void setupCraftsInventories() {
 		int recipesCnt = recipes.size();		
 		int nbRows = recipesCnt / 9;
@@ -183,6 +186,13 @@ public class CraftManager {
 		return (inventories.get(0));
 	}
 	
+	/**
+	 * Gets the inventory of a specific @craft
+	 * 
+	 * @param craft	The craft searched
+	 * 
+	 * @return the @craft inventory
+	 */
 	public static Inventory getCraftsInventory(ACraft craft) {
 		int idx = recipes.indexOf(craft);
 		int invIdx = idx / 45;
@@ -226,6 +236,14 @@ public class CraftManager {
 		return null;
 	}
 	
+	/**
+	 * Gets the inventory depending on @current inv anc clicked @item
+	 * 
+	 * @param current	The current inventory
+	 * @param item		The clicked item
+	 * 
+	 * @return the inventory
+	 */
 	public static Inventory getInventory(Inventory current, ItemStack item) {
 		int idx = -1;
 		
@@ -339,12 +357,15 @@ public class CraftManager {
 		addCraft(t);
 
 		GameManager.getGames().forEach((playerName, game) ->
-			game.player.discoverRecipe(new NamespacedKey(KuffleMain.current, t.getName()))
+			game.player.discoverRecipe(new NamespacedKey(KuffleMain.getInstance(), t.getName()))
 		);
 		
 		reloadInventories();
 	}
 	
+	/**
+	 * Reloads the inventories
+	 */
 	private static void reloadInventories() {
 		inventories.forEach(i -> i.clear());
 		inventories.clear();

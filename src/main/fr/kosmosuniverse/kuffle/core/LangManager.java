@@ -66,7 +66,7 @@ public class LangManager {
 	}
 	
 	/**
-	 * Add target's langs to <targets> map
+	 * Add target's langs to @targets map
 	 * 
 	 * @param target	The target to add
 	 * @param langs		The langs of targets

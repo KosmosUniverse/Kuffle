@@ -1,5 +1,6 @@
 package main.fr.kosmosuniverse.kuffle.core;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -17,13 +18,32 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  * @author KosmosUniverse
  *
  */
-public class Config {
+public class Config implements Serializable {
+	/**
+	 * Serial ID
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Config Default messgage
+	 */
 	private static final String CONFIG_DEFAULT = "CONFIG_DEFAULT";
 	
 	private static ConfigHolder configValues;
+
+	/**
+	 * Error flag
+	 */
 	private static boolean setRet;
+	
+	/**
+	 * Error messgae
+	 */
 	private static String error;
 
+	/**
+	 * Map of config value and set method
+	 */
 	private static Map<String, Consumer<String>> configElems = null;
 
 	/**
@@ -341,8 +361,10 @@ public class Config {
 	public static String displayConfig() {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("Configuration:").append("\n");
-		sb.append("" + ChatColor.BLUE).append("Saturation: " + ChatColor.GOLD).append(configValues.saturation).append("\n");
+		sb.append(ChatColor.BLUE).append("-------------------------------\n");
+		sb.append("-      Configuration Kuffle v" + KuffleMain.getVersion()).append("      -\n");
+		sb.append("-------------------------------\n");
+		sb.append("Saturation: " + ChatColor.GOLD).append(configValues.saturation).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Spreadplayers: " + ChatColor.GOLD).append(configValues.spread).append("\n");
 		sb.append("" + ChatColor.BLUE).append("  - Spreadplayer min distance: " + ChatColor.GOLD).append(configValues.spreadDistance).append("\n");
 		sb.append("" + ChatColor.BLUE).append("  - Spreadplayer min radius: " + ChatColor.GOLD).append(configValues.spreadRadius).append("\n");
@@ -364,7 +386,7 @@ public class Config {
 		sb.append("" + ChatColor.BLUE).append("  - Team: " + ChatColor.GOLD).append(configValues.passiveTeam).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Team: " + ChatColor.GOLD).append(configValues.team).append("\n");
 		sb.append("" + ChatColor.BLUE).append("  - Team Size: " + ChatColor.GOLD).append(configValues.teamSize).append("\n");
-		sb.append("" + ChatColor.BLUE).append("Mode: ").append("\n");
+		sb.append("" + ChatColor.BLUE).append("Modes: ").append("\n");
 		sb.append("" + ChatColor.BLUE).append("  - Same: " + ChatColor.GOLD).append(configValues.same).append("\n");
 		sb.append("" + ChatColor.BLUE).append("  - Double: " + ChatColor.GOLD).append(configValues.duoMode).append("\n");
 		sb.append("" + ChatColor.BLUE).append("  - SBTT: " + ChatColor.GOLD).append(configValues.sbttMode).append("\n");
@@ -373,7 +395,10 @@ public class Config {
 		sb.append("" + ChatColor.BLUE).append("  - EndTeleporter: " + ChatColor.GOLD).append(configValues.xpEnd).append("\n");
 		sb.append("" + ChatColor.BLUE).append("  - OverworldTeleporter: " + ChatColor.GOLD).append(configValues.xpOverworld).append("\n");
 		sb.append("" + ChatColor.BLUE).append("  - CoralCompass: " + ChatColor.GOLD).append(configValues.xpCoral).append("\n");
-
+		sb.append(ChatColor.BLUE).append("-------------------------------\n");
+		sb.append("-      Configuration Kuffle v" + KuffleMain.getVersion()).append("      -\n");
+		sb.append("-------------------------------\n").append(ChatColor.RESET);
+		
 		return sb.toString();
 	}
 	
@@ -421,6 +446,15 @@ public class Config {
 		configObj.put("xpCoral", configValues.xpCoral);
 		
 		return configObj;
+	}
+	
+	/**
+	 * Loads config
+	 * 
+	 * @param config	config read from file
+	 */
+	public static void loadConfig(ConfigHolder config) {
+		configValues = new ConfigHolder(config);
 	}
 	
 	/**
@@ -1090,5 +1124,14 @@ public class Config {
 			configValues.lang = configLang;
 			setRet = true;			
 		}
+	}
+	
+	/**
+	 * Gets the ConfigHolder object that contains all config values
+	 * 
+	 * @return the whole config values
+	 */
+	public static ConfigHolder getHolder() {
+		return configValues;
 	}
 }

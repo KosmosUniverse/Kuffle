@@ -94,7 +94,7 @@ public abstract class ACraft {
 			type = "STONECUTTER";
 			Material ing = Material.valueOf(ingredients.get(ingredients.keySet().toArray()[0]).get("Type"));
 			
-			recipe = new StonecuttingRecipe(new NamespacedKey(KuffleMain.current, name), item, ing);
+			recipe = new StonecuttingRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item, ing);
 			
 			ings.add(new ItemStack(ing));
 			addInvItems(ings);
@@ -102,7 +102,7 @@ public abstract class ACraft {
 			String[] shapeRows = shape.split("-");
 			
 			type = "SHAPED";
-			recipe = new ShapedRecipe(new NamespacedKey(KuffleMain.current, name), item);
+			recipe = new ShapedRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item);
 			((ShapedRecipe) recipe).shape(shapeRows[0], shapeRows[1], shapeRows[2]);
 			
 			for (String line : shapeRows) {
@@ -134,7 +134,7 @@ public abstract class ACraft {
 			addInvItems(ings);
 		} else if (recipeType == Type.WORKBENCH) {
 			type = "SHAPELESS";
-			recipe = new ShapelessRecipe(new NamespacedKey(KuffleMain.current, name), item);
+			recipe = new ShapelessRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item);
 			
 			ingredients.forEach((c, m) -> {
 				String ingType = m.get("Type").toUpperCase();

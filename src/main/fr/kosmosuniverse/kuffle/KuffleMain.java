@@ -17,8 +17,9 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  *
  */
 public class KuffleMain extends JavaPlugin {
-	public static KuffleMain current;
 	public static KuffleType type = null;
+	private static KuffleMain current = null;
+	public static String version = null;
 	
 	public static GameLoop loop;
 	
@@ -31,6 +32,7 @@ public class KuffleMain extends JavaPlugin {
 		saveDefaultConfig();
 		reloadConfig();
 		
+		version = this.getDescription().getVersion();
 		current = this;
 		
 		try {
@@ -41,7 +43,6 @@ public class KuffleMain extends JavaPlugin {
 		}
 		
 		loaded = true;
-		current = this;
 
 		LogManager.getInstanceSystem().logMsg(this.getName(), LangManager.getMsgLang("ON", Config.getLang()));
 	}
@@ -53,5 +54,13 @@ public class KuffleMain extends JavaPlugin {
 			
 			type.clear();
 		}
+	}
+	
+	public static KuffleMain getInstance() {
+		return current;
+	}
+	
+	public static String getVersion() {
+		return version;
 	}
 }

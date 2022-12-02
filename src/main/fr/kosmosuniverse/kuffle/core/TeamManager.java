@@ -1,13 +1,17 @@
 package main.fr.kosmosuniverse.kuffle.core;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
@@ -77,7 +81,7 @@ public class TeamManager {
 	/**
 	 * Deletes a team by name
 	 * 
-	 * @param name	Team name to delete
+	 * @param teamName	Team name to delete
 	 */
 	public void deleteTeam(String teamName) {
 		if (teams != null) {
@@ -269,11 +273,25 @@ public class TeamManager {
 	/**
 	 * Gets JSON string of all teams
 	 * 
-	 * @return the JSON string
+	 * @param path	The path to the Kuffle plugin folder
 	 */
-	@SuppressWarnings("unchecked")
-	public String saveTeams() {
-		JSONObject global = new JSONObject();
+	public void saveTeams(String path) {
+		try (FileOutputStream fos = new FileOutputStream(path + File.separator + "Teams.k")) {
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			
+			oos.writeInt(teams.size());
+			
+			for (Team team : teams) {
+				oos.writeObject(team);
+			}
+			
+			oos.flush();
+			oos.close();
+		} catch (IOException e) {
+			Utils.logException(e);
+		}
+		
+		/*JSONObject global = new JSONObject();
 		
 		for (Team item : teams) {
 			JSONObject tmp = new JSONObject();
@@ -290,17 +308,40 @@ public class TeamManager {
 			global.put(item.name, tmp);
 		}
 		
-		return global.toString();
+		return global.toString();*/
 	}
 	
 	/**
 	 * Loads Teams from JSONObject
 	 * 
-	 * @param global	JSONObject that represents previously saved teams
-	 * @param games		map of currently playing players
+	 * @param path	The path to the Kuffle plugin folder
+	 * 
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 * @throws ClassNotFoundException 
 	 */
-	public void loadTeams(JSONObject global, Map<String, Game> games) {
-		for (Object key : global.keySet()) {
+	public void loadTeams(String path) throws IOException, ClassNotFoundException {
+		try (FileInputStream fos = new FileInputStream(path + File.separator + "Teams.k")) {
+			ObjectInputStream ois = new ObjectInputStream(fos);
+			
+			if (teams == null) {
+				teams = new ArrayList<>();
+			}
+			
+			if (teams.size() != 0) {
+				clear();
+			}
+			
+			int size = ois.readInt();
+			
+			for (int i = 0; i < size; i++) {
+				teams.add((Team) ois.readObject());
+			}
+
+			ois.close();
+		}
+		
+		/*for (Object key : global.keySet()) {
 			String name = (String) key;
 			JSONObject tmp = (JSONObject) global.get(key);
 			ChatColor color = Utils.findChatColor((String) tmp.get("color"));
@@ -321,7 +362,7 @@ public class TeamManager {
 					}
 				}
 			}
-		}
+		}*/
 	}
 	
 	/**

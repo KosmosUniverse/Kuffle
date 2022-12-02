@@ -75,7 +75,7 @@ public class KuffleAddDuringGame implements CommandExecutor {
 	/**
 	 * Starts a player
 	 * 
-	 * @param sender	The player that want to start <player>
+	 * @param sender	The player that want to start @player
 	 * @param player	The player for whom the game will start
 	 * @param team		The player's team if needed
 	 */

@@ -53,12 +53,12 @@ public class MultiBlock {
 	}
 
 	/**
-	 * Checks if multiblock exists at the Location <coreLoc>
+	 * Checks if multiblock exists at the Location @coreLoc
 	 * 
 	 * @param corelLoc	The location center
 	 * @param player	The player
 	 * 
-	 * @return True if the multiblock is fully formed at <coreLoc> Location
+	 * @return True if the multiblock is fully formed at @coreLoc Location
 	 */
 	public boolean checkMultiBlock(Location corelLoc, Player player) {
 		Location newLoc = new Location(corelLoc.getWorld(), corelLoc.getBlockX(), corelLoc.getBlockY(), corelLoc.getBlockZ());
@@ -105,7 +105,7 @@ public class MultiBlock {
 	}
 	
 	/**
-	 * Spawn a multiblock at a <player> Location
+	 * Spawn a multiblock at a @player Location
 	 * 
 	 * @param player	The player
 	 */

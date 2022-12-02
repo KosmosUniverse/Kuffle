@@ -1,11 +1,15 @@
 package main.fr.kosmosuniverse.kuffle.core;
 
+import java.io.Serializable;
+
 /**
  * 
  * @author KosmosUniverse
  *
  */
-class ConfigHolder {
+class ConfigHolder implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	public boolean saturation;
 	public boolean spread;
 	public boolean rewards;
@@ -34,4 +38,46 @@ class ConfigHolder {
 	public int xpOverworld;
 	public int xpCoral;
 	public String lang;
+	
+	/**
+	 * Default constructor
+	 */
+	public ConfigHolder() {
+	}
+	
+	/**
+	 * Copy constructor that fill all config values fon other @config
+	 * 
+	 * @param config	the source config
+	 */
+	public ConfigHolder(ConfigHolder config) {
+		  saturation = config.saturation;
+		  spread = config.spread;
+		  rewards = config.rewards;
+		  skip = config.skip;
+		  crafts = config.crafts;
+		  team = config.team;
+		  same = config.same;
+		  duoMode = config.duoMode;
+		  sbttMode = config.sbttMode;
+		  printTab = config.printTab;
+		  printTabAll = config.printTabAll;
+		  endOne = config.endOne;
+		  passiveAll = config.passiveAll;
+		  passiveTeam = config.passiveTeam;
+		  sbttAmount = config.sbttAmount;
+		  teamSize = config.teamSize;
+		  spreadDistance = config.spreadDistance;
+		  spreadRadius = config.spreadRadius;
+		  targetPerAge = config.targetPerAge;
+		  skipAge = config.skipAge;
+		  lastAge = config.lastAge;
+		  startTime = config.startTime;
+		  addedTime = config.addedTime;
+		  level = config.level;
+		  xpEnd = config.xpEnd;
+		  xpOverworld = config.xpOverworld;
+		  xpCoral = config.xpCoral;
+		  lang = config.lang;
+	}
 }

@@ -1,5 +1,9 @@
 package main.fr.kosmosuniverse.kuffle.core;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,12 +12,20 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import main.fr.kosmosuniverse.kuffle.utils.SerializeUtils;
+
 /**
  * 
  * @author KosmosUniverse
  *
  */
-public class Team {
+public class Team implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
 	public List<Player> players = new ArrayList<>();
 	public String name;
 	public ChatColor color;
@@ -99,8 +111,56 @@ public class Team {
 			}
 		}
 		
-		sb.append("§r");
+		sb.append("" + ChatColor.RESET);
 		
 		return sb.toString();
+	}
+	
+	/**
+	 * Defines what will be stored about this Team in the Teams save file
+	 * 
+	 * @param oStream	The ObjectOoutputStream
+	 * 
+	 * @throws IOException
+	 */
+	private void writeObject(ObjectOutputStream oStream) throws IOException {
+		oStream.writeUTF(name == null ? "$null$" : name);
+		oStream.writeObject(color);
+		oStream.writeInt(players.size());
+		
+		for (Player player : players) {
+			oStream.writeUTF(player.getName());
+		}
+	}
+	
+	/**
+	 * Read Team info from Teams input stream
+	 * 
+	 * @param iStream	The stream that contains all Team infos
+	 * 
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	private void readObject(ObjectInputStream iStream) throws ClassNotFoundException, IOException {
+		name = SerializeUtils.readString(iStream);
+		color = (ChatColor) iStream.readObject();
+		
+		int size = iStream.readInt();
+		List<String> names = new ArrayList<>();
+		players = new ArrayList<>();
+		
+		for (int i = 0; i < size; i++) {
+			names.add(SerializeUtils.readString(iStream));
+		}
+		
+		for (String pname : names) {
+			if (GameManager.hasPlayer(pname)) {
+				players.add(GameManager.getPlayer(pname));
+			} else {
+				LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("PLAYER_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + pname + ">"));
+			}
+		}
+		
+		names.clear();
 	}
 }

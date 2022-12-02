@@ -352,7 +352,7 @@ public class TargetManager {
 	 * 
 	 * @param age	The age
 	 * 
-	 * @return the list of targets of the Age <age>
+	 * @return the list of targets of the Age @age
 	 */
 	public static List<String> getAgeTargets(String age) {
 		return Collections.unmodifiableList(targets.get(age));
@@ -363,7 +363,7 @@ public class TargetManager {
 	 * 
 	 * @param age	The age
 	 * 
-	 * @return the list of targets of the Age <age>
+	 * @return the list of targets of the Age @age
 	 */
 	public static List<Inventory> getAgeTargetsInvs(String age) {
 		return Collections.unmodifiableList(targetsInvs.get(age));

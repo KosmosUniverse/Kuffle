@@ -32,7 +32,7 @@ public class KuffleAgeTargetsTab implements TabCompleter  {
 	}
 	
 	/**
-	 * Clears the <ages> list
+	 * Clears the @ages list
 	 */
 	public void clear() {
 		ages.clear();

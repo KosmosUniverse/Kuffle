@@ -1,8 +1,9 @@
 package main.fr.kosmosuniverse.kuffle.listeners;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,12 +19,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
+import main.fr.kosmosuniverse.kuffle.core.GameHolder;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
@@ -52,22 +52,24 @@ public class PlayerEvents implements Listener {
 			return;
 		}
 		
-		if (!Utils.fileExists(KuffleMain.current.getDataFolder().getPath(), player.getName() + ".k")) {
+		if (!Utils.fileExists(KuffleMain.getInstance().getDataFolder().getPath(), player.getName() + ".k")) {
 			return;
 		}
 
 		try {
-			GameManager.loadPlayerGame(player);
-		} catch (IOException | ParseException e) {
+			GameManager.loadPlayerGame(KuffleMain.getInstance().getDataFolder().getPath(), player);
+		} catch (IOException | ClassNotFoundException e) {
+			LogManager.getInstanceSystem().writeMsg(player, "Cannot reload your game, please contact an administartor.");
 			Utils.logException(e);
+			return;
 		}
 		
 		for (ACraft item : CraftManager.getRecipeList()) {
-			player.discoverRecipe(new NamespacedKey(KuffleMain.current, item.getName()));
+			player.discoverRecipe(new NamespacedKey(KuffleMain.getInstance(), item.getName()));
 		}
 		
 		GameManager.sendMsgToPlayers(LangManager.getMsgLang("GAME_RELOADED", GameManager.getPlayerLang(player.getName())).replace("%s", player.getName()));
-		LogManager.getInstanceSystem().logMsg(KuffleMain.current.getName(), "<" + player.getName() + "> game is reloaded !");
+		LogManager.getInstanceSystem().logMsg(KuffleMain.getInstance().getName(), "<" + player.getName() + "> game is reloaded !");
 	}
 	
 	/**
@@ -75,7 +77,6 @@ public class PlayerEvents implements Listener {
 	 * 
 	 * @param event	The PlayerQuitEvent
 	 */
-	@SuppressWarnings("unchecked")
 	@EventHandler
 	public void onPlayerDisconnectEvent(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
@@ -85,16 +86,11 @@ public class PlayerEvents implements Listener {
 		}
 		
 		for (ACraft item : CraftManager.getRecipeList()) {
-			player.undiscoverRecipe(new NamespacedKey(KuffleMain.current, item.getName()));
+			player.undiscoverRecipe(new NamespacedKey(KuffleMain.getInstance(), item.getName()));
 		}
 		
-		try (FileWriter writer = new FileWriter(KuffleMain.current.getDataFolder().getPath() + File.separator + player.getName() + ".k")) {			
-			writer.write(GameManager.savePlayer(player.getName()));			
-			LogManager.getInstanceSystem().logMsg(KuffleMain.current.getName(), "<" + player.getName() + "> game is saved.");
-		} catch (IOException e) {
-			LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
-		}
-		
+		GameManager.savePlayer(KuffleMain.getInstance().getDataFolder().getPath(), player.getName());
+				
 		GameManager.stopPlayer(player.getName());
 		GameManager.removePlayer(player.getName());
 		GameManager.updatePlayersHeads();
@@ -102,14 +98,21 @@ public class PlayerEvents implements Listener {
 		
 		if (GameManager.getGames().size() == 0) {
 			if (Config.getTeam()) {
-				try (FileWriter writer = new FileWriter(KuffleMain.current.getDataFolder().getPath() + File.separator + "Teams.k");) {				
-					writer.write(TeamManager.getInstance().saveTeams());
-				} catch (IOException e) {
-					LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
-				}
+				TeamManager.getInstance().saveTeams(KuffleMain.getInstance().getDataFolder().getPath());
 			}
 			
-			try (FileWriter writer = new FileWriter(KuffleMain.current.getDataFolder().getPath() + File.separator + "Games.k");) {				
+			GameHolder holder = new GameHolder(Config.getHolder(), KuffleMain.type.getType().toString(), GameManager.getRanks(), KuffleMain.type.getXpMap());
+			
+			try (FileOutputStream fos = new FileOutputStream(KuffleMain.getInstance().getDataFolder().getPath() + File.separator + "Game.k")) {
+				ObjectOutputStream oos = new ObjectOutputStream(fos);
+				oos.writeObject(holder);
+				oos.flush();
+				oos.close();
+			} catch (IOException e) {
+				Utils.logException(e);
+			}
+			
+			/*try (FileWriter writer = new FileWriter(KuffleMain.getInstance().getDataFolder().getPath() + File.separator + "Games.k");) {				
 				JSONObject global = new JSONObject();
 
 				global.put("type", KuffleMain.type.getType().toString());
@@ -122,7 +125,7 @@ public class PlayerEvents implements Listener {
 				global.clear();
 			} catch (IOException e) {
 				LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
-			}
+			}*/
 
 			if (KuffleMain.type.getType() == KuffleType.Type.ITEMS) {
 				CraftManager.removeCraftTemplates();
@@ -188,7 +191,7 @@ public class PlayerEvents implements Listener {
 
 		event.setRespawnLocation(GameManager.getPlayerSpawnLoc(player.getName()));
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.current, () -> {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			if (Config.getLevel().losable) {
 				player.sendMessage(ChatColor.RED + LangManager.getMsgLang("YOU_LOSE", GameManager.getPlayerLang(player.getName())));
 			} else {

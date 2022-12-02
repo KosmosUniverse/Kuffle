@@ -16,12 +16,20 @@ import main.fr.kosmosuniverse.kuffle.crafts.ACraft;
 import main.fr.kosmosuniverse.kuffle.crafts.CraftImpl;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
+/**
+ * 
+ * @author KosmosUniverse
+ *
+ */
 public class CraftImplTest {
 	/**
 	 * Contains path to files used in these tests
 	 */
 	private static final String DATA_PATH = ".\\src\\test\\fr\\kosmosuniverse\\kuffle\\crafts\\resources\\";
 	
+	/**
+	 * Test craft
+	 */
 	@Test
 	public void testWShaped() {
 		JSONObject jsonCraft = null;

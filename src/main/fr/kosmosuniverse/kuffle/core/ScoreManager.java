@@ -66,7 +66,11 @@ public class ScoreManager {
 		GameManager.applyToPlayers((game) -> {
 			GameManager.setupPlayerScores(game.player.getName(), scoreboard, targets.getScore(game.player.getName()));
 			GameManager.updatePlayerListName(game.player.getName());
+
+			game.score.setScore(game.targetCount);
 		});
+		
+		targets.setDisplaySlot(DisplaySlot.PLAYER_LIST);
 	}
 	
 	/**

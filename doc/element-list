@@ -1,1 +1,13 @@
-test.fr.kosmosuniverse.utils.fileconformity.unittest
+main.fr.kosmosuniverse.kuffle
+main.fr.kosmosuniverse.kuffle.commands
+main.fr.kosmosuniverse.kuffle.core
+main.fr.kosmosuniverse.kuffle.crafts
+main.fr.kosmosuniverse.kuffle.exceptions
+main.fr.kosmosuniverse.kuffle.listeners
+main.fr.kosmosuniverse.kuffle.multiblock
+main.fr.kosmosuniverse.kuffle.tabcompleters
+main.fr.kosmosuniverse.kuffle.type
+main.fr.kosmosuniverse.kuffle.utils
+test.fr.kosmosuniverse.kuffle.crafts.unittest
+test.fr.kosmosuniverse.kuffle.utils.filesconformity.unittest
+test.fr.kosmosuniverse.kuffle.utils.itemutils

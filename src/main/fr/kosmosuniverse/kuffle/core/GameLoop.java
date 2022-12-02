@@ -51,7 +51,7 @@ public class GameLoop {
 					}
 				}
 			}
-		}.runTaskTimer(KuffleMain.current, 0, 20);
+		}.runTaskTimer(KuffleMain.getInstance(), 0, 20);
 	}
 	
 	private boolean checkFinished() {
