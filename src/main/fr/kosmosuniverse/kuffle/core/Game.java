@@ -91,10 +91,10 @@ public class Game implements Serializable {
 	/**
 	 * Setup Player after Game created by load
 	 * 
-	 * @param _player	The player to link to this Game
+	 * @param p	The player to link to this Game
 	 */
-	public void setupPostLoad(Player _player) {
-		player = _player;
+	public void setupPostLoad(Player p) {
+		player = p;
 		ageDisplay = Bukkit.createBossBar(LangManager.getMsgLang("START", Config.getLang()), BarColor.PURPLE, BarStyle.SOLID);
 		ageDisplay.addPlayer(player);
 	}

@@ -29,7 +29,7 @@ public class ItemEvent implements Listener {
 	 */
 	@EventHandler
 	public void onItemDrop(PlayerDropItemEvent event) {
-		if (!KuffleMain.gameStarted) {
+		if (!KuffleMain.getInstance().isStarted()) {
 			return ;
 		}
 		
@@ -56,7 +56,7 @@ public class ItemEvent implements Listener {
 	 */
 	@EventHandler
 	public void onBlockBreak(BlockDropItemEvent event) {
-		if (!KuffleMain.gameStarted) {
+		if (!KuffleMain.getInstance().isStarted()) {
 			return ;
 		}
 		
@@ -81,7 +81,7 @@ public class ItemEvent implements Listener {
 	 */
 	@EventHandler
 	public void onItemDespawn(ItemDespawnEvent event) {
-		if (!KuffleMain.gameStarted) {
+		if (!KuffleMain.getInstance().isStarted()) {
 			return ;
 		}
 		

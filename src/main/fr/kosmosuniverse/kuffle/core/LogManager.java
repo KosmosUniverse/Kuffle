@@ -7,8 +7,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.entity.Player;
+
+import main.fr.kosmosuniverse.kuffle.KuffleMain;
 
 /**
  * 
@@ -16,6 +20,7 @@ import org.bukkit.entity.Player;
  *
  */
 public class LogManager {
+	private static final Logger LOGGER = KuffleMain.getInstance().getLogger();
 	private static LogManager instanceSystem = null;
 	private static LogManager instanceGame = null;
 	private String path = "";
@@ -35,7 +40,7 @@ public class LogManager {
 				Files.createFile(pPath);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.INFO, e.getMessage());
 		}
 	}
 	
@@ -86,8 +91,8 @@ public class LogManager {
 			
 			writer.write(dtf.format(now) + " : [SYSTEM] -> " + msg + "\n");
 		} catch (IOException e) {
-			e.printStackTrace();
-		}		
+			LOGGER.log(Level.INFO, e.getMessage());
+		}
 	}
 	
 	/**
@@ -102,7 +107,7 @@ public class LogManager {
 			
 			writer.write(dtf.format(now) + " : [" + name + "] -> " + msg + "\n");
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.INFO, e.getMessage());
 		}		
 	}
 	
@@ -120,7 +125,7 @@ public class LogManager {
 			
 			writer.write(dtf.format(now) + " : [" + to.getName() + "] -> " + msg + "\n");
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.INFO, e.getMessage());
 		}		
 	}
 }

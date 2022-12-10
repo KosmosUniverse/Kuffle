@@ -14,11 +14,11 @@ import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 
 public class Template extends ACraft {
-	List<Material> compose;
+	private List<Material> compose;
 	
-	public Template(String _name, List<Material> craftCompose) {
+	public Template(String craftName, List<Material> craftCompose) {
 		compose = craftCompose;
-		name = _name;
+		name = craftName;
 		item = ItemUtils.itemMaker(Material.EMERALD, 1, ChatColor.DARK_RED + name, "Single Use " + name.replace("Template", "") + " Template.", "Right click to validate your item.");
 		
 		recipe = new ShapelessRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item);

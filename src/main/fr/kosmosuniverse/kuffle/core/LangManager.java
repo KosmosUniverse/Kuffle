@@ -76,9 +76,7 @@ public class LangManager {
 			targetsLangs = new HashMap<>();
 		}
 		
-		if (!targetsLangs.containsKey(target)) {
-			targetsLangs.put(target, new HashMap<>());
-		}
+		targetsLangs.computeIfAbsent(target, t -> new HashMap<>());
 		
 		langs.forEach((key, value) -> {
 			if (!targetsLangs.get(target).containsKey(key)) {
@@ -145,7 +143,11 @@ public class LangManager {
 	 * @return True if target found, False instead
 	 */
 	public static boolean hasTarget(String target) {
-		return targetsLangs == null ? false : targetsLangs.containsKey(target);
+		if (targetsLangs != null) {
+			return targetsLangs.containsKey(target);
+		}
+		
+		return false;
 	}
 	
 	/**

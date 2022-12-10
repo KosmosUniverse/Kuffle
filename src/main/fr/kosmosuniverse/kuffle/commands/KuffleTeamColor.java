@@ -8,13 +8,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
-import main.fr.kosmosuniverse.kuffle.type.KuffleType;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
+import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 /**
@@ -25,24 +25,15 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
 public class KuffleTeamColor implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		if (!(sender instanceof Player))
-			return false;
+		Player player = null;
 		
-		Player player = (Player) sender;
-		
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-team-color>"));
-		
-		if (!player.hasPermission("k-team-color")) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
+		try {
+			player = CommandUtils.initCommand(sender, "k-team-color", true, true, false);
+		} catch (KuffleCommandFalseException e) {
 			return false;
 		}
 		
-		if (KuffleMain.type.getType() == KuffleType.Type.NO_TYPE) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("KUFFLE_TYPE_NOT_CONFIG", Config.getLang()));
-			return true;
-		}
-		
-		if (KuffleMain.gameStarted && GameManager.getGames().size() > 0) {
+		if (GameManager.getGames().size() > 0) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
 			return true;
 		}
@@ -77,7 +68,7 @@ public class KuffleTeamColor implements CommandExecutor {
 		
 		colorUsed.clear();
 
-		String tmpColor = TeamManager.getInstance().getTeam(args[0]).color.name();
+		String tmpColor = TeamManager.getInstance().getTeam(args[0]).getColor().name();
 		
 		TeamManager.getInstance().changeTeamColor(args[0], tmp);	
 		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("COLOR_CHANGED", Config.getLang()).replace("[#]", "[" + tmpColor + "]").replace("[##]", "[" + tmp.name() + "]").replace("<#>",	"<" + args[0] + ">"));

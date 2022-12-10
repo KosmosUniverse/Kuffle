@@ -1,6 +1,6 @@
 package main.fr.kosmosuniverse.kuffle.core;
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.security.SecureRandom;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -19,12 +19,12 @@ public class GameLoop {
 	private int worstRank;
 
 	public void startRunnable() {
-		final ThreadLocalRandom random = ThreadLocalRandom.current();
+		final SecureRandom random = new SecureRandom();
 		
 		runnable = new BukkitRunnable() {
 			@Override
 			public void run() {
-				if (KuffleMain.paused) {
+				if (KuffleMain.getInstance().isPaused()) {
 					return ;
 				}
 
@@ -67,15 +67,15 @@ public class GameLoop {
 		return ret;
 	}
 	
-	private void runLoop(ThreadLocalRandom random) {
-		GameManager.applyToPlayers((game) -> {
+	private void runLoop(SecureRandom random) {
+		GameManager.applyToPlayers(game -> {
 			if (game.lose) {
 				if (!game.finished) {
 					GameManager.finish(game, worstRank);
 					worstRank = GameManager.getWorstRank();
-					GameManager.applyToPlayers((playerGame) -> {
-						playerGame.player.sendMessage(LangManager.getMsgLang("GAME_ABANDONED", playerGame.configLang).replace("<#>", ChatColor.GOLD + "" + ChatColor.BOLD + game.player.getName() + ChatColor.BLUE));
-					});
+					GameManager.applyToPlayers(playerGame ->
+						playerGame.player.sendMessage(LangManager.getMsgLang("GAME_ABANDONED", playerGame.configLang).replace("<#>", ChatColor.GOLD + "" + ChatColor.BOLD + game.player.getName() + ChatColor.BLUE))
+					);
 				}
 			} else if (game.finished) {
 				GameManager.playerRandomBarColor(game);
@@ -92,13 +92,13 @@ public class GameLoop {
 	}
  	
 	private void checkTargetStatus(Game game) {
-		if (game.age == (Config.getLastAge().number + 1)) {
+		if (game.age == (Config.getLastAge().getNumber() + 1)) {
 			GameManager.finish(game, bestRank);
 			bestRank = GameManager.getBestRank();
 			LogManager.getInstanceGame().logSystemMsg(game.player.getName() + " complete its game !");
-			GameManager.applyToPlayers((playerGame) -> {
-				playerGame.player.sendMessage(LangManager.getMsgLang("GAME_COMPLETE", playerGame.configLang).replace("<#>", ChatColor.GOLD + "" + ChatColor.BOLD + game.player.getName() + ChatColor.BLUE));
-			});
+			GameManager.applyToPlayers(playerGame ->
+				playerGame.player.sendMessage(LangManager.getMsgLang("GAME_COMPLETE", playerGame.configLang).replace("<#>", ChatColor.GOLD + "" + ChatColor.BOLD + game.player.getName() + ChatColor.BLUE))
+			);
 		} else if (!Config.getTeam() && game.targetCount >= (Config.getTargetPerAge() + 1)) {
 			GameManager.nextPlayerAge(game);
 		} else if (Config.getTeam() && game.targetCount >= (Config.getTargetPerAge() + 1)) {
@@ -110,13 +110,13 @@ public class GameLoop {
 		}
 	}
 	
-	private void resetOrDisplayTarget(Game game, ThreadLocalRandom random) {
+	private void resetOrDisplayTarget(Game game, SecureRandom random) {
 		if (System.currentTimeMillis() - game.timeShuffle > (game.time * 60000)) {
 			game.player.sendMessage(ChatColor.RED + LangManager.getMsgLang("TARGET_NOT_FOUND", game.configLang));
 			LogManager.getInstanceGame().logSystemMsg("Player : " + game.player.getName() + " did not found target : " + game.currentTarget);
 			newItem(game);
 		} else if (Config.getDouble() && !game.currentTarget.contains("/")) {
-			String currentTmp = TargetManager.newTarget(GameManager.getPlayerAlreadyGot(game), AgeManager.getAgeByNumber(game.age).name);
+			String currentTmp = TargetManager.newTarget(GameManager.getPlayerAlreadyGot(game), AgeManager.getAgeByNumber(game.age).getName());
 
 			GameManager.addToAlreadyGot(game, currentTmp);
 			game.currentTarget = game.currentTarget + "/" + currentTmp;
@@ -128,12 +128,12 @@ public class GameLoop {
 			GameManager.removeFromList(game, tmp);
 		}
 		
-		if (KuffleMain.type.getType() == KuffleType.Type.BLOCKS) {
-			checkBlock(game);
+		if (KuffleMain.getInstance().getType().getType() == KuffleType.Type.BLOCKS && checkBlock(game)) {
+			GameManager.playerFoundTarget(game);
 		}
 	}
 	
-	private void checkBlock(Game game) {
+	private boolean checkBlock(Game game) {
 		Location pPosition = game.player.getLocation().clone().add(0, -1, 0);
 		double pY = pPosition.getY();
 		
@@ -145,14 +145,15 @@ public class GameLoop {
 				
 				if (targets[0].equals(pPosition.getBlock().getType().name().toLowerCase()) ||
 						targets[1].equals(pPosition.getBlock().getType().name().toLowerCase())) {
-					GameManager.playerFoundTarget(game);
-					break;
+					
+					return true;
 				}
 			} else if (game.currentTarget.equals(pPosition.getBlock().getType().name().toLowerCase())) {
-				GameManager.playerFoundTarget(game);
-				break;
+				return true;
 			}
 		}
+		
+		return false;
 	}
 
 	private void printTimerTarget(Game tmpGame) {
@@ -194,7 +195,7 @@ public class GameLoop {
 		boolean ret = true;
 		Team team = TeamManager.getInstance().findTeamByPlayer(tmpGame.player.getName());
 		
-		for (Player player : team.players) {
+		for (Player player : team.getPlayers()) {
 			Game game = GameManager.getGames().get(player.getName());
 			
 			if (game.age <= tmpGame.age &&
@@ -224,19 +225,19 @@ public class GameLoop {
 	}
 
 	private String newItemSingle(Game tmpGame) {
-		if (GameManager.getPlayerAlreadyGot(tmpGame).size() >= TargetManager.getAgeTargets(AgeManager.getAgeByNumber(tmpGame.age).name).size()) {
+		if (GameManager.getPlayerAlreadyGot(tmpGame).size() >= TargetManager.getAgeTargets(AgeManager.getAgeByNumber(tmpGame.age).getName()).size()) {
 			GameManager.resetPlayerList(tmpGame);
 		}
 
 		String ret;
 
 		if (Config.getSame()) {
-			Pair tmpPair = TargetManager.nextTarget(GameManager.getPlayerAlreadyGot(tmpGame), AgeManager.getAgeByNumber(tmpGame.age).name, tmpGame.sameIdx);
+			Pair tmpPair = TargetManager.nextTarget(GameManager.getPlayerAlreadyGot(tmpGame), AgeManager.getAgeByNumber(tmpGame.age).getName(), tmpGame.sameIdx);
 
 			tmpGame.sameIdx = (int) tmpPair.getKey();
 			ret = (String) tmpPair.getValue();
 		} else {
-			ret = TargetManager.newTarget(tmpGame.alreadyGot, AgeManager.getAgeByNumber(tmpGame.age).name);
+			ret = TargetManager.newTarget(tmpGame.alreadyGot, AgeManager.getAgeByNumber(tmpGame.age).getName());
 		}
 
 		return ret;

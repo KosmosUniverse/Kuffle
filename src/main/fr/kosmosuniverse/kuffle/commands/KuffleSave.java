@@ -1,9 +1,6 @@
 package main.fr.kosmosuniverse.kuffle.commands;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,15 +9,12 @@ import org.bukkit.entity.Player;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Config;
-import main.fr.kosmosuniverse.kuffle.core.CraftManager;
-import main.fr.kosmosuniverse.kuffle.core.GameHolder;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
-import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
-import main.fr.kosmosuniverse.kuffle.type.KuffleType;
-import main.fr.kosmosuniverse.kuffle.utils.Utils;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
+import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 
 /**
  * 
@@ -41,25 +35,15 @@ public class KuffleSave implements CommandExecutor {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		if (!(sender instanceof Player))
-			return false;
+		Player player = null;
 		
-		Player player = (Player) sender;
-		
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-save>"));
-		
-		if (!player.hasPermission("k-save")) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
-			
+		try {
+			player = CommandUtils.initCommand(sender, "k-add-during-game", false, true, true);
+		} catch (KuffleCommandFalseException e) {
 			return false;
 		}
 		
-		if (!KuffleMain.gameStarted) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", Config.getLang()));
-			return false;
-		}
-		
-		KuffleMain.paused = true;
+		KuffleMain.getInstance().setPaused(true);
 
 		GameManager.savePlayers(dataFolder.getPath());
 				
@@ -67,41 +51,8 @@ public class KuffleSave implements CommandExecutor {
 			TeamManager.getInstance().saveTeams(dataFolder.getPath());
 		}
 		
-		GameHolder holder = new GameHolder(Config.getHolder(), KuffleMain.type.getType().toString(), GameManager.getRanks(), KuffleMain.type.getXpMap());
+		CommandUtils.saveParty();
 		
-		try (FileOutputStream fos = new FileOutputStream(KuffleMain.getInstance().getDataFolder().getPath() + File.separator + "Game.k")) {
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(holder);
-			oos.flush();
-			oos.close();
-		} catch (IOException e) {
-			Utils.logException(e);
-		}
-		
-		/*try (FileWriter writer = new FileWriter(dataFolder.getPath() + File.separator + "Games.k");) {				
-			JSONObject global = new JSONObject();
-
-			global.put("type", KuffleMain.type.getType().toString());
-			global.put("config", Config.saveConfig());
-			global.put("ranks", GameManager.saveRanks());
-			global.put("xpMax", KuffleMain.type.saveXpMax());
-			
-			writer.write(global.toJSONString());
-			
-			global.clear();
-		} catch (IOException e) {
-			LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
-		}*/
-		
-		if (KuffleMain.type.getType() == KuffleType.Type.ITEMS) {
-			CraftManager.removeCraftTemplates();
-		}
-		
-		ScoreManager.clear();
-		GameManager.clear();
-		KuffleMain.loop.kill();
-		KuffleMain.paused = false;
-		KuffleMain.gameStarted = false;
 		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_SAVED", Config.getLang()));
 		
 		return true;

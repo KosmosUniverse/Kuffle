@@ -9,10 +9,10 @@ import org.bukkit.Material;
  *
  */
 public class Age {
-	public String name;
-	public int number;
-	public ChatColor color;
-	public Material box;
+	private String name;
+	private int number;
+	private ChatColor color;
+	private Material box;
 	
 	/**
 	 * Constructor
@@ -42,5 +42,41 @@ public class Age {
 		number = ageNumber;
 		color = ChatColor.valueOf(ageColor);
 		box = Material.matchMaterial(ageBox);
+	}
+	
+	/**
+	 * Gets Age name
+	 * 
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * Gets Age number
+	 * 
+	 * @return the number
+	 */
+	public int getNumber() {
+		return number;
+	}
+	
+	/**
+	 * Gets Age color
+	 * 
+	 * @return the color
+	 */
+	public ChatColor getColor() {
+		return color;
+	}
+	
+	/**
+	 * Gets Age box
+	 * 
+	 * @return the box
+	 */
+	public Material getBox() {
+		return box;
 	}
 }

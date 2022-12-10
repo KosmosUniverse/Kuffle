@@ -14,6 +14,8 @@ import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
+import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 
 /**
  * 
@@ -23,31 +25,22 @@ import main.fr.kosmosuniverse.kuffle.core.LogManager;
 public class KufflePause implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		if (!(sender instanceof Player))
-			return false;
+		Player player = null;
 		
-		Player player = (Player) sender;
-		
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-pause>"));
-		
-		if (!player.hasPermission("k-pause")) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
+		try {
+			player = CommandUtils.initCommand(sender, "k-pause", false, true, true);
+		} catch (KuffleCommandFalseException e) {
 			return false;
 		}
 		
-		if (!KuffleMain.gameStarted) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", Config.getLang()));
-			return false;
-		}
-		
-		if (KuffleMain.paused) {
+		if (KuffleMain.getInstance().isPaused()) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_ALREADY_PAUSED", Config.getLang()));
 			return false;
 		}
 		
-		KuffleMain.paused = true;
+		KuffleMain.getInstance().setPaused(true);
 		
-		GameManager.applyToPlayers((game) -> {
+		GameManager.applyToPlayers(game -> {
 			GameManager.pausePlayer(game);
 			ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + LangManager.getMsgLang("GAME_PAUSED", game.configLang) + ChatColor.RESET, game.player);
 			game.player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 10, false, false, false));			

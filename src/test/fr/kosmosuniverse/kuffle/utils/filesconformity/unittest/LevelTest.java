@@ -53,7 +53,7 @@ class LevelTest {
 			assertTrue(FilesConformity.levelsConformity(content),
 					"levels_correct.json should be conform.");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -70,7 +70,7 @@ class LevelTest {
 			assertFalse(FilesConformity.levelsConformity(content),
 					"Level conformity must reject when number is missing !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -87,7 +87,7 @@ class LevelTest {
 			assertFalse(FilesConformity.levelsConformity(content),
 					"Level conformity must reject when seconds is missing !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -104,7 +104,7 @@ class LevelTest {
 			assertFalse(FilesConformity.levelsConformity(content),
 					"Level conformity must reject when lose is missing !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -121,7 +121,7 @@ class LevelTest {
 			assertFalse(FilesConformity.levelsConformity(content),
 					"Level conformity must reject when number is invalid !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -138,7 +138,7 @@ class LevelTest {
 			assertFalse(FilesConformity.levelsConformity(content),
 					"Level conformity must reject when seconds is invalid !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -155,7 +155,7 @@ class LevelTest {
 			assertFalse(FilesConformity.levelsConformity(content),
 					"Level conformity must reject when lose is invalid !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}

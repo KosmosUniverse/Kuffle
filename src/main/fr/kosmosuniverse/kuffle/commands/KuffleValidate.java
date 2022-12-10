@@ -19,11 +19,10 @@ public class KuffleValidate implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		if (!KuffleMain.gameStarted) {
+		if (!KuffleMain.getInstance().isStarted()) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", Config.getLang()));
 			return true;
 		}
-		
 		
 		if (args.length != 1) {
 			return false;
@@ -58,13 +57,13 @@ public class KuffleValidate implements CommandExecutor {
 				return true;
 			}
 			
-			if (GameManager.getPlayerAge(args[0]).number == -1) {
+			if (GameManager.getPlayerAge(args[0]).getNumber() == -1) {
 				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_ALREADY_FINISHED", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
 				
 				return true;
 			}
 
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("AGE_VALIDATED", Config.getLang()).replace("[#]", "[" + GameManager.getPlayerAge(args[0]).name + "]").replace("<#>", "<" + args[0] + ">"));
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("AGE_VALIDATED", Config.getLang()).replace("[#]", "[" + GameManager.getPlayerAge(args[0]).getName() + "]").replace("<#>", "<" + args[0] + ">"));
 			GameManager.finishAge(args[0]);
 		}
 		

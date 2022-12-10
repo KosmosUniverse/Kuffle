@@ -72,7 +72,7 @@ public class LevelManager {
 	 */
 	public static boolean levelExists(String levelName) {
 		for (Level level : levels) {
-			if (level.name.equals(levelName)) {
+			if (level.getName().equals(levelName)) {
 				return true;
 			}
 		}
@@ -89,7 +89,7 @@ public class LevelManager {
 	 */
 	public static Level getLevelByNumber(int levelNumber) {
 		for (Level level : levels) {
-			if (level.number == levelNumber) {
+			if (level.getNumber() == levelNumber) {
 				return level;
 			}
 		}
@@ -106,7 +106,7 @@ public class LevelManager {
 	 */
 	public static Level getLevelByName(String levelName) {
 		for (Level level : levels) {
-			if (level.name.equalsIgnoreCase(levelName)) {
+			if (level.getName().equalsIgnoreCase(levelName)) {
 				return level;
 			}
 		}
@@ -123,7 +123,7 @@ public class LevelManager {
 		int max = 0;
 		
 		for (Level level : levels) {
-			max = max < level.number ? level.number : max;
+			max = max < level.getNumber() ? level.getNumber() : max;
 		}
 		
 		return max;

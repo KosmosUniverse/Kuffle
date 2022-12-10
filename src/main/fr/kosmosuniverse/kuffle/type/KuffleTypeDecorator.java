@@ -15,8 +15,8 @@ import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 public abstract class KuffleTypeDecorator extends KuffleType {
 	protected KuffleType type;
 	
-	public KuffleTypeDecorator(KuffleType _type) {
-		type = _type;
+	protected KuffleTypeDecorator(KuffleType kuffleType) {
+		type = kuffleType;
 	}
 	
 	@Override

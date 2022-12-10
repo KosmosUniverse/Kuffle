@@ -6,10 +6,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
-import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
+import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 
 /**
  * 
@@ -19,19 +20,15 @@ import main.fr.kosmosuniverse.kuffle.core.LogManager;
 public class KuffleAbandon implements CommandExecutor  {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cnd, String msg, String[] args) {
-		if (!(sender instanceof Player))
-			return false;
+		Player player;
 		
-		Player player = (Player) sender;
-		
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-abandon>"));
-		
-		if (!player.hasPermission("k-abandon")) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
+		try {
+			player = CommandUtils.initCommand(sender, "k-abandon", false, true, true);
+		} catch (KuffleCommandFalseException e) {
 			return false;
 		}
 		
-		if (KuffleMain.gameStarted) {
+		if (KuffleMain.getInstance().isStarted()) {
 			if (!GameManager.hasPlayer(player.getName())) {
 				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_PLAYING", GameManager.getPlayerLang(player.getName())));
 				return true;

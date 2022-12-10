@@ -44,6 +44,7 @@ public class CraftImplTest {
 		
 		if (jsonCraft == null) {
 			fail("json craft is null");
+			return;
 		}
 		
 		for (Object key : jsonCraft.keySet()) {

@@ -38,16 +38,13 @@ public class BlocksPlayerInteract extends PlayerInteract implements Listener {
 	 */
 	@EventHandler
 	public void onLeftClick(PlayerInteractEvent event) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
-		if (KuffleMain.type.getType() != KuffleType.Type.BLOCKS) {
+		if (KuffleMain.getInstance().getType().getType() != KuffleType.Type.BLOCKS) {
 			return ;
 		}
 		
 		try {
-			if (onLeftClickGeneric(event)) {
-				return ;
-			}
+			onLeftClickGeneric(event);
 		} catch (KuffleEventNotUsableException e) {
-			return ;
 		}	
 	}
 }

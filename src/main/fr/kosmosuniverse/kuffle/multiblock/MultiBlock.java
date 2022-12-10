@@ -13,16 +13,16 @@ import org.bukkit.entity.Player;
  *
  */
 public class MultiBlock {
-	private Material Core;
+	private Material core;
 	private List<Level> pattern;
 	
 	/**
 	 * Constructor
 	 * 
-	 * @param _core	The multiblock core
+	 * @param mbCore	The multiblock core
 	 */
-	public MultiBlock(Material _core) {
-		Core = _core;
+	public MultiBlock(Material mbCore) {
+		core = mbCore;
 		pattern = new ArrayList<>();
 	}
 	
@@ -40,7 +40,7 @@ public class MultiBlock {
 	 * @return	The core as Material
 	 */
 	public Material getCore() {
-		return Core;
+		return core;
 	}
 	
 	/**
@@ -63,11 +63,7 @@ public class MultiBlock {
 	public boolean checkMultiBlock(Location corelLoc, Player player) {
 		Location newLoc = new Location(corelLoc.getWorld(), corelLoc.getBlockX(), corelLoc.getBlockY(), corelLoc.getBlockZ());
 		
-		if (checkNorthSouth(newLoc, 1) || checkNorthSouth(newLoc, -1) || checkEastWest(newLoc, 1) || checkEastWest(newLoc, -1)) {
-			return true;
-		}
-
-		return false;
+		return (checkNorthSouth(newLoc, 1) || checkNorthSouth(newLoc, -1) || checkEastWest(newLoc, 1) || checkEastWest(newLoc, -1));
 	}
 
 	/**
@@ -112,7 +108,7 @@ public class MultiBlock {
 	public void spawnMultiBlock(Player player) {
 		Location newLoc = new Location(player.getLocation().getWorld(), player.getLocation().getBlockX(), player.getLocation().getBlockY() + 20, player.getLocation().getBlockZ());
 
-		newLoc.getBlock().setType(this.Core);
+		newLoc.getBlock().setType(this.core);
 
 		for (Level l : pattern) {
 			l.spawnLevel(newLoc);

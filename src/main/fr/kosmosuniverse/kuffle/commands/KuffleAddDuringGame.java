@@ -15,6 +15,8 @@ import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
+import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 /**
@@ -25,24 +27,15 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
 public class KuffleAddDuringGame implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		if (!(sender instanceof Player))
+		Player player = null;
+		
+		try {
+			player = CommandUtils.initCommand(sender, "k-add-during-game", false, true, true);
+		} catch (KuffleCommandFalseException e) {
 			return false;
-
-		Player player = (Player) sender;
-
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-add-during-game>"));
-
-		if (!player.hasPermission("k-add-during-game")) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
-			return false;
-		}
-
-		if (!KuffleMain.gameStarted) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", Config.getLang()));			
-			return true;
 		}
 		
-		if (args.length == 0 || args.length > 2) {
+		if (player == null || args.length == 0 || args.length > 2) {
 			return false;
 		}
 
@@ -56,7 +49,7 @@ public class KuffleAddDuringGame implements CommandExecutor {
 			if (!TeamManager.getInstance().hasTeam(args[1])) {
 				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + args[1] + ">"));
 				return true;
-			} else if (TeamManager.getInstance().getTeam(args[1]).players.size() == Config.getTeamSize()) {
+			} else if (TeamManager.getInstance().getTeam(args[1]).getPlayers().size() == Config.getTeamSize()) {
 				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_FULL", Config.getLang()));
 				return true;
 			}
@@ -80,7 +73,7 @@ public class KuffleAddDuringGame implements CommandExecutor {
 	 * @param team		The player's team if needed
 	 */
 	private void startPlayer(Player sender, Player player, String team) {
-		KuffleMain.paused = true;
+		KuffleMain.getInstance().setPaused(true);
 
 		GameManager.addPlayer(player);
 		LogManager.getInstanceSystem().writeMsg(sender, LangManager.getMsgLang("ADDED_ONE_LIST", Config.getLang()));
@@ -89,7 +82,7 @@ public class KuffleAddDuringGame implements CommandExecutor {
 			TeamManager.getInstance().affectPlayer(team, player);
 			LogManager.getInstanceSystem().writeMsg(sender, LangManager.getMsgLang("TEAM_ADD_PLAYER", Config.getLang()).replace("<#>", "<" + team + ">").replace("<##>", "<" + player.getName() + ">"));
 
-			GameManager.applyToPlayer(player.getName(), (game) -> {
+			GameManager.applyToPlayer(player.getName(), game -> {
 				game.teamName = team;
 				game.spawnLoc = GameManager.getPlayerSpawnLoc(TeamManager.getInstance().getTeam(team).getPlayersName().get(0));
 			});
@@ -97,7 +90,7 @@ public class KuffleAddDuringGame implements CommandExecutor {
 			player.setBedSpawnLocation(GameManager.getPlayerSpawnLoc(player.getName()), true);
 			player.teleport(GameManager.getPlayer(TeamManager.getInstance().getTeam(team).getPlayersName().get(0)).getPlayer());
 		} else {
-			GameManager.applyToPlayer(player.getName(), (game) -> {
+			GameManager.applyToPlayer(player.getName(), game -> {
 				game.spawnLoc = player.getLocation();
 				game.spawnLoc.add(0, -1, 0).getBlock().setType(Material.BEDROCK);
 			});
@@ -113,7 +106,7 @@ public class KuffleAddDuringGame implements CommandExecutor {
 		ScoreManager.setupPlayerScore(player.getName());
 		GameManager.updatePlayersHeads();
 
-		KuffleMain.paused = false;
+		KuffleMain.getInstance().setPaused(false);
 
 		player.getInventory().addItem(KuffleStart.getStartBox(player.getName()));
 

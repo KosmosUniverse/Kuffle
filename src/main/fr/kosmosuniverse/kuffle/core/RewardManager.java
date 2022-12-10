@@ -113,7 +113,7 @@ public class RewardManager {
 		List<ItemStack> items = new ArrayList<>();
 		Map<String, RewardElem> ageReward = rewards.get(ageName);
 		
-		ItemStack container = ItemUtils.itemMaker(AgeManager.getAgeByName(ageName).box, 1, ageName.replace("_Age", "") + " Reward", "Owner:" + player.getName());
+		ItemStack container = ItemUtils.itemMaker(AgeManager.getAgeByName(ageName).getBox(), 1, ageName.replace("_Age", "") + " Reward", "Owner:" + player.getName());
 		
 		BlockStateMeta containerMeta = (BlockStateMeta) container.getItemMeta();
 		ShulkerBox box = (ShulkerBox) containerMeta.getBlockState();

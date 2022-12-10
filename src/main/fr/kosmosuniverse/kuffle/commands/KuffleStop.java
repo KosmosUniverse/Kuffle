@@ -13,28 +13,21 @@ import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
+import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 
 public class KuffleStop implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		if (!(sender instanceof Player))
-			return false;
+		Player player = null;
 		
-		Player player = (Player) sender;
-		
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-stop>"));
-		
-		if (!player.hasPermission("k-stop")) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
+		try {
+			player = CommandUtils.initCommand(sender, "k-stop", false, true, true);
+		} catch (KuffleCommandFalseException e) {
 			return false;
 		}
 		
-		if (!KuffleMain.gameStarted) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", Config.getLang()));
-			return false;
-		}
-		
-		GameManager.applyToPlayers((game) -> {
+		GameManager.applyToPlayers(game -> {
 			for (PotionEffect pe : game.player.getActivePotionEffects()) {
 				game.player.removePotionEffect(pe.getType());
 			}
@@ -43,7 +36,7 @@ public class KuffleStop implements CommandExecutor {
 		});
 
 		if (Config.getSBTT()) {
-			KuffleMain.type.clearSbtt();
+			KuffleMain.getInstance().getType().clearSbtt();
 		}
 		
 		ScoreManager.clear();
@@ -53,10 +46,10 @@ public class KuffleStop implements CommandExecutor {
 		}
 		
 		GameManager.clear();
-		KuffleMain.loop.kill();
+		KuffleMain.getInstance().getGameLoop().kill();
 		
-		KuffleMain.gameStarted = false;
-		KuffleMain.paused = false;
+		KuffleMain.getInstance().setStarted(false);
+		KuffleMain.getInstance().setPaused(false);
 		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_STOPPED", Config.getLang()));
 		
 		return true;

@@ -32,6 +32,8 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  *
  */
 public class ItemsPlayerInteract extends PlayerInteract {
+	private static final String END_TELEPORTER = "EndTeleporter";
+	private static final String OVER_TELEPORTER = "OverworldTeleporter";
 	
 	/**
 	 * Constructor
@@ -53,7 +55,7 @@ public class ItemsPlayerInteract extends PlayerInteract {
 	 */
 	@EventHandler
 	public void onLeftClick(PlayerInteractEvent event) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
-		if (KuffleMain.type.getType() != KuffleType.Type.ITEMS) {
+		if (KuffleMain.getInstance().getType().getType() != KuffleType.Type.ITEMS) {
 			return ;
 		}
 		
@@ -73,8 +75,8 @@ public class ItemsPlayerInteract extends PlayerInteract {
 			return ;
 		}
 		
-		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("EndTeleporter")) &&
-				checkXp(player, KuffleMain.type.getXpActivable("EndTeleporter"))) {
+		if (ItemUtils.itemComparison(item, CraftManager.findItemByName(END_TELEPORTER)) &&
+				checkXp(player, KuffleMain.getInstance().getType().getXpActivable(END_TELEPORTER))) {
 			consumeItem(player, event.getHand());
 			
 			endTeleporter(player);
@@ -82,8 +84,8 @@ public class ItemsPlayerInteract extends PlayerInteract {
 			return ;
 		}
 		
-		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("OverworldTeleporter")) &&
-				checkXp(player, KuffleMain.type.getXpActivable("OverworldTeleporter"))) {
+		if (ItemUtils.itemComparison(item, CraftManager.findItemByName(OVER_TELEPORTER)) &&
+				checkXp(player, KuffleMain.getInstance().getType().getXpActivable(OVER_TELEPORTER))) {
 			consumeItem(player, event.getHand());
 			
 			overworldTeleporter(player);
@@ -142,9 +144,9 @@ public class ItemsPlayerInteract extends PlayerInteract {
 		
 		teleport(tmp, player, LangManager.getMsgLang("TP_END", GameManager.getPlayerLang(player.getName())));
 		
-		int xpAmount = KuffleMain.type.getXpActivable("EndTeleporter");
+		int xpAmount = KuffleMain.getInstance().getType().getXpActivable(END_TELEPORTER);
 		xpAmount = (xpAmount - 1) < 1 ? 1 : (xpAmount - 1);
-		KuffleMain.type.setXpActivable("EndTeleporter", xpAmount);
+		KuffleMain.getInstance().getType().setXpActivable(END_TELEPORTER, xpAmount);
 		
 	}
 
@@ -158,9 +160,9 @@ public class ItemsPlayerInteract extends PlayerInteract {
 		
 		teleport(tmp, player, LangManager.getMsgLang("TP_OVERWORLD", GameManager.getPlayerLang(player.getName())));
 		
-		int xpAmount = KuffleMain.type.getXpActivable("OverworldTeleporter");
+		int xpAmount = KuffleMain.getInstance().getType().getXpActivable(OVER_TELEPORTER);
 		xpAmount = (xpAmount - 2) < 2 ? 2 : (xpAmount - 2);
-		KuffleMain.type.setXpActivable("OverworldTeleporter", xpAmount);
+		KuffleMain.getInstance().getType().setXpActivable(OVER_TELEPORTER, xpAmount);
 	}
 	
 	/**
@@ -176,7 +178,7 @@ public class ItemsPlayerInteract extends PlayerInteract {
 		if (Config.getTeam()) {
 			Team team = TeamManager.getInstance().findTeamByPlayer(player.getName());
 			
-			team.getPlayers().forEach((p) -> {
+			team.getPlayers().forEach(p -> {
 				p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 50, false, false, false));
 				p.teleport(loc);
 				p.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);

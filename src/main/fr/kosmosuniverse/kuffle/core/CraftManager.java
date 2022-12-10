@@ -33,6 +33,11 @@ public class CraftManager {
 	private static ItemStack redPane = ItemUtils.itemMaker(Material.RED_STAINED_GLASS_PANE, 1, "<- Back");
 	private static ItemStack bluePane = ItemUtils.itemMaker(Material.BLUE_STAINED_GLASS_PANE, 1, "Next ->");
 	private static int slotCnt;
+	private static final String TEMPLATE = "Template";
+	
+	private CraftManager() {
+		throw new IllegalStateException("");
+	}
 	
 	/**
 	 * Setups the crafts (Mandatory and Optional if Crafts option is true)
@@ -52,7 +57,7 @@ public class CraftManager {
 			String version = craft.get("Version").toString();
 			String remVersion = craft.containsKey("RemVersion") ? craft.get("RemVersion").toString() : null;
 			String kuffleType = craft.get("KuffleType").toString();
-			boolean mandatory = Boolean.valueOf(craft.get("Mandatory").toString().toUpperCase());
+			boolean mandatory = Boolean.parseBoolean(craft.get("Mandatory").toString().toUpperCase());
 			
 			if (VersionManager.isVersionValid(version, remVersion) &&
 					(kuffleType.equals("BOTH") || gameType == KuffleType.Type.valueOf(kuffleType.toUpperCase())) &&
@@ -118,7 +123,7 @@ public class CraftManager {
 	public static void removeCrafts() {
 		List<String> names = recipes.stream().map(recipe -> recipe.getName()).collect(Collectors.toList());
 		
-		names.forEach(name -> removeCraft(name));
+		names.forEach(CraftManager::removeCraft);
 		names.clear();
 	}
 	
@@ -146,7 +151,7 @@ public class CraftManager {
 		slotCnt = 0;
 				
 		 for (int i = 0; i < nbInvTotal; i++) {
-			 inventories.add(setupInventory(54, cnt, (!(nbRowsRest > 0) && (i + 1) == nbInvTotal)));
+			 inventories.add(setupInventory(54, cnt, (nbRowsRest <= 0 && (i + 1) == nbInvTotal)));
 			 cnt++;
 		 }
 		 
@@ -267,11 +272,9 @@ public class CraftManager {
 		} else if (item.getType() == Material.RED_STAINED_GLASS_PANE) {
 			if (item.getItemMeta().getDisplayName().equals("<- Back")) {
 				return (inventories.get(0));
-			} else if (item.getItemMeta().getDisplayName().equals("<- Previous")) {
-				if (idx > 0) {
-					idx -= 1;
-					return (inventories.get(idx));
-				}
+			} else if (item.getItemMeta().getDisplayName().equals("<- Previous") && idx > 0) {
+				idx -= 1;
+				return (inventories.get(idx));
 			}
 		}
 		
@@ -301,11 +304,11 @@ public class CraftManager {
 	public static void setupCraftTemplates() {
 		List<Template> templates = new ArrayList<>();
 
-		for (int i = 0; i <= Config.getLastAge().number; i++)  {
-			String name = AgeManager.getAgeByNumber(i).name;
+		for (int i = 0; i <= Config.getLastAge().getNumber(); i++)  {
+			String name = AgeManager.getAgeByNumber(i).getName();
 
-			name = name.replace("_Age", "Template");
-			templates.add(new Template(name, getMaterials(AgeManager.getAgeByNumber(i).name)));
+			name = name.replace("_Age", TEMPLATE);
+			templates.add(new Template(name, getMaterials(AgeManager.getAgeByNumber(i).getName())));
 		}
 
 		for (Template t : templates) {
@@ -319,10 +322,10 @@ public class CraftManager {
 	 * Removes the template items
 	 */
 	public static void removeCraftTemplates() {
-		for (int i = 0; i <= Config.getLastAge().number; i++)  {
-			String name = AgeManager.getAgeByNumber(i).name;
+		for (int i = 0; i <= Config.getLastAge().getNumber(); i++)  {
+			String name = AgeManager.getAgeByNumber(i).getName();
 			
-			name = name.replace("_Age", "Template");
+			name = name.replace("_Age", TEMPLATE);
 
 			removeCraft(name);
 		}
@@ -335,8 +338,8 @@ public class CraftManager {
 	 */
 	public static void reloadTemplates() {
 		for (Age age : AgeManager.getAges()) {
-			if (age.number != -1) {
-				reloadTemplate(age.name.replace("_Age", "Template"));
+			if (age.getNumber() != -1) {
+				reloadTemplate(age.getName().replace("_Age", TEMPLATE));
 			}
 		}
 	}
@@ -352,7 +355,7 @@ public class CraftManager {
 		
 		removeCraft(tmpName);
 
-		Template t = new Template(tmpName, getMaterials(tmpName.replace("Template", "_Age")));
+		Template t = new Template(tmpName, getMaterials(tmpName.replace(TEMPLATE, "_Age")));
 
 		addCraft(t);
 
@@ -412,11 +415,10 @@ public class CraftManager {
 		boolean ret = false;
 		
 		for (ACraft recipe : recipes) {
-			if (recipe.getName().toLowerCase().contains("template")) {
-				if (ItemUtils.itemComparison(item, recipe.getItem())) {
-					ret = true;
-					break;
-				}
+			if (recipe.getName().toLowerCase().contains("template") &&
+					ItemUtils.itemComparison(item, recipe.getItem())) {
+				ret = true;
+				break;
 			}
 		}
 		

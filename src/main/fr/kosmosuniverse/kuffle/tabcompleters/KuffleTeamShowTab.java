@@ -27,7 +27,7 @@ public class KuffleTeamShowTab implements TabCompleter {
 			List<String> ret = new ArrayList<>();
 			
 			for (Team item : TeamManager.getInstance().getTeams()) {
-				ret.add(item.name);
+				ret.add(item.getName());
 			}
 			
 			return ret;

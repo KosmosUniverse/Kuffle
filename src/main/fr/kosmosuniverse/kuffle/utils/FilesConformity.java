@@ -163,6 +163,7 @@ public class FilesConformity {
 	 */
 	private static boolean checkContent(String file, String content) {
 		boolean ret = true;
+		String fileExtension = ".json";
 		
 		if (content.equals(getFromResource(file))) {
 			ret = false;
@@ -174,10 +175,10 @@ public class FilesConformity {
 			ret = itemLangConformity(content);
 		} else if (ret && file.equals("langs.json")) {
 			ret = msgLangConformity(content);
-		} else if (ret && file.equals("items_" + VersionManager.getVersion() + ".json") ||
-				file.equals("sbtt_" + VersionManager.getVersion() + ".json")) {
+		} else if (ret && file.equals("items_" + VersionManager.getVersion() + fileExtension) ||
+				file.equals("sbtt_" + VersionManager.getVersion() + fileExtension)) {
 			ret = itemsConformity(content);
-		} else if (ret && file.equals("rewards_" + VersionManager.getVersion() + ".json")) {
+		} else if (ret && file.equals("rewards_" + VersionManager.getVersion() + fileExtension)) {
 			ret = rewardsConformity(content);
 		} else if (ret && file.equals("levels.json")) {
 			ret = levelsConformity(content);

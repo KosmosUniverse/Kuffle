@@ -139,7 +139,7 @@ public class SpreadPlayer {
     			
     			location.setY(location.getWorld().getHighestBlockYAt(location) + 1);
     			
-				for (Player player : teams.get(cnt).players) {
+				for (Player player : teams.get(cnt).getPlayers()) {
 					player.teleport(locations.get(cnt));
 				}
     		}

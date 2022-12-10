@@ -6,12 +6,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -268,12 +268,6 @@ public class GameManager {
 	public static void savePlayers(String path) {
 		games.forEach((playerName, playerGame) -> {
 			savePlayer(path, playerGame);
-			/*
-			try (FileWriter writer = new FileWriter(path + File.separator + playerName + ".k");) {				
-				writer.write(savePlayer(playerGame));
-			} catch (IOException e) {
-				LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
-			}*/
 			
 			stopPlayer(playerGame);
 		});
@@ -305,123 +299,6 @@ public class GameManager {
 			Utils.logException(e);
 		}
 	}
-	
-	/**
-	 * Convert player datas into a stringify JSON
-	 * 
-	 * @param player	The player that will be saved
-	 * 
-	 * @return the JSON formatted string of player's data
-	 */
-	public static String createPlayerSaveString(String player) {
-		return (createPlayerSaveString(games.get(player)));
-	}
-	
-	/**
-	 * Convert player datas into a stringify JSON
-	 * 
-	 * @param game	The game that contains the player to save
-	 * 
-	 * @return the JSON formatted string of player's data
-	 */
-	@SuppressWarnings("unchecked")	
-	public static String createPlayerSaveString(Game game) {
-		JSONObject jsonSpawn = new JSONObject();
-
-		jsonSpawn.put("World", game.spawnLoc.getWorld().getName());
-		jsonSpawn.put("X", game.spawnLoc.getX());
-		jsonSpawn.put("Y", game.spawnLoc.getY());
-		jsonSpawn.put("Z", game.spawnLoc.getZ());
-
-		JSONObject jsonDeath = new JSONObject();
-		if (game.deathLoc == null) {
-			jsonDeath = null;
-		} else {
-			jsonDeath.put("World", game.deathLoc.getWorld().getName());
-			jsonDeath.put("X", game.deathLoc.getX());
-			jsonDeath.put("Y", game.deathLoc.getY());
-			jsonDeath.put("Z", game.deathLoc.getZ());
-		}
-
-		JSONObject global = new JSONObject();
-
-		/*if (game.deathInv != null) {
-			try {
-				//savePlayerInventory(game);
-			} catch (IOException e) {
-				LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
-			}
-		}*/
-
-		global.put("age", game.age);
-		global.put("current", game.currentTarget);
-		global.put("interval", System.currentTimeMillis() - game.timeShuffle);
-		global.put("time", game.time);
-		global.put("isDead", game.dead);
-		global.put("itemCount", game.targetCount);
-		global.put("spawn", jsonSpawn);
-		global.put("death", jsonDeath);
-		global.put("teamName", game.teamName);
-		global.put("sameIdx", game.sameIdx);
-		global.put("deathCount", game.deathCount);
-		global.put("skipCount", game.skipCount);
-		global.put("finished", game.finished);
-		global.put("lose", game.lose);
-
-		JSONArray got = new JSONArray();
-
-		for (String item : game.alreadyGot) {
-			got.add(item);
-		}
-
-		global.put("alreadyGot", got);
-
-		JSONObject saveTimes = new JSONObject();
-
-		game.times.forEach(saveTimes::put);
-
-		saveTimes.put("interval", System.currentTimeMillis() - game.timeBase);
-
-		global.put("times", saveTimes);
-
-		return (global.toString());
-	}
-		
-	/*public static void savePlayerInventory(String player) throws IOException {
-		savePlayerInventory(games.get(player));
-	}*/
-	
-	/**
-	 * Saves a player's inventory in a YAML file
-	 * 
-	 * param player	The player to whom the inventory will be saved
-	 * 
-	 * throws IOException if FileConfiguration.save() fails
-	 */
-	/*public static void savePlayerInventory(Game game) throws IOException {
-        File f = new File(KuffleMain.current.getDataFolder().getPath(), game.player.getName() + ".yml");
-        FileConfiguration c = YamlConfiguration.loadConfiguration(f);
-        
-        c.set("inventory.content", game.deathInv.getContents());
-        c.save(f);
-    }*/
-	
-	/**
-	 * loads a player's inventory from a YAML file
-	 * 
-	 * param player	The player to whom the inventory will be loaded
-	 */
-	//s@SuppressWarnings("unchecked")
-	/*public static void loadPlayerInventory(String player) {
-		Game game = games.get(player);
-		File f = new File(KuffleMain.current.getDataFolder().getPath(), game.player.getName() + ".yml");
-        FileConfiguration c = YamlConfiguration.loadConfiguration(f);
-
-        game.deathInv = Bukkit.createInventory(null, 54);
-
-        ItemStack[] content = ((List<ItemStack>) c.get("inventory.content")).toArray(new ItemStack[0]);
-        game.deathInv.setContents(content);
-    }*/
 	
 	public static void loadPlayers(String path) throws IOException, ClassNotFoundException {
 		List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
@@ -530,7 +407,7 @@ public class GameManager {
 			return ;
 		}
 
-		if (game.finished || game.age == (Config.getLastAge().number + 1)) {
+		if (game.finished || game.age == (Config.getLastAge().getNumber() + 1)) {
 			game.ageDisplay.setProgress(1.0);
 			game.ageDisplay.setTitle(LangManager.getMsgLang("GAME_DONE", game.configLang).replace("%i", "" + game.gameRank));
 
@@ -540,7 +417,7 @@ public class GameManager {
 		double calc = ((double) game.targetCount) / Config.getTargetPerAge();
 		calc = calc > 1.0 ? 1.0 : calc;
 		game.ageDisplay.setProgress(calc);
-		game.ageDisplay.setTitle(AgeManager.getAgeByNumber(game.age).name.replace("_", " ") + ": " + game.targetCount);
+		game.ageDisplay.setTitle(AgeManager.getAgeByNumber(game.age).getName().replace("_", " ") + ": " + game.targetCount);
 	}
 	
 	/**
@@ -651,16 +528,16 @@ public class GameManager {
 	public static void nextPlayerAge(Game game) {
 		if (Config.getRewards()) {
 			if (game.age > 0) {
-				RewardManager.removePreviousRewardEffects(AgeManager.getAgeByNumber(game.age - 1).name, game.player);
+				RewardManager.removePreviousRewardEffects(AgeManager.getAgeByNumber(game.age - 1).getName(), game.player);
 			}
 			
-			if (game.age < Config.getLastAge().number) {
-				RewardManager.givePlayerReward(AgeManager.getAgeByNumber(game.age).name, game.player);
+			if (game.age < Config.getLastAge().getNumber()) {
+				RewardManager.givePlayerReward(AgeManager.getAgeByNumber(game.age).getName(), game.player);
 			}
 		}
 		
-		game.times.put(AgeManager.getAgeByNumber(game.age).name, System.currentTimeMillis() - game.timeBase);
-		game.totalTime += game.times.get(AgeManager.getAgeByNumber(game.age).name) / 1000;
+		game.times.put(AgeManager.getAgeByNumber(game.age).getName(), System.currentTimeMillis() - game.timeBase);
+		game.totalTime += game.times.get(AgeManager.getAgeByNumber(game.age).getName()) / 1000;
 
 		game.player.sendMessage(LangManager.getMsgLang("TIME_AGE", game.configLang).replace("%t", Utils.getTimeFromSec(game.totalTime)));
 		
@@ -674,7 +551,7 @@ public class GameManager {
 		game.player.playSound(game.player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f);
 		game.score.setScore(game.targetCount);
 		
-		if (game.age == (Config.getLastAge().number + 1)) {
+		if (game.age == (Config.getLastAge().getNumber() + 1)) {
 			return ;
 		}
 		
@@ -683,7 +560,7 @@ public class GameManager {
 
 		Age tmpAge = AgeManager.getAgeByNumber(game.age);
 
-		games.forEach((playerName, playerGame) -> playerGame.player.sendMessage(LangManager.getMsgLang("AGE_MOVED", game.configLang).replace("<#>", ChatColor.BLUE + "<" + ChatColor.GOLD + game.player.getName() + ChatColor.BLUE + ">").replace("<##>", "<" + tmpAge.color + tmpAge.name.replace("_Age", "") + ChatColor.BLUE + ">")));
+		games.forEach((playerName, playerGame) -> playerGame.player.sendMessage(LangManager.getMsgLang("AGE_MOVED", game.configLang).replace("<#>", ChatColor.BLUE + "<" + ChatColor.GOLD + game.player.getName() + ChatColor.BLUE + ">").replace("<##>", "<" + tmpAge.getColor() + tmpAge.getName().replace("_Age", "") + ChatColor.BLUE + ">")));
 	}
 	
 	/**
@@ -720,11 +597,11 @@ public class GameManager {
 		}
 
 		if (game.lose) {
-			for (int cnt = game.age; cnt < Config.getLastAge().number; cnt++) {
-				game.times.put(AgeManager.getAgeByNumber(cnt).name, (long) -1);
+			for (int cnt = game.age; cnt < Config.getLastAge().getNumber(); cnt++) {
+				game.times.put(AgeManager.getAgeByNumber(cnt).getName(), (long) -1);
 			}
 		} else {
-			game.times.put(AgeManager.getAgeByNumber(game.age).name, System.currentTimeMillis() - game.timeBase);
+			game.times.put(AgeManager.getAgeByNumber(game.age).getName(), System.currentTimeMillis() - game.timeBase);
 		}
 
 		game.age = -1;
@@ -765,8 +642,9 @@ public class GameManager {
 	 */
 	public static void playerRandomBarColor(Game game) {
 		BarColor[] colors = BarColor.values();
+		SecureRandom random = new SecureRandom();
 		
-		game.ageDisplay.setColor(colors[ThreadLocalRandom.current().nextInt(colors.length)]);
+		game.ageDisplay.setColor(colors[random.nextInt(colors.length)]);
 	}
 	
 	/**
@@ -783,7 +661,7 @@ public class GameManager {
 		if (malus) {
 			game.skipCount++;
 			
-			if ((game.age + 1) < Config.getSkipAge().number) {
+			if ((game.age + 1) < Config.getSkipAge().getNumber()) {
 				LogManager.getInstanceGame().writeMsg(game.player, LangManager.getMsgLang("CANT_SKIP_AGE", game.configLang));
 
 				return false;
@@ -835,7 +713,7 @@ public class GameManager {
 			if (tmp < 0)
 				return;
 
-			RewardManager.givePlayerRewardEffect(game.player, AgeManager.getAgeByNumber(tmp).name);
+			RewardManager.givePlayerRewardEffect(game.player, AgeManager.getAgeByNumber(tmp).getName());
 		}
 	}
 	
@@ -891,9 +769,9 @@ public class GameManager {
 		Game game = games.get(player);
 		
 		if (Config.getTeam()) {
-			game.player.setPlayerListName("[" + TeamManager.getInstance().getTeam(game.teamName).color + game.teamName + ChatColor.RESET + "] - " + AgeManager.getAgeByNumber(game.age).color + player);
+			game.player.setPlayerListName("[" + TeamManager.getInstance().getTeam(game.teamName).getColor() + game.teamName + ChatColor.RESET + "] - " + AgeManager.getAgeByNumber(game.age).getColor() + player);
 		} else {
-			game.player.setPlayerListName(AgeManager.getAgeByNumber(game.age).color + player);
+			game.player.setPlayerListName(AgeManager.getAgeByNumber(game.age).getColor() + player);
 		}
 	}
 	
@@ -965,7 +843,7 @@ public class GameManager {
 		
 		game.deathCount++;
 		
-		if (Config.getLevel().losable) {
+		if (Config.getLevel().isLosable()) {
 			game.lose = true;
 		} else {
 			savePlayerInv(player);
@@ -997,6 +875,8 @@ public class GameManager {
 	 * 
 	 * @param player	The player
 	 * @param gameTime	The time to set
+	 * 
+	 * @deprecated not to be used
 	 */
 	@Deprecated
 	public static void setTime(String player, int gameTime) {
@@ -1008,6 +888,8 @@ public class GameManager {
 	 * 
 	 * @param player	The player
 	 * @param targetNb	The target count to set
+	 * 
+	 * @deprecated not to be used
 	 */
 	@Deprecated
 	public static void setTargetCount(String player, int targetNb) {
@@ -1027,6 +909,8 @@ public class GameManager {
 	 * 
 	 * @param player	The player
 	 * @param gameAge	The Age to set
+	 * 
+	 * @deprecated not to be used
 	 */
 	@Deprecated
 	public static void setAge(String player, int gameAge) {
@@ -1055,6 +939,8 @@ public class GameManager {
 	 * 
 	 * @param player	The player
 	 * @param death		The death count to set
+	 * 
+	 * @deprecated not to be used
 	 */
 	@Deprecated
 	public static void setDeathCount(String player, int death) {
@@ -1066,6 +952,8 @@ public class GameManager {
 	 * 
 	 * @param player	The player
 	 * @param skip		The skip count to set
+	 * 
+	 * @deprecated not to be used
 	 */
 	@Deprecated
 	public static void setSkipCount(String player, int skip) {
@@ -1077,6 +965,8 @@ public class GameManager {
 	 * 
 	 * @param player	The player
 	 * @param shuffle	The time shuffle to set
+	 * 
+	 * @deprecated not to be used
 	 */
 	@Deprecated
 	public static void setTimeShuffle(String player, long shuffle) {
@@ -1122,6 +1012,8 @@ public class GameManager {
 	 * 
 	 * @param player	The player
 	 * @param gameScore	The score to set
+	 * 
+	 * @deprecated not to be used
 	 */
 	@Deprecated
 	public static void setPlayerTargetScore(String player, Score gameScore) {
@@ -1133,6 +1025,8 @@ public class GameManager {
 	 * 	
 	 * @param player	The player
 	 * @param death		The inventory to set
+	 * 
+	 * @deprecated not to be used
 	 */
 	@Deprecated
 	public static void setPlayerDeathInv(String player, List<ItemStack> death) {
@@ -1144,6 +1038,8 @@ public class GameManager {
 	 * 
 	 * @param player	The player
 	 * @param spawn		The location to set
+	 * 
+	 * @deprecated not to be used
 	 */
 	@Deprecated
 	public static void setPlayerSpawnLoc(String player, Location spawn) {
@@ -1155,6 +1051,8 @@ public class GameManager {
 	 * 
 	 * @param player	The player
 	 * @param spawn		The location to set
+	 * 
+	 * @deprecated not to be used
 	 */
 	@Deprecated
 	public static void setPlayerSpawnLoc(String player, JSONObject spawn) {
@@ -1169,6 +1067,8 @@ public class GameManager {
 	 * 
 	 * @param player	The player
 	 * @param spawn		The death location to set
+	 * 
+	 * @deprecated not to be used
 	 */
 	@Deprecated
 	public static void setPlayerDeathLoc(String player, Location spawn) {
@@ -1183,11 +1083,11 @@ public class GameManager {
 	public static Map<String, Long> getTimesMapFromJSON(JSONObject gameTimes) {
 		Map<String, Long> times = new HashMap<>();
 
-		for (int i = 0; i < Config.getLastAge().number; i++) {
+		for (int i = 0; i < Config.getLastAge().getNumber(); i++) {
 			Age ageTime = AgeManager.getAgeByNumber(i);
 
-			if (gameTimes.containsKey(ageTime.name)) {
-				times.put(ageTime.name, (Long) gameTimes.get(ageTime.name));
+			if (gameTimes.containsKey(ageTime.getName())) {
+				times.put(ageTime.getName(), (Long) gameTimes.get(ageTime.getName()));
 			}
 		}
 		
@@ -1289,7 +1189,7 @@ public class GameManager {
 	public static void teleportAutoBack(String player) {
 		Game game = games.get(player);
 		
-		game.player.sendMessage(LangManager.getMsgLang("TP_BACK", game.configLang).replace("%i", "" + Config.getLevel().seconds));
+		game.player.sendMessage(LangManager.getMsgLang("TP_BACK", game.configLang).replace("%i", "" + Config.getLevel().getSeconds()));
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			Location loc = game.deathLoc;
@@ -1315,7 +1215,7 @@ public class GameManager {
 			}
 			
 			reloadPlayerEffects(player);
-		}, (Config.getLevel().seconds * 20));
+		}, (Config.getLevel().getSeconds() * 20));
 	}
 	
 	/**
@@ -1492,16 +1392,16 @@ public class GameManager {
 		sb.append(ChatColor.BLUE + LangManager.getMsgLang("TEMPLATE_COUNT", receiverLang).replace("%i", "" + ChatColor.RESET + game.sbttCount)).append("\n");
 		sb.append(ChatColor.BLUE + LangManager.getMsgLang("TIME_TAB", receiverLang)).append("\n");
 
-		for (int i = 0; i < (Config.getLastAge().number + 1); i++) {
+		for (int i = 0; i < (Config.getLastAge().getNumber() + 1); i++) {
 			Age age = AgeManager.getAgeByNumber(i);
 
-			if (game.times.get(age.name) == -1) {
-				sb.append(LangManager.getMsgLang("FINISH_ABANDON", receiverLang).replace("%s", age.color + age.name.replace("_Age", "") + ChatColor.BLUE)).append("\n");
+			if (game.times.get(age.getName()) == -1) {
+				sb.append(LangManager.getMsgLang("FINISH_ABANDON", receiverLang).replace("%s", age.getColor() + age.getName().replace("_Age", "") + ChatColor.BLUE)).append("\n");
 				total = -1;
 				break;
 			} else {
-				sb.append(LangManager.getMsgLang("FINISH_TIME", receiverLang).replace("%s", age.color + age.name.replace("_Age", "") + ChatColor.BLUE).replace("%t", ChatColor.RESET + Utils.getTimeFromSec(game.times.get(age.name) / 1000))).append("\n");
-				total += game.times.get(age.name) / 1000;
+				sb.append(LangManager.getMsgLang("FINISH_TIME", receiverLang).replace("%s", age.getColor() + age.getName().replace("_Age", "") + ChatColor.BLUE).replace("%t", ChatColor.RESET + Utils.getTimeFromSec(game.times.get(age.getName()) / 1000))).append("\n");
+				total += game.times.get(age.getName()) / 1000;
 			}
 		}
 		
@@ -1531,16 +1431,16 @@ public class GameManager {
 		sb.append(LangManager.getMsgLang("TEMPLATE_COUNT", configLang).replace("%i", "" + game.sbttCount)).append("\n");
 		sb.append(LangManager.getMsgLang("TIME_TAB", configLang)).append("\n");
 
-		for (int i = 0; i < (Config.getLastAge().number + 1); i++) {
+		for (int i = 0; i < (Config.getLastAge().getNumber() + 1); i++) {
 			Age age = AgeManager.getAgeByNumber(i);
 
-			if (game.times.get(age.name) == -1) {
-				sb.append(LangManager.getMsgLang("FINISH_ABANDON", configLang).replace("%s", age.name.replace("_Age", ""))).append("\n");
+			if (game.times.get(age.getName()) == -1) {
+				sb.append(LangManager.getMsgLang("FINISH_ABANDON", configLang).replace("%s", age.getName().replace("_Age", ""))).append("\n");
 				total = -1;
 				break;
 			} else {
-				sb.append(LangManager.getMsgLang("FINISH_TIME", configLang).replace("%s", age.name.replace("_Age", "")).replace("%t", Utils.getTimeFromSec(game.times.get(age.name) / 1000))).append("\n");
-				total += game.times.get(age.name) / 1000;
+				sb.append(LangManager.getMsgLang("FINISH_TIME", configLang).replace("%s", age.getName().replace("_Age", "")).replace("%t", Utils.getTimeFromSec(game.times.get(age.getName()) / 1000))).append("\n");
+				total += game.times.get(age.getName()) / 1000;
 			}
 		}
 
@@ -1589,7 +1489,7 @@ public class GameManager {
 		if (Config.getDouble()) {
 			String[] targets = game.currentTarget.split("/");
 
-			ret = targets[0].equals(target.getType().name().toLowerCase()) || targets[1].equals(target.getType().name().toLowerCase());;
+			ret = targets[0].equals(target.getType().name().toLowerCase()) || targets[1].equals(target.getType().name().toLowerCase());
 		} else {
 			ret = game.currentTarget.equals(target.getType().name().toLowerCase());
 		}
@@ -1695,9 +1595,9 @@ public class GameManager {
 	 * @param player	the player that ask for display
 	 */
 	public static void displayList(Player player) {
-		if (GameManager.getGames().size() == 0) {
+		if (games != null && games.size() == 0) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NO_PLAYERS", Config.getLang()));
-		} else {
+		} else if (games != null){
 			StringBuilder sb = new StringBuilder();
 			int i = 0;
 
@@ -1731,7 +1631,7 @@ public class GameManager {
 		playersRanks.clear();
 		
 		if (Config.getTeam()) {
-			TeamManager.getInstance().getTeams().forEach((team) -> playersRanks.put(team.name, 0));
+			TeamManager.getInstance().getTeams().forEach(team -> playersRanks.put(team.getName(), 0));
 		} else {
 			games.forEach((playerName, playerGame) -> playersRanks.put(playerName, 0));
 		}
@@ -1800,10 +1700,10 @@ public class GameManager {
 	public static JSONObject saveRanks() {
 		JSONObject rankObj = new JSONObject();
 		
-		for (String name : playersRanks.keySet()) {
-			if ((!Config.getTeam() && hasPlayer(name)) ||
-			(Config.getTeam() && TeamManager.getInstance().hasTeam(name))) {
-				rankObj.put(name, playersRanks.get(name));
+		for (Map.Entry<String, Integer> entry : playersRanks.entrySet()) {
+			if ((!Config.getTeam() && hasPlayer(entry.getKey())) ||
+			(Config.getTeam() && TeamManager.getInstance().hasTeam(entry.getKey()))) {
+				rankObj.put(entry.getKey(), entry.getValue());
 			}
 		}
 		

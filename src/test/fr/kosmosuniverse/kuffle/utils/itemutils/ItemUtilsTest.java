@@ -6,22 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.junit.Ignore;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 
 class ItemUtilsTest {
-
-	@BeforeAll
-	static void setUpBeforeClass() {
-	}
-
-	@AfterAll
-	static void tearDownAfterClass() {
-	}
-
 	@Ignore
 	@Test
 	void testItemWithName() {

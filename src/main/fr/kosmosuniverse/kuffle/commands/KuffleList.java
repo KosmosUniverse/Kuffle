@@ -8,40 +8,25 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
-import main.fr.kosmosuniverse.kuffle.type.KuffleType;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
+import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 public class KuffleList implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		if (!(sender instanceof Player))
-			return false;
-
-		Player player = (Player) sender;
-
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-list>"));
-
-		if (!player.hasPermission("k-list")) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
-
+		Player player = null;
+		
+		try {
+			player = CommandUtils.initCommand(sender, "k-list", true, true, false);
+		} catch (KuffleCommandFalseException e) {
 			return false;
 		}
 		
-		if (KuffleMain.type.getType() == KuffleType.Type.NO_TYPE) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("KUFFLE_TYPE_NOT_CONFIG", Config.getLang()));
-			return true;
-		}
-		
-		if (args.length != 0 && KuffleMain.gameStarted) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
-			return true;
-		}
-
 		if (args.length == 0) {
 			GameManager.displayList(player);
 

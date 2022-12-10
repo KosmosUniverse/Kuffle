@@ -76,46 +76,37 @@ public class OverWorldTeleporter extends AMultiblock {
 	public void onActivate(Player player, ActivationType type) {
 		if (type == ActivationType.ASSEMBLE) {
 			player.sendMessage(LangManager.getMsgLang("CONSTRUCTED", GameManager.getPlayerLang(player.getName())).replace("%s", name));
-		} else if (type == ActivationType.ACTIVATE) {
-			if (world != null) {
-				player.sendMessage(LangManager.getMsgLang("ACTIVATED", GameManager.getPlayerLang(player.getName())).replace("%s", name));
-				player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 50, false, false, false));
-				
-				Location tmp = new Location(Bukkit.getWorld(world.getName()), player.getLocation().getX() - 1000, 80.0, player.getLocation().getZ() - 1000);
-				
-				tmp.setY(tmp.getWorld().getHighestBlockAt(tmp).getY() + 2.0);
-				
-				player.teleport(tmp);
-				player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);	
-			}
+		} else if (type == ActivationType.ACTIVATE && world != null) {
+			player.sendMessage(LangManager.getMsgLang("ACTIVATED", GameManager.getPlayerLang(player.getName())).replace("%s", name));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 50, false, false, false));
+			
+			Location tmp = new Location(Bukkit.getWorld(world.getName()), player.getLocation().getX() - 1000, 80.0, player.getLocation().getZ() - 1000);
+			
+			tmp.setY(tmp.getWorld().getHighestBlockAt(tmp).getY() + 2.0);
+			
+			player.teleport(tmp);
+			player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);	
 		}
 	}
 
 	@Override
 	public void createInventories() {
+		invs.add(setupLayer1());
+		invs.add(setupLayer2());
+		invs.add(setupLayer3());
+	}
+	
+	/**
+	 * Creates multiblock layer 1
+	 * 
+	 * @return the first layer
+	 */
+	private Inventory setupLayer1() {
 		Inventory inv = Bukkit.createInventory(null, 27, ChatColor.BLACK + name + " Layer 1");
-		
-		ItemStack grayPane = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
-		ItemStack limePane = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
-		ItemStack redPane = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-		ItemStack bluePane = new ItemStack(Material.BLUE_STAINED_GLASS_PANE);
-		ItemMeta itM = grayPane.getItemMeta();
-		
-		itM.setDisplayName(" ");
-		grayPane.setItemMeta(itM);
-		itM = limePane.getItemMeta();
-		itM.setDisplayName(" ");
-		limePane.setItemMeta(itM);
-		itM = redPane.getItemMeta();
-		itM.setDisplayName("<- Back");
-		redPane.setItemMeta(itM);
-		itM = bluePane.getItemMeta();
-		itM.setDisplayName("Next ->");
-		bluePane.setItemMeta(itM);
 		
 		for (int i = 0; i < 27; i++) {
 			if (i == 0) {
-				inv.setItem(i, new ItemStack(redPane));
+				inv.setItem(i, new ItemStack(backPane));
 			} else if (i == 8) {
 				inv.setItem(i, new ItemStack(bluePane));
 			} else if (i == 3 || i == 5) {
@@ -131,17 +122,20 @@ public class OverWorldTeleporter extends AMultiblock {
 			}
 		}
 		
-		invs.add(inv);
-		
-		itM = redPane.getItemMeta();
-		itM.setDisplayName("<- Previous");
-		redPane.setItemMeta(itM);
-		
-		inv = Bukkit.createInventory(null, 27, ChatColor.BLACK + name + " Layer 2");
+		return inv;
+	}
+	
+	/**
+	 * Creates multiblock layer 2
+	 * 
+	 * @return the second layer
+	 */
+	private Inventory setupLayer2() {
+		Inventory inv = Bukkit.createInventory(null, 27, ChatColor.BLACK + name + " Layer 2");
 		
 		for (int i = 0; i < 27; i++) {
 			if (i == 0) {
-				inv.setItem(i, new ItemStack(redPane));
+				inv.setItem(i, new ItemStack(previousPane));
 			} else if (i == 8) {
 				inv.setItem(i, new ItemStack(bluePane));
 			} else if (i == 3 || i == 5) {
@@ -157,13 +151,20 @@ public class OverWorldTeleporter extends AMultiblock {
 			}
 		}
 		
-		invs.add(inv);
-		
-		inv = Bukkit.createInventory(null, 27, ChatColor.BLACK + name + " Layer 3");
+		return inv;
+	}
+	
+	/**
+	 * Creates multiblock layer 3
+	 * 
+	 * @return the third layer
+	 */
+	private Inventory setupLayer3() {
+		Inventory inv = Bukkit.createInventory(null, 27, ChatColor.BLACK + name + " Layer 3");
 		
 		for (int i = 0; i < 27; i++) {
 			if (i == 0) {
-				inv.setItem(i, new ItemStack(redPane));
+				inv.setItem(i, new ItemStack(previousPane));
 			} else if (i == 4) {
 				inv.setItem(i, new ItemStack(Material.PURPUR_PILLAR));
 			} else if (i == 3 || i == 5 || i == 12 || i == 13 || i == 14|| i == 21 || i == 22 || i == 23) {
@@ -173,6 +174,6 @@ public class OverWorldTeleporter extends AMultiblock {
 			}
 		}
 		
-		invs.add(inv);
+		return inv;
 	}
 }

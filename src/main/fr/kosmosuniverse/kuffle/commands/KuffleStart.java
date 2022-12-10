@@ -23,7 +23,8 @@ import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.SpreadPlayer;
 import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
-import main.fr.kosmosuniverse.kuffle.type.KuffleType;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
+import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 
 /**
@@ -34,32 +35,17 @@ import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 public class KuffleStart implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		if (!(sender instanceof Player))
-			return false;
-
-		Player player = (Player) sender;
-
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-start>"));
-
-		if (!player.hasPermission("k-start")) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
-			return false;
-		}
+		Player player = null;
 		
-		if (KuffleMain.type.getType() == KuffleType.Type.NO_TYPE) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("KUFFLE_TYPE_NOT_CONFIG", Config.getLang()));
-			return true;
+		try {
+			player = CommandUtils.initCommand(sender, "k-start", true, true, false);
+		} catch (KuffleCommandFalseException e) {
+			return false;
 		}
 
 		if (GameManager.getGames().size() == 0) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NO_PLAYERS", Config.getLang()));
 
-			return false;
-		}
-
-		if (KuffleMain.gameStarted) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
-			
 			return false;
 		}
 
@@ -71,7 +57,7 @@ public class KuffleStart implements CommandExecutor {
 			TeamManager.getInstance().clear();
 		}
 		
-		GameManager.applyToPlayers((game) -> {
+		GameManager.applyToPlayers(game -> {
 			game.configLang = Config.getLang();
 			
 			if (Config.getSaturation()) {
@@ -81,9 +67,9 @@ public class KuffleStart implements CommandExecutor {
 			game.player.sendMessage(LangManager.getMsgLang("GAME_STARTED", game.configLang));
 		});
 
-		KuffleMain.type.setXpActivable("EndTeleporter", Config.getXpEnd());
-		KuffleMain.type.setXpActivable("OverworldTeleporter", Config.getXpOverworld());
-		KuffleMain.type.setXpActivable("CoralCompass", Config.getXpCoral());
+		KuffleMain.getInstance().getType().setXpActivable("EndTeleporter", Config.getXpEnd());
+		KuffleMain.getInstance().getType().setXpActivable("OverworldTeleporter", Config.getXpOverworld());
+		KuffleMain.getInstance().getType().setXpActivable("CoralCompass", Config.getXpCoral());
 		
 		LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("GAME_STARTED", Config.getLang()));
 
@@ -93,38 +79,34 @@ public class KuffleStart implements CommandExecutor {
 		GameManager.updatePlayersHeads();
 		GameManager.setupPlayersRanks();
 
-		KuffleMain.paused = true;
+		KuffleMain.getInstance().setPaused(true);
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
-			GameManager.applyToPlayers((game) ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.RED + "5" + ChatColor.RESET, game.player)
-			);
+			GameManager.applyToPlayers(game ->
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.RED + "5" + ChatColor.RESET, game.player));
 
 			if (Config.getSBTT()) {
-				KuffleMain.type.setupSbtt();
+				KuffleMain.getInstance().getType().setupSbtt();
 			}
 		}, 20 + spread);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
-			GameManager.applyToPlayers((game) ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GOLD + "4" + ChatColor.RESET, game.player)
-			)
+			GameManager.applyToPlayers(game ->
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GOLD + "4" + ChatColor.RESET, game.player))
 		, 40 + spread);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
-			GameManager.applyToPlayers((game) ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "3" + ChatColor.RESET, game.player)
-			)
+			GameManager.applyToPlayers(game ->
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "3" + ChatColor.RESET, game.player))
 		, 60 + spread);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
-			GameManager.applyToPlayers((game) ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GREEN + "2" + ChatColor.RESET, game.player)
-			)
+			GameManager.applyToPlayers(game ->
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GREEN + "2" + ChatColor.RESET, game.player))
 		, 80 + spread);
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
-			GameManager.applyToPlayers((game) -> {
+			GameManager.applyToPlayers(game -> {
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.BLUE + "1" + ChatColor.RESET, game.player);
 				GameManager.setupPlayer(game);
 			});
@@ -133,19 +115,19 @@ public class KuffleStart implements CommandExecutor {
 		}, 100 + spread);
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
-			GameManager.applyToPlayers((game) -> {
+			GameManager.applyToPlayers(game -> {
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + "GO!" + ChatColor.RESET, game.player);
 				ItemStack box = getStartBox(game.player.getName());
 				game.player.getInventory().addItem(box);
 			});
 
-			if (KuffleMain.loop == null) {
-				KuffleMain.loop = new GameLoop();
+			if (KuffleMain.getInstance().getGameLoop() == null) {
+				KuffleMain.getInstance().setGameLoop(new GameLoop());
 			}
 			
-			KuffleMain.loop.startRunnable();
-			KuffleMain.gameStarted = true;
-			KuffleMain.paused = false;
+			KuffleMain.getInstance().getGameLoop().startRunnable();
+			KuffleMain.getInstance().setStarted(true);
+			KuffleMain.getInstance().setPaused(false);
 		}, 120 + spread);
 
 		return true;
@@ -162,9 +144,9 @@ public class KuffleStart implements CommandExecutor {
 		if (Config.getSpread()) {
 			SpreadPlayer.spreadPlayers(sender, Config.getSpreadDistance(), Config.getSpreadRadius(), GameManager.getPlayerList());
 
-			GameManager.applyToPlayers((game) -> {
+			GameManager.applyToPlayers(game -> {
 				if (Config.getTeam()) {
-					game.teamName = TeamManager.getInstance().findTeamByPlayer(game.player.getName()).name;
+					game.teamName = TeamManager.getInstance().findTeamByPlayer(game.player.getName()).getName();
 				}
 
 				game.player.setBedSpawnLocation(game.player.getLocation(), true);
@@ -178,7 +160,7 @@ public class KuffleStart implements CommandExecutor {
 
 			GameManager.applyToPlayers(spawn, (game, spawnLoc) -> {
 				if (Config.getTeam()) {
-					game.teamName = TeamManager.getInstance().findTeamByPlayer(game.player.getName()).name;
+					game.teamName = TeamManager.getInstance().findTeamByPlayer(game.player.getName()).getName();
 				}
 
 				if (((Location) spawnLoc).getY() < 0) {

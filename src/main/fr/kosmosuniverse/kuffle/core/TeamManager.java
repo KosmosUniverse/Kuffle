@@ -69,7 +69,7 @@ public class TeamManager {
 	public boolean hasTeam(String teamName) {
 		if (teams != null) {
 			for (Team item : teams) {
-				if (item.name.equals(teamName)) {
+				if (item.getName().equals(teamName)) {
 					return true;
 				}
 			}
@@ -86,8 +86,8 @@ public class TeamManager {
 	public void deleteTeam(String teamName) {
 		if (teams != null) {
 			for (Team item : teams) {
-				if (item.name.equals(teamName)) {
-					item.players.clear();
+				if (item.getName().equals(teamName)) {
+					item.getPlayers().clear();
 					teams.remove(item);
 					break;
 				}
@@ -104,8 +104,8 @@ public class TeamManager {
 	public void changeTeamColor(String teamName, ChatColor teamColor) {
 		if (teams != null) {
 			for (Team item : teams) {
-				if (item.name.equals(teamName)) {
-					item.color = teamColor;
+				if (item.getName().equals(teamName)) {
+					item.setColor(teamColor);
 					break;
 				}
 			}
@@ -121,8 +121,8 @@ public class TeamManager {
 	public void affectPlayer(String teamName, Player player) {
 		if (teams != null) {
 			for (Team item : teams) {
-				if (item.name.equals(teamName)) {
-					item.players.add(player);
+				if (item.getName().equals(teamName)) {
+					item.getPlayers().add(player);
 					break;
 				}
 			}
@@ -138,8 +138,8 @@ public class TeamManager {
 	public void removePlayer(String teamName, Player player) {
 		if (teams != null) {
 			for (Team item : teams) {
-				if (item.name.equals(teamName)) {
-					item.players.remove(player);
+				if (item.getName().equals(teamName)) {
+					item.getPlayers().remove(player);
 					break;
 				}
 			}
@@ -175,7 +175,7 @@ public class TeamManager {
 		
 		if (teams != null) {
 			for (Team item : teams)  {
-				teamColors.add(item.color.name());
+				teamColors.add(item.getColor().name());
 			}
 		}
 		
@@ -191,7 +191,7 @@ public class TeamManager {
 		int max = 0;
 		
 		for (Team teamItem : teams) {
-			max = teamItem.players.size() < max ? max : teamItem.players.size();
+			max = teamItem.getPlayers().size() < max ? max : teamItem.getPlayers().size();
 		}
 		
 		return max;
@@ -207,7 +207,7 @@ public class TeamManager {
 	public Team findTeamByPlayer(String player) {
 		if (teams != null) {
 			for (Team teamItem : teams) {
-				for (Player playerItem : teamItem.players) {
+				for (Player playerItem : teamItem.getPlayers()) {
 					if (playerItem.getDisplayName().equals(player)) {
 						return teamItem;
 					}
@@ -223,7 +223,7 @@ public class TeamManager {
 	 */
 	public void clear() {
 		if (teams != null) {
-			teams.forEach((t) -> t.players.clear());			
+			teams.forEach(t -> t.getPlayers().clear());			
 			teams.clear();
 		}
 	}
@@ -238,7 +238,7 @@ public class TeamManager {
 	public String printTeam(String teamName) {
 		if (teams != null) {
 			for (Team item : teams) {
-				if (item.name.equals(teamName)) {
+				if (item.getName().equals(teamName)) {
 					return item.toString();
 				}
 			}
@@ -290,25 +290,6 @@ public class TeamManager {
 		} catch (IOException e) {
 			Utils.logException(e);
 		}
-		
-		/*JSONObject global = new JSONObject();
-		
-		for (Team item : teams) {
-			JSONObject tmp = new JSONObject();
-			JSONArray players = new JSONArray();
-			
-			tmp.put("color", item.color.toString());
-			
-			for (Player p : item.players) {
-				players.add(p.getName());
-			}
-			
-			tmp.put("players", players);
-			
-			global.put(item.name, tmp);
-		}
-		
-		return global.toString();*/
 	}
 	
 	/**
@@ -340,29 +321,6 @@ public class TeamManager {
 
 			ois.close();
 		}
-		
-		/*for (Object key : global.keySet()) {
-			String name = (String) key;
-			JSONObject tmp = (JSONObject) global.get(key);
-			ChatColor color = Utils.findChatColor((String) tmp.get("color"));
-			JSONArray players = (JSONArray) tmp.get("players");
-			
-			createTeam(name, color);
-			
-			if (players != null) {
-				for (Object obj : players) {
-
-					Game tmpPlayer = games.get((String) obj);
-					
-					if (tmpPlayer == null) {
-						LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("PLAYER_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + (String) obj + ">"));
-					} else {
-						Player p = tmpPlayer.player;
-						affectPlayer(name, p);	
-					}
-				}
-			}
-		}*/
 	}
 	
 	/**
@@ -383,7 +341,7 @@ public class TeamManager {
 	 */
 	public Team getTeam(String name) {
 		for (Team item : teams) {
-			if (item.name.equals(name)) {
+			if (item.getName().equals(name)) {
 				return item;
 			}
 		}

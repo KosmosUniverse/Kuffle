@@ -17,23 +17,24 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  *
  */
 public class KuffleMain extends JavaPlugin {
-	public static KuffleType type = null;
-	private static KuffleMain current = null;
-	public static String version = null;
+	private static KuffleMain instance = null;
 	
-	public static GameLoop loop;
+	private KuffleType type = null;
+	private GameLoop loop;
 	
-	public static boolean paused = false;
-	public static boolean loaded = false;
-	public static boolean gameStarted = false;
-
+	private String version = null;
+	
+	private boolean paused = false;
+	private boolean loaded = false;
+	private boolean gameStarted = false;
+	
 	@Override
 	public void onEnable() {
 		saveDefaultConfig();
 		reloadConfig();
 		
+		instance = this;
 		version = this.getDescription().getVersion();
-		current = this;
 		
 		try {
 			type = new KuffleNoType(this);
@@ -57,10 +58,46 @@ public class KuffleMain extends JavaPlugin {
 	}
 	
 	public static KuffleMain getInstance() {
-		return current;
+		return instance;
 	}
 	
-	public static String getVersion() {
+	public KuffleType getType() {
+		return type;
+	}
+	
+	public GameLoop getGameLoop() {
+		return loop;
+	}
+	
+	public String getVersion() {
 		return version;
+	}
+	
+	public boolean isPaused() {
+		return paused;
+	}
+	
+	public boolean isLoaded() {
+		return loaded;
+	}
+	
+	public boolean isStarted() {
+		return gameStarted;
+	}
+	
+	public void setType(KuffleType kuffleType) {
+		type = kuffleType;
+	}
+	
+	public void setGameLoop(GameLoop gameLoop) {
+		loop = gameLoop;
+	}
+	
+	public void setPaused(boolean gamePaused) {
+		paused = gamePaused;
+	}
+	
+	public void setStarted(boolean started) {
+		gameStarted = started;
 	}
 }

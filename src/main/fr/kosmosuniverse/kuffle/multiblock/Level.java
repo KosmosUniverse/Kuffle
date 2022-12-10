@@ -20,13 +20,13 @@ public class Level {
 	/**
 	 * Constructor
 	 * 
-	 * @param _lNb		The level
-	 * @param _length	The level size
+	 * @param lNb		The level
+	 * @param lNb	The level size
 	 * @param patterns	Pattern list
 	 */
-	public Level(double _lNb, int _length, Pattern ... patterns) {
-		levelNb = _lNb;
-		length = _length;
+	public Level(double lNb, int levelLength, Pattern ... patterns) {
+		levelNb = lNb;
+		length = levelLength;
 		List<Pattern> tmp = new ArrayList<>();
 		int i = 0;
 		

@@ -24,6 +24,10 @@ public class ScoreManager {
 	private static Objective targets = null;
 	private static List<Score> sAges = new ArrayList<>();
 	
+	private ScoreManager() {
+		throw new IllegalStateException("");
+	}
+	
 	/**
 	 * Setups scoreboard and objective
 	 * 
@@ -50,8 +54,8 @@ public class ScoreManager {
 		
 		int ageCnt = 0;
 		
-		for (; ageCnt < (Config.getLastAge().number + 1); ageCnt++) {
-			sAges.add(age.getScore(AgeManager.getAgeByNumber(ageCnt).color + AgeManager.getAgeByNumber(ageCnt).name.replace("_", " ")));
+		for (; ageCnt < (Config.getLastAge().getNumber() + 1); ageCnt++) {
+			sAges.add(age.getScore(AgeManager.getAgeByNumber(ageCnt).getColor() + AgeManager.getAgeByNumber(ageCnt).getName().replace("_", " ")));
 		}
 				
 		ageCnt = 1;
@@ -63,7 +67,7 @@ public class ScoreManager {
 		
 		age.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
-		GameManager.applyToPlayers((game) -> {
+		GameManager.applyToPlayers(game -> {
 			GameManager.setupPlayerScores(game.player.getName(), scoreboard, targets.getScore(game.player.getName()));
 			GameManager.updatePlayerListName(game.player.getName());
 
@@ -79,7 +83,7 @@ public class ScoreManager {
 	 * @param player	The player that will be setup
 	 */
 	public static void setupPlayerScore(String player) {
-		GameManager.applyToPlayer(player, (game) -> {
+		GameManager.applyToPlayer(player, game -> {
 			GameManager.setupPlayerScores(game.player.getName(), scoreboard, targets.getScore(game.player.getName()));
 			GameManager.updatePlayerListName(game.player.getName());
 		});

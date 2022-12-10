@@ -75,7 +75,7 @@ class TargetTest {
 			assertTrue(FilesConformity.itemsConformity(content),
 					"targets_correct.json should be conform.");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -92,7 +92,7 @@ class TargetTest {
 			assertFalse(FilesConformity.itemsConformity(content),
 					"Targets conformity must reject bad age names !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -109,7 +109,7 @@ class TargetTest {
 			assertFalse(FilesConformity.itemsConformity(content),
 					"Targets conformity must reject unknown Minecraft target !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}

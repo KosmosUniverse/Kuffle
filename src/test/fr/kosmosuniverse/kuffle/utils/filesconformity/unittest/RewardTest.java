@@ -76,7 +76,7 @@ class RewardTest {
 			assertTrue(FilesConformity.rewardsConformity(content),
 					"rewards_correct.json should be conform.");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -93,7 +93,7 @@ class RewardTest {
 			assertFalse(FilesConformity.rewardsConformity(content),
 					"Rewards conformity must reject bad age names !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -110,7 +110,7 @@ class RewardTest {
 			assertFalse(FilesConformity.rewardsConformity(content),
 					"rewards conformity must reject when amount is invalid !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -127,7 +127,7 @@ class RewardTest {
 			assertFalse(FilesConformity.rewardsConformity(content),
 					"rewards conformity must reject when effect is invalid !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -144,7 +144,7 @@ class RewardTest {
 			assertFalse(FilesConformity.rewardsConformity(content),
 					"rewards conformity must reject when effects is invalid !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -161,7 +161,7 @@ class RewardTest {
 			assertFalse(FilesConformity.rewardsConformity(content),
 					"rewards conformity must reject when enchant is invalid !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -178,7 +178,7 @@ class RewardTest {
 			assertFalse(FilesConformity.rewardsConformity(content),
 					"rewards conformity must reject when enchants is invalid !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -195,7 +195,7 @@ class RewardTest {
 			assertFalse(FilesConformity.rewardsConformity(content),
 					"rewards conformity must reject when level is invalid !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -212,7 +212,7 @@ class RewardTest {
 			assertFalse(FilesConformity.rewardsConformity(content),
 					"rewards conformity must reject unknown Minecraft target !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -229,7 +229,7 @@ class RewardTest {
 			assertFalse(FilesConformity.rewardsConformity(content),
 					"rewards conformity must reject when amount is missing !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -246,7 +246,7 @@ class RewardTest {
 			assertFalse(FilesConformity.rewardsConformity(content),
 					"rewards conformity must reject when effect is missing !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -263,7 +263,7 @@ class RewardTest {
 			assertFalse(FilesConformity.rewardsConformity(content),
 					"rewards conformity must reject when enchant is missing !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -280,7 +280,7 @@ class RewardTest {
 			assertFalse(FilesConformity.rewardsConformity(content),
 					"rewards conformity must reject when level is missing !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}

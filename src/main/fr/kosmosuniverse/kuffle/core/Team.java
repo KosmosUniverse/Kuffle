@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -26,9 +26,9 @@ public class Team implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	
-	public List<Player> players = new ArrayList<>();
-	public String name;
-	public ChatColor color;
+	private List<Player> players = new ArrayList<>();
+	private String name;
+	private ChatColor color;
 	
 	/**
 	 * Constructor
@@ -37,9 +37,10 @@ public class Team implements Serializable {
 	 */
 	public Team(String teamName) {
 		ChatColor[] colors = ChatColor.values();
+		SecureRandom random = new SecureRandom();
 		
 		name = teamName;
-		color = colors[ThreadLocalRandom.current().nextInt(colors.length)];
+		color = colors[random.nextInt(colors.length)];
 	}
 	
 	/**
@@ -92,6 +93,27 @@ public class Team implements Serializable {
 	 */
 	public List<Player> getPlayers() {
 		return Collections.unmodifiableList(players);
+	}
+	
+	/**
+	 * @return name
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * @return color
+	 */
+	public ChatColor getColor() {
+		return color;
+	}
+	
+	/**
+	 * @param teamColor	new team color
+	 */
+	public void setColor(ChatColor teamColor) {
+		color = teamColor;
 	}
 	
 	/**

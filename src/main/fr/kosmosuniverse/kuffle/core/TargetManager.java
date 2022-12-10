@@ -1,11 +1,11 @@
 package main.fr.kosmosuniverse.kuffle.core;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -69,8 +69,8 @@ public class TargetManager {
 	
 	private static void setupTypes(String version, JSONObject versionObj) {
 		for (Object kuffleType : versionObj.keySet()) {
-			if ("BOTH".equals(kuffleType.toString().toUpperCase()) ||
-					KuffleMain.type.getType() == KuffleType.Type.valueOf(kuffleType.toString().toUpperCase())) {
+			if ("BOTH".equalsIgnoreCase(kuffleType.toString()) ||
+					KuffleMain.getInstance().getType().getType() == KuffleType.Type.valueOf(kuffleType.toString().toUpperCase())) {
 				JSONObject typeObj = (JSONObject) versionObj.get(kuffleType);
 				
 				setupAges(version, typeObj);
@@ -97,7 +97,7 @@ public class TargetManager {
 	private static void setupTargets(String version, String age, JSONObject ageObj) {
 		for (Object target : ageObj.keySet()) {
 			JSONObject targetObj = (JSONObject) ageObj.get(target);
-			boolean sbtt = Boolean.valueOf(targetObj.get("Sbtt").toString().toLowerCase());
+			boolean sbtt = Boolean.parseBoolean(targetObj.get("Sbtt").toString().toLowerCase());
 			
 			if (!targetObj.containsKey("remVersion") ||
 					VersionManager.isVersionValid(version, targetObj.get("remVersion").toString())) {
@@ -198,15 +198,17 @@ public class TargetManager {
 	private static String newObject(Map<String, List<String>> objects, List<String> done, String ageName) {	
 		List<String> finalList = new ArrayList<>();
 		
-		objects.get(ageName).stream().filter(s -> !done.contains(s)).forEach(s -> finalList.add(s));
+		objects.get(ageName).stream().filter(s -> !done.contains(s)).forEach(finalList::add);
 		
 		if (finalList.size() == 1) {
 			return finalList.get(0);
-		} else if (finalList.size() == 0) {
+		} else if (finalList.isEmpty()) {
 			return null;
 		}
 		
-		return finalList.get(ThreadLocalRandom.current().nextInt(finalList.size()));
+		SecureRandom random = new SecureRandom();
+		
+		return finalList.get(random.nextInt(finalList.size()));
 	}
 	
 	/**
@@ -321,9 +323,7 @@ public class TargetManager {
 				return new ItemStack(mat);
 			} else if (mat.toString().contains(target.toUpperCase()) &&
 					target.toUpperCase().contains(mat.toString())) {
-				ItemStack retItem = ItemUtils.itemMaker(mat, 1, target);
-
-				return retItem;
+				return ItemUtils.itemMaker(mat, 1, target);
 			}
 		}
 		
@@ -373,8 +373,8 @@ public class TargetManager {
 	 * Shuffles all targets for each ages
 	 */
 	public static void shuffleTargets() {
-		for (String age : targets.keySet()) {
-			Collections.shuffle(targets.get(age));
+		for (Map.Entry<String, List<String>> entry : targets.entrySet()) {
+			Collections.shuffle(entry.getValue());
 		}
 	}
 }

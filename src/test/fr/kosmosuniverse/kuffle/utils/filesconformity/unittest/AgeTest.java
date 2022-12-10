@@ -53,7 +53,7 @@ class AgeTest {
 			assertTrue(FilesConformity.ageConformity(content),
 					"ages_correct.json should be conform.");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -70,7 +70,7 @@ class AgeTest {
 			assertFalse(FilesConformity.ageConformity(content),
 					"Age conformity must reject bad names !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -87,7 +87,7 @@ class AgeTest {
 			assertFalse(FilesConformity.ageConformity(content),
 					"Age conformity must reject when number is missing !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -104,7 +104,7 @@ class AgeTest {
 			assertFalse(FilesConformity.ageConformity(content),
 					"Age conformity must reject when text color is missing !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -121,7 +121,7 @@ class AgeTest {
 			assertFalse(FilesConformity.ageConformity(content),
 					"Age conformity must reject when box color is missing !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -138,7 +138,7 @@ class AgeTest {
 			assertFalse(FilesConformity.ageConformity(content),
 					"Age conformity must reject when number is invalid !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -155,7 +155,7 @@ class AgeTest {
 			assertFalse(FilesConformity.ageConformity(content),
 					"Age conformity must reject when text color is invalid !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -172,7 +172,7 @@ class AgeTest {
 			assertFalse(FilesConformity.ageConformity(content),
 					"Age conformity must reject when box color is invalid !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}

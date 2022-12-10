@@ -51,7 +51,7 @@ class LangTest {
 			assertTrue(FilesConformity.msgLangConformity(content),
 					"langs_correct.json is not conform.");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -68,7 +68,7 @@ class LangTest {
 			assertTrue(FilesConformity.itemLangConformity(content),
 					"targets_langs_correct.json should be conform.");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -85,7 +85,7 @@ class LangTest {
 			assertFalse(FilesConformity.msgLangConformity(content),
 					"All langs used have to be in the first target langs !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -102,7 +102,7 @@ class LangTest {
 			assertFalse(FilesConformity.itemLangConformity(content),
 					"All langs used have to be in the first target langs !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
@@ -119,7 +119,7 @@ class LangTest {
 			assertFalse(FilesConformity.itemLangConformity(content),
 					"Langs are defines for an unknown Minecraft target !!!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());
 		}
 	}

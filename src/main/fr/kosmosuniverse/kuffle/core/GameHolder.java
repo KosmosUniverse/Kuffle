@@ -42,16 +42,16 @@ public final class GameHolder implements Serializable {
 	/**
 	 * Constructor
 	 * 
-	 * @param _config		Config
-	 * @param _kuffleType	Kuffle Type
-	 * @param _ranks		Players Ranks
-	 * @param _xpMap		Xp max
+	 * @param conf		Config
+	 * @param type		Kuffle Type
+	 * @param ranksMap	Players Ranks
+	 * @param xps		Xp max
 	 */
-	public GameHolder(ConfigHolder _config, String _kuffleType, Map<String, Integer> _ranks, Map<String, Integer> _xpMap) {
-		config = _config;
-		kuffleType = _kuffleType;
-		ranks = _ranks;
-		xpMap = _xpMap;
+	public GameHolder(ConfigHolder conf, String type, Map<String, Integer> ranksMap, Map<String, Integer> xps) {
+		config = conf;
+		kuffleType = type;
+		ranks = ranksMap;
+		xpMap = xps;
 	}
 	
 	/**

@@ -81,9 +81,9 @@ public class VersionManager {
 	 * @return the key if found, -1 instead
 	 */
 	public static int getVersionByValue(String version) {
-		for (int key : versions.keySet()) {
-			if (versions.get(key).equals(version)) {
-				return key;
+		for (Map.Entry<Integer, String> entry : versions.entrySet()) {
+			if (entry.getValue().equals(version)) {
+				return entry.getKey();
 			}
 		}
 
@@ -118,10 +118,6 @@ public class VersionManager {
 			return false;
 		}
 		
-		if (remVersionIdx != -1 && currentIdx >= remVersionIdx) {
-			return false;
-		}
-		
-		return true;
+		return !(remVersionIdx != -1 && currentIdx >= remVersionIdx);
 	}
 }

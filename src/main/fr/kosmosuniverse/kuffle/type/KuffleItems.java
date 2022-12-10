@@ -19,8 +19,8 @@ public class KuffleItems extends KuffleTypeDecorator {
 	 * 
 	 * @throws KuffleFileLoadException if one of the resource file load fails
 	 */	
-	public KuffleItems(KuffleType _type, JavaPlugin plugin) throws KuffleFileLoadException {
-		super(_type);
+	public KuffleItems(KuffleType type, JavaPlugin plugin) throws KuffleFileLoadException {
+		super(type);
 		setupKuffleType(plugin);
 	}
 	

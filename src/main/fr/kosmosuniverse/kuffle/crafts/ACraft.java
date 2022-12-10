@@ -53,19 +53,19 @@ public abstract class ACraft {
 	 * @param resultObj	The result item as JSONObject
 	 */
 	protected final void setupResult(JSONObject resultObj) {
-		String name = resultObj.containsKey("Name") ? resultObj.get("Name").toString() : null;
+		String resultName = resultObj.containsKey("Name") ? resultObj.get("Name").toString() : null;
 		List<String> lore = resultObj.containsKey("Lore") ? jsonArrayToList((JSONArray) resultObj.get("Lore")) : null;
-		Material type = Material.valueOf(resultObj.get("Type").toString().toUpperCase());
+		Material resultType = Material.valueOf(resultObj.get("Type").toString().toUpperCase());
 		int amount = Integer.parseInt(resultObj.get("Amount").toString());
 		
-		if (name == null && lore == null) {
-			item = new ItemStack(type, amount);
+		if (resultName == null && lore == null) {
+			item = new ItemStack(resultType, amount);
 		} else if (lore == null) {
-			item = ItemUtils.itemMaker(type, amount, name);
-		} else if (name == null) {
-			item = ItemUtils.itemMaker(type, amount, lore);
+			item = ItemUtils.itemMaker(resultType, amount, resultName);
+		} else if (resultName == null) {
+			item = ItemUtils.itemMaker(resultType, amount, lore);
 		} else {
-			item = ItemUtils.itemMaker(type, amount, name, lore);
+			item = ItemUtils.itemMaker(resultType, amount, resultName, lore);
 		}
 	}
 	
@@ -91,73 +91,97 @@ public abstract class ACraft {
 		List<ItemStack> ings = new ArrayList<>();
 		
 		if (recipeType == Type.STONECUTTER) {
-			type = "STONECUTTER";
-			Material ing = Material.valueOf(ingredients.get(ingredients.keySet().toArray()[0]).get("Type"));
-			
-			recipe = new StonecuttingRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item, ing);
-			
-			ings.add(new ItemStack(ing));
-			addInvItems(ings);
+			ings = setupStonecutter(ingredients);
 		} else if (recipeType == Type.WORKBENCH && shape != null) {
-			String[] shapeRows = shape.split("-");
-			
-			type = "SHAPED";
-			recipe = new ShapedRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item);
-			((ShapedRecipe) recipe).shape(shapeRows[0], shapeRows[1], shapeRows[2]);
-			
-			for (String line : shapeRows) {
-				for (char c : line.toCharArray()) {
-					if (ingredients.containsKey("" + c)) {
-						String ingType = ingredients.get("" + c).get("Type").toUpperCase();
-						
-						if (ingType.contains(",")) {
-							List<Material> list = new ArrayList<>();
-							
-							for (String s : ingType.split(",")) {
-								list.add(Material.valueOf(s.toUpperCase()));
-							}
-							
-							MaterialChoice mc = new MaterialChoice(list);
-
-							((ShapedRecipe) recipe).setIngredient(c, mc);
-							ings.add(ItemUtils.itemMaker(list.get(0), 1, ingredients.get("" + c).get("Name")));
-						} else {
-							((ShapedRecipe) recipe).setIngredient(c, Material.valueOf(ingType));
-							ings.add(new ItemStack(Material.valueOf(ingType)));
-						}
-					} else {
-						ings.add(null);
-					}
-				}
-			}
-			
-			addInvItems(ings);
+			ings = setupShaped(shape, ingredients);
 		} else if (recipeType == Type.WORKBENCH) {
-			type = "SHAPELESS";
-			recipe = new ShapelessRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item);
-			
-			ingredients.forEach((c, m) -> {
-				String ingType = m.get("Type").toUpperCase();
-				
-				if (ingType.contains(",")) {
-					List<Material> list = new ArrayList<>();
-					
-					for (String s : ingType.split(",")) {
-						list.add(Material.valueOf(s.toUpperCase()));
-					}
-					
-					MaterialChoice mc = new MaterialChoice(list);
-
-					((ShapelessRecipe) recipe).addIngredient(mc);
-					ings.add(ItemUtils.itemMaker(list.get(0), 1, m.get("Name")));
-				} else {
-					((ShapelessRecipe) recipe).addIngredient(Material.valueOf(ingType));
-					ings.add(new ItemStack(Material.valueOf(ingType)));
-				}
-			});
-			
-			addInvItems(ings);
+			ings = setupShapeless(ingredients);
 		}
+		
+		addInvItems(ings);
+	}
+	
+	private final List<ItemStack> setupStonecutter(Map<String, Map<String, String>> ingredients) {
+		List<ItemStack> ings = new ArrayList<>();
+		
+		type = "STONECUTTER";
+		Material ing = Material.valueOf(ingredients.get(ingredients.keySet().toArray()[0]).get("Type"));
+		
+		recipe = new StonecuttingRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item, ing);
+		
+		ings.add(new ItemStack(ing));
+		
+		return ings;
+	}
+	
+	private final List<ItemStack> setupShaped(String shape, Map<String, Map<String, String>> ingredients) {
+		List<ItemStack> ings = new ArrayList<>();
+		String[] shapeRows = shape.split("-");
+		
+		type = "SHAPED";
+		recipe = new ShapedRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item);
+		((ShapedRecipe) recipe).shape(shapeRows[0], shapeRows[1], shapeRows[2]);
+		
+		for (String line : shapeRows) {
+			for (char c : line.toCharArray()) {
+				setupIngredients(recipe, ingredients, c, ings);
+			}
+		}
+		
+		return ings;
+	}
+	
+	private static void setupIngredients(Recipe recipe, Map<String, Map<String, String>> ingredients, char c, List<ItemStack> ings) {
+		if (ingredients.containsKey("" + c)) {
+			String ingType = ingredients.get("" + c).get("Type").toUpperCase();
+			
+			if (ingType.contains(",")) {
+				List<Material> list = new ArrayList<>();
+				
+				for (String s : ingType.split(",")) {
+					list.add(Material.valueOf(s.toUpperCase()));
+				}
+				
+				MaterialChoice mc = new MaterialChoice(list);
+
+				((ShapedRecipe) recipe).setIngredient(c, mc);
+				ings.add(ItemUtils.itemMaker(list.get(0), 1, ingredients.get("" + c).get("Name")));
+			} else {
+				((ShapedRecipe) recipe).setIngredient(c, Material.valueOf(ingType));
+				ings.add(new ItemStack(Material.valueOf(ingType)));
+			}
+		} else {
+			ings.add(null);
+		}
+	}
+	
+	private final List<ItemStack> setupShapeless(Map<String, Map<String, String>> ingredients) {
+		List<ItemStack> ings = new ArrayList<>();
+		
+		type = "SHAPELESS";
+		recipe = new ShapelessRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item);
+		
+		ingredients.forEach((c, m) -> {
+			String ingType = m.get("Type").toUpperCase();
+			
+			if (ingType.contains(",")) {
+				List<Material> list = new ArrayList<>();
+				
+				for (String s : ingType.split(",")) {
+					list.add(Material.valueOf(s.toUpperCase()));
+				}
+				
+				MaterialChoice mc = new MaterialChoice(list);
+
+				((ShapelessRecipe) recipe).addIngredient(mc);
+				ings.add(ItemUtils.itemMaker(list.get(0), 1, m.get("Name")));
+			} else {
+				((ShapelessRecipe) recipe).addIngredient(Material.valueOf(ingType));
+				ings.add(new ItemStack(Material.valueOf(ingType)));
+			}
+		});
+		
+		return ings;
 	}
 	
 	/**
@@ -187,6 +211,10 @@ public abstract class ACraft {
 	protected final void addInvItems(List<ItemStack> ings) {
 		int cnt = 0;
 		int i = 3;
+		
+		if (ings == null) {
+			return ;
+		}
 		
 		while (i < 24) {
 			if (cnt >= ings.size() || ings.get(cnt) == null) {

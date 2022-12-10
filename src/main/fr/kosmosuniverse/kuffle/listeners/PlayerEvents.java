@@ -1,9 +1,6 @@
 package main.fr.kosmosuniverse.kuffle.listeners;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,14 +20,12 @@ import org.bukkit.potion.PotionEffectType;
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
-import main.fr.kosmosuniverse.kuffle.core.GameHolder;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
-import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
 import main.fr.kosmosuniverse.kuffle.crafts.ACraft;
-import main.fr.kosmosuniverse.kuffle.type.KuffleType;
+import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 /**
@@ -48,7 +43,7 @@ public class PlayerEvents implements Listener {
 	public void onPlayerConnectEvent(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 	
-		if (!KuffleMain.gameStarted) {
+		if (!KuffleMain.getInstance().isStarted()) {
 			return;
 		}
 		
@@ -81,7 +76,7 @@ public class PlayerEvents implements Listener {
 	public void onPlayerDisconnectEvent(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		
-		if (!KuffleMain.gameStarted || !GameManager.hasPlayer(player.getName())) {
+		if (!KuffleMain.getInstance().isStarted() || !GameManager.hasPlayer(player.getName())) {
 			return ;
 		}
 		
@@ -101,41 +96,8 @@ public class PlayerEvents implements Listener {
 				TeamManager.getInstance().saveTeams(KuffleMain.getInstance().getDataFolder().getPath());
 			}
 			
-			GameHolder holder = new GameHolder(Config.getHolder(), KuffleMain.type.getType().toString(), GameManager.getRanks(), KuffleMain.type.getXpMap());
+			CommandUtils.saveParty();
 			
-			try (FileOutputStream fos = new FileOutputStream(KuffleMain.getInstance().getDataFolder().getPath() + File.separator + "Game.k")) {
-				ObjectOutputStream oos = new ObjectOutputStream(fos);
-				oos.writeObject(holder);
-				oos.flush();
-				oos.close();
-			} catch (IOException e) {
-				Utils.logException(e);
-			}
-			
-			/*try (FileWriter writer = new FileWriter(KuffleMain.getInstance().getDataFolder().getPath() + File.separator + "Games.k");) {				
-				JSONObject global = new JSONObject();
-
-				global.put("type", KuffleMain.type.getType().toString());
-				global.put("config", Config.saveConfig());
-				global.put("ranks", GameManager.saveRanks());
-				global.put("xpMax", KuffleMain.type.saveXpMax());
-				
-				writer.write(global.toJSONString());
-				
-				global.clear();
-			} catch (IOException e) {
-				LogManager.getInstanceSystem().logSystemMsg(e.getMessage());
-			}*/
-
-			if (KuffleMain.type.getType() == KuffleType.Type.ITEMS) {
-				CraftManager.removeCraftTemplates();
-			}
-			
-			ScoreManager.clear();
-			GameManager.clear();
-			KuffleMain.loop.kill();
-			KuffleMain.paused = false;
-			KuffleMain.gameStarted = false;
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("ALL_DISCONNECTED", Config.getLang()));
 			LogManager.getInstanceGame().logSystemMsg(LangManager.getMsgLang("ALL_DISCONNECTED", Config.getLang()));
 		}
@@ -148,7 +110,7 @@ public class PlayerEvents implements Listener {
 	 */
 	@EventHandler
 	public void onPlayerDeathEvent(PlayerDeathEvent event) {
-		if (!KuffleMain.gameStarted) {
+		if (!KuffleMain.getInstance().isStarted()) {
 			return ;
 		}
 		
@@ -177,7 +139,7 @@ public class PlayerEvents implements Listener {
 	 */
 	@EventHandler
 	public void onPlayerRespawnEvent(PlayerRespawnEvent event) {
-		if (!KuffleMain.gameStarted) {
+		if (!KuffleMain.getInstance().isStarted()) {
 			return ;
 		}
 		
@@ -192,7 +154,7 @@ public class PlayerEvents implements Listener {
 		event.setRespawnLocation(GameManager.getPlayerSpawnLoc(player.getName()));
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
-			if (Config.getLevel().losable) {
+			if (Config.getLevel().isLosable()) {
 				player.sendMessage(ChatColor.RED + LangManager.getMsgLang("YOU_LOSE", GameManager.getPlayerLang(player.getName())));
 			} else {
 				GameManager.teleportAutoBack(player.getName());
@@ -208,11 +170,11 @@ public class PlayerEvents implements Listener {
 	 */
 	@EventHandler
 	public void onPauseEvent(PlayerMoveEvent event) {
-		if (!KuffleMain.gameStarted) {
+		if (!KuffleMain.getInstance().isStarted()) {
 			return ;
 		}
 		
-		if (KuffleMain.paused) {
+		if (KuffleMain.getInstance().isPaused()) {
 			event.setCancelled(true);
 		}
 	}

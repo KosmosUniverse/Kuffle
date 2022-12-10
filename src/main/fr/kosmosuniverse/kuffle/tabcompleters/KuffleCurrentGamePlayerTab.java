@@ -24,7 +24,7 @@ public class KuffleCurrentGamePlayerTab implements TabCompleter {
 		if (GameManager.getGames() != null && args.length == 1) {
 			List<String> list = new ArrayList<>();
 			
-			GameManager.applyToPlayers((game) -> {
+			GameManager.applyToPlayers(game -> {
 				if (!game.lose && !game.finished) {
 					list.add(game.player.getName());	
 				}

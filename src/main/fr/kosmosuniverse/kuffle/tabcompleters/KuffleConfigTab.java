@@ -2,6 +2,7 @@ package main.fr.kosmosuniverse.kuffle.tabcompleters;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,11 +51,8 @@ public class KuffleConfigTab implements TabCompleter {
 		
 		for (Object key : mainObj.keySet()) {
 			String[] raw = ((String) mainObj.get(key)).split(":");
-			List<String> list = new ArrayList<>();
-			
-			for (String s : raw) {
-				list.add(s);
-			}
+
+			List<String> list = Arrays.asList(raw);
 			
 			all.put((String) key, list);
 		}

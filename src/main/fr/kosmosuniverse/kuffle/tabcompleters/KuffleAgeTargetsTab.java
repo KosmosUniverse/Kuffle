@@ -25,7 +25,7 @@ public class KuffleAgeTargetsTab implements TabCompleter  {
 		int max = AgeManager.getLastAgeIndex();
 		
 		for (int cnt = 0; cnt <= max; cnt++) {
-			String age = AgeManager.getAgeByNumber(cnt).name;
+			String age = AgeManager.getAgeByNumber(cnt).getName();
 
 			ages.add(age);
 		}

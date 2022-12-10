@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
+
 /**
  * 
  * @author KosmosUniverse
@@ -22,6 +24,12 @@ public abstract class AMultiblock {
 	protected List<Inventory> invs = new ArrayList<>();
 	protected ItemStack item;
 	protected World world = null;
+	
+	ItemStack grayPane = ItemUtils.itemMaker(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, " ");
+	ItemStack limePane = ItemUtils.itemMaker(Material.LIME_STAINED_GLASS_PANE, 1, " ");
+	ItemStack backPane = ItemUtils.itemMaker(Material.RED_STAINED_GLASS_PANE, 1, "<- Back");
+	ItemStack previousPane = ItemUtils.itemMaker(Material.RED_STAINED_GLASS_PANE, 1, "<- Previous");
+	ItemStack bluePane = ItemUtils.itemMaker(Material.BLUE_STAINED_GLASS_PANE, 1, "Next ->");
 	
 	/**
 	 * Called when multiblock is assemble or activated
@@ -81,11 +89,9 @@ public abstract class AMultiblock {
 		} else if (item.getType() == Material.RED_STAINED_GLASS_PANE) {
 			if (item.getItemMeta().getDisplayName().equals("<- Back")) {
 				return (master);
-			} else if (item.getItemMeta().getDisplayName().equals("<- Previous")) {
-				if (idx > 0) {
-					idx -= 1;
-					return (invs.get(idx));
-				}
+			} else if (item.getItemMeta().getDisplayName().equals("<- Previous") && idx > 0) {
+				idx -= 1;
+				return (invs.get(idx));
 			}
 		}
 		

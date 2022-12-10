@@ -21,7 +21,7 @@ public class KuffleSkip implements CommandExecutor {
 		
 		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-skip>"));
 		
-		if (!KuffleMain.gameStarted) {
+		if (!KuffleMain.getInstance().isStarted()) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_NOT_LAUNCHED", Config.getLang()));
 			
 			return false;
@@ -68,8 +68,5 @@ public class KuffleSkip implements CommandExecutor {
 		
 		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("ITEM_SKIPPED", Config.getLang()).replace("[#]", " [" + GameManager.getPlayerTarget(playerTarget) + "] ").replace("<#>", " <" + playerTarget + ">"));
 		GameManager.skipPlayerTarget(playerTarget, "k-skip".equals(cmd));
-
-		
-		return ;
 	}
 }

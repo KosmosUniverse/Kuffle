@@ -29,8 +29,12 @@ public class MultiblockManager {
 	private static List<AMultiblock> multiblocks = null;
 	
 	/**
-	 * Constructor
+	 * Private default constructor
 	 */
+	private MultiblockManager() {
+		throw new IllegalStateException("");
+	}
+	
 	public static void setup() {
 		multiblocks = new ArrayList<>();
 		
@@ -53,9 +57,7 @@ public class MultiblockManager {
 	 * @return a Map of Cores and the name of their multiblocks
 	 */
 	public static Map<Material, String> getCores() {
-		Map<Material, String> cores = multiblocks.stream().collect(Collectors.toMap(AMultiblock::getType, AMultiblock::getName));
-		
-		return cores;
+		return multiblocks.stream().collect(Collectors.toMap(AMultiblock::getType, AMultiblock::getName));
 	}
 	
 	/**
@@ -88,18 +90,18 @@ public class MultiblockManager {
 		List<String> done = new ArrayList<>();
 		List<Material> tmp = new ArrayList<>();
 		
-		for (int ageCnt = 0; ageCnt < Config.getLastAge().number; ageCnt++) {
+		for (int ageCnt = 0; ageCnt < Config.getLastAge().getNumber(); ageCnt++) {
 			Age age = AgeManager.getAgeByNumber(ageCnt);
 			
 			for (int i = 0; i < Config.getSBTTAmount(); i++) {
-				done.add(TargetManager.newSbtt(done, age.name));
+				done.add(TargetManager.newSbtt(done, age.getName()));
 			}
 			
 			for (String block : done) {
 				tmp.add(Material.matchMaterial(block));
 			}
 			
-			multiblocks.add(new Template(age.name, tmp));
+			multiblocks.add(new Template(age.getName(), tmp));
 
 			tmp.clear();
 			done.clear();
@@ -152,10 +154,10 @@ public class MultiblockManager {
 		if (!Config.getSBTT()) {
 			return ;
 		}
-		for (int ageCnt = 0; ageCnt < Config.getLastAge().number; ageCnt++) {
+		for (int ageCnt = 0; ageCnt < Config.getLastAge().getNumber(); ageCnt++) {
 			Age age = AgeManager.getAgeByNumber(ageCnt);
 			
-			removeTemplate(age.name);
+			removeTemplate(age.getName());
 		}
 	}
 	

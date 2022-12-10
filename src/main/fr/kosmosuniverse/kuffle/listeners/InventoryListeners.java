@@ -50,19 +50,13 @@ public class InventoryListeners implements Listener {
 		if (event.getView().getTitle().contains(ChatColor.BLACK + "AllCustomCrafts")) {
 			event.setCancelled(true);
 
-			if ((inv = CraftManager.getInventory(current, item)) != null) {
-				player.openInventory(inv);
-			} else if ((craft = CraftManager.getCraftByItem(item)) != null &&
-					(inv = craft.getInventory()) != null) {
-				player.openInventory(inv);
-			}
+			openAllCrafts(current, item, player);
 		} else if (event.getView().getTitle().equals(ChatColor.BLACK + "AllMultiBlocks")) {
 			event.setCancelled(true);
 			
-			if ((multiblock = MultiblockManager.searchMultiBlockByItem(item)) != null) {
-				if ((inv = multiblock.getInventory(current, item, MultiblockManager.getMultiblocksInventories(), true)) != null) {
-					player.openInventory(inv);
-				}
+			if ((multiblock = MultiblockManager.searchMultiBlockByItem(item)) != null &&
+					(inv = multiblock.getInventory(current, item, MultiblockManager.getMultiblocksInventories(), true)) != null) {
+				player.openInventory(inv);
 			}
 		} else if ((craft = CraftManager.getCraftByInventoryName(event.getView().getTitle())) != null) {
 			event.setCancelled(true);
@@ -70,7 +64,7 @@ public class InventoryListeners implements Listener {
 			if (item.getItemMeta().getDisplayName().equals("<- Back")) {
 				player.openInventory(CraftManager.getCraftsInventory(craft));
 			}
-		} else if (KuffleMain.type.getType() == KuffleType.Type.BLOCKS && (multiblock = MultiblockManager.searchMultiBlockByInventoryName(event.getView().getTitle())) != null) {
+		} else if (KuffleMain.getInstance().getType().getType() == KuffleType.Type.BLOCKS && (multiblock = MultiblockManager.searchMultiBlockByInventoryName(event.getView().getTitle())) != null) {
 			event.setCancelled(true);
 			
 			if ((inv = multiblock.getInventory(current, item, MultiblockManager.getMultiblocksInventories(), false)) != null) {
@@ -82,6 +76,23 @@ public class InventoryListeners implements Listener {
 			playersInventory(player, item);
 		} else if (event.getView().getTitle().contains(" Targets ")) {
 			itemsInventory(event);
+		}
+	}
+	
+	private void openAllCrafts(Inventory current, ItemStack item, Player player) {
+		Inventory inv = CraftManager.getInventory(current, item);
+		ACraft craft;
+		
+		if (inv == null) {
+			craft = CraftManager.getCraftByItem(item);
+			
+			if (craft != null) {
+				inv = craft.getInventory();
+			}
+		}
+		
+		if (inv != null) {
+			player.openInventory(inv);
 		}
 	}
 	

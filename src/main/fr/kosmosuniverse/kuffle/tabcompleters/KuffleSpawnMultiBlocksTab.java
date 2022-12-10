@@ -17,7 +17,7 @@ import main.fr.kosmosuniverse.kuffle.multiblock.MultiblockManager;
  *
  */
 public class KuffleSpawnMultiBlocksTab implements TabCompleter {
-	public List<String> list;
+	private List<String> list;
 	
 	/**
 	 * Constructor
@@ -29,14 +29,12 @@ public class KuffleSpawnMultiBlocksTab implements TabCompleter {
 	@Override
 	public List<String> onTabComplete(CommandSender sender,  Command cmd, String msg, String[] args) {
 		if (!(sender instanceof Player))
-			return null;
+			return new ArrayList<>();
 		
-		if (cmd.getName().equalsIgnoreCase("kb-spawn-multiblock")) {
-			if (args.length == 1) {
-				return list;	
-			}
+		if (cmd.getName().equalsIgnoreCase("kb-spawn-multiblock") && args.length == 1) {
+			return list;
 		}
 		
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 }

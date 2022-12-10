@@ -22,9 +22,11 @@ public class KuffleNoType extends KuffleType {
 	}
 	
 	public void setupSbtt() {
+		throw new UnsupportedOperationException("No type selected");
 	}
 	
 	public void clearSbtt() {
+		throw new UnsupportedOperationException("No type selected");
 	}
 	
 	@Override

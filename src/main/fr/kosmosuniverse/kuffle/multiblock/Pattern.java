@@ -16,16 +16,16 @@ public class Pattern {
 	/**
 	 * Constructor
 	 * 
-	 * @param _m	The material
-	 * @param _x	The X relative position
-	 * @param _y	The Y relative position
-	 * @param _z	The Z relative position 
+	 * @param patternMaterial	The material
+	 * @param patternX			The X relative position
+	 * @param patternY			The Y relative position
+	 * @param patternZ			The Z relative position 
 	 */
-	public Pattern(Material _m, int _x, int _y, int _z) {
-		m = _m;
-		x = _x;
-		y = _y;
-		z = _z;
+	public Pattern(Material patternMaterial, int patternX, int patternY, int patternZ) {
+		m = patternMaterial;
+		x = patternX;
+		y = patternY;
+		z = patternZ;
 	}
 	
 	/**
@@ -67,10 +67,10 @@ public class Pattern {
 	/**
 	 * Sets the Material
 	 * 
-	 * @param _m	The material to set
+	 * @param patternMaterial	The material to set
 	 */
-	public void setMaterial(Material _m) {
-		m = _m;
+	public void setMaterial(Material patternMaterial) {
+		m = patternMaterial;
 	}
 	
 	/**

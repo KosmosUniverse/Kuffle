@@ -15,7 +15,7 @@ import org.json.simple.parser.ParseException;
  *
  */
 public class AgeManager {
-	public static List<Age> ages = null;
+	private static List<Age> ages = null;
 	
 	/**
 	 * Private AgeManager constructor
@@ -74,7 +74,7 @@ public class AgeManager {
 	 */
 	public static boolean ageExists(String ageName) {
 		for (Age age : ages) {
-			if (age.name.equals(ageName)) {
+			if (age.getName().equals(ageName)) {
 				return true;
 			}
 		}
@@ -91,7 +91,7 @@ public class AgeManager {
 	 */
 	public static Age getAgeByNumber(int ageNumber) {
 		for (Age age : ages) {
-			if (age.number == ageNumber) {
+			if (age.getNumber() == ageNumber) {
 				return age;
 			}
 		}
@@ -108,7 +108,7 @@ public class AgeManager {
 	 */
 	public static Age getAgeByName(String ageName) {
 		for (Age age : ages) {
-			if (age.name.equalsIgnoreCase(ageName)) {
+			if (age.getName().equalsIgnoreCase(ageName)) {
 				return age;
 			}
 		}
@@ -123,7 +123,7 @@ public class AgeManager {
 	 */
 	public static Age getDefaultAge() {
 		for (Age age : ages) {
-			if (age.number == -1) {
+			if (age.getNumber() == -1) {
 				return age;
 			}
 		}
@@ -158,7 +158,7 @@ public class AgeManager {
 		int max = 0;
 		
 		for (Age age : ages) {
-			max = max < age.number ? age.number : max;
+			max = max < age.getNumber() ? age.getNumber() : max;
 		}
 		
 		return max;
@@ -170,7 +170,7 @@ public class AgeManager {
 	 * @return Ages name as List of Strings
 	 */
 	public static List<String> getAgesNameList() {
-		return Collections.unmodifiableList(ages.stream().map(age -> age.name).collect(Collectors.toList()));
+		return Collections.unmodifiableList(ages.stream().map(age -> age.getName()).collect(Collectors.toList()));
 	}
 	
 	/**

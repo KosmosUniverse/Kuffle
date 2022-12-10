@@ -48,28 +48,6 @@ public class ItemUtils {
 	 * 
 	 * @param material	The item type
 	 * @param amount	The amount of this item
-	 * @param rawLore	The lore as an Array of this item
-	 * 
-	 * @return the item with the previous characteristics
-	 */
-	/*public static ItemStack itemMaker(Material material, int amount, String... rawLore) {
-		ItemStack item = new ItemStack(material, amount);
-		ItemMeta itM = item.getItemMeta();
-		List<String> lore = new ArrayList<>();		
-		
-		Collections.addAll(lore, rawLore);
-		
-		itM.setLore(lore);
-		item.setItemMeta(itM);
-		
-		return item;
-	}*/
-	
-	/**
-	 * Makes an item with custom lore
-	 * 
-	 * @param material	The item type
-	 * @param amount	The amount of this item
 	 * @param lore		The lore as a List of this item
 	 * 
 	 * @return the item with the previous characteristics

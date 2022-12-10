@@ -42,6 +42,9 @@ import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
  *
  */
 public class PlayerInteract implements Listener  {
+	private static final String CORAL_COMPASS = "CoralCompass";
+	private static final String COMPASS_CLASS = "org.bukkit.inventory.meta.CompassMeta";
+	
 	protected Map<Location, String> shulkers = new HashMap<>();
 	
 	/**
@@ -76,7 +79,7 @@ public class PlayerInteract implements Listener  {
 	protected boolean onLeftClickGeneric(PlayerInteractEvent event) throws KuffleEventNotUsableException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
 		boolean ret = true;
 		
-		if (!KuffleMain.gameStarted) {
+		if (!KuffleMain.getInstance().isStarted()) {
 			ret = false;
 		}
 		
@@ -104,8 +107,8 @@ public class PlayerInteract implements Listener  {
 		
 		ItemStack item = event.getItem();
 		
-		if (VersionManager.isVersionValid("1.17", null) && ItemUtils.itemComparison(item, CraftManager.findItemByName("CoralCompass"))) {
-			if (!Boolean.valueOf((Class.forName("org.bukkit.inventory.meta.CompassMeta").getClass().getMethod("hasLodestone").invoke(Class.forName("org.bukkit.inventory.meta.CompassMeta").cast(item.getItemMeta())).toString()))) {
+		if (VersionManager.isVersionValid("1.17", null) && ItemUtils.itemComparison(item, CraftManager.findItemByName(CORAL_COMPASS))) {
+			if (!Boolean.valueOf((Class.forName(COMPASS_CLASS).getClass().getMethod("hasLodestone").invoke(Class.forName(COMPASS_CLASS).cast(item.getItemMeta())).toString()))) {
 				coralCompass(player, item);
 				
 			} else {
@@ -125,7 +128,7 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onDrinkMilk(PlayerItemConsumeEvent event) {
-		if (!KuffleMain.gameStarted) {
+		if (!KuffleMain.getInstance().isStarted()) {
 			return ;
 		}
 		
@@ -133,9 +136,9 @@ public class PlayerInteract implements Listener  {
 		
 		if (GameManager.hasPlayer(player.getName()) &&
 				event.getItem().getType() == Material.MILK_BUCKET) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
-				GameManager.reloadPlayerEffects(player.getName());
-			}, 20);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
+				GameManager.reloadPlayerEffects(player.getName())
+			, 20);
 		}
 	}
 	
@@ -146,7 +149,7 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onPlaceShulkerGeneric(BlockPlaceEvent event) {
-		if (!KuffleMain.gameStarted || !Config.getPassiveAll()) {
+		if (!KuffleMain.getInstance().isStarted() || !Config.getPassiveAll()) {
 			return ;
 		}
 		
@@ -170,7 +173,7 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onInteractShulkerGeneric(PlayerInteractEvent event) {
-		if (!KuffleMain.gameStarted || !Config.getPassiveAll()) {
+		if (!KuffleMain.getInstance().isStarted() || !Config.getPassiveAll()) {
 			return ;
 		}
 		
@@ -197,7 +200,7 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onBreakShulkerGeneric(BlockBreakEvent event) {
-		if (!KuffleMain.gameStarted || !Config.getPassiveAll()) {
+		if (!KuffleMain.getInstance().isStarted() || !Config.getPassiveAll()) {
 			return ;
 		}
 		
@@ -224,7 +227,7 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onBreakSignGeneric(BlockBreakEvent event) {
-		if (!KuffleMain.gameStarted) {
+		if (!KuffleMain.getInstance().isStarted()) {
 			return ;
 		}
 		
@@ -242,15 +245,15 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onCraftGeneric(CraftItemEvent event) {
-		if (!KuffleMain.gameStarted) {
+		if (!KuffleMain.getInstance().isStarted()) {
 			return ;
 		}
 		
 		ItemStack item = event.getInventory().getResult();
 		Player player = (Player) event.getWhoClicked();
 
-		if (ItemUtils.itemComparison(item, CraftManager.findItemByName("CoralCompass"))) {
-			int xpAmount = KuffleMain.type.getXpActivable("CoralCompass");
+		if (ItemUtils.itemComparison(item, CraftManager.findItemByName(CORAL_COMPASS))) {
+			int xpAmount = KuffleMain.getInstance().getType().getXpActivable(CORAL_COMPASS);
 			
 			if (player.getLevel() < xpAmount) {
 				event.setCancelled(true);
@@ -258,6 +261,7 @@ public class PlayerInteract implements Listener  {
 			} else {
 				player.setLevel(player.getLevel() - xpAmount);
 				xpAmount = (xpAmount - 5) < 5 ? 5 : (xpAmount - 5);
+				KuffleMain.getInstance().getType().setXpActivable(CORAL_COMPASS, xpAmount);
 				
 				LogManager.getInstanceGame().logMsg(player.getName(), "Crafted CoralCompass.");
 			}
@@ -271,7 +275,7 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onPlayerHitPlayerGeneric(EntityDamageByEntityEvent event) {
-		if (!KuffleMain.gameStarted && !Config.getPassiveAll()) {
+		if (!KuffleMain.getInstance().isStarted() && !Config.getPassiveAll()) {
 			return ;
 		}
 		
@@ -307,7 +311,7 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onFireWorkThrowGeneric(PlayerInteractEvent event) {
-		if (!KuffleMain.gameStarted) {
+		if (!KuffleMain.getInstance().isStarted()) {
 			return ;
 		}
 		
@@ -385,7 +389,7 @@ public class PlayerInteract implements Listener  {
 			Location found = searchWarmRadius(baseChunk, radius);
 			
 			if (found != null) {
-				Class.forName("org.bukkit.inventory.meta.CompassMeta").getMethod("setLodestone", Boolean.class).invoke(Class.forName("org.bukkit.inventory.meta.CompassMeta").cast(compass.getItemMeta()), found);
+				Class.forName(COMPASS_CLASS).getMethod("setLodestone", Boolean.class).invoke(Class.forName(COMPASS_CLASS).cast(compass.getItemMeta()), found);
 				ItemMeta itM = compass.getItemMeta();
 				itM.getLore().add("Location : " + found.getBlockX() + ", " + found.getBlockY() + ", " + found.getBlockZ());
 				compass.setItemMeta(itM);

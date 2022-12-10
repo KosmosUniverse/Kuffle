@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import main.fr.kosmosuniverse.kuffle.commands.KuffleAbandon;
@@ -72,12 +71,12 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  *
  */
 public abstract class KuffleType {
-	protected static Map<String, Integer> xpActivables = null;
-	protected static PlayerInteract playerInteractItems = null;
-	protected static PlayerInteract playerInteractBlocks = null;
-	protected static KuffleSetType kuffleSetType;
-	protected static KuffleAgeTargetsTab kuffleAgeTargetsTab = null;
-	protected static KuffleSetTypeTab kuffleSetTypeTab = null;
+	protected Map<String, Integer> xpActivables = null;
+	protected PlayerInteract playerInteractItems = null;
+	protected PlayerInteract playerInteractBlocks = null;
+	protected KuffleSetType kuffleSetType;
+	protected KuffleAgeTargetsTab kuffleAgeTargetsTab = null;
+	protected KuffleSetTypeTab kuffleSetTypeTab = null;
 	
 	/**
 	 * 
@@ -93,7 +92,7 @@ public abstract class KuffleType {
 	/**
 	 * Constructor
 	 */
-	public KuffleType() {
+	protected KuffleType() {
 	}
 	
 	public abstract void setupSbtt();
@@ -107,7 +106,7 @@ public abstract class KuffleType {
 	 * 
 	 * @throws KuffleFileLoadException if files load fails
 	 */
-	public KuffleType(JavaPlugin plugin) throws KuffleFileLoadException {
+	protected KuffleType(JavaPlugin plugin) throws KuffleFileLoadException {
 		LogManager.setupInstanceGame(plugin.getDataFolder().getPath() + File.separator + "KuffleGamelogs.txt");
 		LogManager.setupInstanceSystem(plugin.getDataFolder().getPath() + File.separator + "KuffleSystemlogs.txt");
 		
@@ -307,33 +306,6 @@ public abstract class KuffleType {
 		}
 		
 		xpMax.forEach((k, v) -> xpActivables.put(k, v));
-	}
-	
-	/**
-	 * Loads xpActivables map from JSON Object
-	 * 
-	 * @param xpMax	The JSON object representing xpActivales to load from previous save
-	 */
-	public void loadXpMax(JSONObject xpMax) {
-		xpActivables.clear();
-		
-		for (Object key : xpMax.keySet()) {
-			xpActivables.put((String) key, Integer.parseInt(xpMax.get(key).toString()));
-		}
-	}
-	
-	/**
-	 * Saves xpActivales map to load it later
-	 * 
-	 * @return the JSONObject containing the xpActivables map
-	 */
-	@SuppressWarnings("unchecked")
-	public JSONObject saveXpMax() {
-		JSONObject xpMaxObj = new JSONObject();
-		
-		xpActivables.forEach((k, v) -> xpMaxObj.put(k, v));
-
-		return xpMaxObj;
 	}
 	
 	/**

@@ -7,7 +7,6 @@ import java.util.function.Consumer;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.json.simple.JSONObject;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleConfigException;
@@ -79,10 +78,10 @@ public class Config implements Serializable {
 		configElems.put("XP_END_TELEPORTER", (String i) -> setXpEnd(Integer.parseInt(i)));
 		configElems.put("XP_OVERWORLD_TELEPORTER", (String i) -> setXpOverworld(Integer.parseInt(i)));
 		configElems.put("XP_CORAL_COMPASS", (String i) -> setXpCoral(Integer.parseInt(i)));
-		configElems.put("LAST_AGE", (String s) -> setLastAge(s));
-		configElems.put("FIRST_AGE_SKIP", (String s) -> setFirstSkip(s));
-		configElems.put("LEVEL", (String s) -> setLevel(s));
-		configElems.put("LANG", (String s) -> setLang(s));
+		configElems.put("LAST_AGE", Config::setLastAge);
+		configElems.put("FIRST_AGE_SKIP", Config::setFirstSkip);
+		configElems.put("LEVEL", Config::setLevel);
+		configElems.put("LANG", Config::setLang);
 		
 		checkAndSetConfig(configFile);
 	}
@@ -129,13 +128,15 @@ public class Config implements Serializable {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkAndSetConfig(FileConfiguration configFile) {
-		if (!configFile.contains("game_settings.lang")
-				|| !LangManager.hasLang(configFile.getString("game_settings.lang"))) {
-			configValues.lang = "en";
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "lang"));
-			configFile.set("game_settings.lang", "en");
+		String langConfig = "game_settings.lang";
+		
+		if (!configFile.contains(langConfig)
+				|| !LangManager.hasLang(configFile.getString(langConfig))) {
+			configValues.setLang("en");
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "lang"));
+			configFile.set(langConfig, "en");
 		} else {
-			configValues.lang = configFile.getString("game_settings.lang");
+			configValues.setLang(configFile.getString(langConfig));
 		}
 		
 		checkFileSpread(configFile);
@@ -153,22 +154,26 @@ public class Config implements Serializable {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkFileSpread(FileConfiguration configFile) {
-		if (!configFile.contains("game_settings.spreadplayers.enable")) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling spreadplayers"));
-			configFile.set("game_settings.spreadplayers.enable", false);
+		String spreadConfig = "game_settings.spreadplayers.enable";
+		String spreadMinConfig = "game_settings.spreadplayers.minimum_distance";
+		String spreadMaxConfig = "game_settings.spreadplayers.minimum_radius";
+		
+		if (!configFile.contains(spreadConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling spreadplayers"));
+			configFile.set(spreadConfig, false);
 		}
 		
-		if (!configFile.contains("game_settings.spreadplayers.minimum_distance")
-				|| configFile.getInt("game_settings.spreadplayers.minimum_distance") < 1) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "spreadplayers minimum distance"));
-			configFile.set("game_settings.spreadplayers.minimum_distance", 500);
+		if (!configFile.contains(spreadMinConfig)
+				|| configFile.getInt(spreadMinConfig) < 1) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "spreadplayers minimum distance"));
+			configFile.set(spreadMinConfig, 500);
 		}
 
-		if (!configFile.contains("game_settings.spreadplayers.minimum_radius")
-				|| configFile.getInt("game_settings.spreadplayers.minimum_radius") < configFile
-						.getInt("game_settings.spreadplayers.minimum_distance")) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "spreadplayers minimum radius"));
-			configFile.set("game_settings.spreadplayers.minimum_radius", 1000);
+		if (!configFile.contains(spreadMaxConfig)
+				|| configFile.getInt(spreadMaxConfig) < configFile
+						.getInt(spreadMinConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "spreadplayers minimum radius"));
+			configFile.set(spreadMaxConfig, 1000);
 		}
 	}
 	
@@ -178,47 +183,56 @@ public class Config implements Serializable {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkFileModes(FileConfiguration configFile) {
-		if (!configFile.contains("game_settings.team.enable")) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling team"));
-			configFile.set("game_settings.team.enable", false);
+		String teamConfig = "game_settings.team.enable";
+		String teamSizeConfig = "game_settings.team.size";
+		String sameConfig = "game_settings.modes.same";
+		String sbttConfig = "game_settings.modes.sbtt.enable";
+		String sbttAmountConfig = "game_settings.modes.sbtt.amount";
+		String doubleConfig = "game_settings.modes.double";
+		String passiveAllConfig = "game_settings.passive.all";
+		String passiveTeamConfig = "game_settings.passive.team";
+		
+		if (!configFile.contains(teamConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling team"));
+			configFile.set(teamConfig, false);
 		}
 
-		if (!configFile.contains("game_settings.team.size") || configFile.getInt("game_settings.team.size") < 2
-				|| configFile.getInt("game_settings.team.size") > 10) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "max team size"));
-			configFile.set("game_settings.team.size", 2);
+		if (!configFile.contains(teamSizeConfig) || configFile.getInt(teamSizeConfig) < 2
+				|| configFile.getInt(teamSizeConfig) > 10) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "max team size"));
+			configFile.set(teamSizeConfig, 2);
 		}
 		
-		if (!configFile.contains("game_settings.modes.same")) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling same mode"));
-			configFile.set("game_settings.modes.same", false);
+		if (!configFile.contains(sameConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling same mode"));
+			configFile.set(sameConfig, false);
 		}
 		
-		if (!configFile.contains("game_settings.modes.sbtt.enable")) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "SBTT mode"));
-			configFile.set("game_settings.modes.sbtt.enable", false);
+		if (!configFile.contains(sbttConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "SBTT mode"));
+			configFile.set(sbttConfig, false);
 		}
 		
-		if (!configFile.contains("game_settings.modes.sbtt.amount") ||
-				configFile.getInt("game_settings.modes.sbtt.amount") < 1 ||
-				configFile.getInt("game_settings.modes.sbtt.amount") > 9) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "SBTT amount"));
-			configFile.set("game_settings.modes.sbtt.amount", 4);
+		if (!configFile.contains(sbttAmountConfig) ||
+				configFile.getInt(sbttAmountConfig) < 1 ||
+				configFile.getInt(sbttAmountConfig) > 9) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "SBTT amount"));
+			configFile.set(sbttAmountConfig, 4);
 		}
 		
-		if (!configFile.contains("game_settings.modes.double")) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "Double mode"));
-			configFile.set("game_settings.modes.double", false);
+		if (!configFile.contains(doubleConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "Double mode"));
+			configFile.set(doubleConfig, false);
 		}
 		
-		if (!configFile.contains("game_settings.passive.all")) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "Passive mode"));
-			configFile.set("game_settings.passive.all", false);
+		if (!configFile.contains(passiveAllConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "Passive mode"));
+			configFile.set(passiveAllConfig, false);
 		}
 		
-		if (!configFile.contains("game_settings.passive.team")) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "Passive mode"));
-			configFile.set("game_settings.passive.team", false);
+		if (!configFile.contains(passiveTeamConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "Passive mode"));
+			configFile.set(passiveTeamConfig, false);
 		}
 	}
 	
@@ -228,31 +242,37 @@ public class Config implements Serializable {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkFileStart(FileConfiguration configFile) {
-		if (!configFile.contains("game_settings.target_per_age")
-				|| configFile.getInt("game_settings.target_per_age") < 1) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "item per age"));
-			configFile.set("game_settings.target_per_age", 5);
+		String targetConfig = "game_settings.target_per_age";
+		String timeStartConfig = "game_settings.time.start";
+		String timeAddConfig = "game_settings.time.added";
+		String lastAgeConfig = "game_settings.last_age";
+		String levelConfig = "game_settings.level";
+		
+		if (!configFile.contains(targetConfig)
+				|| configFile.getInt(targetConfig) < 1) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "item per age"));
+			configFile.set(targetConfig, 5);
 		}
 		
-		if (!configFile.contains("game_settings.time.start") || configFile.getInt("game_settings.time.start") < 1) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "start time"));
-			configFile.set("game_settings.time.start", 4);
+		if (!configFile.contains(timeStartConfig) || configFile.getInt(timeStartConfig) < 1) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "start time"));
+			configFile.set(timeStartConfig, 4);
 		}
 
-		if (!configFile.contains("game_settings.time.added") || configFile.getInt("game_settings.time.added") < 1) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "time added"));
-			configFile.set("game_settings.time.added", 2);
+		if (!configFile.contains(timeAddConfig) || configFile.getInt(timeAddConfig) < 1) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "time added"));
+			configFile.set(timeAddConfig, 2);
 		}
 
-		if (!configFile.contains("game_settings.last_age") || AgeManager.getAgeByName(configFile.getString("game_settings.last_age")) == null || AgeManager.getAgeByName(configFile.getString("game_settings.last_age")).number == -1) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "max ages"));
-			configFile.set("game_settings.last_age", AgeManager.getLastAge().name);
+		if (!configFile.contains(lastAgeConfig) || AgeManager.getAgeByName(configFile.getString(lastAgeConfig)) == null || AgeManager.getAgeByName(configFile.getString(lastAgeConfig)).getNumber() == -1) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "max ages"));
+			configFile.set(lastAgeConfig, AgeManager.getLastAge().getName());
 		}
 
-		if (!configFile.contains("game_settings.level") ||
-				!LevelManager.levelExists(configFile.getString("game_settings.level"))) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "level"));
-			configFile.set("game_settings.level", LevelManager.getFirstLevel().name);
+		if (!configFile.contains(levelConfig) ||
+				!LevelManager.levelExists(configFile.getString(levelConfig))) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "levels"));
+			configFile.set(levelConfig, LevelManager.getFirstLevel().getName());
 		}
 	}
 	
@@ -262,34 +282,41 @@ public class Config implements Serializable {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkFileOther(FileConfiguration configFile) {
-		if (!configFile.contains("game_settings.skip.enable")) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling skip"));
-			configFile.set("game_settings.skip.enable", true);
+		String skipConfig = "game_settings.skip.enable";
+		String skipAgeConfig = "game_settings.skip.age";
+		String craftConfig = "game_settings.custom_crafts";
+		String xpEndConfig = "game_settings.xp_max.end_teleporter";
+		String xpOverConfig = "game_settings.xp_max.overworld_teleporter";
+		String xpCoralConfig = "game_settings.xp_max.coral_compass";
+		
+		if (!configFile.contains(skipConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling skip"));
+			configFile.set(skipConfig, true);
 		}
 
-		if (!configFile.contains("game_settings.skip.age") || AgeManager.getAgeByName(configFile.getString("game_settings.skip.age")) == null || AgeManager.getAgeByName(configFile.getString("game_settings.skip.age")).number == -1) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "skip age"));
-			configFile.set("game_settings.skip.age", AgeManager.getFirstAge().name);
+		if (!configFile.contains(skipAgeConfig) || AgeManager.getAgeByName(configFile.getString(skipAgeConfig)) == null || AgeManager.getAgeByName(configFile.getString(skipAgeConfig)).getNumber() == -1) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "skip age"));
+			configFile.set(skipAgeConfig, AgeManager.getFirstAge().getName());
 		}
 
-		if (!configFile.contains("game_settings.custom_crafts")) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling custom crafts"));
-			configFile.set("game_settings.custom_crafts", true);
+		if (!configFile.contains(craftConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling custom crafts"));
+			configFile.set(craftConfig, true);
 		}
 		
-		if (!configFile.contains("game_settings.xp_max.end_teleporter")) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "xp max EndTeleporter"));
-			configFile.set("game_settings.xp_max.end_teleporter", 5);
+		if (!configFile.contains(xpEndConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "xp max EndTeleporter"));
+			configFile.set(xpEndConfig, 5);
 		}
 		
-		if (!configFile.contains("game_settings.xp_max.overworld_teleporter")) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "xp max OverworldTeleporter"));
-			configFile.set("game_settings.xp_max.overworld_teleporter", 10);
+		if (!configFile.contains(xpOverConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "xp max OverworldTeleporter"));
+			configFile.set(xpOverConfig, 10);
 		}
 		
-		if (!configFile.contains("game_settings.xp_max.coral_compass")) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "xp max CoralCompass"));
-			configFile.set("game_settings.xp_max.coral_compass", 20);
+		if (!configFile.contains(xpCoralConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "xp max CoralCompass"));
+			configFile.set(xpCoralConfig, 20);
 		}
 	}
 	
@@ -299,20 +326,24 @@ public class Config implements Serializable {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkFileEnd(FileConfiguration configFile) {
-		if (!configFile.contains("game_settings.print_player_tab.for_you")) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling game end tab display"));
-			configFile.set("game_settings.print_player_tab.for_you", true);
+		String persoTabConfig = "game_settings.print_player_tab.for_you";
+		String everyTabConfig = "game_settings.print_player_tab.for_all_players";
+		String endOneConfig = "game_settings.end_game_when_one_remains";
+		
+		if (!configFile.contains(persoTabConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling game end tab display"));
+			configFile.set(persoTabConfig, true);
 		}
 		
-		if (!configFile.contains("game_settings.print_player_tab.for_all_players") &&
-				configFile.getBoolean("game_settings.print_player_tab.for_all_players")) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "enabling game end tab for all display"));
-			configFile.set("game_settings.print_player_tab.for_all_players", true);
+		if (!configFile.contains(everyTabConfig) &&
+				configFile.getBoolean(everyTabConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling game end tab for all display"));
+			configFile.set(everyTabConfig, true);
 		}
 		
-		if (!configFile.contains("game_settings.end_game_when_one_remains")) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.lang).replace("<#>", "game end when one"));
-			configFile.set("game_settings.end_game_when_one_remains", false);
+		if (!configFile.contains(endOneConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "game end when one"));
+			configFile.set(endOneConfig, false);
 		}
 	}
 
@@ -322,35 +353,35 @@ public class Config implements Serializable {
 	 * @param configFile	file that contains all config values
 	 */
 	private static void setValues(FileConfiguration configFile) {
-		configValues.saturation = configFile.getBoolean("game_settings.saturation");
-		configValues.spread = configFile.getBoolean("game_settings.spreadplayers.enable");
-		configValues.rewards = configFile.getBoolean("game_settings.rewards");
-		configValues.skip = configFile.getBoolean("game_settings.skip.enable");
-		configValues.crafts = configFile.getBoolean("game_settings.custom_crafts");
-		configValues.team = configFile.getBoolean("game_settings.team.enable");
-		configValues.same = configFile.getBoolean("game_settings.modes.same");
-		configValues.printTab = configFile.getBoolean("game_settings.print_player_tab.for_you");
-		configValues.printTabAll = configFile.getBoolean("game_settings.print_player_tab.for_all_players");
-		configValues.endOne = configFile.getBoolean("game_settings.end_game_when_one_remains");
-		configValues.duoMode = configFile.getBoolean("game_settings.modes.double");
-		configValues.sbttMode = configFile.getBoolean("game_settings.modes.sbtt.enable");
-		configValues.passiveAll = configFile.getBoolean("game_settings.passive.all");
-		configValues.passiveTeam = configFile.getBoolean("game_settings.passive.team");
+		configValues.setSaturation(configFile.getBoolean("game_settings.saturation"));
+		configValues.setSpread(configFile.getBoolean("game_settings.spreadplayers.enable"));
+		configValues.setRewards(configFile.getBoolean("game_settings.rewards"));
+		configValues.setSkip(configFile.getBoolean("game_settings.skip.enable"));
+		configValues.setCrafts(configFile.getBoolean("game_settings.custom_crafts"));
+		configValues.setTeam(configFile.getBoolean("game_settings.team.enable"));
+		configValues.setSame(configFile.getBoolean("game_settings.modes.same"));
+		configValues.setPrintTab(configFile.getBoolean("game_settings.print_player_tab.for_you"));
+		configValues.setPrintTabAll(configFile.getBoolean("game_settings.print_player_tab.for_all_players"));
+		configValues.setEndOne(configFile.getBoolean("game_settings.end_game_when_one_remains"));
+		configValues.setDuoMode(configFile.getBoolean("game_settings.modes.double"));
+		configValues.setSbttMode(configFile.getBoolean("game_settings.modes.sbtt.enable"));
+		configValues.setPassiveAll(configFile.getBoolean("game_settings.passive.all"));
+		configValues.setPassiveTeam(configFile.getBoolean("game_settings.passive.team"));
 		
-		configValues.spreadDistance = configFile.getInt("game_settings.spreadplayers.minimum_distance");
-		configValues.spreadRadius = configFile.getInt("game_settings.spreadplayers.minimum_radius");
-		configValues.targetPerAge = configFile.getInt("game_settings.target_per_age");
-		configValues.startTime = configFile.getInt("game_settings.time.start");
-		configValues.addedTime = configFile.getInt("game_settings.time.added");
-		configValues.teamSize = configFile.getInt("game_settings.team.size");
-		configValues.sbttAmount = configFile.getInt("game_settings.modes.sbtt.amount");
-		configValues.xpEnd = configFile.getInt("game_settings.xp_max.end_teleporter");
-		configValues.xpOverworld = configFile.getInt("game_settings.xp_max.overworld_teleporter");
-		configValues.xpCoral = configFile.getInt("game_settings.xp_max.coral_compass");
+		configValues.setSpreadDistance(configFile.getInt("game_settings.spreadplayers.minimum_distance"));
+		configValues.setSpreadRadius(configFile.getInt("game_settings.spreadplayers.minimum_radius"));
+		configValues.setTargetPerAge(configFile.getInt("game_settings.target_per_age"));
+		configValues.setStartTime(configFile.getInt("game_settings.time.start"));
+		configValues.setAddedTime(configFile.getInt("game_settings.time.added"));
+		configValues.setTeamSize(configFile.getInt("game_settings.team.size"));
+		configValues.setSbttAmount(configFile.getInt("game_settings.modes.sbtt.amount"));
+		configValues.setXpEnd(configFile.getInt("game_settings.xp_max.end_teleporter"));
+		configValues.setXpOverworld(configFile.getInt("game_settings.xp_max.overworld_teleporter"));
+		configValues.setXpCoral(configFile.getInt("game_settings.xp_max.coral_compass"));
 		
-		configValues.lastAge = AgeManager.getAgeByName(configFile.getString("game_settings.last_age")).number;
-		configValues.level = LevelManager.getLevelByName(configFile.getString("game_settings.level")).number;
-		configValues.skipAge = AgeManager.getAgeByName(configFile.getString("game_settings.skip.age")).number;
+		configValues.setLastAge(AgeManager.getAgeByName(configFile.getString("game_settings.last_age")).getNumber());
+		configValues.setLevel(LevelManager.getLevelByName(configFile.getString("game_settings.level")).getNumber());
+		configValues.setSkipAge(AgeManager.getAgeByName(configFile.getString("game_settings.skip.age")).getNumber());
 	}
 	
 	/**
@@ -359,45 +390,47 @@ public class Config implements Serializable {
 	 * @return the string
 	 */
 	public static String displayConfig() {
+		String dash = "-------------------------------\n";
+		
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(ChatColor.BLUE).append("-------------------------------\n");
-		sb.append("-      Configuration Kuffle v" + KuffleMain.getVersion()).append("      -\n");
-		sb.append("-------------------------------\n");
-		sb.append("Saturation: " + ChatColor.GOLD).append(configValues.saturation).append("\n");
-		sb.append("" + ChatColor.BLUE).append("Spreadplayers: " + ChatColor.GOLD).append(configValues.spread).append("\n");
-		sb.append("" + ChatColor.BLUE).append("  - Spreadplayer min distance: " + ChatColor.GOLD).append(configValues.spreadDistance).append("\n");
-		sb.append("" + ChatColor.BLUE).append("  - Spreadplayer min radius: " + ChatColor.GOLD).append(configValues.spreadRadius).append("\n");
-		sb.append("" + ChatColor.BLUE).append("Rewards: " + ChatColor.GOLD).append(configValues.rewards).append("\n");
-		sb.append("" + ChatColor.BLUE).append("Skip: " + ChatColor.GOLD).append(configValues.skip).append("\n");
-		sb.append("" + ChatColor.BLUE).append("Crafts: " + ChatColor.GOLD).append(configValues.crafts).append("\n");
-		sb.append("" + ChatColor.BLUE).append("Nb target per age: " + ChatColor.GOLD).append(configValues.targetPerAge).append("\n");
-		sb.append("" + ChatColor.BLUE).append("First Age for Skipping: " + ChatColor.GOLD).append(AgeManager.getAgeByNumber(configValues.skipAge).name).append("\n");
-		sb.append("" + ChatColor.BLUE).append("Last age: " + ChatColor.GOLD).append(AgeManager.getAgeByNumber(configValues.lastAge).name).append("\n");
-		sb.append("" + ChatColor.BLUE).append("Start duration: " + ChatColor.GOLD).append(configValues.startTime).append("\n");
-		sb.append("" + ChatColor.BLUE).append("Added duration: " + ChatColor.GOLD).append(configValues.addedTime).append("\n");
-		sb.append("" + ChatColor.BLUE).append("Lang: " + ChatColor.GOLD).append(configValues.lang).append("\n");
-		sb.append("" + ChatColor.BLUE).append("Level: " + ChatColor.GOLD).append(LevelManager.getLevelByNumber(configValues.level).name).append("\n");
-		sb.append("" + ChatColor.BLUE).append("Print tab at game end: " + ChatColor.GOLD).append(configValues.printTab).append("\n");
-		sb.append("" + ChatColor.BLUE).append("Print tab for all players at game end: " + ChatColor.GOLD).append(configValues.printTabAll).append("\n");
-		sb.append("" + ChatColor.BLUE).append("Game ends when remains one: " + ChatColor.GOLD).append(configValues.endOne).append("\n");
+		sb.append(ChatColor.BLUE).append(dash);
+		sb.append("-      Configuration Kuffle v" + KuffleMain.getInstance().getVersion()).append("      -\n");
+		sb.append(dash);
+		sb.append("Saturation: " + ChatColor.GOLD).append(configValues.isSaturation()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("Spreadplayers: " + ChatColor.GOLD).append(configValues.isSpread()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("  - Spreadplayer min distance: " + ChatColor.GOLD).append(configValues.getSpreadDistance()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("  - Spreadplayer min radius: " + ChatColor.GOLD).append(configValues.getSpreadRadius()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("Rewards: " + ChatColor.GOLD).append(configValues.isRewards()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("Skip: " + ChatColor.GOLD).append(configValues.isSkip()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("Crafts: " + ChatColor.GOLD).append(configValues.isCrafts()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("Nb target per age: " + ChatColor.GOLD).append(configValues.getTargetPerAge()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("First Age for Skipping: " + ChatColor.GOLD).append(AgeManager.getAgeByNumber(configValues.getSkipAge()).getName()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("Last age: " + ChatColor.GOLD).append(AgeManager.getAgeByNumber(configValues.getLastAge()).getName()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("Start duration: " + ChatColor.GOLD).append(configValues.getStartTime()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("Added duration: " + ChatColor.GOLD).append(configValues.getAddedTime()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("Lang: " + ChatColor.GOLD).append(configValues.getLang()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("Level: " + ChatColor.GOLD).append(LevelManager.getLevelByNumber(configValues.getLevel()).getName()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("Print tab at game end: " + ChatColor.GOLD).append(configValues.isPrintTab()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("Print tab for all players at game end: " + ChatColor.GOLD).append(configValues.isPrintTabAll()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("Game ends when remains one: " + ChatColor.GOLD).append(configValues.isEndOne()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Passive: ").append("\n");
-		sb.append("" + ChatColor.BLUE).append("  - All: " + ChatColor.GOLD).append(configValues.passiveAll).append("\n");
-		sb.append("" + ChatColor.BLUE).append("  - Team: " + ChatColor.GOLD).append(configValues.passiveTeam).append("\n");
-		sb.append("" + ChatColor.BLUE).append("Team: " + ChatColor.GOLD).append(configValues.team).append("\n");
-		sb.append("" + ChatColor.BLUE).append("  - Team Size: " + ChatColor.GOLD).append(configValues.teamSize).append("\n");
+		sb.append("" + ChatColor.BLUE).append("  - All: " + ChatColor.GOLD).append(configValues.isPassiveAll()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("  - Team: " + ChatColor.GOLD).append(configValues.isPassiveTeam()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("Team: " + ChatColor.GOLD).append(configValues.isTeam()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("  - Team Size: " + ChatColor.GOLD).append(configValues.getTeamSize()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Modes: ").append("\n");
-		sb.append("" + ChatColor.BLUE).append("  - Same: " + ChatColor.GOLD).append(configValues.same).append("\n");
-		sb.append("" + ChatColor.BLUE).append("  - Double: " + ChatColor.GOLD).append(configValues.duoMode).append("\n");
-		sb.append("" + ChatColor.BLUE).append("  - SBTT: " + ChatColor.GOLD).append(configValues.sbttMode).append("\n");
-		sb.append("" + ChatColor.BLUE).append("    - amount: " + ChatColor.GOLD).append(configValues.sbttAmount).append("\n");
+		sb.append("" + ChatColor.BLUE).append("  - Same: " + ChatColor.GOLD).append(configValues.isSame()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("  - Double: " + ChatColor.GOLD).append(configValues.isDuoMode()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("  - SBTT: " + ChatColor.GOLD).append(configValues.isSbttMode()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("    - amount: " + ChatColor.GOLD).append(configValues.getSbttAmount()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("XP Max: ").append("\n");
-		sb.append("" + ChatColor.BLUE).append("  - EndTeleporter: " + ChatColor.GOLD).append(configValues.xpEnd).append("\n");
-		sb.append("" + ChatColor.BLUE).append("  - OverworldTeleporter: " + ChatColor.GOLD).append(configValues.xpOverworld).append("\n");
-		sb.append("" + ChatColor.BLUE).append("  - CoralCompass: " + ChatColor.GOLD).append(configValues.xpCoral).append("\n");
-		sb.append(ChatColor.BLUE).append("-------------------------------\n");
-		sb.append("-      Configuration Kuffle v" + KuffleMain.getVersion()).append("      -\n");
-		sb.append("-------------------------------\n").append(ChatColor.RESET);
+		sb.append("" + ChatColor.BLUE).append("  - EndTeleporter: " + ChatColor.GOLD).append(configValues.getXpEnd()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("  - OverworldTeleporter: " + ChatColor.GOLD).append(configValues.getXpOverworld()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("  - CoralCompass: " + ChatColor.GOLD).append(configValues.getXpCoral()).append("\n");
+		sb.append(ChatColor.BLUE).append(dash);
+		sb.append("-      Configuration Kuffle v" + KuffleMain.getInstance().getVersion()).append("      -\n");
+		sb.append(dash).append(ChatColor.RESET);
 		
 		return sb.toString();
 	}
@@ -410,45 +443,6 @@ public class Config implements Serializable {
 	}
 	
 	/**
-	 * Creates a JSONObject to save config values
-	 * 
-	 * @return the JSONObject
-	 */
-	@SuppressWarnings("unchecked")
-	public static JSONObject saveConfig() {
-		JSONObject configObj = new JSONObject();
-		
-		configObj.put("saturation", configValues.saturation);
-		configObj.put("spread", configValues.spread);
-		configObj.put("rewards", configValues.rewards);
-		configObj.put("skip", configValues.skip);
-		configObj.put("crafts", configValues.crafts);
-		configObj.put("team", configValues.team);
-		configObj.put("same", configValues.same);
-		configObj.put("duoMode", configValues.duoMode);
-		configObj.put("sbttMode", configValues.sbttMode);
-		configObj.put("printTab", configValues.printTab);
-		configObj.put("printTabAll", configValues.printTabAll);
-		configObj.put("endOne", configValues.endOne);
-		configObj.put("sbttAmount", configValues.sbttAmount);
-		configObj.put("teamSize", configValues.teamSize);
-		configObj.put("spreadMin", configValues.spreadDistance);
-		configObj.put("spreadMax", configValues.spreadRadius);
-		configObj.put("targetPerAge", configValues.targetPerAge);
-		configObj.put("skipAge", AgeManager.getAgeByNumber(configValues.skipAge).name);
-		configObj.put("lastAge", AgeManager.getAgeByNumber(configValues.lastAge).name);
-		configObj.put("startTime", configValues.startTime);
-		configObj.put("addedTime", configValues.addedTime);
-		configObj.put("level", LevelManager.getLevelByNumber(configValues.level).name);
-		configObj.put("lang", configValues.lang);
-		configObj.put("xpEnd", configValues.xpEnd);
-		configObj.put("xpOverworld", configValues.xpOverworld);
-		configObj.put("xpCoral", configValues.xpCoral);
-		
-		return configObj;
-	}
-	
-	/**
 	 * Loads config
 	 * 
 	 * @param config	config read from file
@@ -458,48 +452,12 @@ public class Config implements Serializable {
 	}
 	
 	/**
-	 * Setup config values from JSONObject
-	 * 
-	 * @param configObj	JSONObject that contains config to load
-	 */
-	public static void loadConfig(JSONObject configObj) {
-		configValues.saturation = (boolean) configObj.get("saturation");
-		configValues.spread = (boolean) configObj.get("spread");
-		configValues.rewards = (boolean) configObj.get("rewards");
-		configValues.skip = (boolean) configObj.get("skip");
-		configValues.crafts = (boolean) configObj.get("crafts");
-		configValues.team = (boolean) configObj.get("team");
-		configValues.same = (boolean) configObj.get("same");
-		configValues.duoMode = (boolean) configObj.get("duoMode");
-		configValues.sbttMode = (boolean) configObj.get("sbttMode");
-		configValues.printTab = (boolean) configObj.get("printTab");
-		configValues.printTabAll = (boolean) configObj.get("printTabAll");
-		configValues.endOne = (boolean) configObj.get("endOne");
-		
-		configValues.sbttAmount = Integer.parseInt(configObj.get("sbttAmount").toString());
-		configValues.teamSize = Integer.parseInt(configObj.get("teamSize").toString());
-		configValues.spreadDistance = Integer.parseInt(configObj.get("spreadMin").toString());
-		configValues.spreadRadius = Integer.parseInt(configObj.get("spreadMax").toString());
-		configValues.targetPerAge = Integer.parseInt(configObj.get("targetPerAge").toString());
-		configValues.startTime = Integer.parseInt(configObj.get("startTime").toString());
-		configValues.addedTime = Integer.parseInt(configObj.get("addedTime").toString());
-		configValues.xpEnd = Integer.parseInt(configObj.get("xpEnd").toString());
-		configValues.xpOverworld = Integer.parseInt(configObj.get("xpOverworld").toString());
-		configValues.xpCoral = Integer.parseInt(configObj.get("xpCoral").toString());
-
-		configValues.skipAge = AgeManager.getAgeByName(configObj.get("skipAge").toString()).number;
-		configValues.lastAge = AgeManager.getAgeByName(configObj.get("lastAge").toString()).number;
-		configValues.level = LevelManager.getLevelByName(configObj.get("level").toString()).number;
-		configValues.lang = configObj.get("lang").toString();
-	}
-
-	/**
 	 * Get saturation enable value
 	 * 
 	 * @return if saturation is enabled
 	 */
 	public static boolean getSaturation() {
-		return configValues.saturation;
+		return configValues.isSaturation();
 	}
 
 	/**
@@ -508,7 +466,7 @@ public class Config implements Serializable {
 	 * @return if spread is enabled
 	 */
 	public static boolean getSpread() {
-		return configValues.spread;
+		return configValues.isSpread();
 	}
 
 	/**
@@ -517,7 +475,7 @@ public class Config implements Serializable {
 	 * @return if rewards are enabled
 	 */
 	public static boolean getRewards() {
-		return configValues.rewards;
+		return configValues.isRewards();
 	}
 
 	/**
@@ -526,7 +484,7 @@ public class Config implements Serializable {
 	 * @return if skip is enabled
 	 */
 	public static boolean getSkip() {
-		return configValues.skip;
+		return configValues.isSkip();
 	}
 
 	/**
@@ -535,7 +493,7 @@ public class Config implements Serializable {
 	 * @return if craft are enabled
 	 */
 	public static boolean getCrafts() {
-		return configValues.crafts;
+		return configValues.isCrafts();
 	}
 
 	/**
@@ -544,7 +502,7 @@ public class Config implements Serializable {
 	 * @return if team mode is enabled
 	 */
 	public static boolean getTeam() {
-		return configValues.team;
+		return configValues.isTeam();
 	}
 	
 	/**
@@ -553,7 +511,7 @@ public class Config implements Serializable {
 	 * @return if same mode is enabled
 	 */
 	public static boolean getSame() {
-		return configValues.same;
+		return configValues.isSame();
 	}
 	
 	/**
@@ -562,7 +520,7 @@ public class Config implements Serializable {
 	 * @return if double mode is enabled
 	 */
 	public static boolean getDouble() {
-		return configValues.duoMode;
+		return configValues.isDuoMode();
 	}
 	
 	/**
@@ -571,7 +529,7 @@ public class Config implements Serializable {
 	 * @return if sbtt mode is enabled
 	 */
 	public static boolean getSBTT() {
-		return configValues.sbttMode;
+		return configValues.isSbttMode();
 	}
 	
 	/**
@@ -580,7 +538,7 @@ public class Config implements Serializable {
 	 * @return if print tab is enabled
 	 */
 	public static boolean getPrintTab() {
-		return configValues.printTab;
+		return configValues.isPrintTab();
 	}
 	
 	/**
@@ -589,7 +547,7 @@ public class Config implements Serializable {
 	 * @return if print tab all is enabled
 	 */
 	public static boolean getPrintTabAll() {
-		return configValues.printTabAll;
+		return configValues.isPrintTabAll();
 	}
 	
 	/**
@@ -598,7 +556,7 @@ public class Config implements Serializable {
 	 * @return if end one is enabled
 	 */
 	public static boolean getEndOne() {
-		return configValues.endOne;
+		return configValues.isEndOne();
 	}
 	
 	/**
@@ -607,7 +565,7 @@ public class Config implements Serializable {
 	 * @return if passive is enabled
 	 */
 	public static boolean getPassiveAll() {
-		return configValues.passiveAll;
+		return configValues.isPassiveAll();
 	}
 	
 	/**
@@ -616,7 +574,7 @@ public class Config implements Serializable {
 	 * @return if passive is enabled for team mates
 	 */
 	public static boolean getPassiveTeam() {
-		return configValues.passiveTeam;
+		return configValues.isPassiveTeam();
 	}
 
 	/**
@@ -625,7 +583,7 @@ public class Config implements Serializable {
 	 * @return the team size
 	 */
 	public static int getTeamSize() {
-		return configValues.teamSize;
+		return configValues.getTeamSize();
 	}
 
 	/**
@@ -634,7 +592,7 @@ public class Config implements Serializable {
 	 * @return the amount of target per age
 	 */
 	public static int getTargetPerAge() {
-		return configValues.targetPerAge;
+		return configValues.getTargetPerAge();
 	}
 
 	/**
@@ -643,7 +601,7 @@ public class Config implements Serializable {
 	 * @return the start time
 	 */
 	public static int getStartTime() {
-		return configValues.startTime;
+		return configValues.getStartTime();
 	}
 
 	/**
@@ -652,7 +610,7 @@ public class Config implements Serializable {
 	 * @return the added time
 	 */
 	public static int getAddedTime() {
-		return configValues.addedTime;
+		return configValues.getAddedTime();
 	}
 
 	/**
@@ -661,7 +619,7 @@ public class Config implements Serializable {
 	 * @return the spread distance
 	 */
 	public static int getSpreadDistance() {
-		return configValues.spreadDistance;
+		return configValues.getSpreadDistance();
 	}
 
 	/**
@@ -670,7 +628,7 @@ public class Config implements Serializable {
 	 * @return the spread radius
 	 */
 	public static int getSpreadRadius() {
-		return configValues.spreadRadius;
+		return configValues.getSpreadRadius();
 	}
 	
 	/**
@@ -679,7 +637,7 @@ public class Config implements Serializable {
 	 * @return the sbtt amount
 	 */
 	public static int getSBTTAmount() {
-		return configValues.sbttAmount;
+		return configValues.getSbttAmount();
 	}
 	
 	/**
@@ -688,7 +646,7 @@ public class Config implements Serializable {
 	 * @return the end teleporter xp amount
 	 */
 	public static int getXpEnd() {
-		return configValues.xpEnd;
+		return configValues.getXpEnd();
 	}
 	
 	/**
@@ -697,7 +655,7 @@ public class Config implements Serializable {
 	 * @return the overworld xp amount
 	 */
 	public static int getXpOverworld() {
-		return configValues.xpOverworld;
+		return configValues.getXpOverworld();
 	}
 	
 	/**
@@ -706,7 +664,7 @@ public class Config implements Serializable {
 	 * @return the coral xp amount
 	 */
 	public static int getXpCoral() {
-		return configValues.xpCoral;
+		return configValues.getXpCoral();
 	}
 	
 	/**
@@ -715,7 +673,7 @@ public class Config implements Serializable {
 	 * @return the first skip age number
 	 */
 	public static Age getSkipAge() {
-		return AgeManager.getAgeByNumber(configValues.skipAge);
+		return AgeManager.getAgeByNumber(configValues.getSkipAge());
 	}
 
 	/**
@@ -724,7 +682,7 @@ public class Config implements Serializable {
 	 * @return the last age number
 	 */
 	public static Age getLastAge() {
-		return AgeManager.getAgeByNumber(configValues.lastAge);
+		return AgeManager.getAgeByNumber(configValues.getLastAge());
 	}
 
 	/**
@@ -733,7 +691,7 @@ public class Config implements Serializable {
 	 * @return the level
 	 */
 	public static Level getLevel() {
-		return LevelManager.getLevelByNumber(configValues.level);
+		return LevelManager.getLevelByNumber(configValues.getLevel());
 	}
 
 	/**
@@ -742,7 +700,7 @@ public class Config implements Serializable {
 	 * @return the lang
 	 */
 	public static String getLang() {
-		return configValues.lang;
+		return configValues.getLang();
 	}
 
 	/**
@@ -751,8 +709,7 @@ public class Config implements Serializable {
 	 * @param configSaturation	value used to set saturation
 	 */
 	private static void setSaturation(boolean configSaturation) {
-		System.out.println("set: " + configSaturation);
-		configValues.saturation = configSaturation;
+		configValues.setSaturation(configSaturation);
 		setRet = true;
 	}
 
@@ -762,7 +719,7 @@ public class Config implements Serializable {
 	 * @param configSpread	value used to set spread player
 	 */
 	private static void setSpreadplayers(boolean configSpread) {
-		configValues.spread = configSpread;
+		configValues.setSpread(configSpread);
 		setRet = true;
 	}
 
@@ -772,7 +729,7 @@ public class Config implements Serializable {
 	 * @param configRewards	value used to set reward
 	 */
 	private static void setRewards(boolean configRewards) {
-		configValues.rewards = configRewards;
+		configValues.setRewards(configRewards);
 		setRet = true;
 	}
 
@@ -782,7 +739,7 @@ public class Config implements Serializable {
 	 * @param configSkip	value used to set skip
 	 */
 	private static void setSkip(boolean configSkip) {
-		configValues.skip = configSkip;
+		configValues.setSkip(configSkip);
 		setRet = true;
 	}
 
@@ -792,7 +749,7 @@ public class Config implements Serializable {
 	 * @param configCrafts	value used to set craft
 	 */
 	private static void setCrafts(boolean configCrafts) {
-		configValues.crafts = configCrafts;
+		configValues.setCrafts(configCrafts);
 		setRet = true;
 	}
 
@@ -802,11 +759,11 @@ public class Config implements Serializable {
 	 * @param configTeam	value used to set team
 	 */
 	private static void setTeam(boolean configTeam) {
-		if (KuffleMain.gameStarted) {
-			error = "Game is already running !";
+		if (KuffleMain.getInstance().isStarted()) {
+			error = "Cannot set Team while game is running !";
 			setRet = false;
 		} else {
-			configValues.team = configTeam;
+			configValues.setTeam(configTeam);
 			setRet = true;			
 		}
 	}
@@ -817,11 +774,11 @@ public class Config implements Serializable {
 	 * @param configSame	value used to set same
 	 */
 	private static void setSame(boolean configSame) {
-		if (KuffleMain.gameStarted) {
-			error = "Game is already running !";
+		if (KuffleMain.getInstance().isStarted()) {
+			error = "Cannot change mode when game is running !";
 			setRet = false;
 		} else {		
-			configValues.same = configSame;
+			configValues.setSame(configSame);
 			setRet = true;
 		}
 	}
@@ -832,7 +789,7 @@ public class Config implements Serializable {
 	 * @param configDuoMode	value used to set double mode
 	 */
 	private static void setDoubleMode(boolean configDuoMode) {
-		configValues.duoMode = configDuoMode;
+		configValues.setDuoMode(configDuoMode);
 		setRet = true;
 	}
 	
@@ -842,7 +799,7 @@ public class Config implements Serializable {
 	 * @param configSbttMode	value used to set sbtt
 	 */
 	private static void setSbttMode(boolean configSbttMode) {
-		configValues.sbttMode = configSbttMode;
+		configValues.setSbttMode(configSbttMode);
 		setRet = true;
 	}
 	
@@ -852,8 +809,7 @@ public class Config implements Serializable {
 	 * @param configPrintTab	value used to set printTab
 	 */
 	private static void setPrintTab(boolean configPrintTab) {
-		configValues.printTab = configPrintTab;
-		
+		configValues.setPrintTab(configPrintTab);
 		setRet = true;
 	}
 	
@@ -863,8 +819,7 @@ public class Config implements Serializable {
 	 * @param configPrintTabAll	value used to set printTabAll
 	 */
 	private static void setPrintTabAll(boolean configPrintTabAll) {
-		configValues.printTabAll = configPrintTabAll;
-		
+		configValues.setPrintTabAll(configPrintTabAll);
 		setRet = true;
 	}
 	
@@ -874,8 +829,7 @@ public class Config implements Serializable {
 	 * @param configEndOne	value used to set end one
 	 */
 	private static void setEndOne(boolean configEndOne) {
-		configValues.endOne = configEndOne;
-		
+		configValues.setEndOne(configEndOne);
 		setRet = true;
 	}
 	
@@ -885,7 +839,7 @@ public class Config implements Serializable {
 	 * @param configPassive	value used to set passive all
 	 */
 	private static void setPassiveAll(boolean configPassive) {
-		configValues.passiveAll = configPassive;
+		configValues.setPassiveAll(configPassive);
 		setRet = true;
 	}
 
@@ -895,7 +849,7 @@ public class Config implements Serializable {
 	 * @param configPassive	value used to set passive team
 	 */
 	private static void setPassiveTeam(boolean configPassive) {
-		configValues.passiveTeam = configPassive;
+		configValues.setPassiveTeam(configPassive);
 		setRet = true;
 	}
 	
@@ -905,8 +859,8 @@ public class Config implements Serializable {
 	 * @param configTeamSize	value used to set team size
 	 */
  	private static void setTeamSize(int configTeamSize) {
- 		if (KuffleMain.gameStarted) {
- 			error = "Game is already running !";
+ 		if (KuffleMain.getInstance().isStarted()) {
+ 			error = "Cannot change team siez when game is running !";
 			setRet = false;
 		}
  		
@@ -915,13 +869,13 @@ public class Config implements Serializable {
  			setRet = false;
  		}
  		
-		if (setRet && configValues.team && TeamManager.getInstance().getTeams().size() > 0 && TeamManager.getInstance().getMaxTeamSize() > configTeamSize) {
+		if (setRet && configValues.isTeam() && TeamManager.getInstance().getTeams().size() > 0 && TeamManager.getInstance().getMaxTeamSize() > configTeamSize) {
 			error = "Cannot set team size less than a current team size !";
 			setRet = false;
 		}
 
 		if (setRet) {
-			configValues.teamSize = configTeamSize;
+			configValues.setTeamSize(configTeamSize);
 			setRet = true;
 		}
 	}
@@ -932,7 +886,7 @@ public class Config implements Serializable {
 	 * @param configSpreadDistance	value used to set spread distance
 	 */
 	private static void setSpreadDistance(int configSpreadDistance) {
-		configValues.spreadDistance = configSpreadDistance;
+		configValues.setSpreadDistance(configSpreadDistance);
 		setRet = true;
 	}
 
@@ -942,11 +896,11 @@ public class Config implements Serializable {
 	 * @param configSpreadRadius	value used to set spread radius
 	 */
 	private static void setSpreadRadius(int configSpreadRadius) {
-		if (configSpreadRadius < configValues.spreadDistance) {
+		if (configSpreadRadius < configValues.getSpreadDistance()) {
 			error = "Cannot set spread radius less than spread distance !";
 			setRet = false;
 		} else {		
-			configValues.spreadRadius = configSpreadRadius;
+			configValues.setSpreadRadius(configSpreadRadius);
 			setRet = true;
 		}
 	}
@@ -961,7 +915,7 @@ public class Config implements Serializable {
 			error = "Cannot have less than one target per Age !";
 			setRet = false;
 		} else {
-			configValues.targetPerAge = configTargetPerAge;
+			configValues.setTargetPerAge(configTargetPerAge);
 			setRet = true;
 		}
 	}
@@ -976,7 +930,7 @@ public class Config implements Serializable {
 			error = "Cannot set added time less than 1";
 			setRet = false;
 		} else {
-			configValues.startTime = configStartTime;
+			configValues.setStartTime(configStartTime);
 			setRet = true;
 		}
 	}
@@ -991,7 +945,7 @@ public class Config implements Serializable {
 			error = "Cannot set added time less than 1";
 			setRet = false;
 		} else {
-			configValues.addedTime = configAddedTime;
+			configValues.setAddedTime(configAddedTime);
 			setRet = true;
 		}
 	}
@@ -1007,8 +961,7 @@ public class Config implements Serializable {
 			setRet = false;
 		}
 		
-		configValues.sbttAmount = configSbttAmount;
-		
+		configValues.setSbttAmount(configSbttAmount);
 		setRet = true;
 	}
 	
@@ -1022,7 +975,7 @@ public class Config implements Serializable {
 			error = "Cannot set out of 1 to 10 range !";
 			setRet = false;
 		} else {
-			configValues.xpEnd = configXpEnd;
+			configValues.setXpEnd(configXpEnd);
 			setRet = true;
 		}
 	}
@@ -1037,7 +990,7 @@ public class Config implements Serializable {
 			error = "Cannot set out of 1 to 20 range !";
 			setRet = false;
 		} else {
-			configValues.xpOverworld = configXpOverworld;
+			configValues.setXpOverworld(configXpOverworld);
 			setRet = true;
 		}
 	}
@@ -1052,7 +1005,7 @@ public class Config implements Serializable {
 			error = "Cannot set out of 1 to 30 range !";
 			setRet = false;
 		} else {
-			configValues.xpCoral = configXpCoral;
+			configValues.setXpCoral(configXpCoral);
 			setRet = true;
 		}
 	}
@@ -1063,14 +1016,14 @@ public class Config implements Serializable {
 	 * @param configLastAge	value used to set last age
 	 */
 	private static void setLastAge(String configLastAge) {
-		if (KuffleMain.gameStarted) {
+		if (KuffleMain.getInstance().isStarted()) {
 			error = "Game already started, you cannot modify last Age";
 			setRet = false;
 		} else if (!AgeManager.ageExists(configLastAge)) {
 			error = "Unknown Age !";
 			setRet = false;
 		} else {
-			configValues.lastAge = AgeManager.getAgeByName(configLastAge).number;
+			configValues.setLastAge(AgeManager.getAgeByName(configLastAge).getNumber());
 			setRet = true;
 		}
 	}
@@ -1081,17 +1034,17 @@ public class Config implements Serializable {
 	 * @param configSkipAge	value used to set skip age
 	 */
 	private static void setFirstSkip(String configSkipAge) {
-		if (KuffleMain.gameStarted) {
+		if (KuffleMain.getInstance().isStarted()) {
 			error = "Game already started, you cannot modify skip Age";
 			setRet = false;
 		} else if (!AgeManager.ageExists(configSkipAge)) {
 			error = "Unknown Age !";
 			setRet = false;
-		} else if (AgeManager.getAgeByName(configSkipAge).number > configValues.lastAge) {
+		} else if (AgeManager.getAgeByName(configSkipAge).getNumber() > configValues.getLastAge()) {
 			error = "Cannot set the first age for skipping after the last age !";
 			setRet = false;
 		} else {
-			configValues.skipAge = AgeManager.getAgeByName(configSkipAge).number;
+			configValues.setSkipAge(AgeManager.getAgeByName(configSkipAge).getNumber());
 			setRet = true;
 		}
 	}
@@ -1106,7 +1059,7 @@ public class Config implements Serializable {
 			error = "Unknown level !";
 			setRet = false;
 		} else {
-			configValues.level = LevelManager.getLevelByName(configLevel).number;
+			configValues.setLevel(LevelManager.getLevelByName(configLevel).getNumber());
 			setRet = true;
 		}
 	}
@@ -1121,8 +1074,8 @@ public class Config implements Serializable {
 			error = "Unknown lang !";
 			setRet = false;
 		} else {
-			configValues.lang = configLang;
-			setRet = true;			
+			configValues.setLang(configLang);
+			setRet = true;
 		}
 	}
 	
