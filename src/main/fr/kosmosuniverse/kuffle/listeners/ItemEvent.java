@@ -22,6 +22,8 @@ import main.fr.kosmosuniverse.kuffle.core.GameManager;
  *
  */
 public class ItemEvent implements Listener {
+	private static final String BOX = "shulker_box";
+	
 	/**
 	 * Event triggered at item dropped by player, if this item is shulker_box it is invulnerable
 	 * 
@@ -42,7 +44,7 @@ public class ItemEvent implements Listener {
 		
 		ItemStack itemstack = item.getItemStack();
 		
-		if (!itemstack.getType().name().toLowerCase().contains("shulker_box")) {
+		if (!itemstack.getType().name().toLowerCase().contains(BOX)) {
 			return ;
 		}
 		
@@ -69,7 +71,7 @@ public class ItemEvent implements Listener {
 		Item item = items.get(0);
 		ItemStack itemStack = item.getItemStack();
 		
-		if (itemStack.getType().name().toLowerCase().contains("shulker_box")) {
+		if (itemStack.getType().name().toLowerCase().contains(BOX)) {
 			item.setInvulnerable(true);
 		}
 	}
@@ -103,7 +105,7 @@ public class ItemEvent implements Listener {
 		
 		ItemStack itemStack = item.getItemStack();
 		
-		if (itemStack.getType().name().toLowerCase().contains("shulker_box")) {
+		if (itemStack.getType().name().toLowerCase().contains(BOX)) {
 			event.setCancelled(true);
 		}
 	}

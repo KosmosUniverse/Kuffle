@@ -46,15 +46,9 @@ public class ItemsPlayerInteract extends PlayerInteract {
 	 * Manages the behavior of player left click specific for Items Kuffle type
 	 * 
 	 * @param event	The PlayerInteractEvent
-	 * @throws ClassNotFoundException 
-	 * @throws SecurityException 
-	 * @throws NoSuchMethodException 
-	 * @throws InvocationTargetException 
-	 * @throws IllegalArgumentException 
-	 * @throws IllegalAccessException 
 	 */
 	@EventHandler
-	public void onLeftClick(PlayerInteractEvent event) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
+	public void onLeftClick(PlayerInteractEvent event) {
 		if (KuffleMain.getInstance().getType().getType() != KuffleType.Type.ITEMS) {
 			return ;
 		}
@@ -63,8 +57,9 @@ public class ItemsPlayerInteract extends PlayerInteract {
 			if (onLeftClickGeneric(event)) {
 				return ;
 			}
-		} catch (KuffleEventNotUsableException e) {
-			return ;
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+				| SecurityException | ClassNotFoundException | KuffleEventNotUsableException e) {
+			Utils.logException(e);
 		}
 		
 		Player player = event.getPlayer();

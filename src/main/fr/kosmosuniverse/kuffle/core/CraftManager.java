@@ -360,7 +360,7 @@ public class CraftManager {
 		addCraft(t);
 
 		GameManager.getGames().forEach((playerName, game) ->
-			game.player.discoverRecipe(new NamespacedKey(KuffleMain.getInstance(), t.getName()))
+			game.getPlayer().discoverRecipe(new NamespacedKey(KuffleMain.getInstance(), t.getName()))
 		);
 		
 		reloadInventories();

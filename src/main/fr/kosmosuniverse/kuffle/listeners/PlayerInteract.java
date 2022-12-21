@@ -35,6 +35,7 @@ import main.fr.kosmosuniverse.kuffle.core.TeamManager;
 import main.fr.kosmosuniverse.kuffle.core.VersionManager;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleEventNotUsableException;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
+import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 /**
  * 
@@ -233,7 +234,7 @@ public class PlayerInteract implements Listener  {
 		
 		Block block = event.getBlock();
 		
-		if (block.getType() == Material.OAK_SIGN && GameManager.checkSign(block.getLocation())) {
+		if (block.getType() == Material.OAK_SIGN && Utils.checkSign(block.getLocation())) {
 			event.setCancelled(true);
 		}
 	}

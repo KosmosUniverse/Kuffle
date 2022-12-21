@@ -270,9 +270,9 @@ public class Config implements Serializable {
 		}
 
 		if (!configFile.contains(levelConfig) ||
-				!LevelManager.levelExists(configFile.getString(levelConfig))) {
+				!LevelManager.getInstance().levelExists(configFile.getString(levelConfig))) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "levels"));
-			configFile.set(levelConfig, LevelManager.getFirstLevel().getName());
+			configFile.set(levelConfig, LevelManager.getInstance().getFirstLevel().getName());
 		}
 	}
 	
@@ -380,7 +380,7 @@ public class Config implements Serializable {
 		configValues.setXpCoral(configFile.getInt("game_settings.xp_max.coral_compass"));
 		
 		configValues.setLastAge(AgeManager.getAgeByName(configFile.getString("game_settings.last_age")).getNumber());
-		configValues.setLevel(LevelManager.getLevelByName(configFile.getString("game_settings.level")).getNumber());
+		configValues.setLevel(LevelManager.getInstance().getLevelByName(configFile.getString("game_settings.level")).getNumber());
 		configValues.setSkipAge(AgeManager.getAgeByName(configFile.getString("game_settings.skip.age")).getNumber());
 	}
 	
@@ -410,7 +410,7 @@ public class Config implements Serializable {
 		sb.append("" + ChatColor.BLUE).append("Start duration: " + ChatColor.GOLD).append(configValues.getStartTime()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Added duration: " + ChatColor.GOLD).append(configValues.getAddedTime()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Lang: " + ChatColor.GOLD).append(configValues.getLang()).append("\n");
-		sb.append("" + ChatColor.BLUE).append("Level: " + ChatColor.GOLD).append(LevelManager.getLevelByNumber(configValues.getLevel()).getName()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("Level: " + ChatColor.GOLD).append(LevelManager.getInstance().getLevelByNumber(configValues.getLevel()).getName()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Print tab at game end: " + ChatColor.GOLD).append(configValues.isPrintTab()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Print tab for all players at game end: " + ChatColor.GOLD).append(configValues.isPrintTabAll()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Game ends when remains one: " + ChatColor.GOLD).append(configValues.isEndOne()).append("\n");
@@ -691,7 +691,7 @@ public class Config implements Serializable {
 	 * @return the level
 	 */
 	public static Level getLevel() {
-		return LevelManager.getLevelByNumber(configValues.getLevel());
+		return LevelManager.getInstance().getLevelByNumber(configValues.getLevel());
 	}
 
 	/**
@@ -1055,11 +1055,11 @@ public class Config implements Serializable {
 	 * @param configLevel	value used to set level
 	 */
 	private static void setLevel(String configLevel) {
-		if (!LevelManager.levelExists(configLevel)) {
+		if (!LevelManager.getInstance().levelExists(configLevel)) {
 			error = "Unknown level !";
 			setRet = false;
 		} else {
-			configValues.setLevel(LevelManager.getLevelByName(configLevel).getNumber());
+			configValues.setLevel(LevelManager.getInstance().getLevelByName(configLevel).getNumber());
 			setRet = true;
 		}
 	}

@@ -10,13 +10,13 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.AgeManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.RewardManager;
 import main.fr.kosmosuniverse.kuffle.core.VersionManager;
@@ -40,23 +40,11 @@ public class FilesConformity {
 	/**
 	 * Get a file content
 	 * 
-	 * @param file	The file of whom we will get the content
+	 * @param file			The file of whom we will get the content
 	 * 
 	 * @return the file content as String, null if file is null
 	 */
 	public static String getContent(String file) {
-		return getContent(file, false);
-	}
-	
-	/**
-	 * Get a file content
-	 * 
-	 * @param file			The file of whom we will get the content
-	 * @param onlyResource	The file is searched only in plugin resource files
-	 * 
-	 * @return the file content as String, null if file is null
-	 */
-	public static String getContent(String file, boolean onlyResource) {
 		String content = null;
 		
 		if (file.contains("%v")) {
@@ -163,7 +151,6 @@ public class FilesConformity {
 	 */
 	private static boolean checkContent(String file, String content) {
 		boolean ret = true;
-		String fileExtension = ".json";
 		
 		if (content.equals(getFromResource(file))) {
 			ret = false;
@@ -171,15 +158,8 @@ public class FilesConformity {
 		
 		if (ret && file.equals("ages.json")) {
 			ret = ageConformity(content);
-		} else if (ret && file.equals("items_lang.json")) {
-			ret = itemLangConformity(content);
-		} else if (ret && file.equals("langs.json")) {
+		} else if (ret && file.equals("msgs_langs.json")) {
 			ret = msgLangConformity(content);
-		} else if (ret && file.equals("items_" + VersionManager.getVersion() + fileExtension) ||
-				file.equals("sbtt_" + VersionManager.getVersion() + fileExtension)) {
-			ret = itemsConformity(content);
-		} else if (ret && file.equals("rewards_" + VersionManager.getVersion() + fileExtension)) {
-			ret = rewardsConformity(content);
 		} else if (ret && file.equals("levels.json")) {
 			ret = levelsConformity(content);
 		}
@@ -211,7 +191,6 @@ public class FilesConformity {
 					ageObj.clear();
 				} else if (!((String) key).equals("Default")) {
 					ret = false;
-					break;
 				}
 				
 				if (!ret) {
@@ -238,14 +217,15 @@ public class FilesConformity {
 	 */
 	private static boolean checkAge(JSONObject ageObj, String age) {
 		boolean ret = true;
+		String numberStr = "Number";
 		
-		if (!ageObj.containsKey("Number")) {
+		if (!ageObj.containsKey(numberStr)) {
 			LogManager.getInstanceSystem().logSystemMsg("Age [" + age + "] does not contain 'Number' Object.");
 			ret = false;
-		} else if (ret && !ageObj.containsKey("TextColor")) {
+		} else if (!ageObj.containsKey("TextColor")) {
 			LogManager.getInstanceSystem().logSystemMsg("Age [" + age + "] does not contain 'TextColor' Object.");
 			ret = false;
-		} else if (ret && !ageObj.containsKey("BoxColor")) {
+		} else if (!ageObj.containsKey("BoxColor")) {
 			LogManager.getInstanceSystem().logSystemMsg("Age [" + age + "] does not contain 'BoxColor' Object.");
 			ret = false;
 		}
@@ -255,7 +235,7 @@ public class FilesConformity {
 		}
 		
 		@SuppressWarnings("unused")
-		int number = Integer.parseInt(ageObj.get("Number").toString());
+		int number = Integer.parseInt(ageObj.get(numberStr).toString());
 		String color = (String) ageObj.get("TextColor");
 		String box = (String) ageObj.get("BoxColor") + "_SHULKER_BOX";
 		
@@ -270,17 +250,6 @@ public class FilesConformity {
 		}
 		
 		return ret;
-	}
-	
-	/**
-	 * Checks items_lang.json file conformity
-	 * 
-	 * @param content	file content as String
-	 * 
-	 * @return True if content is conform to awaited items_lang.json content, False instead
-	 */
-	public static boolean itemLangConformity(String content) {
-		return langConformity(content, true);
 	}
 	
 	/**
@@ -321,12 +290,11 @@ public class FilesConformity {
 			if (areMaterial && Material.matchMaterial((String) key) == null) {
 				LogManager.getInstanceSystem().logSystemMsg("Material [" + (String) key + "] does not exist.");
 				ret = false;
-				break;
 			}
 			
 			JSONObject langObj = (JSONObject) jsonObj.get(key);
 			
-			if (langs == null) {
+			if (!ret && langs == null) {
 				langs = new ArrayList<>();
 				
 				for (Object keyLang : langObj.keySet()) {
@@ -334,11 +302,13 @@ public class FilesConformity {
 				}
 			}
 			
-			if (!elementLangCheck(langObj, langs)) {
+			if (!ret && !elementLangCheck(langObj, langs)) {
 				ret = false;
 			}
 			
-			langObj.clear();
+			if (langs != null) {
+				langObj.clear();	
+			}
 			
 			if (!ret) {
 				break;
@@ -374,63 +344,175 @@ public class FilesConformity {
 	}
 	
 	/**
-	 * Checks items_{version}.json file conformity
+	 * Check if the targets file content format is conform and usable for the plugin
 	 * 
-	 * @param content	file content as String
+	 * @param content	The content to analyze
 	 * 
-	 * @return True if content is conform to awaited items_{version}.json content, False instead
+	 * @return True if the content format is valid, False instead
 	 */
-	public static boolean itemsConformity(String content) {
+	public static boolean targetsConformity(String content) {
 		boolean ret = true;
 		
 		try {
 			JSONParser parser = new JSONParser();
-			JSONObject jsonObj;
+			JSONObject mainObj = (JSONObject) parser.parse(content);
 			
-			jsonObj = (JSONObject) parser.parse(content);
-			
-			for (Object key : jsonObj.keySet()) {
-				if (!AgeManager.ageExists((String) key)) {
-					LogManager.getInstanceSystem().logSystemMsg("Age [" + (String) key + "] does not exist in ages.json.");
+			for (Object mainKey : mainObj.keySet()) {
+				if (!VersionManager.hasVersion(mainKey.toString())) {
 					ret = false;
-					break;
 				}
 				
-				JSONObject categories = (JSONObject) jsonObj.get(key);
-				
-				for (Object category : categories.keySet()) {
-					JSONArray array = (JSONArray) categories.get(category);
+				if (ret) {
+					JSONObject versionObj = (JSONObject) mainObj.get(mainKey);
 					
-					for (int i = 0; i < array.size(); i++) {
-						if (Material.matchMaterial((String) array.get(i)) == null) {
-							LogManager.getInstanceSystem().logSystemMsg("Material [" + (String) array.get(i) + "] for category [" + (String) category + "] of Age [" + (String) key + "] does not exist.");
-							ret = false;
-							break;
-						}
-					}
-					
-					array.clear();
-					
-					if (!ret) {
-						break;
-					}
+					ret = checkTargetVersionObj(versionObj);
+					versionObj.clear();
 				}
-				
-				categories.clear();
 				
 				if (!ret) {
 					break;
 				}
 			}
 			
-			jsonObj.clear();
-		} catch (ParseException | IllegalArgumentException e) {
+			mainObj.clear();
+		} catch(ParseException | IllegalArgumentException e) {
 			Utils.logException(e);
 			ret = false;
 		}
 		
 		return ret;
 	}
+	
+	/**
+	 * Checks the JSONObject that contains information about a specific version
+	 * 
+	 * @param versionObj	The JSONObject to check
+	 * 
+	 * @return True if JSONObject format is valid, False instead
+	 */
+	private static boolean checkTargetVersionObj(JSONObject versionObj) {
+		boolean ret = true;
+		
+		for (Object versionKey : versionObj.keySet()) {
+			String type = versionKey.toString();
+			
+			if (!"BOTH".equalsIgnoreCase(type) &&
+					!"BLOCKS".equalsIgnoreCase(type) &&
+					!"ITEMS".equalsIgnoreCase(type)) {
+				ret = false;
+			}
+			
+			if (ret) {
+				JSONObject typeObj = (JSONObject) versionObj.get(versionKey);
+				
+				ret = checkTargetTypeObj(typeObj);
+				typeObj.clear();
+			}
+			
+			if (!ret) {
+				break;
+			}
+		}
+		
+		return ret;
+	}
+	
+	/**
+	 * Checks the JSONObject that contains information about a specific type
+	 * 
+	 * @param typeObj	The JSONObject to check
+	 * 
+	 * @return True if JSONObject format is valid, False instead
+	 */
+	private static boolean checkTargetTypeObj(JSONObject typeObj) {
+		boolean ret = true;
+		
+		for (Object typeKey : typeObj.keySet()) {
+			if (!AgeManager.ageExists(typeKey.toString())) {
+				ret = false;
+			}
+			
+			if (ret) {
+				JSONObject ageObj = (JSONObject) typeObj.get(typeKey);
+				
+				ret = checkTargetAgeObj(ageObj);
+				ageObj.clear();
+			}
+			
+			if (!ret) {
+				break;
+			}
+		}
+		
+		return ret;
+	}
+	
+	/**
+	 * Checks the JSONObject that contains information about a specific age
+	 * 
+	 * @param ageObj	The JSONObject to check
+	 * 
+	 * @return True if JSONObject format is valid, False instead
+	 */
+	private static boolean checkTargetAgeObj(JSONObject ageObj) {
+		boolean ret = true;
+		
+		for (Object ageKey : ageObj.keySet()) {
+			if (Material.matchMaterial(ageKey.toString()) == null) {
+				ret = false;
+			}
+
+			if (ret) {
+				JSONObject materialObj = (JSONObject) ageObj.get(ageKey);
+				
+				ret = checkTargetMaterialObj(materialObj);
+				materialObj.clear();
+			}
+			
+			if (!ret) {
+				break;
+			}
+		}
+		
+		return ret;
+	}
+	
+	/**
+	 * Checks the JSONObject that contains information about a specific target
+	 * 
+	 * @param materialObj	The JSONObject to check
+	 * 
+	 * @return True if JSONObject format is valid, False instead
+	 */
+	private static boolean checkTargetMaterialObj(JSONObject materialObj) {
+		boolean ret = true;
+		
+		if (!materialObj.containsKey("Sbtt") ||
+				!materialObj.containsKey("Langs")) {
+			ret = false;
+		} else {
+			String sbtt = materialObj.get("Sbtt").toString();
+			
+			if (!"true".equalsIgnoreCase(sbtt) &&
+					!"false".equalsIgnoreCase(sbtt)) {
+				ret = false;
+			}
+			
+			JSONObject langObj = (JSONObject) materialObj.get("Langs");
+			
+			for (Object langKey : langObj.keySet()) {
+				if (!LangManager.hasLang(langKey.toString())) {
+					ret = false;
+					break;
+				}
+			}
+			
+			langObj.clear();
+		}
+		
+		return ret;
+	}
+
 	
 	/**
 	 * Checks rewards_{version}.json file conformity
@@ -444,29 +526,28 @@ public class FilesConformity {
 		
 		try {
 			JSONParser parser = new JSONParser();
-			JSONObject jsonObj;
+			JSONObject mainObj;
 			
-			jsonObj = (JSONObject) parser.parse(content);
+			mainObj = (JSONObject) parser.parse(content);
 			
-			for (Object key : jsonObj.keySet()) {
-				if (!AgeManager.ageExists((String) key)) {
-					LogManager.getInstanceSystem().logSystemMsg("Age [" + (String) key + "] does not exist in ages.json.");
+			for (Object mainKey : mainObj.keySet()) {
+				if (!VersionManager.hasVersion(mainKey.toString())) {
 					ret = false;
-					break;
 				}
 				
-				JSONObject rewards = (JSONObject) jsonObj.get(key);
-				
-				ret = checkRewards(rewards);
-				
-				rewards.clear();
+				if (ret) {
+					JSONObject versionObj = (JSONObject) mainObj.get(mainKey);
+	
+					ret = checkRewardVersionObj(versionObj);
+					versionObj.clear();
+				}
 				
 				if (!ret) {
 					break;
 				}
 			}
 			
-			jsonObj.clear();
+			mainObj.clear();
 		} catch (ParseException | IllegalArgumentException e) {
 			Utils.logException(e);
 			ret = false;
@@ -476,48 +557,26 @@ public class FilesConformity {
 	}
 	
 	/**
-	 * Checks if rewards from an age are conform
+	 * Checks if version object contains valid age objects
 	 * 
-	 * @param rewards	rewards from an Age
+	 * @param versionObj	The version object to check
 	 * 
-	 * @return True if rewards are conform, False instead
+	 * @return True if ages are all valid, False instead
 	 */
-	private static boolean checkRewards(JSONObject rewards) {
+	private static boolean checkRewardVersionObj(JSONObject versionObj) {
 		boolean ret = true;
 		
-		for (Object reward : rewards.keySet()) {
-			if (Material.matchMaterial((String) reward) == null) {
-				LogManager.getInstanceSystem().logSystemMsg("Material [" + (String) reward + "] is not in Material Enum.");
+		for (Object versionKey : versionObj.keySet()) {
+			if (!AgeManager.ageExists(versionKey.toString())) {
 				ret = false;
-				break;
 			}
 			
-			JSONObject itemObj = (JSONObject) rewards.get(reward);
-			
-			if (!checkRewardElem(itemObj, (String) reward)) {
-				ret = false;
-				itemObj.clear();
-				break;
-			}
-			
-			try {
-				@SuppressWarnings("unused")
-				int number = Integer.parseInt(itemObj.get("Amount").toString());
-				number = Integer.parseInt(itemObj.get("Level").toString());
+			if (ret) {
+				JSONObject ageObj = (JSONObject) versionObj.get(versionKey);
 				
-				String enchants = (String) itemObj.get("Enchant");
-				String effects = (String) itemObj.get("Effect");
-				
-				if ((!enchants.equals("") && !checkRewardEnchant(enchants, (String) reward)) ||
-						(!effects.equals("") && !checkRewardEffect(effects, (String) reward))) {
-					ret = false;
-				}
-			} catch (NumberFormatException e) {
-				Utils.logException(e);
-				ret = false;
+				ret = checkRewardAgeObj(ageObj);
+				ageObj.clear();
 			}
-			
-			itemObj.clear();
 			
 			if (!ret) {
 				break;
@@ -528,31 +587,77 @@ public class FilesConformity {
 	}
 	
 	/**
-	 * Checks if a reward contains all needed keys
+	 * Checks if age object contains valid materials
 	 * 
-	 * @param itemObj	The reward to check
-	 * @param reward	The String to print in case of error
+	 * @param ageObj	The age object to check
 	 * 
-	 * @return True is reward contains all keys, False instead
+	 * @return True if Materials are all valid, False instead
 	 */
-	private static boolean checkRewardElem(JSONObject itemObj, String reward) {
-		boolean containKey = true;
+	private static boolean checkRewardAgeObj(JSONObject ageObj) {
+		boolean ret = true;
 		
-		if (!itemObj.containsKey("Amount")) {
-			LogManager.getInstanceSystem().logSystemMsg("Reward [" + reward + "] does not contain 'Amount' Object.");
-			containKey = false;
-		} else if (!itemObj.containsKey("Enchant")) {
-			LogManager.getInstanceSystem().logSystemMsg("Reward [" + reward + "] does not contain 'Enchant' Object.");
-			containKey = false;
-		} else if (!itemObj.containsKey("Level")) {
-			LogManager.getInstanceSystem().logSystemMsg("Reward [" + reward + "] does not contain 'Level' Object.");
-			containKey = false;
-		} else if (!itemObj.containsKey("Effect")) {
-			LogManager.getInstanceSystem().logSystemMsg("Reward [" + reward + "] does not contain 'Effect' Object.");
-			containKey = false;
+		for (Object ageKey : ageObj.keySet()) {
+			if (Material.matchMaterial(ageKey.toString()) == null) {
+				ret = false;
+			}
+			
+			if (ret) {
+				JSONObject materialObj = (JSONObject) ageObj.get(ageKey);
+				
+				ret = checkRewardMaterialObj(ageKey.toString(), materialObj);
+				materialObj.clear();
+			}
+			
+			if (!ret) {
+				break;
+			}
 		}
 		
-		return containKey;
+		return ret;
+	}
+	
+	/**
+	 * Checks if a reward contains all needed keys and they are valid
+	 * 
+	 * @param material		The reward name
+	 * @param materialObj	The reward object to check
+	 * 
+	 * @return True if reward contains all mandatory keys and values are conform, False instead
+	 */
+	private static boolean checkRewardMaterialObj(String material, JSONObject materialObj) throws NumberFormatException {
+		boolean ret = true;
+		
+		if (!materialObj.containsKey("Amount")) {
+			ret = false;
+		} else {
+			@SuppressWarnings("unused")
+			int amount = Integer.parseInt(materialObj.get("Amount").toString());
+			
+			if (materialObj.containsKey("Level")) {
+				@SuppressWarnings("unused")
+				int level = Integer.parseInt(materialObj.get("Level").toString());
+			}
+			
+			if (materialObj.containsKey("Enchant")) {
+				String enchants = (String) materialObj.get("Enchant");
+				
+				if (enchants.isEmpty() || !checkRewardEnchant(enchants, material)) {
+					ret = false;
+				}
+			}
+			
+			if (materialObj.containsKey("Effect")) {
+				String effects = (String) materialObj.get("Effect");
+				
+				if (effects.isEmpty() || !checkRewardEffect(effects, material)) {
+					ret = false;
+				}
+			}
+		}
+		
+		
+		
+		return ret;
 	}
 	
 	/**
@@ -617,6 +722,7 @@ public class FilesConformity {
 	 */
 	public static boolean levelsConformity(String content) {
 		boolean ret = true;
+		String numberStr = "Number";
 		
 		try {
 			JSONParser parser = new JSONParser();
@@ -627,7 +733,7 @@ public class FilesConformity {
 			for (Object key : jsonObj.keySet()) {
 				JSONObject levelObj = (JSONObject) jsonObj.get(key);
 				
-				if (!levelObj.containsKey("Number")) {
+				if (!levelObj.containsKey(numberStr)) {
 					LogManager.getInstanceSystem().logSystemMsg("Level [" + (String) key + "] does not contain 'Number' Object.");
 					ret = false;
 				} else if (!levelObj.containsKey("Seconds")) {
@@ -638,19 +744,17 @@ public class FilesConformity {
 					ret = false;
 				}
 				
-				if (!ret) {
-					levelObj.clear();
-					break;
-				}
-				
-				@SuppressWarnings("unused")
-				int number = Integer.parseInt(levelObj.get("Number").toString());
-				number = Integer.parseInt(levelObj.get("Seconds").toString());
-
-				String lose = levelObj.get("Lose").toString();
-
-				if (!lose.equalsIgnoreCase("true") && !lose.equalsIgnoreCase("false")) {
-					ret = false;
+				if (ret) {
+					@SuppressWarnings("unused")
+					int number = Integer.parseInt(levelObj.get(numberStr).toString());
+					@SuppressWarnings("unused")
+					int seconds = Integer.parseInt(levelObj.get("Seconds").toString());
+	
+					String lose = levelObj.get("Lose").toString();
+	
+					if (!lose.equalsIgnoreCase("true") && !lose.equalsIgnoreCase("false")) {
+						ret = false;
+					}
 				}
 				
 				levelObj.clear();

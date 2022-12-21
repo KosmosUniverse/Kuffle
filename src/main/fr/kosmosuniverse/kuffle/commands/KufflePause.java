@@ -41,9 +41,9 @@ public class KufflePause implements CommandExecutor {
 		KuffleMain.getInstance().setPaused(true);
 		
 		GameManager.applyToPlayers(game -> {
-			GameManager.pausePlayer(game);
-			ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + LangManager.getMsgLang("GAME_PAUSED", game.configLang) + ChatColor.RESET, game.player);
-			game.player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 10, false, false, false));			
+			ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + LangManager.getMsgLang("GAME_PAUSED", game.getConfigLang()) + ChatColor.RESET, game.getPlayer());
+			game.pausePlayer();
+			game.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 10, false, false, false));			
 		});
 		
 		return true;

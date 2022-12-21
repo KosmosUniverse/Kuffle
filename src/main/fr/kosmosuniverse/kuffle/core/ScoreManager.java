@@ -19,6 +19,7 @@ import net.md_5.bungee.api.ChatColor;
  *
  */
 public class ScoreManager {
+	private static final String DUMMY = "dummy";
 	private static Scoreboard scoreboard;
 	private static Objective age = null;
 	private static Objective targets = null;
@@ -35,8 +36,8 @@ public class ScoreManager {
 	 */
 	public static void setupScores(KuffleType.Type type) {
 		scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-		targets = scoreboard.registerNewObjective(type.name().toLowerCase(), "dummy", Utils.capitalize(type.name()));
-		age = scoreboard.registerNewObjective("ages", "dummy", ChatColor.LIGHT_PURPLE + "Ages");
+		targets = scoreboard.registerNewObjective(type.name().toLowerCase(), DUMMY, Utils.capitalize(type.name()));
+		age = scoreboard.registerNewObjective("ages", DUMMY, ChatColor.LIGHT_PURPLE + "Ages");
 		
 		targets.setDisplaySlot(DisplaySlot.PLAYER_LIST);
 		age.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -50,7 +51,7 @@ public class ScoreManager {
 			age.unregister();
 		}
 		
-		age = scoreboard.registerNewObjective("ages", "dummy", ChatColor.LIGHT_PURPLE + "Ages");
+		age = scoreboard.registerNewObjective("ages", DUMMY, ChatColor.LIGHT_PURPLE + "Ages");
 		
 		int ageCnt = 0;
 		
@@ -68,10 +69,10 @@ public class ScoreManager {
 		age.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
 		GameManager.applyToPlayers(game -> {
-			GameManager.setupPlayerScores(game.player.getName(), scoreboard, targets.getScore(game.player.getName()));
-			GameManager.updatePlayerListName(game.player.getName());
+			GameManager.setupPlayerScores(game.getPlayer().getName(), scoreboard, targets.getScore(game.getPlayer().getName()));
+			game.updatePlayerListName();
 
-			game.score.setScore(game.targetCount);
+			game.getScore().setScore(game.getTargetCount());
 		});
 		
 		targets.setDisplaySlot(DisplaySlot.PLAYER_LIST);
@@ -84,8 +85,8 @@ public class ScoreManager {
 	 */
 	public static void setupPlayerScore(String player) {
 		GameManager.applyToPlayer(player, game -> {
-			GameManager.setupPlayerScores(game.player.getName(), scoreboard, targets.getScore(game.player.getName()));
-			GameManager.updatePlayerListName(game.player.getName());
+			GameManager.setupPlayerScores(game.getPlayer().getName(), scoreboard, targets.getScore(game.getPlayer().getName()));
+			game.updatePlayerListName();
 		});
 	}
 	

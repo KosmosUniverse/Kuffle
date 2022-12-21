@@ -83,16 +83,16 @@ public class KuffleAddDuringGame implements CommandExecutor {
 			LogManager.getInstanceSystem().writeMsg(sender, LangManager.getMsgLang("TEAM_ADD_PLAYER", Config.getLang()).replace("<#>", "<" + team + ">").replace("<##>", "<" + player.getName() + ">"));
 
 			GameManager.applyToPlayer(player.getName(), game -> {
-				game.teamName = team;
-				game.spawnLoc = GameManager.getPlayerSpawnLoc(TeamManager.getInstance().getTeam(team).getPlayersName().get(0));
+				game.setTeamName(team);
+				game.setSpawnLoc(GameManager.getPlayerSpawnLoc(TeamManager.getInstance().getTeam(team).getPlayersName().get(0)));
 			});
 
 			player.setBedSpawnLocation(GameManager.getPlayerSpawnLoc(player.getName()), true);
 			player.teleport(GameManager.getPlayer(TeamManager.getInstance().getTeam(team).getPlayersName().get(0)).getPlayer());
 		} else {
 			GameManager.applyToPlayer(player.getName(), game -> {
-				game.spawnLoc = player.getLocation();
-				game.spawnLoc.add(0, -1, 0).getBlock().setType(Material.BEDROCK);
+				game.setSpawnLoc(player.getLocation());
+				game.getSpawnLoc().add(0, -1, 0).getBlock().setType(Material.BEDROCK);
 			});
 			
 			player.setBedSpawnLocation(player.getLocation(), true);

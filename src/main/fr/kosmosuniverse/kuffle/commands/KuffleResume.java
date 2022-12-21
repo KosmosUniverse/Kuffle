@@ -40,26 +40,26 @@ public class KuffleResume implements CommandExecutor {
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
 			GameManager.applyToPlayers(game ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.RED + "3" + ChatColor.RESET, game.player))
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.RED + "3" + ChatColor.RESET, game.getPlayer()))
 		, 20);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
 			GameManager.applyToPlayers(game ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "2" + ChatColor.RESET, game.player))
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "2" + ChatColor.RESET, game.getPlayer()))
 		, 40);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
 			GameManager.applyToPlayers(game ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GREEN + "1" + ChatColor.RESET, game.player))
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GREEN + "1" + ChatColor.RESET, game.getPlayer()))
 		, 60);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			KuffleMain.getInstance().setPaused(false);
 			
 			GameManager.applyToPlayers(game -> {
-				GameManager.resumePlayer(game);
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + LangManager.getMsgLang("GAME_RESUMED", game.configLang) + ChatColor.RESET, game.player);
-				game.player.removePotionEffect(PotionEffectType.INVISIBILITY);
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + LangManager.getMsgLang("GAME_RESUMED", game.getConfigLang()) + ChatColor.RESET, game.getPlayer());
+				game.resumePlayer();
+				game.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
 			});
 		}, 80);
 

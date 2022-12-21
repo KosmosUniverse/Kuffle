@@ -28,8 +28,8 @@ public class KuffleStop implements CommandExecutor {
 		}
 		
 		GameManager.applyToPlayers(game -> {
-			for (PotionEffect pe : game.player.getActivePotionEffects()) {
-				game.player.removePotionEffect(pe.getType());
+			for (PotionEffect pe : game.getPlayer().getActivePotionEffects()) {
+				game.getPlayer().removePotionEffect(pe.getType());
 			}
 			
 			GameManager.resetPlayerBar(game);

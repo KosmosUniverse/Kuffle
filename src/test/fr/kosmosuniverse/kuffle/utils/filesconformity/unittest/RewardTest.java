@@ -47,7 +47,7 @@ class RewardTest {
 		LogManager.setupInstanceSystem("C:\\Temp\\Kuffle\\unittest\\KuffleSystemlogs.txt");
 		
 		try {
-			AgeManager.setupAges(FilesConformity.getContent("ages.json", true));
+			AgeManager.setupAges(FilesConformity.getContent("ages.json"));
 		} catch (IllegalArgumentException | ParseException e) {
 			Utils.logException(e);
 			AgeManager.clear();

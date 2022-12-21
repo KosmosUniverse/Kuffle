@@ -12,8 +12,10 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,6 +23,8 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffectType;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
+import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.VersionManager;
 
@@ -30,6 +34,8 @@ import main.fr.kosmosuniverse.kuffle.core.VersionManager;
  *
  */
 public final class Utils {
+	private static List<Material> exceptions;
+	private static List<Location> signs = null;
 	
 	/**
 	 * Private Utils constructor
@@ -38,6 +44,21 @@ public final class Utils {
 	 */
 	private Utils() {
 		throw new IllegalStateException("Utility class");
+	}
+	
+	public static void setupLists() {
+		exceptions = new ArrayList<>();
+		signs = new ArrayList<>();
+		
+		for (Material m : Material.values()) {
+			if (m.name().contains("SHULKER_BOX")) {
+				exceptions.add(m);
+			}
+		}
+		
+		exceptions.add(Material.CRAFTING_TABLE);
+		exceptions.add(Material.FURNACE);
+		exceptions.add(Material.STONECUTTER);
 	}
 	
 	/**
@@ -334,5 +355,91 @@ public final class Utils {
 		players.clear();
 
 		return retPlayer;
+	}
+	
+	/**
+	 * Changes the location Y value to highest block, Or 61 if no block
+	 * 
+	 * @param loc
+	 */
+	public static void changeLocForEnd(Location loc) {
+		int tmp = loc.getWorld().getHighestBlockYAt(loc);
+		
+		if (tmp != -1) {
+			loc.setY(loc.getWorld().getHighestBlockYAt(loc) + 1);
+		} else {
+			loc.setY(61);
+		}
+	}
+	
+	/**
+	 * Create safe box 5x5x5 made of Dirt around player location
+	 * 
+	 * @param loc			The box center location
+	 * @param playerName	The player name that will be teleported inside
+	 */
+	public static void createSafeBox(Location loc, String playerName) {
+		Location wall;
+		
+		for (double x = -2; x <= 2; x++) {
+			for (double y = -2; y <= 2; y++) {
+				for (double z = -2; z <= 2; z++) {
+					wall = loc.clone();
+					wall.add(x, y, z);
+					
+					if (x == 0 && y == -1 && z == 0) {
+						setSign(wall, playerName);
+					} else if (x <= 1 && x >= -1 && y <= 1 && y >= -1 && z <= 1 && z >= -1) {
+						replaceExeption(wall, Material.AIR);
+					} else {
+						replaceExeption(wall, Material.DIRT);
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Set safe box Dirt block only if no exception block is at this location
+	 * 
+	 * @param loc	The location to transform
+	 * @param m		The block type to set
+	 */
+	private static void replaceExeption(Location loc, Material m) {
+		if (!exceptions.contains(loc.getBlock().getType())) {
+			loc.getBlock().setType(m);
+		}
+	}
+	
+	/**
+	 * Put a sign with the dead player name on it, only if no exception block at this location
+	 * 
+	 * @param loc			The Location to put sign
+	 * @param playerName	The player name to put on the sign
+	 */
+	private static void setSign(Location loc, String playerName) {
+		if (!exceptions.contains(loc.getBlock().getType())) {
+			loc.getBlock().setType(Material.OAK_SIGN);
+			
+			Sign sign = (Sign) loc.getBlock().getState();
+			
+			sign.setLine(0, "[" + KuffleMain.getInstance().getName() + "]");
+			sign.setLine(1, LangManager.getMsgLang("HERE_DIES", Config.getLang()));
+			sign.setLine(2, playerName);
+			sign.update(true);
+			
+			signs.add(loc);
+		}
+	}
+	
+	/**
+	 * Checks if there is a sign at this location
+	 * 
+	 * @param loc	The location to check
+	 * 
+	 * @return True if there is a plugin sign at this location
+	 */
+	public static boolean checkSign(Location loc) {
+		return signs.contains(loc);
 	}
 }

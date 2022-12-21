@@ -74,6 +74,19 @@ public class VersionManager {
 	}
 	
 	/**
+	 * Checks if a specific version exists
+	 * 
+	 * @param version	The version to check
+	 * 
+	 * @return True if the version exists, False instead
+	 */
+	public static boolean hasVersion(String version) {
+		return versions.entrySet().stream()
+				.filter(entry -> entry.getValue().equals(version))
+				.count() > 0;
+	}
+	
+	/**
 	 * Gets version key from version value
 	 * 
 	 * @param version	The version value

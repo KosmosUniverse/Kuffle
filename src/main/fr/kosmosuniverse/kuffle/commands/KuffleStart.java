@@ -58,13 +58,13 @@ public class KuffleStart implements CommandExecutor {
 		}
 		
 		GameManager.applyToPlayers(game -> {
-			game.configLang = Config.getLang();
+			game.setConfigLang(Config.getLang());
 			
 			if (Config.getSaturation()) {
-				game.player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 999999, 10, false, false, false));
+				game.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 999999, 10, false, false, false));
 			}
 			
-			game.player.sendMessage(LangManager.getMsgLang("GAME_STARTED", game.configLang));
+			game.getPlayer().sendMessage(LangManager.getMsgLang("GAME_STARTED", game.getConfigLang()));
 		});
 
 		KuffleMain.getInstance().getType().setXpActivable("EndTeleporter", Config.getXpEnd());
@@ -83,7 +83,7 @@ public class KuffleStart implements CommandExecutor {
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			GameManager.applyToPlayers(game ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.RED + "5" + ChatColor.RESET, game.player));
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.RED + "5" + ChatColor.RESET, game.getPlayer()));
 
 			if (Config.getSBTT()) {
 				KuffleMain.getInstance().getType().setupSbtt();
@@ -92,23 +92,23 @@ public class KuffleStart implements CommandExecutor {
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
 			GameManager.applyToPlayers(game ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GOLD + "4" + ChatColor.RESET, game.player))
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GOLD + "4" + ChatColor.RESET, game.getPlayer()))
 		, 40 + spread);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
 			GameManager.applyToPlayers(game ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "3" + ChatColor.RESET, game.player))
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "3" + ChatColor.RESET, game.getPlayer()))
 		, 60 + spread);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
 			GameManager.applyToPlayers(game ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GREEN + "2" + ChatColor.RESET, game.player))
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GREEN + "2" + ChatColor.RESET, game.getPlayer()))
 		, 80 + spread);
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			GameManager.applyToPlayers(game -> {
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.BLUE + "1" + ChatColor.RESET, game.player);
-				GameManager.setupPlayer(game);
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.BLUE + "1" + ChatColor.RESET, game.getPlayer());
+				game.setupPlayer();
 			});
 
 			ScoreManager.setupPlayersScores();
@@ -116,9 +116,9 @@ public class KuffleStart implements CommandExecutor {
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			GameManager.applyToPlayers(game -> {
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + "GO!" + ChatColor.RESET, game.player);
-				ItemStack box = getStartBox(game.player.getName());
-				game.player.getInventory().addItem(box);
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + "GO!" + ChatColor.RESET, game.getPlayer());
+				ItemStack box = getStartBox(game.getPlayer().getName());
+				game.getPlayer().getInventory().addItem(box);
 			});
 
 			if (KuffleMain.getInstance().getGameLoop() == null) {
@@ -146,12 +146,12 @@ public class KuffleStart implements CommandExecutor {
 
 			GameManager.applyToPlayers(game -> {
 				if (Config.getTeam()) {
-					game.teamName = TeamManager.getInstance().findTeamByPlayer(game.player.getName()).getName();
+					game.setTeamName(TeamManager.getInstance().findTeamByPlayer(game.getPlayer().getName()).getName());
 				}
 
-				game.player.setBedSpawnLocation(game.player.getLocation(), true);
-				game.spawnLoc = game.player.getLocation();
-				game.spawnLoc.add(0, -1, 0).getBlock().setType(Material.BEDROCK);
+				game.getPlayer().setBedSpawnLocation(game.getPlayer().getLocation(), true);
+				game.setSpawnLoc(game.getPlayer().getLocation());
+				game.getSpawnLoc().add(0, -1, 0).getBlock().setType(Material.BEDROCK);
 			});
 
 			return 20;
@@ -160,11 +160,11 @@ public class KuffleStart implements CommandExecutor {
 
 			GameManager.applyToPlayers(spawn, (game, spawnLoc) -> {
 				if (Config.getTeam()) {
-					game.teamName = TeamManager.getInstance().findTeamByPlayer(game.player.getName()).getName();
+					game.setTeamName(TeamManager.getInstance().findTeamByPlayer(game.getPlayer().getName()).getName());
 				}
 
 				if (((Location) spawnLoc).getY() < 0) {
-					Location tmp = game.player.getLocation().getWorld().getSpawnLocation();
+					Location tmp = game.getPlayer().getLocation().getWorld().getSpawnLocation();
 					
 					((Location) spawnLoc).setWorld(tmp.getWorld());
 					((Location) spawnLoc).setX(tmp.getX());
@@ -174,7 +174,7 @@ public class KuffleStart implements CommandExecutor {
 					((Location) spawnLoc).subtract(0, 1, 0).getBlock().setType(Material.BEDROCK);
 				}
 
-				game.spawnLoc = ((Location) spawnLoc);
+				game.setSpawnLoc(((Location) spawnLoc));
 			});
 			
 			return 0;

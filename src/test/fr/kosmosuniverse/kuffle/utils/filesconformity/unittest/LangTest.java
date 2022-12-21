@@ -55,23 +55,6 @@ class LangTest {
 			fail("Exception raised: " + e.getMessage());
 		}
 	}
-	
-	/**
-	 * Test correct targets_langs.json file
-	 */
-	@Test
-	void testTargetsLangsCorrect() {
-		try {
-			InputStream stream = new FileInputStream(new File(DATA_PATH + "targets_langs_correct.json"));
-			String content = Utils.readFileContent(stream);
-			
-			assertTrue(FilesConformity.itemLangConformity(content),
-					"targets_langs_correct.json should be conform.");
-		} catch (IOException e) {
-			Utils.logException(e);
-			fail("Exception raised: " + e.getMessage());
-		}
-	}
 
 	/**
 	 * Test langs file with invalid lang
@@ -84,40 +67,6 @@ class LangTest {
 			
 			assertFalse(FilesConformity.msgLangConformity(content),
 					"All langs used have to be in the first target langs !!!");
-		} catch (IOException e) {
-			Utils.logException(e);
-			fail("Exception raised: " + e.getMessage());
-		}
-	}
-	
-	/**
-	 * Test targets_langs file with invalid lang
-	 */
-	@Test
-	void testTargetsLangsInvalidLang() {
-		try {
-			InputStream stream = new FileInputStream(new File(DATA_PATH + "targets_langs_invalid_lang.json"));
-			String content = Utils.readFileContent(stream);
-			
-			assertFalse(FilesConformity.itemLangConformity(content),
-					"All langs used have to be in the first target langs !!!");
-		} catch (IOException e) {
-			Utils.logException(e);
-			fail("Exception raised: " + e.getMessage());
-		}
-	}
-	
-	/**
-	 * Test targets_langs file with invalid target
-	 */
-	@Test
-	void testTargetsLangsNotExists() {
-		try {
-			InputStream stream = new FileInputStream(new File(DATA_PATH + "targets_langs_not_exists.json"));
-			String content = Utils.readFileContent(stream);
-			
-			assertFalse(FilesConformity.itemLangConformity(content),
-					"Langs are defines for an unknown Minecraft target !!!");
 		} catch (IOException e) {
 			Utils.logException(e);
 			fail("Exception raised: " + e.getMessage());

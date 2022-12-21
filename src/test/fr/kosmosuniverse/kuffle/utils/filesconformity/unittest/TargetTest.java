@@ -47,7 +47,7 @@ class TargetTest {
 		LogManager.setupInstanceSystem("C:\\Temp\\Kuffle\\unittest\\KuffleSystemlogs.txt");
 		
 		try {
-			AgeManager.setupAges(FilesConformity.getContent("ages.json", true));
+			AgeManager.setupAges(FilesConformity.getContent("ages.json"));
 		} catch (IllegalArgumentException | ParseException e) {
 			Utils.logException(e);
 			AgeManager.clear();
@@ -72,7 +72,7 @@ class TargetTest {
 			InputStream stream = new FileInputStream(new File(DATA_PATH + "targets_correct.json"));
 			String content = Utils.readFileContent(stream);
 			
-			assertTrue(FilesConformity.itemsConformity(content),
+			assertTrue(FilesConformity.targetsConformity(content),
 					"targets_correct.json should be conform.");
 		} catch (IOException e) {
 			Utils.logException(e);
@@ -89,7 +89,7 @@ class TargetTest {
 			InputStream stream = new FileInputStream(new File(DATA_PATH + "targets_invalid_age.json"));
 			String content = Utils.readFileContent(stream);
 			
-			assertFalse(FilesConformity.itemsConformity(content),
+			assertFalse(FilesConformity.targetsConformity(content),
 					"Targets conformity must reject bad age names !!!");
 		} catch (IOException e) {
 			Utils.logException(e);
@@ -106,7 +106,7 @@ class TargetTest {
 			InputStream stream = new FileInputStream(new File(DATA_PATH + "targets_invalid_target.json"));
 			String content = Utils.readFileContent(stream);
 			
-			assertFalse(FilesConformity.itemsConformity(content),
+			assertFalse(FilesConformity.targetsConformity(content),
 					"Targets conformity must reject unknown Minecraft target !!!");
 		} catch (IOException e) {
 			Utils.logException(e);

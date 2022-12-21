@@ -26,6 +26,7 @@ import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
  *
  */
 public class RewardManager {
+	private static final String POTION = "potion";
 	private static Map<String, Map<String, RewardElem>> rewards = null;
 	
 	/**
@@ -99,7 +100,7 @@ public class RewardManager {
 			String level = rewardObj.containsKey("Level") ? rewardObj.get("Level").toString() : null;
 			String effect = rewardObj.containsKey("Effect") ? rewardObj.get("Effect").toString() : null;
 			
-			rewards.get(age).put(reward.toString(), new RewardElem(reward.toString(), Integer.parseInt(amount.toString()), enchant, level == null ? -1 : Integer.parseInt(level.toString()), effect));
+			rewards.get(age).put(reward.toString(), new RewardElem(reward.toString(), Integer.parseInt(amount), enchant, level == null ? -1 : Integer.parseInt(level), effect));
 		}
 	}
 	
@@ -124,7 +125,7 @@ public class RewardManager {
 			
 			if (ageReward.get(k).enchant()) {
 				items.add(setupEnchantedItem(k, ageReward.get(k)));
-			} else if (k.contains("potion")) {
+			} else if (k.contains(POTION)) {
 				givePotionEffect(ageReward.get(k), player);
 			} else {
 				it = new ItemStack(Material.matchMaterial(k), ageReward.get(k).getAmount());
@@ -240,7 +241,7 @@ public class RewardManager {
 		Map<String, RewardElem> ageReward = rewards.get(age);
 		
 		for (String k : ageReward.keySet()) {
-			if (k.contains("potion")) {				
+			if (k.contains(POTION)) {				
 				player.addPotionEffect(new PotionEffect(findEffect(ageReward.get(k).getEffect()), 999999, ageReward.get(k).getAmount()));
 			}
 		}
@@ -256,7 +257,7 @@ public class RewardManager {
 		Map<String, RewardElem> ageReward = rewards.get(ageName);
 		
 		for (String key : ageReward.keySet()) {
-			if (key.contains("potion")) {
+			if (key.contains(POTION)) {
 				player.removePotionEffect(findEffect(ageReward.get(key).getEffect()));
 			}
 		}

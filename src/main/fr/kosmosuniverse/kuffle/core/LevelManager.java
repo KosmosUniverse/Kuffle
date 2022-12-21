@@ -13,24 +13,29 @@ import org.json.simple.parser.ParseException;
  *
  */
 public class LevelManager {
-	public static List<Level> levels = null;
-	
-	/**
-	 * Private LevelManager constructor
-	 * 
-	 * @throws IllegalStateException
-	 */
-	private LevelManager() {
-		throw new IllegalStateException("Utility class");
-	}
+	private static LevelManager instance = null;
+	private List<Level> levels = null;
 	
 	/**
 	 * Clears levels list
 	 */
-	public static void clear() {
+	public void clear() {
 		if (levels != null) {
 			levels.clear();
 		}
+	}
+	
+	/**
+	 * Get the LevelManager instance
+	 * 
+	 * @return the instance
+	 */
+	public static synchronized LevelManager getInstance() {
+		if (instance == null ) {
+			instance = new LevelManager();
+		}
+		
+		return instance;
 	}
 	
 	/**
@@ -41,7 +46,7 @@ public class LevelManager {
 	 * @throws IllegalArgumentException if content is null
 	 * @throws ParseException if JSONParser.parse fails
 	 */
-	public static void setupLevels(String content) throws IllegalArgumentException, ParseException {
+	public void setupLevels(String content) throws IllegalArgumentException, ParseException {
 		levels = new ArrayList<>();
 
 		if (content == null) {
@@ -70,7 +75,7 @@ public class LevelManager {
 	 * 
 	 * @return True if level exists, False instead
 	 */
-	public static boolean levelExists(String levelName) {
+	public boolean levelExists(String levelName) {
 		for (Level level : levels) {
 			if (level.getName().equals(levelName)) {
 				return true;
@@ -87,7 +92,7 @@ public class LevelManager {
 	 * 
 	 * @return the Level object if exists, null instead
 	 */
-	public static Level getLevelByNumber(int levelNumber) {
+	public Level getLevelByNumber(int levelNumber) {
 		for (Level level : levels) {
 			if (level.getNumber() == levelNumber) {
 				return level;
@@ -104,7 +109,7 @@ public class LevelManager {
 	 * 
 	 * @return the Level object if exists, null instead
 	 */
-	public static Level getLevelByName(String levelName) {
+	public Level getLevelByName(String levelName) {
 		for (Level level : levels) {
 			if (level.getName().equalsIgnoreCase(levelName)) {
 				return level;
@@ -119,7 +124,7 @@ public class LevelManager {
 	 * 
 	 * @return the highest number
 	 */
-	public static int getLevelMaxNumber() {
+	public int getLevelMaxNumber() {
 		int max = 0;
 		
 		for (Level level : levels) {
@@ -134,7 +139,7 @@ public class LevelManager {
 	 * 
 	 * @return the levels' first Level
 	 */
-	public static Level getFirstLevel() {
+	public Level getFirstLevel() {
 		return levels.get(0);
 	}
 }

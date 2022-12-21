@@ -138,10 +138,10 @@ public abstract class KuffleType {
 		}
 		
 		try {
-			LevelManager.setupLevels(FilesConformity.getContent("levels.json"));
+			LevelManager.getInstance().setupLevels(FilesConformity.getContent("levels.json"));
 		} catch (IllegalArgumentException | ParseException e) {
 			Utils.logException(e);
-			LevelManager.clear();
+			LevelManager.getInstance().clear();
 			
 			throw new KuffleFileLoadException("Levels load failed !");
 		}
@@ -269,7 +269,7 @@ public abstract class KuffleType {
 		}
 		
 		Config.clear();
-		LevelManager.clear();
+		LevelManager.getInstance().clear();
 		AgeManager.clear();
 		VersionManager.clear();
 		LangManager.clear();
