@@ -2,10 +2,6 @@ package main.fr.kosmosuniverse.kuffle.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
@@ -14,25 +10,19 @@ import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
-import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
-import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 
 /**
  * 
  * @author KosmosUniverse
  *
  */
-public class KuffleResume implements CommandExecutor {
+public class KuffleResume extends AKuffleCommand {
+	public KuffleResume() {
+		super("k-resume", null, true, 0, 0, false);
+	}
+
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		Player player = null;
-		
-		try {
-			player = CommandUtils.initCommand(sender, "k-resume", false, true, true);
-		} catch (KuffleCommandFalseException e) {
-			return false;
-		}
-		
+	public boolean runCommand() {
 		if (!KuffleMain.getInstance().isPaused()) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_ALREADY_RUNNING", Config.getLang()));
 			return false;

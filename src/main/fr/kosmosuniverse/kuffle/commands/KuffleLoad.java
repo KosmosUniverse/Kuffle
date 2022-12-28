@@ -7,9 +7,6 @@ import java.io.ObjectInputStream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -24,10 +21,8 @@ import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
-import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
 import main.fr.kosmosuniverse.kuffle.type.KuffleType;
-import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 /**
@@ -35,7 +30,7 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  * @author KosmosUniverse
  *
  */
-public class KuffleLoad implements CommandExecutor {
+public class KuffleLoad extends AKuffleCommand {
 	private File dataFolder;
 	private static final String GAME_FILE = "Game.k";
 	
@@ -45,19 +40,12 @@ public class KuffleLoad implements CommandExecutor {
 	 * @param folder	The Kuffle plugin folder
 	 */
 	public KuffleLoad(File folder) {
+		super("k-load", null, false, 0, 0, false);
 		dataFolder = folder;
 	}
 	
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		Player player;
-		
-		try {
-			player = CommandUtils.initCommand(sender, "k-load", false, true, false);
-		} catch (KuffleCommandFalseException e1) {
-			return false;
-		}
-		
+	public boolean runCommand() {
 		if (GameManager.getGames() != null && GameManager.getGames().size() != 0) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("LIST_NOT_EMPTY", Config.getLang()) + ".");
 			return true;

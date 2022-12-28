@@ -1,9 +1,6 @@
 package main.fr.kosmosuniverse.kuffle.commands;
 
 import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -16,7 +13,6 @@ import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
-import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 /**
@@ -24,44 +20,36 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  * @author KosmosUniverse
  *
  */
-public class KuffleAddDuringGame implements CommandExecutor {
-	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		Player player = null;
-		
-		try {
-			player = CommandUtils.initCommand(sender, "k-add-during-game", false, true, true);
-		} catch (KuffleCommandFalseException e) {
-			return false;
-		}
-		
-		if (player == null || args.length == 0 || args.length > 2) {
-			return false;
-		}
+public class KuffleAddDuringGame extends AKuffleCommand {
+	public KuffleAddDuringGame() {
+		super("k-add-during-game", null, true, 1, 2, false);
+	}
 
+	@Override
+	public boolean runCommand() throws KuffleCommandFalseException {
 		Player retPlayer;
 
 		if ((retPlayer = Utils.searchPlayerByName(args[0])) == null) {
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 
 		if (Config.getTeam() && args.length == 2) {
 			if (!TeamManager.getInstance().hasTeam(args[1])) {
 				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + args[1] + ">"));
-				return true;
+				throw new KuffleCommandFalseException();
 			} else if (TeamManager.getInstance().getTeam(args[1]).getPlayers().size() == Config.getTeamSize()) {
 				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_FULL", Config.getLang()));
-				return true;
+				throw new KuffleCommandFalseException();
 			}
 
 			startPlayer(player, retPlayer, args[1]);
-		} else if (args.length == 1 && !Config.getTeam()) {
+		} else if (!Config.getTeam() && args.length == 1) {
 			startPlayer(player, retPlayer, null);
 		} else {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_PREVENT_ADD", Config.getLang()));			
-			return false;
+			throw new KuffleCommandFalseException();
 		}
-
+		
 		return true;
 	}
 

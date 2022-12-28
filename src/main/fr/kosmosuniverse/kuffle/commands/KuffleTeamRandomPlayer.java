@@ -22,24 +22,16 @@ import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
  * @author KosmosUniverse
  *
  */
-public class KuffleTeamRandomPlayer implements CommandExecutor {
+public class KuffleTeamRandomPlayer extends AKuffleCommand {
+	public KuffleTeamRandomPlayer() {
+		super("k-team-random-player", null, false, 0, 0, true);
+	}
+
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		Player player = null;
-		
-		try {
-			player = CommandUtils.initCommand(sender, "k-team-random-player", true, true, false);
-		} catch (KuffleCommandFalseException e) {
-			return false;
-		}
-		
+	public boolean runCommand() {
 		if (GameManager.getGames().size() > 0) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
 			return true;
-		}
-		
-		if (args.length != 0) {
-			return false;
 		}
 		
 		if (GameManager.getGames().size() == 0) {

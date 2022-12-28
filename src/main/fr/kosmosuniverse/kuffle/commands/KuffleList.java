@@ -3,30 +3,21 @@ package main.fr.kosmosuniverse.kuffle.commands;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
-import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
-import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
-public class KuffleList implements CommandExecutor {
+public class KuffleList extends AKuffleCommand {
+	public KuffleList() {
+		super("k-list", true, false, 0, 2, false);
+	}
+
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		Player player = null;
-		
-		try {
-			player = CommandUtils.initCommand(sender, "k-list", true, true, false);
-		} catch (KuffleCommandFalseException e) {
-			return false;
-		}
-		
+	public boolean runCommand() {
 		if (args.length == 0) {
 			GameManager.displayList(player);
 

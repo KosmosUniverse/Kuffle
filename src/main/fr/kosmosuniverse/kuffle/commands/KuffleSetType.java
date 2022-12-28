@@ -3,19 +3,14 @@ package main.fr.kosmosuniverse.kuffle.commands;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
-import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
 import main.fr.kosmosuniverse.kuffle.type.KuffleBlocks;
 import main.fr.kosmosuniverse.kuffle.type.KuffleItems;
 import main.fr.kosmosuniverse.kuffle.type.KuffleType;
-import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Pair;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
@@ -24,44 +19,11 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  * @author KosmosUniverse
  *
  */
-public class KuffleSetType implements CommandExecutor  {
+public class KuffleSetType extends AKuffleCommand {
 	private Pair confirm = null;
 	
-	@Override
-	public boolean onCommand(CommandSender sender, Command cnd, String msg, String[] args) {
-		Player player;
-		
-		try {
-			player = CommandUtils.initCommand(sender, "k-set-type", false, true, false);
-		} catch (KuffleCommandFalseException e1) {
-			return false;
-		}
-		
-		if (args.length != 1) {
-			return false;
-		}
-		
-		KuffleType.Type type;
-		
-		try {
-			type = KuffleType.Type.valueOf(args[0].toUpperCase());
-		} catch (IllegalArgumentException e) {
-			LogManager.getInstanceSystem().writeMsg(player, "[ERROR] Unknown Kuffle Type");
-			return true;
-		}
-		
-		if (KuffleMain.getInstance().getType().getType() == type) {
-			LogManager.getInstanceSystem().writeMsg(player, "Kuffle Type is already set as [" + type.name() + "]");
-			return true;
-		}
-		
-		if (confirm == null) {				
-			firstSubmit(player, msg+args[0]);
-		} else {
-			confirmSubmit(player, msg+args[0], type);
-		}
-
-		return true;
+	public KuffleSetType() {
+		super("k-set-type", null, false, 1, 1, false);
 	}
 	
 	private void firstSubmit(Player player, String key) {
@@ -116,5 +78,30 @@ public class KuffleSetType implements CommandExecutor  {
 		}
 		
 		LogManager.getInstanceSystem().writeMsg(player, "Kuffle type set as [" + type.name() + "].");
+	}
+
+	@Override
+	public boolean runCommand() {
+		KuffleType.Type type;
+		
+		try {
+			type = KuffleType.Type.valueOf(args[0].toUpperCase());
+		} catch (IllegalArgumentException e) {
+			LogManager.getInstanceSystem().writeMsg(player, "[ERROR] Unknown Kuffle Type");
+			return true;
+		}
+		
+		if (KuffleMain.getInstance().getType().getType() == type) {
+			LogManager.getInstanceSystem().writeMsg(player, "Kuffle Type is already set as [" + type.name() + "]");
+			return true;
+		}
+		
+		if (confirm == null) {				
+			firstSubmit(player, name+args[0]);
+		} else {
+			confirmSubmit(player, name+args[0], type);
+		}
+
+		return true;
 	}
 }

@@ -22,29 +22,16 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  * @author KosmosUniverse
  * 
  */
-public class KuffleTeamCreate implements CommandExecutor {
+public class KuffleTeamCreate extends AKuffleCommand {
+	public KuffleTeamCreate() {
+		super("k-team-create", null, false, 1, 2, true);
+	}
+
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		Player player = null;
-		
-		try {
-			player = CommandUtils.initCommand(sender, "k-team-create", true, true, false);
-		} catch (KuffleCommandFalseException e) {
-			return false;
-		}
-		
-		if (!Config.getTeam()) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_ENABLE", Config.getLang()));
-			return true;
-		}
-		
+	public boolean runCommand() {
 		if (GameManager.getGames().size() > 0) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
 			return true;
-		}
-		
-		if (args.length < 1 || args.length > 2) {
-			return false;
 		}
 		
 		if (TeamManager.getInstance().hasTeam(args[0])) {
@@ -79,5 +66,4 @@ public class KuffleTeamCreate implements CommandExecutor {
 		
 		return true;
 	}
-
 }

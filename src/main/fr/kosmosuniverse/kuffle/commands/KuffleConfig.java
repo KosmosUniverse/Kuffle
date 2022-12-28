@@ -1,7 +1,6 @@
 package main.fr.kosmosuniverse.kuffle.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -15,7 +14,7 @@ import main.fr.kosmosuniverse.kuffle.exceptions.KuffleConfigException;
  * @author KosmosUniverse
  *
  */
-public class KuffleConfig implements CommandExecutor {
+public class KuffleConfig extends AKuffleCommand {
 	private static final String CONFIG_SET = "CONFIG_SET";
 	private static final String CONFIG_NOT_SET = "CONFIG_NOT_SET";
 	
@@ -30,11 +29,12 @@ public class KuffleConfig implements CommandExecutor {
 		INVALID
 	}
 	
+	public KuffleConfig(String cmdName, Boolean typed, Boolean started, Integer aMin, Integer aMax, boolean team) {
+		super("k-config", null, null, null, null, false);
+	}
+	
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		if (!(sender instanceof Player))
-			return false;
-		
+	public boolean runCommand() {
 		if (args.length % 2 == 1) {
 			return false;
 		}

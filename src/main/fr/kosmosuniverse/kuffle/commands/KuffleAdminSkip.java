@@ -7,9 +7,9 @@ import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 
-public class KuffleSkip extends AKuffleCommand {
-	public KuffleSkip() {
-		super("k-skip", null, true, 0, 0, false);
+public class KuffleAdminSkip extends AKuffleCommand {
+	public KuffleAdminSkip() {
+		super("k-adminskip", null, true, 1, 1, false);
 	}
 	
 	private void doSkip(Player player, String cmd, String playerTarget) {
@@ -24,22 +24,17 @@ public class KuffleSkip extends AKuffleCommand {
 		}
 		
 		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("ITEM_SKIPPED", Config.getLang()).replace("[#]", " [" + GameManager.getPlayerTarget(playerTarget) + "] ").replace("<#>", " <" + playerTarget + ">"));
-		GameManager.skipPlayerTarget(playerTarget, true);
+		GameManager.skipPlayerTarget(playerTarget, false);
 	}
 
 	@Override
 	public boolean runCommand() {
-		if (!Config.getSkip()) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("CONFIG_DISABLED", Config.getLang()));
-			return true;
-		}
-		
 		if (!GameManager.hasPlayer(player.getName())) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_PLAYING", Config.getLang()));
 			return true;
 		}
 		
-		doSkip(player, name, player.getName());
+		doSkip(player, name, args[0]);
 		
 		return true;
 	}

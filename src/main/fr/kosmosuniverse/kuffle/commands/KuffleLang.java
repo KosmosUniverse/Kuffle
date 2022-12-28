@@ -1,37 +1,22 @@
 package main.fr.kosmosuniverse.kuffle.commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
-import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
-import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 
 /**
  * 
  * @author KosmosUniverse
  *
  */
-public class KuffleLang implements CommandExecutor {
+public class KuffleLang extends AKuffleCommand {
+	public KuffleLang() {
+		super("k-lang", null, true, 0, 1, false);
+	}
+
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		Player player;
-		
-		try {
-			player = CommandUtils.initCommand(sender, "k-lang", false, true, true);
-		} catch (KuffleCommandFalseException e) {
-			return false;
-		}
-		
-		if (args.length > 1) {
-			return false; 
-		}
-		
+	public boolean runCommand() {
 		if (!GameManager.hasPlayer(player.getName())) {
 			return true;
 		}

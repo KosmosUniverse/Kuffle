@@ -4,9 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -23,8 +20,6 @@ import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.SpreadPlayer;
 import main.fr.kosmosuniverse.kuffle.core.TargetManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
-import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
-import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 
 /**
@@ -32,17 +27,13 @@ import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
  * @author KosmosUniverse
  *
  */
-public class KuffleStart implements CommandExecutor {
-	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		Player player = null;
-		
-		try {
-			player = CommandUtils.initCommand(sender, "k-start", true, true, false);
-		} catch (KuffleCommandFalseException e) {
-			return false;
-		}
+public class KuffleStart extends AKuffleCommand {
+	public KuffleStart() {
+		super("k-start", true, false, 0, 0, false);
+	}
 
+	@Override
+	public boolean runCommand() {
 		if (GameManager.getGames().size() == 0) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NO_PLAYERS", Config.getLang()));
 
