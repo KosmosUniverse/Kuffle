@@ -3,11 +3,7 @@ package main.fr.kosmosuniverse.kuffle.tabcompleters;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 
 /**
@@ -15,13 +11,15 @@ import main.fr.kosmosuniverse.kuffle.type.KuffleType;
  * @author KosmosUniverse
  *
  */
-public class KuffleSetTypeTab implements TabCompleter  {
+public class KuffleSetTypeTab extends AKuffleTabCommand {
 	private List<String> types = new ArrayList<>();
 
 	/**
 	 * Constructor
 	 */
 	public KuffleSetTypeTab() {
+		super("k-set-type", 1, 1);
+		
 		for (KuffleType.Type type : KuffleType.Type.values()) {
 			types.add(type.name());
 		}
@@ -33,17 +31,11 @@ public class KuffleSetTypeTab implements TabCompleter  {
 	public void clear() {
 		types.clear();
 	}
-	
+
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd, String msg, String[] args) {
-		if (!(sender instanceof Player)) {
-			return new ArrayList<>();
+	protected void runCommand() throws KuffleCommandFalseException {
+		if (currentArgs.length == 1) {
+			ret.addAll(types);
 		}
-		
-		if (args.length == 1) {
-			return types;
-		}
-		
-		return new ArrayList<>();
 	}
 }

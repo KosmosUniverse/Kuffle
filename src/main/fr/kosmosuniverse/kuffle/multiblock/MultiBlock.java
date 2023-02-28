@@ -1,6 +1,7 @@
 package main.fr.kosmosuniverse.kuffle.multiblock;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -50,6 +51,15 @@ public class MultiBlock {
 	 */
 	public void addLevel(Level l) {
 		pattern.add(l);
+	}
+	
+	/**
+	 * Gets the multiblock levels
+	 * 
+	 * @return the pattern list that contains all multiblock levels
+	 */
+	public List<Level> getLevels() {
+		return Collections.unmodifiableList(pattern);
 	}
 
 	/**

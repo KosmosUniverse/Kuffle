@@ -4,13 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 
+import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
+import net.md_5.bungee.api.ChatColor;
 
 /**
  * 
@@ -32,17 +37,81 @@ public abstract class AMultiblock {
 	ItemStack bluePane = ItemUtils.itemMaker(Material.BLUE_STAINED_GLASS_PANE, 1, "Next ->");
 	
 	/**
-	 * Called when multiblock is assemble or activated
-	 * 
-	 * @param player	The player that triggered it
-	 * @param type		The Activation type (Assemble or Activate)
+	 * Creates all multiblock inventories
 	 */
-	public abstract void onActivate(Player player, ActivationType type);
+	public void createInventories() {
+		for (Level level : multiblock.getLevels()) {
+			invs.add(setupLayer(level, multiblock.getLevels().size()));
+		}
+	}
 	
 	/**
-	 * Creates multiblock's inventories
+	 * Setups an inventory layer based on level patterns
+	 * 
+	 * @param level		The level
+	 * @param maxLevels	The max number of level in the multiblock
+	 * 
+	 * @return the inventory created for the layer
 	 */
-	public abstract void createInventories();
+	private Inventory setupLayer(Level level, int maxLevels) {
+		Inventory inv = Bukkit.createInventory(null, 27, ChatColor.BLACK + name + " Layer " + level.getLevelNb());
+		List<Material> compose = level.getLevel();
+		int composeCnt = 0;
+		
+		for (int i = 0; i < 27; i++) {
+			if (i == 0) {
+				inv.setItem(i, level.getLevelNb() == 0 ? backPane : previousPane);
+			} else {
+				inv.setItem(i, findInvElem(i, level.getLevelNb(), maxLevels, compose, composeCnt));
+			}
+			
+			if ((i >= 3 && i <= 5) || (i >= 12 && i <= 14) || (i >= 21 && i <= 23)) {
+				composeCnt++;
+			}
+		}
+		
+		return inv;
+	}
+	
+	/**
+	 * Finds the appropriate item to put in the layer inventory depending on its position in the inventory
+	 * 
+	 * @param invCnt		the item position in the inventory
+	 * @param levelNb		The level number
+	 * @param maxLevels		The maximum of level for that multiblock
+	 * @param compose		The level material list
+	 * @param composeCnt	The compose counter
+	 * 
+	 * @return the appropriate item for this position in the inventory
+	 */
+	private ItemStack findInvElem(int invCnt, int levelNb, int maxLevels, List<Material> compose, int composeCnt) {
+		ItemStack it;
+		
+		if (invCnt == 8) {
+			it = levelNb == (maxLevels - 1) ? limePane : bluePane;
+		} else if ((invCnt >= 3 && invCnt <= 5) ||
+				(invCnt >= 12 && invCnt <= 14) ||
+				(invCnt >= 21 && invCnt <= 23)) {
+			if (compose.get(composeCnt) == Material.AIR) {
+				it = grayPane;
+			} else {
+				it = new ItemStack(compose.get(composeCnt));
+			}
+		} else {
+			it = limePane;
+		}
+		
+		return it;
+	}
+	
+	/**
+	 * create the location to teleport the player
+	 * 
+	 * @param player	The player to teleport
+	 * 
+	 * @return the location
+	 */
+	public abstract Location createLocation(Player player);
 	
 	/**
 	 * CLears this object
@@ -50,6 +119,27 @@ public abstract class AMultiblock {
 	public void clear() {
 		multiblock.clear();
 		invs.clear();
+	}
+	
+	/**
+	 * Called when multiblock is assemble or activated
+	 * 
+	 * @param player	The player that triggered it
+	 * @param type		The Activation type (Assemble or Activate)
+	 */
+	public void onActivate(Player player, ActivationType type) {
+		if (type == ActivationType.ASSEMBLE) {
+			player.sendMessage(LangManager.getMsgLang("CONSTRUCTED", GameManager.getPlayerLang(player.getName())).replace("%s", name));
+		} else if (type == ActivationType.ACTIVATE && world != null) {
+			Location tmp = createLocation(player);
+			
+			if (tmp != null) {
+				tmp.setY(tmp.getWorld().getHighestBlockAt(tmp).getY() + 2.0);
+				
+				player.teleport(tmp);
+				player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);	
+			}
+		}
 	}
 	
 	/**

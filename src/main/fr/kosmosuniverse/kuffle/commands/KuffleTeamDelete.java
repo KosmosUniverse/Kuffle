@@ -5,6 +5,7 @@ import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 
 /**
  * 
@@ -17,15 +18,15 @@ public class KuffleTeamDelete extends AKuffleCommand {
 	}
 
 	@Override
-	public boolean runCommand() {
+	public boolean runCommand() throws KuffleCommandFalseException {
 		if (GameManager.getGames().size() > 0) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		if (!TeamManager.getInstance().hasTeam(args[0])) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		TeamManager.getInstance().deleteTeam(args[0]);

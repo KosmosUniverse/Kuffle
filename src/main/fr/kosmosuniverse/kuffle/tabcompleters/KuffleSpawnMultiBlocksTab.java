@@ -1,14 +1,9 @@
 package main.fr.kosmosuniverse.kuffle.tabcompleters;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 import main.fr.kosmosuniverse.kuffle.multiblock.MultiblockManager;
 
 /**
@@ -16,25 +11,22 @@ import main.fr.kosmosuniverse.kuffle.multiblock.MultiblockManager;
  * @author KosmosUniverse
  *
  */
-public class KuffleSpawnMultiBlocksTab implements TabCompleter {
+public class KuffleSpawnMultiBlocksTab extends AKuffleTabCommand {
 	private List<String> list;
 	
 	/**
 	 * Constructor
 	 */
 	public KuffleSpawnMultiBlocksTab() {
+		super("k-spawn-multiblock", 1, 1);
+		
 		list = MultiblockManager.getMultiblocks().stream().map(m -> m.getName()).collect(Collectors.toList());
 	}
-	
+
 	@Override
-	public List<String> onTabComplete(CommandSender sender,  Command cmd, String msg, String[] args) {
-		if (!(sender instanceof Player))
-			return new ArrayList<>();
-		
-		if (cmd.getName().equalsIgnoreCase("kb-spawn-multiblock") && args.length == 1) {
-			return list;
+	protected void runCommand() throws KuffleCommandFalseException {
+		if (currentArgs.length == 1) {
+			ret.addAll(list);
 		}
-		
-		return new ArrayList<>();
 	}
 }

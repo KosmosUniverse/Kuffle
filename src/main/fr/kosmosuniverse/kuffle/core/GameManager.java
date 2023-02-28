@@ -675,7 +675,7 @@ public class GameManager {
 	 * @return the number of player that are still playing
 	 */
 	public static int getNbPlayerStillPlaying() {
-		return (int) games.entrySet().stream()
+		return GameManager.games.size() - (int) games.entrySet().stream()
 				.filter(entry -> entry.getValue().isFinished())
 				.count();
 	}

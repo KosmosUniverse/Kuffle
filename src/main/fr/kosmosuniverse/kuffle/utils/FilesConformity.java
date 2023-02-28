@@ -16,6 +16,7 @@ import org.json.simple.parser.ParseException;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.AgeManager;
+import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.RewardManager;
@@ -27,6 +28,8 @@ import main.fr.kosmosuniverse.kuffle.core.VersionManager;
  *
  */
 public class FilesConformity {
+	private static final String NBR_STR = "Number";
+	
 	/**
 	 * Private FilesConformity constructor
 	 * This class is utility class and must not be instantiate
@@ -61,12 +64,29 @@ public class FilesConformity {
 			content = getFromResource(file);
 			
 			if (content != null)  {
-				LogManager.getInstanceSystem().logMsg(KuffleMain.getInstance().getName(), "Load " + file + " from Resource.");
+				LogManager.getInstanceSystem().logMsg(KuffleMain.getInstance().getName(), LangManager.getMsgLang("FC_LOAD_RESOURCE", Config.getLang()).replace("%s", file));
 			} else {
-				LogManager.getInstanceSystem().logMsg(KuffleMain.getInstance().getName(), "File : " + file + " does not exist.");
+				LogManager.getInstanceSystem().logMsg(KuffleMain.getInstance().getName(), LangManager.getMsgLang("FC_LOAD_FAIL", Config.getLang()).replace("%s", file));
 			}
 		} else {
-			LogManager.getInstanceSystem().logMsg(KuffleMain.getInstance().getName(), "Load " + file + " from File.");
+			LogManager.getInstanceSystem().logMsg(KuffleMain.getInstance().getName(), LangManager.getMsgLang("FC_LOAD_FILE", Config.getLang()).replace("%s", file));
+		}
+		
+		return content;
+	}
+	
+	/**
+	 * Gets file content without checking it and without logging
+	 * 
+	 * @param file	The file from which it will get the content
+	 * 
+	 * @return the JSON file content as string
+	 */
+	public static String getRawContent(String file) {
+		String content = getFromFile(file);
+		
+		if (content == null) {
+			content = getFromResource(file);
 		}
 		
 		return content;
@@ -159,7 +179,7 @@ public class FilesConformity {
 		if (ret && file.equals("ages.json")) {
 			ret = ageConformity(content);
 		} else if (ret && file.equals("msgs_langs.json")) {
-			ret = msgLangConformity(content);
+			ret = langConformity(content);
 		} else if (ret && file.equals("levels.json")) {
 			ret = levelsConformity(content);
 		}
@@ -217,16 +237,15 @@ public class FilesConformity {
 	 */
 	private static boolean checkAge(JSONObject ageObj, String age) {
 		boolean ret = true;
-		String numberStr = "Number";
 		
-		if (!ageObj.containsKey(numberStr)) {
-			LogManager.getInstanceSystem().logSystemMsg("Age [" + age + "] does not contain 'Number' Object.");
+		if (!ageObj.containsKey(NBR_STR)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_AGE_NUMBER", Config.getLang()).replace("%s", age));
 			ret = false;
 		} else if (!ageObj.containsKey("TextColor")) {
-			LogManager.getInstanceSystem().logSystemMsg("Age [" + age + "] does not contain 'TextColor' Object.");
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_AGE_TEXTCOLOR", Config.getLang()).replace("%s", age));
 			ret = false;
 		} else if (!ageObj.containsKey("BoxColor")) {
-			LogManager.getInstanceSystem().logSystemMsg("Age [" + age + "] does not contain 'BoxColor' Object.");
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_AGE_BOXCOLOR", Config.getLang()).replace("%s", age));
 			ret = false;
 		}
 		
@@ -235,33 +254,23 @@ public class FilesConformity {
 		}
 		
 		@SuppressWarnings("unused")
-		int number = Integer.parseInt(ageObj.get(numberStr).toString());
+		int number = Integer.parseInt(ageObj.get(NBR_STR).toString());
 		String color = (String) ageObj.get("TextColor");
 		String box = (String) ageObj.get("BoxColor") + "_SHULKER_BOX";
 		
 		if (ChatColor.valueOf(color) == null) {
-			LogManager.getInstanceSystem().logSystemMsg("Age [" + age + "] color [" + color + "] is not in ChatColor Enum.");
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_AGE_TEXTCOLOR_ENUM", Config.getLang()).replace("%ss", color).replace("%s", age));
 			ret = false;
 		}
 		
 		if (ret && Material.matchMaterial(box) == null) {
-			LogManager.getInstanceSystem().logSystemMsg("Age [" + age + "] box [" + box + "] is not in Material Enum.");
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_AGE_BOXCOLOR_ENUM", Config.getLang()).replace("%ss", box).replace("%s", age));
 			ret = false;
 		}
 		
 		return ret;
 	}
-	
-	/**
-	 * Checks langs.json file conformity
-	 * 
-	 * @param content	file content as String
-	 * 
-	 * @return True if content is conform to awaited langs.json content, False instead
-	 */
-	public static boolean msgLangConformity(String content) {
-		return langConformity(content, false);
-	}
+
 	
 	/**
 	 * Checks langs for a specified content and, if needed, checks if material exists.
@@ -271,7 +280,7 @@ public class FilesConformity {
 	 * 
 	 * @return True if content is conform to awaited lang file content, False instead
 	 */
-	private static boolean langConformity(String content, boolean areMaterial) {
+	public static boolean langConformity(String content) {
 		JSONParser parser = new JSONParser();
 		JSONObject jsonObj = null;
 		List<String> langs = null;
@@ -286,15 +295,9 @@ public class FilesConformity {
 		boolean ret = true;
 		
 		for (Object key : jsonObj.keySet()) {
-			
-			if (areMaterial && Material.matchMaterial((String) key) == null) {
-				LogManager.getInstanceSystem().logSystemMsg("Material [" + (String) key + "] does not exist.");
-				ret = false;
-			}
-			
 			JSONObject langObj = (JSONObject) jsonObj.get(key);
 			
-			if (!ret && langs == null) {
+			if (langs == null) {
 				langs = new ArrayList<>();
 				
 				for (Object keyLang : langObj.keySet()) {
@@ -302,13 +305,9 @@ public class FilesConformity {
 				}
 			}
 			
-			if (!ret && !elementLangCheck(langObj, langs)) {
-				ret = false;
-			}
+			ret = checkLangKey(langObj, langs);
 			
-			if (langs != null) {
-				langObj.clear();	
-			}
+			langObj.clear();
 			
 			if (!ret) {
 				break;
@@ -325,22 +324,25 @@ public class FilesConformity {
 	}
 	
 	/**
-	 * Checks if the langObj keys are contained in langs list
+	 * Check if the langs for a specific key are good
 	 * 
-	 * @param langObj	The JSONObject that contains keys that will be checked
-	 * @param langs		List that contains good languages
+	 * @param langObj	The lang object to check
+	 * @param langs		The allowed langs
 	 * 
-	 * @return True if materialObj keys are all in langs, False instead
+	 * @return True if langObj is conform, False instead
 	 */
-	private static boolean elementLangCheck(JSONObject langObj, List<String> langs) {
+	private static boolean checkLangKey(JSONObject langObj, List<String> langs) {
+		boolean ret = true;
+		
 		for (Object keyLang : langObj.keySet()) {
 			if (!langs.contains(keyLang)) {
-				LogManager.getInstanceSystem().logSystemMsg("Lang [" + (String) keyLang + "] is not everywhere in lang file.");
-				return false;
+				LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_LANG_EVERYWHERE", Config.getLang()).replace("%s", keyLang.toString()));
+				ret = false;
+				break;
 			}
 		}
 		
-		return true;
+		return ret;
 	}
 	
 	/**
@@ -359,13 +361,14 @@ public class FilesConformity {
 			
 			for (Object mainKey : mainObj.keySet()) {
 				if (!VersionManager.hasVersion(mainKey.toString())) {
+					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_TARGET_VERSION", Config.getLang()).replace("%s", mainKey.toString()));
 					ret = false;
 				}
 				
 				if (ret) {
 					JSONObject versionObj = (JSONObject) mainObj.get(mainKey);
 					
-					ret = checkTargetVersionObj(versionObj);
+					ret = checkTargetVersionObj(versionObj, mainKey.toString());
 					versionObj.clear();
 				}
 				
@@ -390,7 +393,7 @@ public class FilesConformity {
 	 * 
 	 * @return True if JSONObject format is valid, False instead
 	 */
-	private static boolean checkTargetVersionObj(JSONObject versionObj) {
+	private static boolean checkTargetVersionObj(JSONObject versionObj, String version) {
 		boolean ret = true;
 		
 		for (Object versionKey : versionObj.keySet()) {
@@ -399,13 +402,14 @@ public class FilesConformity {
 			if (!"BOTH".equalsIgnoreCase(type) &&
 					!"BLOCKS".equalsIgnoreCase(type) &&
 					!"ITEMS".equalsIgnoreCase(type)) {
+				LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_TARGET_TYPE", Config.getLang()).replace("%ss", version).replace("%s", type));
 				ret = false;
 			}
 			
 			if (ret) {
 				JSONObject typeObj = (JSONObject) versionObj.get(versionKey);
 				
-				ret = checkTargetTypeObj(typeObj);
+				ret = checkTargetTypeObj(typeObj, version, type);
 				typeObj.clear();
 			}
 			
@@ -424,18 +428,19 @@ public class FilesConformity {
 	 * 
 	 * @return True if JSONObject format is valid, False instead
 	 */
-	private static boolean checkTargetTypeObj(JSONObject typeObj) {
+	private static boolean checkTargetTypeObj(JSONObject typeObj, String version, String type) {
 		boolean ret = true;
 		
 		for (Object typeKey : typeObj.keySet()) {
 			if (!AgeManager.ageExists(typeKey.toString())) {
+				LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_TARGET_AGE", Config.getLang()).replace("%sss", version).replace("%ss", type).replace("%s", typeKey.toString()));
 				ret = false;
 			}
 			
 			if (ret) {
 				JSONObject ageObj = (JSONObject) typeObj.get(typeKey);
 				
-				ret = checkTargetAgeObj(ageObj);
+				ret = checkTargetAgeObj(ageObj, version);
 				ageObj.clear();
 			}
 			
@@ -454,18 +459,19 @@ public class FilesConformity {
 	 * 
 	 * @return True if JSONObject format is valid, False instead
 	 */
-	private static boolean checkTargetAgeObj(JSONObject ageObj) {
+	private static boolean checkTargetAgeObj(JSONObject ageObj, String version) {
 		boolean ret = true;
 		
 		for (Object ageKey : ageObj.keySet()) {
 			if (Material.matchMaterial(ageKey.toString()) == null) {
 				ret = false;
+				LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_TARGET_MATERIAL", Config.getLang()).replace("%ss", version).replace("%s", ageKey.toString()));
 			}
 
 			if (ret) {
 				JSONObject materialObj = (JSONObject) ageObj.get(ageKey);
 				
-				ret = checkTargetMaterialObj(materialObj);
+				ret = checkTargetMaterialObj(materialObj, version, ageKey.toString());
 				materialObj.clear();
 			}
 			
@@ -484,17 +490,19 @@ public class FilesConformity {
 	 * 
 	 * @return True if JSONObject format is valid, False instead
 	 */
-	private static boolean checkTargetMaterialObj(JSONObject materialObj) {
+	private static boolean checkTargetMaterialObj(JSONObject materialObj, String version, String target) {
 		boolean ret = true;
 		
 		if (!materialObj.containsKey("Sbtt") ||
 				!materialObj.containsKey("Langs")) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_TARGET_MATERIAL_KEYS", Config.getLang()).replace("%ss", version).replace("%s", target));
 			ret = false;
 		} else {
 			String sbtt = materialObj.get("Sbtt").toString();
 			
 			if (!"true".equalsIgnoreCase(sbtt) &&
 					!"false".equalsIgnoreCase(sbtt)) {
+				LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_TARGET_MATERIAL_SBTT", Config.getLang()).replace("%sss", sbtt).replace("%ss", version).replace("%s", target));
 				ret = false;
 			}
 			
@@ -502,6 +510,7 @@ public class FilesConformity {
 			
 			for (Object langKey : langObj.keySet()) {
 				if (!LangManager.hasLang(langKey.toString())) {
+					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_TARGET_MATERIAL_LANG", Config.getLang()).replace("%sss", langKey.toString()).replace("%ss", version).replace("%s", target));
 					ret = false;
 					break;
 				}
@@ -604,7 +613,12 @@ public class FilesConformity {
 			if (ret) {
 				JSONObject materialObj = (JSONObject) ageObj.get(ageKey);
 				
-				ret = checkRewardMaterialObj(ageKey.toString(), materialObj);
+				try {
+					ret = checkRewardMaterialObj(ageKey.toString(), materialObj);
+				} catch (NumberFormatException e) {
+					Utils.logException(e);
+				}
+				
 				materialObj.clear();
 			}
 			
@@ -628,34 +642,32 @@ public class FilesConformity {
 		boolean ret = true;
 		
 		if (!materialObj.containsKey("Amount")) {
-			ret = false;
-		} else {
+			return false;
+		}
+		
+		@SuppressWarnings("unused")
+		int amount = Integer.parseInt(materialObj.get("Amount").toString());
+		
+		if (materialObj.containsKey("Level")) {
 			@SuppressWarnings("unused")
-			int amount = Integer.parseInt(materialObj.get("Amount").toString());
+			int level = Integer.parseInt(materialObj.get("Level").toString());
+		}
+		
+		if (materialObj.containsKey("Enchant")) {
+			String enchants = (String) materialObj.get("Enchant");
 			
-			if (materialObj.containsKey("Level")) {
-				@SuppressWarnings("unused")
-				int level = Integer.parseInt(materialObj.get("Level").toString());
-			}
-			
-			if (materialObj.containsKey("Enchant")) {
-				String enchants = (String) materialObj.get("Enchant");
-				
-				if (enchants.isEmpty() || !checkRewardEnchant(enchants, material)) {
-					ret = false;
-				}
-			}
-			
-			if (materialObj.containsKey("Effect")) {
-				String effects = (String) materialObj.get("Effect");
-				
-				if (effects.isEmpty() || !checkRewardEffect(effects, material)) {
-					ret = false;
-				}
+			if (enchants.isEmpty() || !checkRewardEnchant(enchants, material)) {
+				ret = false;
 			}
 		}
 		
-		
+		if (materialObj.containsKey("Effect")) {
+			String effects = (String) materialObj.get("Effect");
+			
+			if (effects.isEmpty() || !checkRewardEffect(effects, material)) {
+				ret = false;
+			}
+		}
 		
 		return ret;
 	}
@@ -674,13 +686,13 @@ public class FilesConformity {
 		if (enchants.contains(",")) {
 			for (String enchant : enchants.split(",")) {
 				if (RewardManager.getEnchantment(enchant) == null) {
-					LogManager.getInstanceSystem().logSystemMsg("Reward [" + reward + "] contains unknown enchant : [" + enchant + "].");
+					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_REWARD_ENCHANT", Config.getLang()).replace("%ss", enchant).replace("%s", reward));
 					containKey = false;
 					break;
 				}
 			}
 		} else if (RewardManager.getEnchantment(enchants) == null) {
-			LogManager.getInstanceSystem().logSystemMsg("Reward [" + reward + "] contains unknown enchant : [" + enchants + "].");
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_REWARD_ENCHANT", Config.getLang()).replace("%ss", enchants).replace("%s", reward));
 			containKey = false;
 		}
 		
@@ -701,12 +713,12 @@ public class FilesConformity {
 		if (effects.contains(",")) {
 			for (String effect : effects.split(",")) {
 				if (RewardManager.findEffect(effect) == null) {
-					LogManager.getInstanceSystem().logSystemMsg("Reward [" + reward + "] contains unknown effect : [" + effect + "].");
+					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_REWARD_EFFECT", Config.getLang()).replace("%ss", effect).replace("%s", reward));
 					containKey = false;
 				}
 			}
 		} else if (!Utils.checkEffect(effects)) {
-			LogManager.getInstanceSystem().logSystemMsg("Reward [" + reward + "] contains unknown enchant : [" + effects + "].");
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_REWARD_EFFECT", Config.getLang()).replace("%ss", effects).replace("%s", reward));
 			containKey = false;
 		}
 		
@@ -722,7 +734,6 @@ public class FilesConformity {
 	 */
 	public static boolean levelsConformity(String content) {
 		boolean ret = true;
-		String numberStr = "Number";
 		
 		try {
 			JSONParser parser = new JSONParser();
@@ -733,20 +744,20 @@ public class FilesConformity {
 			for (Object key : jsonObj.keySet()) {
 				JSONObject levelObj = (JSONObject) jsonObj.get(key);
 				
-				if (!levelObj.containsKey(numberStr)) {
-					LogManager.getInstanceSystem().logSystemMsg("Level [" + (String) key + "] does not contain 'Number' Object.");
+				if (!levelObj.containsKey(NBR_STR)) {
+					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_LEVEL_NUMBER", Config.getLang()).replace("%s", key.toString()));
 					ret = false;
 				} else if (!levelObj.containsKey("Seconds")) {
-					LogManager.getInstanceSystem().logSystemMsg("Level [" + (String) key + "] does not contain 'Seconds' Object.");
+					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_LEVEL_SECONDS", Config.getLang()).replace("%s", key.toString()));
 					ret = false;
 				} else if (!levelObj.containsKey("Lose")) {
-					LogManager.getInstanceSystem().logSystemMsg("Level [" + (String) key + "] does not contain 'Lose' Object.");
+					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_LEVEL_LOSE", Config.getLang()).replace("%s", key.toString()));
 					ret = false;
 				}
 				
 				if (ret) {
 					@SuppressWarnings("unused")
-					int number = Integer.parseInt(levelObj.get(numberStr).toString());
+					int number = Integer.parseInt(levelObj.get(NBR_STR).toString());
 					@SuppressWarnings("unused")
 					int seconds = Integer.parseInt(levelObj.get("Seconds").toString());
 	

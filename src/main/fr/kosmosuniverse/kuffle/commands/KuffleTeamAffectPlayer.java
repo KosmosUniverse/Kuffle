@@ -5,6 +5,7 @@ import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 
 /**
  * 
@@ -17,30 +18,30 @@ public class KuffleTeamAffectPlayer extends AKuffleCommand {
 	}
 
 	@Override
-	public boolean runCommand() {
+	public boolean runCommand() throws KuffleCommandFalseException {
 		if (GameManager.getGames().size() > 0) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		if (!TeamManager.getInstance().hasTeam(args[0])) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		if (TeamManager.getInstance().getTeam(args[0]).getPlayers().size() == Config.getTeamSize()) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_FULL", Config.getLang()));
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		if (!GameManager.hasPlayer(args[1])) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("PLAYER_NOT_IN_GAME", Config.getLang()));
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		if (TeamManager.getInstance().getTeam(args[0]).hasPlayer(args[1])) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_PLAYER", Config.getLang()));
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		TeamManager.getInstance().affectPlayer(args[0], GameManager.getPlayer(args[1]));

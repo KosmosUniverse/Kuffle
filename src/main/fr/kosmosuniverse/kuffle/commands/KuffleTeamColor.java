@@ -1,7 +1,5 @@
 package main.fr.kosmosuniverse.kuffle.commands;
 
-import java.util.List;
-
 import org.bukkit.ChatColor;
 
 import main.fr.kosmosuniverse.kuffle.core.Config;
@@ -9,7 +7,8 @@ import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
-import main.fr.kosmosuniverse.kuffle.utils.Utils;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
+import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 
 /**
  * 
@@ -22,37 +21,26 @@ public class KuffleTeamColor extends AKuffleCommand {
 	}
 
 	@Override
-	public boolean runCommand() {
+	public boolean runCommand() throws KuffleCommandFalseException {
 		if (GameManager.getGames().size() > 0) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		if (!TeamManager.getInstance().hasTeam(args[0])) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		if (TeamManager.getInstance().getTeam(args[0]).hasPlayer(args[1])) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_PLAYER", Config.getLang()));
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
-		ChatColor tmp;
+		ChatColor tmp = CommandUtils.checkTeamColor(player, args[1]);
 		
-		if ((tmp = Utils.findChatColor(args[1])) == null) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("COLOR_NOT_EXISTS", Config.getLang()).replace("[#]", "[" + args[1] + "]"));
-			return true;
+		if (tmp == null) {
+			throw new KuffleCommandFalseException();
 		}
-		
-		List<String> colorUsed = TeamManager.getInstance().getTeamColors();
-		
-		if (colorUsed.contains(tmp.name())) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("COLOR_ALREADY_USED", Config.getLang()).replace("[#]", "[" + tmp.name() + "]"));
-			colorUsed.clear();
-			return true;
-		}
-		
-		colorUsed.clear();
 
 		String tmpColor = TeamManager.getInstance().getTeam(args[0]).getColor().name();
 		

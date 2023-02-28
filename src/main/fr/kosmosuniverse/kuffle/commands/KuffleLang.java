@@ -4,6 +4,7 @@ import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 
 /**
  * 
@@ -16,9 +17,9 @@ public class KuffleLang extends AKuffleCommand {
 	}
 
 	@Override
-	public boolean runCommand() {
+	public boolean runCommand() throws KuffleCommandFalseException {
 		if (!GameManager.hasPlayer(player.getName())) {
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		if (args.length == 0) {

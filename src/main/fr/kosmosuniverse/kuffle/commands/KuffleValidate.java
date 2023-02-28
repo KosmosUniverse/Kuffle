@@ -4,6 +4,7 @@ import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 
 public class KuffleValidate extends AKuffleCommand {
 	public KuffleValidate() {
@@ -11,17 +12,10 @@ public class KuffleValidate extends AKuffleCommand {
 	}
 
 	@Override
-	public boolean runCommand() {
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-validate>"));
-		
-		if (!player.hasPermission("k-validate")) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
-			return false;
-		}
-		
+	public boolean runCommand() throws KuffleCommandFalseException {
 		if (!GameManager.hasPlayer(args[0])) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("VALIDATE_PLAYER_ITEM", Config.getLang()));
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 
 		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("ITEM_VALIDATED", Config.getLang()).replace("[#]", " [" + GameManager.getPlayerTarget(args[0]) + "] ").replace("<#>", "<" + args[0] + ">"));			

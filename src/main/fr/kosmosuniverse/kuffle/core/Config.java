@@ -700,6 +700,10 @@ public class Config implements Serializable {
 	 * @return the lang
 	 */
 	public static String getLang() {
+		if (configValues == null) {
+			return "en";
+		}
+		
 		return configValues.getLang();
 	}
 

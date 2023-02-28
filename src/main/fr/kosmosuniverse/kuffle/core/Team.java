@@ -96,6 +96,8 @@ public class Team implements Serializable {
 	}
 	
 	/**
+	 * Gets the team Name
+	 * 
 	 * @return name
 	 */
 	public String getName() {
@@ -103,6 +105,8 @@ public class Team implements Serializable {
 	}
 	
 	/**
+	 * Gets the team color
+	 * 
 	 * @return color
 	 */
 	public ChatColor getColor() {
@@ -110,10 +114,30 @@ public class Team implements Serializable {
 	}
 	
 	/**
-	 * @param teamColor	new team color
+	 * Sets team color
+	 * 
+	 * @param teamColor	New team color
 	 */
 	public void setColor(ChatColor teamColor) {
 		color = teamColor;
+	}
+	
+	/**
+	 * Adds a player to the team
+	 * 
+	 * @param player	The player to add
+	 */
+	public void addPlayer(Player player) {
+		players.add(player);
+	}
+	
+	/**
+	 * Removes a player from the team
+	 * 
+	 * @param player	The player to remove
+	 */
+	public void removePlayer(Player player) {
+		players.remove(player);
 	}
 	
 	/**

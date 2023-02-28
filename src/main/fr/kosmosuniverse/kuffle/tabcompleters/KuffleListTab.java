@@ -4,54 +4,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 
 /**
  * 
  * @author KosmosUniverse
  *
  */
-public class KuffleListTab implements TabCompleter {
+public class KuffleListTab extends AKuffleTabCommand {
 	private List<String> list = new ArrayList<>();
 	
 	/**
 	 * Constructor
 	 */
 	public KuffleListTab() {
+		super("k-list", 0, 2);
+		
 		list.add("add");
 		list.add("remove");
 		list.add("reset");
 	}
 	
 	@Override
-	public List<String> onTabComplete(CommandSender sender,  Command cmd, String msg, String[] args) {
-		List<String> ret = new ArrayList<>();
-		
-		if (!(sender instanceof Player)) {
-			return ret;
-		}
-		
-		if (args.length == 1) {
-			return list;
-		} else if (args.length == 2) {
-			if (args[0].equals("add")) {
+	protected void runCommand() throws KuffleCommandFalseException {
+		if (currentArgs.length == 1) {
+			ret.addAll(list);
+		} else if (currentArgs.length == 2) {
+			if (currentArgs[0].equals("add")) {
 				ret.add("@a");
 				
 				for (Player player : Bukkit.getOnlinePlayers()) {
 					ret.add(player.getName());
 				}
-			} else if (args[0].equals("remove")) {
+			} else if (currentArgs[0].equals("remove")) {
 				for (String playerName : GameManager.getPlayerNames()) {
 					ret.add(playerName);
 				}
 			}
 		}
-		
-		return ret;
 	}
 }

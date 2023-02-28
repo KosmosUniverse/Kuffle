@@ -4,6 +4,7 @@ import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 
 public class KuffleValidateAge extends AKuffleCommand {
 	public KuffleValidateAge() {
@@ -11,24 +12,15 @@ public class KuffleValidateAge extends AKuffleCommand {
 	}
 
 	@Override
-	public boolean runCommand() {
-		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-validate-age>"));
-		
-		if (!player.hasPermission("k-validate-age")) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
-			return false;
-		}
-		
+	public boolean runCommand() throws KuffleCommandFalseException {
 		if (!GameManager.hasPlayer(args[0])) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("VALIDATE_PLAYER_AGE", Config.getLang()));	
-			
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		if (GameManager.getPlayerAge(args[0]).getNumber() == -1) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_ALREADY_FINISHED", Config.getLang()).replace("<#>", "<" + args[0] + ">"));
-			
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 
 		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("AGE_VALIDATED", Config.getLang()).replace("[#]", "[" + GameManager.getPlayerAge(args[0]).getName() + "]").replace("<#>", "<" + args[0] + ">"));

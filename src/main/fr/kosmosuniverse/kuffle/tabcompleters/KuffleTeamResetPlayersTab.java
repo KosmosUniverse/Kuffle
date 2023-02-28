@@ -1,40 +1,27 @@
 package main.fr.kosmosuniverse.kuffle.tabcompleters;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-
 import main.fr.kosmosuniverse.kuffle.core.Team;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 
 /**
  * 
  * @author KosmosUniverse
  *
  */
-public class KuffleTeamResetPlayersTab implements TabCompleter {
+public class KuffleTeamResetPlayersTab extends AKuffleTabCommand {
+	public KuffleTeamResetPlayersTab() {
+		super("k-team-reset-players", 1, 1);
+	}
+
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd, String msg, String[] args) {
-		if (!(sender instanceof Player)) {
-			return new ArrayList<>();
-		}
-		
-		if (args.length == 1) {
-			List<String> ret = new ArrayList<>();
-			
+	protected void runCommand() throws KuffleCommandFalseException {
+		if (currentArgs.length == 1) {
 			for (Team item : TeamManager.getInstance().getTeams()) {
 				if (item.getPlayers().size() != 0) {
 					ret.add(item.getName());	
 				}
 			}
-			
-			return ret;
 		}
-
-		return new ArrayList<>();
 	}
 }

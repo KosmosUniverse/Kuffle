@@ -3,9 +3,6 @@ package main.fr.kosmosuniverse.kuffle.commands;
 import java.security.SecureRandom;
 import java.util.List;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import main.fr.kosmosuniverse.kuffle.core.Config;
@@ -15,7 +12,6 @@ import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.Team;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
-import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 
 /**
  * 
@@ -28,25 +24,25 @@ public class KuffleTeamRandomPlayer extends AKuffleCommand {
 	}
 
 	@Override
-	public boolean runCommand() {
+	public boolean runCommand() throws KuffleCommandFalseException {
 		if (GameManager.getGames().size() > 0) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		if (GameManager.getGames().size() == 0) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("LIST_EMPTY", Config.getLang()));
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		if (calcMaxPlayers() < GameManager.getPlayerNames().size()) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_TOO_MANY_PLAYERS", Config.getLang()));
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		if (!checkEmptyTeams()) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_ALREADY_PLAYERS", Config.getLang()));
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		int cnt = 0;

@@ -48,7 +48,7 @@ class LangTest {
 			InputStream stream = new FileInputStream(new File(DATA_PATH + "langs_correct.json"));
 			String content = Utils.readFileContent(stream);
 			
-			assertTrue(FilesConformity.msgLangConformity(content),
+			assertTrue(FilesConformity.langConformity(content),
 					"langs_correct.json is not conform.");
 		} catch (IOException e) {
 			Utils.logException(e);
@@ -65,7 +65,7 @@ class LangTest {
 			InputStream stream = new FileInputStream(new File(DATA_PATH + "langs_invalid_lang.json"));
 			String content = Utils.readFileContent(stream);
 			
-			assertFalse(FilesConformity.msgLangConformity(content),
+			assertFalse(FilesConformity.langConformity(content),
 					"All langs used have to be in the first target langs !!!");
 		} catch (IOException e) {
 			Utils.logException(e);

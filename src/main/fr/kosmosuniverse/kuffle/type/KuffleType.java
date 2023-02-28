@@ -7,7 +7,7 @@ import java.util.Map;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.simple.parser.ParseException;
 
-import main.fr.kosmosuniverse.kuffle.commands.KuffleAbandon2;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleAbandon;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleAddDuringGame;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleAgeTargets;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleConfig;
@@ -111,7 +111,7 @@ public abstract class KuffleType {
 		LogManager.setupInstanceSystem(plugin.getDataFolder().getPath() + File.separator + "KuffleSystemlogs.txt");
 		
 		try {
-			LangManager.setupMsgsLangs(FilesConformity.getContent("msgs_langs.json"));
+			LangManager.setupMsgsLangs(FilesConformity.getRawContent("msgs_langs.json"));
 		} catch (IllegalArgumentException | ParseException e) {
 			Utils.logException(e);
 			LangManager.clear();
@@ -169,7 +169,7 @@ public abstract class KuffleType {
 		plugin.getCommand("k-set-type").setExecutor(kuffleSetType);
 		plugin.getCommand("k-lang").setExecutor(new KuffleLang());
 		plugin.getCommand("k-skip").setExecutor(new KuffleSkip());
-		plugin.getCommand("k-abandon").setExecutor(new KuffleAbandon2());
+		plugin.getCommand("k-abandon").setExecutor(new KuffleAbandon());
 		plugin.getCommand("k-adminskip").setExecutor(new KuffleSkip());
 		plugin.getCommand("k-validate").setExecutor(new KuffleValidate());
 		plugin.getCommand("k-validate-age").setExecutor(new KuffleValidate());

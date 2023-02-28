@@ -32,9 +32,9 @@ public abstract class AKuffleCommand implements CommandExecutor  {
 	protected Player player = null;
 	protected String[] args = null;
 	
-	public abstract boolean runCommand() throws KuffleCommandFalseException;
+	protected abstract boolean runCommand() throws KuffleCommandFalseException;
 	
-	public AKuffleCommand(String cmdName, Boolean typed,
+	protected AKuffleCommand(String cmdName, Boolean typed,
 			Boolean started, Integer aMin,
 			Integer aMax, boolean team) {
 		name = cmdName;

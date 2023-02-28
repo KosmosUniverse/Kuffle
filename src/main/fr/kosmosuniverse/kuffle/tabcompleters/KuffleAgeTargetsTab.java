@@ -3,25 +3,23 @@ package main.fr.kosmosuniverse.kuffle.tabcompleters;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-
 import main.fr.kosmosuniverse.kuffle.core.AgeManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 
 /**
  * 
  * @author KosmosUniverse
  *
  */
-public class KuffleAgeTargetsTab implements TabCompleter  {
+public class KuffleAgeTargetsTab extends AKuffleTabCommand {
 	private List<String> ages = new ArrayList<>();
 
 	/**
 	 * Constructor
 	 */
 	public KuffleAgeTargetsTab() {
+		super("k-agetargets", 0, 1);
+		
 		int max = AgeManager.getLastAgeIndex();
 		
 		for (int cnt = 0; cnt <= max; cnt++) {
@@ -39,15 +37,9 @@ public class KuffleAgeTargetsTab implements TabCompleter  {
 	}
 	
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd, String msg, String[] args) {
-		if (!(sender instanceof Player)) {
-			return new ArrayList<>();
+	protected void runCommand() throws KuffleCommandFalseException {
+		if (currentArgs.length == 1) {
+			ret.addAll(ages);
 		}
-		
-		if (args.length == 1) {
-			return ages;
-		}
-		
-		return new ArrayList<>();
 	}
 }

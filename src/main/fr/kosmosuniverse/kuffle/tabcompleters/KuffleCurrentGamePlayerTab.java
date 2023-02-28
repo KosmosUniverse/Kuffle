@@ -1,38 +1,26 @@
 package main.fr.kosmosuniverse.kuffle.tabcompleters;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 
 /**
  * 
  * @author KosmosUniverse
  *
  */
-public class KuffleCurrentGamePlayerTab implements TabCompleter {
+public class KuffleCurrentGamePlayerTab extends AKuffleTabCommand {
+	public KuffleCurrentGamePlayerTab() {
+		super(null, -1, -1);
+	}
+
 	@Override
-	public List<String> onTabComplete(CommandSender sender,  Command cmd, String msg, String[] args) {
-		if (!(sender instanceof Player))
-			return new ArrayList<>();
-		
-		if (GameManager.getGames() != null && args.length == 1) {
-			List<String> list = new ArrayList<>();
-			
+	protected void runCommand() throws KuffleCommandFalseException {
+		if (GameManager.getGames() != null && currentArgs.length == 1) {
 			GameManager.applyToPlayers(game -> {
 				if (!game.isLose() && !game.isFinished()) {
-					list.add(game.getPlayer().getName());	
+					ret.add(game.getPlayer().getName());	
 				}
 			});
-			
-			return list;
 		}
-		
-		return new ArrayList<>();
 	}
 }

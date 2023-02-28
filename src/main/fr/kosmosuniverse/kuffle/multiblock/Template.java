@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -84,5 +85,10 @@ public class Template extends AMultiblock {
 		}
 		
 		return inv;
+	}
+
+	@Override
+	public Location createLocation(Player player) {
+		return null;
 	}
 }

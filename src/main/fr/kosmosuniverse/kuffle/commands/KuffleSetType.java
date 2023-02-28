@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
 import main.fr.kosmosuniverse.kuffle.type.KuffleBlocks;
 import main.fr.kosmosuniverse.kuffle.type.KuffleItems;
@@ -81,19 +82,19 @@ public class KuffleSetType extends AKuffleCommand {
 	}
 
 	@Override
-	public boolean runCommand() {
+	public boolean runCommand() throws KuffleCommandFalseException {
 		KuffleType.Type type;
 		
 		try {
 			type = KuffleType.Type.valueOf(args[0].toUpperCase());
 		} catch (IllegalArgumentException e) {
 			LogManager.getInstanceSystem().writeMsg(player, "[ERROR] Unknown Kuffle Type");
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		if (KuffleMain.getInstance().getType().getType() == type) {
 			LogManager.getInstanceSystem().writeMsg(player, "Kuffle Type is already set as [" + type.name() + "]");
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		if (confirm == null) {				

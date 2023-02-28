@@ -1,21 +1,17 @@
 package main.fr.kosmosuniverse.kuffle.tabcompleters;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 /**
@@ -23,15 +19,18 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  * @author KosmosUniverse
  *
  */
-public class KuffleConfigTab implements TabCompleter {
+public class KuffleConfigTab extends AKuffleTabCommand {
 	private Map<String, List<String>> all = new HashMap<>();
 	
 	/**
 	 * Constructor that read file and fill display values map
 	 */
 	public KuffleConfigTab() {
+		super("k-config", -1, -1);
+		
 		try {
 			String rawValues = Utils.readFileContent(KuffleMain.getInstance().getResource("configValuesDisplay.json"));
+			
 			processStringsToList(rawValues);
 		} catch (IOException | ParseException e) {
 			Utils.logException(e);
@@ -59,28 +58,20 @@ public class KuffleConfigTab implements TabCompleter {
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd, String msg, String[] args) {
-		if (!(sender instanceof Player)) {
-			return new ArrayList<>();
-		}
-		
-		if (args.length == 0) {
-			return new ArrayList<>(all.keySet());
-		} else if (args.length % 2 == 1) {
-			List<String> ret = new ArrayList<>(all.keySet());
+	protected void runCommand() throws KuffleCommandFalseException {
+		if (currentArgs.length == 0) {
+			ret.addAll(all.keySet());
+		} else if (currentArgs.length % 2 == 1) {
+			ret.addAll(all.keySet());
 			
-			for (String arg : args) {
+			for (String arg : currentArgs) {
 				if (ret.contains(arg)) {
 					ret.remove(arg);
 				}
 			}
-			
-			return ret;
 		} else {
-			if (all.containsKey(args[args.length - 2])) {
-				return all.get(args[args.length - 2]);
-			} else {
-				return new ArrayList<>();	
+			if (all.containsKey(currentArgs[currentArgs.length - 2])) {
+				ret.addAll(all.get(currentArgs[currentArgs.length - 2]));
 			}
 		}
 	}

@@ -21,6 +21,7 @@ import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.ScoreManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
 import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
@@ -45,14 +46,14 @@ public class KuffleLoad extends AKuffleCommand {
 	}
 	
 	@Override
-	public boolean runCommand() {
+	public boolean runCommand() throws KuffleCommandFalseException {
 		if (GameManager.getGames() != null && GameManager.getGames().size() != 0) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("LIST_NOT_EMPTY", Config.getLang()) + ".");
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		if (Utils.fileExists(dataFolder.getPath(), GAME_FILE) && !loadGameFile(player)) {
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		try {
@@ -60,7 +61,7 @@ public class KuffleLoad extends AKuffleCommand {
 		} catch (IOException | ClassNotFoundException e) {
 			LogManager.getInstanceSystem().writeMsg(player, "Cannot load game, please contact an administrator.");
 			Utils.logException(e);
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		GameManager.updatePlayersHeads();

@@ -6,6 +6,7 @@ import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 
 public class KuffleAdminSkip extends AKuffleCommand {
 	public KuffleAdminSkip() {
@@ -28,10 +29,10 @@ public class KuffleAdminSkip extends AKuffleCommand {
 	}
 
 	@Override
-	public boolean runCommand() {
+	public boolean runCommand() throws KuffleCommandFalseException {
 		if (!GameManager.hasPlayer(player.getName())) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_PLAYING", Config.getLang()));
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 		
 		doSkip(player, name, args[0]);

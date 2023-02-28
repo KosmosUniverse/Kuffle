@@ -1,43 +1,34 @@
 package main.fr.kosmosuniverse.kuffle.tabcompleters;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 
 /**
  * 
  * @author KosmosUniverse
  *
  */
-public class KuffleTeamCreateTab implements TabCompleter {
+public class KuffleTeamCreateTab extends AKuffleTabCommand {
+	public KuffleTeamCreateTab() {
+		super("k-team-create", 1, 2);
+	}
+
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd, String msg, String[] args) {
-		if (!(sender instanceof Player)) {
-			return new ArrayList<>();
-		}
-		
-		if (args.length == 2) {
-			List<String> colorList = new ArrayList<>();
+	protected void runCommand() throws KuffleCommandFalseException {
+		if (currentArgs.length == 2) {
 			List<String> colorUsed = TeamManager.getInstance().getTeamColors();
 			
 			for (ChatColor item : ChatColor.values()) {
 				if (!colorUsed.contains(item.name())) {
-					colorList.add(item.name());	
+					ret.add(item.name());	
 				}
 			}
 			
 			colorUsed.clear();
-			
-			return colorList;
 		}
-
-		return new ArrayList<>();
 	}
 }

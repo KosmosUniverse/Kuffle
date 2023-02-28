@@ -8,7 +8,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -118,15 +121,21 @@ public class TeamManager {
 	 * @param teamName	The team in which the player will be added
 	 * @param player	The player to add
 	 */
-	public void affectPlayer(String teamName, Player player) {
+	public boolean affectPlayer(String teamName, Player player) {
+		boolean ret = false;
+		
 		if (teams != null) {
-			for (Team item : teams) {
-				if (item.getName().equals(teamName)) {
-					item.getPlayers().add(player);
-					break;
-				}
+			Optional<Team> team = teams.stream()
+					.filter(t -> t.getName().equals(teamName))
+					.findFirst();
+			
+			if (team.isPresent() && !team.get().hasPlayer(player.getName())) {
+				team.get().addPlayer(player);
+				ret = true;
 			}
 		}
+		
+		return ret;
 	}
 	
 	/**
@@ -137,11 +146,12 @@ public class TeamManager {
 	 */
 	public void removePlayer(String teamName, Player player) {
 		if (teams != null) {
-			for (Team item : teams) {
-				if (item.getName().equals(teamName)) {
-					item.getPlayers().remove(player);
-					break;
-				}
+			Optional<Team> team = teams.stream()
+					.filter(t -> t.getName().equals(teamName))
+					.findFirst();
+			
+			if (team.isPresent() && team.get().hasPlayer(player.getName())) {
+				team.get().removePlayer(player);
 			}
 		}
 	}
@@ -205,17 +215,15 @@ public class TeamManager {
 	 * @return The Team object that contains this player, null if player is not in a team
 	 */
 	public Team findTeamByPlayer(String player) {
-		if (teams != null) {
-			for (Team teamItem : teams) {
-				for (Player playerItem : teamItem.getPlayers()) {
-					if (playerItem.getDisplayName().equals(player)) {
-						return teamItem;
-					}
-				}
-			}
+		if (teams == null) {
+			return null;
 		}
+	
+		Optional<Team> item = teams.stream()
+				.filter(team -> team.hasPlayer(player))
+				.findFirst();
 		
-		return null;
+		return item.isPresent() ? item.get() : null;
 	}
 	
 	/**
@@ -340,15 +348,21 @@ public class TeamManager {
 	 * @return Team object found, null if not found
 	 */
 	public Team getTeam(String name) {
-		for (Team item : teams) {
-			if (item.getName().equals(name)) {
-				return item;
-			}
-		}
+		Optional<Team> item = teams.stream()
+				.filter(team -> team.getName().equals(name))
+				.findFirst();
 		
-		return null;
+		return item.isPresent() ? item.get() : null;
 	}
 	
+	/**
+	 * Checks if two players are in the same team
+	 * 
+	 * @param player1	The player based on the team search
+	 * @param player2	The team is check for this player
+	 * 
+	 * @return True if both players are in the same team, False instead
+	 */
 	public boolean sameTeam(String player1, String player2) {
 		Team team = findTeamByPlayer(player1);
 		boolean ret = false;
@@ -358,5 +372,20 @@ public class TeamManager {
 		}
 		
 		return ret;
+	}
+	
+	/**
+	 * Gets Teams name
+	 * 
+	 * @return a List of all teams name or null if teams is null
+	 */
+	public List<String> getTeamsName() {
+		if (teams == null) {
+			return Collections.emptyList();
+		}
+		
+		return teams.stream()
+				.map(team -> team.getName())
+				.collect(Collectors.toList());
 	}
 }

@@ -1,7 +1,5 @@
 package main.fr.kosmosuniverse.kuffle.commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import main.fr.kosmosuniverse.kuffle.core.Config;
@@ -29,7 +27,7 @@ public class KuffleConfig extends AKuffleCommand {
 		INVALID
 	}
 	
-	public KuffleConfig(String cmdName, Boolean typed, Boolean started, Integer aMin, Integer aMax, boolean team) {
+	public KuffleConfig() {
 		super("k-config", null, null, null, null, false);
 	}
 	
@@ -38,8 +36,6 @@ public class KuffleConfig extends AKuffleCommand {
 		if (args.length % 2 == 1) {
 			return false;
 		}
-		
-		Player player = (Player) sender;
 		
 		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-config>"));
 		

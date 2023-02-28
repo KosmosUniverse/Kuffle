@@ -1,6 +1,7 @@
 package main.fr.kosmosuniverse.kuffle.multiblock;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -12,7 +13,7 @@ import org.bukkit.Material;
  *
  */
 public class Level {
-	private double levelNb;
+	private int levelNb;
 	private int length;
 	private List<List<Pattern>> levelNS = new ArrayList<>();
 	private List<List<Pattern>> levelEW = null;
@@ -24,7 +25,7 @@ public class Level {
 	 * @param lNb	The level size
 	 * @param patterns	Pattern list
 	 */
-	public Level(double lNb, int levelLength, Pattern ... patterns) {
+	public Level(int lNb, int levelLength, Pattern ... patterns) {
 		levelNb = lNb;
 		length = levelLength;
 		List<Pattern> tmp = new ArrayList<>();
@@ -154,8 +155,21 @@ public class Level {
 	 * 
 	 * @return the @levelNb
 	 */
-	public double getLevelNb() {
+	public int getLevelNb() {
 		return (levelNb);
+	}
+	
+	/**
+	 * Gets Level Lists
+	 * 
+	 * @return levelNS list that contains level pattern
+	 */
+	public List<Material> getLevel() {
+		List<Material> compose = new ArrayList<>();
+		
+		levelNS.forEach(rows -> rows.forEach(item -> compose.add(item.getMaterial())));
+		
+		return Collections.unmodifiableList(compose);
 	}
 	
 	/**

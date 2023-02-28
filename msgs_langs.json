@@ -430,5 +430,89 @@
 	"XP_NEEDED" : {
 		"en" : "You need <#> xp levels to use this item.",
 		"fr" : "Vous devez avoir <#> niveau(x) d'xp pour utiliser cet objet."
+	},
+	"FC_LOAD_RESOURCE" : {
+		"en" : "Load %s from plugin resources.",
+		"fr" : "Chargement de %s depuis les ressources du plugin."
+	},
+	"FC_LOAD_FILE" : {
+		"en" : "Load  %s from custom plugin files.",
+		"fr" : "Chargement de %s depuis les fichiers modifiables du plugin."
+	},
+	"FC_LOAD_FAIL" : {
+		"en" : "File %s does not exist.",
+		"fr" : "Le fichier %s n'existe pas."
+	},
+	"FC_AGE_NUMBER" : {
+		"en" : "Age [%s] does not contain 'Number' Object.",
+		"fr" : "L'age [%s] ne contient pas d'objet 'Number'"
+	},
+	"FC_AGE_TEXTCOLOR" : {
+		"en" : "Age [%s] does not contain 'TextColor' Object.",
+		"fr" : "L'age [%s] ne contient pas d'objet 'TextColor'"
+	},
+	"FC_AGE_BOXCOLOR" : {
+		"en" : "Age [%s] does not contain 'BoxColor' Object.",
+		"fr" : "L'age [%s] ne contient pas d'objet 'BoxColor'"
+	},
+	"FC_AGE_TEXTCOLOR_ENUM" : {
+		"en" : "Age [%s] the color [%ss] is not in ChatColor Enum.",
+		"fr" : "L'age [%s] contient la couleur [%ss] qui n'existe pas dans ChatColor."
+	},
+	"FC_AGE_BOXCOLOR_ENUM" : {
+		"en" : "Age [%s] the box [%ss] is not in Material Enum.",
+		"fr" : "L'age [%s] contient la boite [%ss] qui n'existe pas dans Material."
+	},
+	"FC_LANG_EVERYWHERE" : {
+		"en" : "Lang [%s] is not everywhere in lang file.",
+		"fr" : "La langue [%s] n'est pas présente dans tous les objets du fichier."
+	},
+	"FC_REWARD_ENCHANT" : {
+		"en" : "Reward [%s] contains unknown enchant : [%ss].",
+		"fr" : "Le Reward [%s] contient un enchantement inconnu : [%ss]."
+	},
+	"FC_REWARD_EFFECT" : {
+		"en" : "Reward [%s] contains unknown effect : [%ss].",
+		"fr" : "Le Reward [%s] contient un effet inconnu : [%ss]."
+	},
+	"FC_LEVEL_NUMBER" : {
+		"en" : "Level [%s] does not contain 'Number' Object.",
+		"fr" : "Le niveau [%s] ne contient pas d'objet 'Number'"
+	},
+	"FC_LEVEL_SECONDS" : {
+		"en" : "Level [%s] does not contain 'Seconds' Object.",
+		"fr" : "Le niveau [%s] ne contient pas d'objet 'Seconds'"
+	},
+	"FC_LEVEL_LOSE" : {
+		"en" : "Level [%s] does not contain 'Lose' Object.",
+		"fr" : "Le niveau [%s] ne contient pas d'objet 'Lose'"
+	},
+	"FC_TARGET_VERSION" : {
+		"en" : "Target version [%s] does not exists in loaded versions.",
+		"fr" : "Pour les cibles, la version [%s] n'existe pas dans les version chargées."
+	},
+	"FC_TARGET_TYPE" : {
+		"en" : "Target type [%s] for version [%ss] is incorrect.",
+		"fr" : "Pour les cibles, le type [%s] de la version [%ss] est incorrecte."
+	},
+	"FC_TARGET_AGE" : {
+		"en" : "Target age [%s] for versoin [%sss] and type [%ss] does not exists in loaded ages.",
+		"fr" : "Pour les cibles, l'age [%s] de la version [%sss] et du type [%ss] n'existe pas dans les ages chargés."
+	},
+	"FC_TARGET_MATERIAL" : {
+		"en" : "Target [%s] of version [%ss] does not exists in Material Enum.",
+		"fr" : "La cible [%s] de la version [%ss] n'existe pas dans Material."
+	},
+	"FC_TARGET_MATERIAL_KEYS" : {
+		"en" : "Target [%s] of version [%ss] does not contain all keys.",
+		"fr" : "La cible [%s] de la version [%ss] ne contient pas toutes les clés."
+	},
+	"FC_TARGET_MATERIAL_SBTT" : {
+		"en" : "Target [%s] of version [%ss] has sbtt value [%sss] that is not boolean.",
+		"fr" : "La cible [%s] de la version [%ss] a une valeur de sbtt [%sss] qui n'est pas un booléen."
+	},
+	"FC_TARGET_MATERIAL_LANG" : {
+		"en" : "Target [%s] of version [%ss] has lang value [%sss] that is not loaded.",
+		"fr" : "La cible [%s] de la version [%ss] a une langue [%sss] qui n'est pas chargée."
 	}
 }
