@@ -182,6 +182,10 @@ public class FilesConformity {
 			ret = langConformity(content);
 		} else if (ret && file.equals("levels.json")) {
 			ret = levelsConformity(content);
+		} else if (ret && file.equals("targets.json")) {
+			ret = targetsConformity(content);
+		} else if (ret && file.equals("rewards.json")) {
+			ret = rewardsConformity(content);
 		}
 		
 		return ret;
