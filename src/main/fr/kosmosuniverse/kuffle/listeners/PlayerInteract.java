@@ -77,7 +77,7 @@ public class PlayerInteract implements Listener  {
 	 * @throws IllegalArgumentException  	NMS Exception
 	 * @throws IllegalAccessException 	 	NMS Exception
 	 */
-	protected boolean onLeftClickGeneric(PlayerInteractEvent event) throws KuffleEventNotUsableException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
+	protected boolean onRightClickGeneric(PlayerInteractEvent event) throws KuffleEventNotUsableException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
 		boolean ret = true;
 		
 		if (!KuffleMain.getInstance().isStarted()) {

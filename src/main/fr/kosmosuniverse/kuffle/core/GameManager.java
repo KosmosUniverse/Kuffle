@@ -36,7 +36,7 @@ import net.md_5.bungee.api.ChatColor;
  *
  */
 public class GameManager {
-	private static Map<String, Game> games = null;
+	private static Map<String, Game> games = new HashMap<>();
 	private static Map<String, Integer> playersRanks = null;
 	private static Inventory playersHeads = null;
 	
@@ -54,7 +54,6 @@ public class GameManager {
 	 * Setups the games map
 	 */
 	public static void setupGame() {
-		games = new HashMap<>();
 		playersRanks = new HashMap<>();
 		Utils.setupLists();
 	}
@@ -132,6 +131,10 @@ public class GameManager {
 		if (!games.containsKey(player)) {
 			ret = false;
 		} else {
+			if (Config.getTeam() && TeamManager.getInstance().isInTeam(player)) {
+				TeamManager.getInstance().removePlayer(TeamManager.getInstance().findTeamByPlayer(player).getName(), games.get(player).getPlayer());
+			}
+			
 			games.get(player).clear();
 			games.remove(player);
 			ret = true;

@@ -6,7 +6,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -92,7 +91,7 @@ public class Team implements Serializable {
 	 * @return the players list
 	 */
 	public List<Player> getPlayers() {
-		return Collections.unmodifiableList(players);
+		return players;
 	}
 	
 	/**

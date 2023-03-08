@@ -12,7 +12,7 @@ import main.fr.kosmosuniverse.kuffle.type.KuffleType;
  */
 public class KuffleSpawnMuliblock extends AKuffleCommand {
 	public KuffleSpawnMuliblock() {
-		super("k-spawn-multiblock", true, true, 1, 1, false);
+		super("k-spawn-multiblock", true, null, 1, 1, false);
 	}
 
 	@Override

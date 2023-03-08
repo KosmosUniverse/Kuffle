@@ -127,7 +127,7 @@ public class KuffleStart extends AKuffleCommand {
 	/**
 	 * Sets players spawn location after spreading if on in config
 	 * 
-	 * @param sender	The player thatmade start command
+	 * @param sender	The player that made start command
 	 * 
 	 * @return 20 is players have been spread, 0 instead
 	 */

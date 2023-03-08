@@ -25,7 +25,7 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  */
 public class TeamManager {
 	private static TeamManager instance;
-	private List<Team> teams;
+	private List<Team> teams = new ArrayList<>();;
 
 	public static synchronized TeamManager getInstance() {
 		if (instance == null) {
@@ -41,10 +41,6 @@ public class TeamManager {
 	 * @param name	Team name
 	 */
 	public void createTeam(String name) {
-		if (teams == null) {
-			teams = new ArrayList<>();
-		}
-		
 		teams.add(new Team(name));
 	}
 	
@@ -55,10 +51,6 @@ public class TeamManager {
 	 * @param color	Team color
 	 */
 	public void createTeam(String name, ChatColor color) {
-		if (teams == null) {
-			teams = new ArrayList<>();
-		}
-		
 		teams.add(new Team(name, color));
 	}
 	

@@ -1,5 +1,6 @@
 package main.fr.kosmosuniverse.kuffle.commands;
 
+import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
@@ -14,12 +15,12 @@ import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
  */
 public class KuffleTeamAffectPlayer extends AKuffleCommand {
 	public KuffleTeamAffectPlayer() {
-		super("k-team-affect-player", null, true, 2, 2, true);
+		super("k-team-affect-player", null, false, 2, 2, true);
 	}
 
 	@Override
 	public boolean runCommand() throws KuffleCommandFalseException {
-		if (GameManager.getGames().size() > 0) {
+		if (KuffleMain.getInstance().isStarted()) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
 			throw new KuffleCommandFalseException();
 		}

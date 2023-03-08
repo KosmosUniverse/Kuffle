@@ -37,10 +37,11 @@ public class BlocksPlayerInteract extends PlayerInteract implements Listener {
 		}
 		
 		try {
-			onLeftClickGeneric(event);
+			onRightClickGeneric(event);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException | ClassNotFoundException | KuffleEventNotUsableException e) {
 			Utils.logException(e);
+			return;
 		}
 	}
 }

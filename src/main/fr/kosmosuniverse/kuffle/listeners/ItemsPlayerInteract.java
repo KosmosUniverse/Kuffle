@@ -54,12 +54,13 @@ public class ItemsPlayerInteract extends PlayerInteract {
 		}
 		
 		try {
-			if (onLeftClickGeneric(event)) {
+			if (onRightClickGeneric(event)) {
 				return ;
 			}
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException | ClassNotFoundException | KuffleEventNotUsableException e) {
 			Utils.logException(e);
+			return ;
 		}
 		
 		Player player = event.getPlayer();

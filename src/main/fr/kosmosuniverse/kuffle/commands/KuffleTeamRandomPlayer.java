@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
+import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
@@ -25,7 +26,7 @@ public class KuffleTeamRandomPlayer extends AKuffleCommand {
 
 	@Override
 	public boolean runCommand() throws KuffleCommandFalseException {
-		if (GameManager.getGames().size() > 0) {
+		if (KuffleMain.getInstance().isStarted()) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
 			throw new KuffleCommandFalseException();
 		}
