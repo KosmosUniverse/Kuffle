@@ -32,6 +32,7 @@ public abstract class ACraft {
 	protected Recipe recipe;
 	protected String type;
 	protected Inventory inv;
+	protected boolean mandatory;
 	
 	protected ItemStack grayPane = ItemUtils.itemMaker(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, " ");
 	protected ItemStack limePane = ItemUtils.itemMaker(Material.LIME_STAINED_GLASS_PANE, 1, " ");
@@ -267,5 +268,9 @@ public abstract class ACraft {
 	 */
 	public Inventory getInventory() {
 		return inv;
+	}
+	
+	public boolean isMandatory() {
+		return mandatory;
 	}
 }

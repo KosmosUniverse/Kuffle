@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONObject;
@@ -92,7 +93,29 @@ public class CraftManager {
 	 */
 	public static void addCraft(ACraft craft) {
 		recipes.add(craft);
-		KuffleMain.getInstance().getServer().addRecipe(craft.getRecipe());
+	}
+	
+	/**
+	 * Adds Crafts recipe into Minecraft
+	 */
+	public static void enableCrafts() {
+		recipes.stream()
+			.filter(craft -> craft.isMandatory() || Config.getCrafts())
+			.forEach(craft -> {
+				KuffleMain.getInstance().getServer().addRecipe(craft.getRecipe());
+				GameManager.discoverCraft(new NamespacedKey(KuffleMain.getInstance(), craft.getName()));
+			});
+	}
+	
+	/**
+	 * Makes player discover currently used crafts
+	 * 
+	 * @param player	The player that have to discover crafts
+	 */
+	public static void discoverCrafts(Player player) {
+		recipes.stream()
+			.filter(craft -> craft.isMandatory() || Config.getCrafts())
+			.forEach(craft -> player.discoverRecipe(new NamespacedKey(KuffleMain.getInstance(), craft.getName())));
 	}
 	
 	/**
@@ -111,10 +134,26 @@ public class CraftManager {
 		
 		if (craft != null) {
 			recipes.remove(craft);
-			
-			NamespacedKey n = new NamespacedKey(KuffleMain.getInstance(), name);
-			KuffleMain.getInstance().getServer().removeRecipe(n);
 		}
+	}
+	
+	/**
+	 * Removes Crafts from Minecraft
+	 */
+	public static void disableCrafts() {
+		recipes.stream()
+		.filter(craft -> craft.isMandatory() || Config.getCrafts())
+		.forEach(craft -> {
+			NamespacedKey n = new NamespacedKey(KuffleMain.getInstance(), craft.getName());
+			GameManager.undiscoverCraft(n);
+			KuffleMain.getInstance().getServer().removeRecipe(n);
+		});
+	}
+	
+	public static void undiscoverCrafts(Player player) {
+		recipes.stream()
+			.filter(craft -> craft.isMandatory() || Config.getCrafts())
+			.forEach(craft -> player.undiscoverRecipe(new NamespacedKey(KuffleMain.getInstance(), craft.getName())));
 	}
 	
 	/**

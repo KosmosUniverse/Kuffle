@@ -18,6 +18,7 @@ public class CraftImpl extends ACraft {
 	 */
 	public CraftImpl(JSONObject jsonRecipe) {
 		name = jsonRecipe.get("Name").toString();
+		mandatory = Boolean.parseBoolean(jsonRecipe.get("Mandatory").toString().toUpperCase());
 		setupResult((JSONObject) jsonRecipe.get("Result"));
 		
 		Type type = Type.valueOf(jsonRecipe.get("Type").toString().toUpperCase());

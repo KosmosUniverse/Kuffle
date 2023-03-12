@@ -4,6 +4,7 @@ import org.bukkit.potion.PotionEffect;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.CraftManager;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
@@ -29,6 +30,7 @@ public class KuffleStop extends AKuffleCommand {
 			KuffleMain.getInstance().getType().clearSbtt();
 		}
 		
+		CraftManager.disableCrafts();
 		ScoreManager.clear();
 		
 		if (Config.getTeam()) {

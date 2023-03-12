@@ -18,6 +18,9 @@ public class GameLoop {
 	private int bestRank;
 	private int worstRank;
 
+	/**
+	 * Starts the runnable
+	 */
 	public void startRunnable() {
 		final SecureRandom random = new SecureRandom();
 		
@@ -54,6 +57,11 @@ public class GameLoop {
 		}.runTaskTimer(KuffleMain.getInstance(), 0, 20);
 	}
 	
+	/**
+	 * Check if the game is finished
+	 * 
+	 * @return True if finished, False instead
+	 */
 	private boolean checkFinished() {
 		int nb = GameManager.getNbPlayerStillPlaying();
 		boolean ret;
@@ -67,6 +75,11 @@ public class GameLoop {
 		return ret;
 	}
 	
+	/**
+	 * Run the game
+	 * 
+	 * @param random	The random generator
+	 */
 	private void runLoop(SecureRandom random) {
 		GameManager.applyToPlayers(game -> {
 			if (game.isLose()) {
@@ -91,9 +104,14 @@ public class GameLoop {
 		});
 	}
  	
+	/**
+	 * Check target for a specific player
+	 * 
+	 * @param game	The player game to check
+	 */
 	private void checkTargetStatus(Game game) {
 		if (game.getAge() == (Config.getLastAge().getNumber() + 1)) {
-			game.finish(bestRank);
+			GameManager.finish(game.getPlayer().getName(), bestRank);
 			bestRank = GameManager.getBestRank();
 			LogManager.getInstanceGame().logSystemMsg(game.getPlayer().getName() + " complete its game !");
 			GameManager.applyToPlayers(playerGame ->
@@ -110,6 +128,12 @@ public class GameLoop {
 		}
 	}
 	
+	/**
+	 * Update target display
+	 * 
+	 * @param game		The player Game to update
+	 * @param random	The random generator
+	 */
 	private void resetOrDisplayTarget(Game game, SecureRandom random) {
 		if (System.currentTimeMillis() - game.getTimeShuffle() > (game.getTime() * 60000)) {
 			game.getPlayer().sendMessage(ChatColor.RED + LangManager.getMsgLang("TARGET_NOT_FOUND", game.getConfigLang()));
@@ -133,6 +157,13 @@ public class GameLoop {
 		}
 	}
 	
+	/**
+	 * Check Block for kuffle Block type
+	 * 
+	 * @param game	The player game to check
+	 * 
+	 * @return True if the block is valid, False instead
+	 */
 	private boolean checkBlock(Game game) {
 		Location pPosition = game.getPlayer().getLocation().clone().add(0, -1, 0);
 		double pY = pPosition.getY();
@@ -156,6 +187,11 @@ public class GameLoop {
 		return false;
 	}
 
+	/**
+	 * Display target
+	 * 
+	 * @param tmpGame	The player game to check
+	 */
 	private void printTimerTarget(Game tmpGame) {
 		if (Config.getTeam() && tmpGame.getTargetCount() >= (Config.getTargetPerAge() + 1)) {
 			ActionBar.sendMessage(ChatColor.LIGHT_PURPLE + LangManager.getMsgLang("TEAM_WAIT", tmpGame.getConfigLang()), tmpGame.getPlayer());
@@ -191,6 +227,13 @@ public class GameLoop {
 		ActionBar.sendMessage(color + LangManager.getMsgLang("COUNTDOWN", tmpGame.getConfigLang()).replace("%i", "" + count).replace("%s", dispCuritem), tmpGame.getPlayer());
 	}
 
+	/**
+	 * Check if team mates have finished their age
+	 * 
+	 * @param tmpGame	The player game to check
+	 * 
+	 * @return True if all team player have finished their age, False instead
+	 */
 	private boolean checkTeamMates(Game tmpGame) {
 		boolean ret = true;
 		Team team = TeamManager.getInstance().findTeamByPlayer(tmpGame.getPlayer().getName());
@@ -208,6 +251,11 @@ public class GameLoop {
 		return ret;
 	}
 
+	/**
+	 * Generates a new target for a player by checking activated modes
+	 * 
+	 * @param tmpGame	The player game
+	 */
 	private void newItem(Game tmpGame) {
 		if (Config.getDouble()) {
 			String currentTarget = newItemSingle(tmpGame);
@@ -224,6 +272,13 @@ public class GameLoop {
 		GameManager.updatePlayerDisplayTarget(tmpGame);
 	}
 
+	/**
+	 * Generates a new target without checking modes
+	 * 
+	 * @param tmpGame	The player game
+	 * 
+	 * @return The target
+	 */
 	private String newItemSingle(Game tmpGame) {
 		if (tmpGame.getAlreadyGot().size() >= TargetManager.getAgeTargets(AgeManager.getAgeByNumber(tmpGame.getAge()).getName()).size()) {
 		tmpGame.resetAlreadyGot();
@@ -243,6 +298,9 @@ public class GameLoop {
 		return ret;
 	}
 
+	/**
+	 * Stops the runnable
+	 */
 	public void kill() {
 		if (runnable != null) {
 			runnable.cancel();

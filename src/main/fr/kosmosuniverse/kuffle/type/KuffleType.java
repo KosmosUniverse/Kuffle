@@ -32,6 +32,7 @@ import main.fr.kosmosuniverse.kuffle.commands.KuffleTeamRemovePlayer;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleTeamResetPlayers;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleTeamShow;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleValidate;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleValidateAge;
 import main.fr.kosmosuniverse.kuffle.core.AgeManager;
 import main.fr.kosmosuniverse.kuffle.core.Config;
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
@@ -148,8 +149,6 @@ public abstract class KuffleType {
 		
 		Config.setupConfig(plugin.getConfig());
 		
-		xpActivables = new HashMap<>();
-		
 		kuffleSetType = new KuffleSetType();
 		kuffleSetTypeTab = new KuffleSetTypeTab();
 		
@@ -172,7 +171,7 @@ public abstract class KuffleType {
 		plugin.getCommand("k-abandon").setExecutor(new KuffleAbandon());
 		plugin.getCommand("k-adminskip").setExecutor(new KuffleSkip());
 		plugin.getCommand("k-validate").setExecutor(new KuffleValidate());
-		plugin.getCommand("k-validate-age").setExecutor(new KuffleValidate());
+		plugin.getCommand("k-validate-age").setExecutor(new KuffleValidateAge());
 		plugin.getCommand("k-players").setExecutor(new KufflePlayers());
 		plugin.getCommand("k-add-during-game").setExecutor(new KuffleAddDuringGame());
 
@@ -239,6 +238,8 @@ public abstract class KuffleType {
 			throw new KuffleFileLoadException("Crafts load failed !");
 		}
 		
+		xpActivables = new HashMap<>();
+		
 		ScoreManager.setupScores(getType());
 		GameManager.setupGame();
 		
@@ -259,6 +260,10 @@ public abstract class KuffleType {
 	 */
 	public final void clear() {
 		clearType();
+		
+		if (xpActivables != null) {
+			xpActivables.clear();
+		}
 		
 		if (kuffleAgeTargetsTab != null) {
 			kuffleAgeTargetsTab.clear();

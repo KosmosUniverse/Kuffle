@@ -150,7 +150,7 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onPlaceShulkerGeneric(BlockPlaceEvent event) {
-		if (!KuffleMain.getInstance().isStarted() || !Config.getPassiveAll()) {
+		if (!KuffleMain.getInstance().isStarted() || (!Config.getPassiveAll() && !Config.getPassiveTeam())) {
 			return ;
 		}
 		
@@ -174,7 +174,8 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onInteractShulkerGeneric(PlayerInteractEvent event) {
-		if (!KuffleMain.getInstance().isStarted() || !Config.getPassiveAll()) {
+		if (!KuffleMain.getInstance().isStarted() ||
+				(!Config.getPassiveAll() && !Config.getPassiveTeam())) {
 			return ;
 		}
 		
@@ -182,14 +183,14 @@ public class PlayerInteract implements Listener  {
 		Action action = event.getAction();
 		Block block = event.getClickedBlock();
 		
-		if (action != Action.RIGHT_CLICK_BLOCK || block == null) {
+		if (action != Action.RIGHT_CLICK_BLOCK || block == null || !block.getType().toString().toLowerCase().contains("shulker_box")) {
 			return ;
 		}
 		
 		String placerName = shulkers.get(block.getLocation());
 		
-		if (!(GameManager.hasPlayer(player.getName()) && (placerName.equals(player.getName()) ||
-				(Config.getTeam() && TeamManager.getInstance().sameTeam(placerName, player.getName()))))) {
+		if (placerName != null && !placerName.equals(player.getName()) && (Config.getPassiveAll() ||
+				(Config.getTeam() && Config.getPassiveTeam() &&	!TeamManager.getInstance().sameTeam(placerName, player.getName())))) {
 			event.setCancelled(true);
 		}
 	}
@@ -201,7 +202,8 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onBreakShulkerGeneric(BlockBreakEvent event) {
-		if (!KuffleMain.getInstance().isStarted() || !Config.getPassiveAll()) {
+		if (!KuffleMain.getInstance().isStarted() ||
+				(!Config.getPassiveAll() && !Config.getPassiveTeam())) {
 			return ;
 		}
 		
@@ -215,9 +217,11 @@ public class PlayerInteract implements Listener  {
 		
 		String placerName = shulkers.get(location);
 		
-		if (GameManager.hasPlayer(player.getName()) && (placerName.equals(player.getName()) ||
-				(Config.getTeam() && TeamManager.getInstance().sameTeam(placerName, player.getName())))) {
+		if (placerName != null && !placerName.equals(player.getName()) && (Config.getPassiveAll() ||
+				(Config.getTeam() && Config.getPassiveTeam() &&	!TeamManager.getInstance().sameTeam(placerName, player.getName())))) {
 			event.setCancelled(true);
+		} else {
+			shulkers.remove(location);	
 		}
 	}
 	
@@ -294,14 +298,11 @@ public class PlayerInteract implements Listener  {
 			return ;
 		}
 		
-		if (Config.getPassiveAll()) {
+		if (Config.getPassiveAll() || (Config.getPassiveTeam() && Config.getTeam() &&
+						!TeamManager.getInstance().sameTeam(damager.getName(), damagee.getName()))) {
 			event.setCancelled(true);
 			
 			return ;
-		}
-		
-		if (Config.getPassiveTeam() && Config.getTeam() && TeamManager.getInstance().sameTeam(damager.getName(), damagee.getName())) {
-			event.setCancelled(true);
 		}
 	}
 	

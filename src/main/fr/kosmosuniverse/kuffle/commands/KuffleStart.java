@@ -12,6 +12,7 @@ import org.bukkit.potion.PotionEffectType;
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.core.ActionBar;
 import main.fr.kosmosuniverse.kuffle.core.Config;
+import main.fr.kosmosuniverse.kuffle.core.CraftManager;
 import main.fr.kosmosuniverse.kuffle.core.GameLoop;
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
@@ -86,10 +87,12 @@ public class KuffleStart extends AKuffleCommand {
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.GOLD + "4" + ChatColor.RESET, game.getPlayer()))
 		, 40 + spread);
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			GameManager.applyToPlayers(game ->
-				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "3" + ChatColor.RESET, game.getPlayer()))
-		, 60 + spread);
+				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.YELLOW + "3" + ChatColor.RESET, game.getPlayer()));
+			
+			CraftManager.enableCrafts();
+		}, 60 + spread);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
 			GameManager.applyToPlayers(game ->
@@ -123,17 +126,18 @@ public class KuffleStart extends AKuffleCommand {
 
 		return true;
 	}
-	
+
 	/**
 	 * Sets players spawn location after spreading if on in config
 	 * 
-	 * @param sender	The player that made start command
+	 * @param sender The player that made start command
 	 * 
 	 * @return 20 is players have been spread, 0 instead
 	 */
 	private int spreadAndSpawn(Player sender) {
 		if (Config.getSpread()) {
-			SpreadPlayer.spreadPlayers(sender, Config.getSpreadDistance(), Config.getSpreadRadius(), GameManager.getPlayerList());
+			SpreadPlayer.spreadPlayers(sender, Config.getSpreadDistance(), Config.getSpreadRadius(),
+					GameManager.getPlayerList());
 
 			GameManager.applyToPlayers(game -> {
 				if (Config.getTeam()) {
@@ -156,18 +160,18 @@ public class KuffleStart extends AKuffleCommand {
 
 				if (((Location) spawnLoc).getY() < 0) {
 					Location tmp = game.getPlayer().getLocation().getWorld().getSpawnLocation();
-					
+
 					((Location) spawnLoc).setWorld(tmp.getWorld());
 					((Location) spawnLoc).setX(tmp.getX());
 					((Location) spawnLoc).setY(tmp.getY());
 					((Location) spawnLoc).setZ(tmp.getZ());
-					
+
 					((Location) spawnLoc).subtract(0, 1, 0).getBlock().setType(Material.BEDROCK);
 				}
 
 				game.setSpawnLoc(((Location) spawnLoc));
 			});
-			
+
 			return 0;
 		}
 	}

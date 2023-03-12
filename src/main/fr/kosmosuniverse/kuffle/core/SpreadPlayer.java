@@ -44,7 +44,7 @@ public class SpreadPlayer {
         if (players == null) {
             spreadSize = 15;
         } else {
-        	spreadSize = teams == null ? players.size() : teams.size();
+        	spreadSize = Config.getTeam() ? teams.size() : players.size();
         }
         
         double angle = 360.0 / spreadSize;
@@ -54,8 +54,8 @@ public class SpreadPlayer {
         
         List<Location> locations = getSpreadLocations(radius, angle, spreadSize, sender.getLocation());
         
-        if ((teams != null && locations.size() != teams.size()) ||
-        		(teams == null && players != null && locations.size() != players.size())) {
+        if ((Config.getTeam() && locations.size() != teams.size()) ||
+        		(!Config.getTeam() && players != null && locations.size() != players.size())) {
         	return ;
         }
         
@@ -133,7 +133,7 @@ public class SpreadPlayer {
         	return ;
         }
     	
-    	if (teams != null) {
+    	if (Config.getTeam()) {
     		for (int cnt = 0; cnt < teams.size(); cnt++) {
     			Location location = locations.get(cnt);
     			

@@ -403,9 +403,9 @@ public class Config implements Serializable {
 		sb.append("" + ChatColor.BLUE).append("  - Spreadplayer min radius: " + ChatColor.GOLD).append(configValues.getSpreadRadius()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Rewards: " + ChatColor.GOLD).append(configValues.isRewards()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Skip: " + ChatColor.GOLD).append(configValues.isSkip()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("  - Not before : " + ChatColor.GOLD).append(AgeManager.getAgeByNumber(configValues.getSkipAge()).getName()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Crafts: " + ChatColor.GOLD).append(configValues.isCrafts()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Nb target per age: " + ChatColor.GOLD).append(configValues.getTargetPerAge()).append("\n");
-		sb.append("" + ChatColor.BLUE).append("First Age for Skipping: " + ChatColor.GOLD).append(AgeManager.getAgeByNumber(configValues.getSkipAge()).getName()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Last age: " + ChatColor.GOLD).append(AgeManager.getAgeByNumber(configValues.getLastAge()).getName()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Start duration: " + ChatColor.GOLD).append(configValues.getStartTime()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Added duration: " + ChatColor.GOLD).append(configValues.getAddedTime()).append("\n");

@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,7 +23,6 @@ import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LangManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
 import main.fr.kosmosuniverse.kuffle.core.TeamManager;
-import main.fr.kosmosuniverse.kuffle.crafts.ACraft;
 import main.fr.kosmosuniverse.kuffle.utils.CommandUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
@@ -59,10 +57,7 @@ public class PlayerEvents implements Listener {
 			return;
 		}
 		
-		for (ACraft item : CraftManager.getRecipeList()) {
-			player.discoverRecipe(new NamespacedKey(KuffleMain.getInstance(), item.getName()));
-		}
-		
+		CraftManager.discoverCrafts(player);		
 		GameManager.sendMsgToPlayers(LangManager.getMsgLang("GAME_RELOADED", GameManager.getPlayerLang(player.getName())).replace("%s", player.getName()));
 		LogManager.getInstanceSystem().logMsg(KuffleMain.getInstance().getName(), "<" + player.getName() + "> game is reloaded !");
 	}
@@ -80,10 +75,7 @@ public class PlayerEvents implements Listener {
 			return ;
 		}
 		
-		for (ACraft item : CraftManager.getRecipeList()) {
-			player.undiscoverRecipe(new NamespacedKey(KuffleMain.getInstance(), item.getName()));
-		}
-		
+		CraftManager.undiscoverCrafts(player);
 		GameManager.savePlayer(KuffleMain.getInstance().getDataFolder().getPath(), player.getName());
 				
 		GameManager.stopPlayer(player.getName());

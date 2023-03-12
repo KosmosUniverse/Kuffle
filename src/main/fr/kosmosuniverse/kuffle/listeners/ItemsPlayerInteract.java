@@ -59,7 +59,6 @@ public class ItemsPlayerInteract extends PlayerInteract {
 			}
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException | ClassNotFoundException | KuffleEventNotUsableException e) {
-			Utils.logException(e);
 			return ;
 		}
 		
@@ -114,7 +113,6 @@ public class ItemsPlayerInteract extends PlayerInteract {
 	 */
 	private boolean checkXp(Player player, int xpMin) {
 		boolean ret = false;
-		
 		if (player.getLevel() < xpMin) {
 			ret = false;
 			player.sendMessage(LangManager.getMsgLang("XP_NEEDED", GameManager.getPlayerLang(player.getName())).replace("<#>", "" + xpMin));
@@ -143,7 +141,6 @@ public class ItemsPlayerInteract extends PlayerInteract {
 		int xpAmount = KuffleMain.getInstance().getType().getXpActivable(END_TELEPORTER);
 		xpAmount = (xpAmount - 1) < 1 ? 1 : (xpAmount - 1);
 		KuffleMain.getInstance().getType().setXpActivable(END_TELEPORTER, xpAmount);
-		
 	}
 
 	/**

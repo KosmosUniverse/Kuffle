@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -314,13 +315,12 @@ public class GameManager {
 	 * @throws ClassNotFoundException 
 	 */
 	public static void loadPlayerGame(String path, Player player) throws IOException, ClassNotFoundException {
-		
 		loadPlayer(path, player);
 		
 		String playerName = player.getName();
 		Game game = games.get(playerName);
 		
-		updatePlayerDisplayTarget(game);		
+		updatePlayerDisplayTarget(game);
 		updatePlayersHeads();
 
 		if (game.isDead()) {
@@ -400,7 +400,10 @@ public class GameManager {
 	 */
 	public static void nextPlayerAge(String player) {
 		games.get(player).nextPlayerAge();
-		games.forEach((playerName, playerGame) -> playerGame.getPlayer().sendMessage(LangManager.getMsgLang("AGE_MOVED", playerGame.getConfigLang()).replace("<#>", ChatColor.BLUE + "<" + ChatColor.GOLD + playerName + ChatColor.BLUE + ">").replace("<##>", "<" + AgeManager.getAgeByNumber(playerGame.getAge()).getColor() + AgeManager.getAgeByNumber(playerGame.getAge()).getName().replace("_Age", "") + ChatColor.BLUE + ">")));
+		
+		if (games.get(player).getAge() < (Config.getLastAge().getNumber() + 1)) {
+			games.forEach((playerName, playerGame) -> playerGame.getPlayer().sendMessage(LangManager.getMsgLang("AGE_MOVED", playerGame.getConfigLang()).replace("<#>", ChatColor.BLUE + "<" + ChatColor.GOLD + player + ChatColor.BLUE + ">").replace("<##>", "<" + AgeManager.getAgeByNumber(games.get(player).getAge()).getColor() + AgeManager.getAgeByNumber(games.get(player).getAge()).getName().replace("_Age", "") + ChatColor.BLUE + ">")));
+		}
 	}
 	
 	/**
@@ -409,15 +412,19 @@ public class GameManager {
 	 * @param playerName	The name of player that finished
 	 * @param rank			The player rank
 	 */
-	public void finish(String playerName, int rank) {
+	public static void finish(String playerName, int rank) {
 		if (Config.getTeam()) {
 			int tmpRank;
 
 			if ((tmpRank = checkTeamMateRank(games.get(playerName).getTeamName())) != -1) {
 				rank = tmpRank;
 			}
+			
+			playersRanks.put(games.get(playerName).getTeamName(), rank);
+		} else {
+			playersRanks.put(playerName, rank);
 		}
-		playersRanks.put(playerName, rank);
+		
 		games.get(playerName).finish(rank);
 		
 		updatePlayersHeadData(playerName, null);
@@ -678,9 +685,25 @@ public class GameManager {
 	 * @return the number of player that are still playing
 	 */
 	public static int getNbPlayerStillPlaying() {
-		return GameManager.games.size() - (int) games.entrySet().stream()
-				.filter(entry -> entry.getValue().isFinished())
-				.count();
+		if (!Config.getTeam()) {
+			return GameManager.games.size() - (int) games.entrySet().stream()
+					.filter(entry -> entry.getValue().isFinished())
+					.count();
+		} else {
+			List<String> teams = new ArrayList<>();
+			
+			for (String playerName : games.keySet()) {
+				if (games.get(playerName).isFinished() && !teams.contains(games.get(playerName).getTeamName())) {
+					teams.add(games.get(playerName).getTeamName());
+				}
+			}
+			
+			int ret = TeamManager.getInstance().getTeams().size() - teams.size();
+			
+			teams.clear();
+			
+			return ret;
+		}
 	}
 	
 	/**
@@ -695,9 +718,11 @@ public class GameManager {
 		
 		if (getNbPlayerStillPlaying() == 1) {
 			games.entrySet().stream()
-			.filter(entry -> entry.getValue().isFinished())
-			.findFirst()
-			.ifPresent(entry -> entry.getValue().finish(rank));
+				.filter(entry -> !entry.getValue().isFinished())
+				.forEach(entry -> {
+					entry.getValue().setLose(true);
+					entry.getValue().finish(rank);
+				});
 			
 			ret = true;
 		}
@@ -1006,5 +1031,23 @@ public class GameManager {
 	 */
 	public static Map<String, Integer> getRanks() {
 		return playersRanks;
+	}
+	
+	/**
+	 * Makes player discover a craft
+	 * 
+	 * @param craft	The craft that player will discover
+	 */
+	public static void discoverCraft(NamespacedKey craft) {
+		games.forEach((k, v) -> v.getPlayer().discoverRecipe(craft));
+	}
+		
+	/**
+	 * Makes player forget this craft
+	 * 
+	 * @param craft	The craft that player has to forgot
+	 */
+	public static void undiscoverCraft(NamespacedKey craft) {
+		games.forEach((k, v) -> v.getPlayer().undiscoverRecipe(craft));
 	}
 }
