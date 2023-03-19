@@ -301,8 +301,6 @@ public class PlayerInteract implements Listener  {
 		if (Config.getPassiveAll() || (Config.getPassiveTeam() && Config.getTeam() &&
 						!TeamManager.getInstance().sameTeam(damager.getName(), damagee.getName()))) {
 			event.setCancelled(true);
-			
-			return ;
 		}
 	}
 	

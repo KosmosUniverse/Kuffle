@@ -115,7 +115,22 @@ public class CraftManager {
 	public static void discoverCrafts(Player player) {
 		recipes.stream()
 			.filter(craft -> craft.isMandatory() || Config.getCrafts())
-			.forEach(craft -> player.discoverRecipe(new NamespacedKey(KuffleMain.getInstance(), craft.getName())));
+			.forEach(craft -> player.discoverRecipe(craft.getKey()));
+	}
+	
+	/**
+	 * Discover crafts for all current players
+	 */
+	public static void discoverCrafts() {
+		for (ACraft craft : recipes) {
+			if (craft.isMandatory() || Config.getCrafts()) {
+				GameManager.discoverCraft(craft.getKey());
+			}
+		}
+	}
+	
+	public static List<NamespacedKey> getRecipesKey() {
+		return recipes.stream().map(craft -> craft.getKey()).collect(Collectors.toList());
 	}
 	
 	/**
@@ -143,17 +158,29 @@ public class CraftManager {
 	public static void disableCrafts() {
 		recipes.stream()
 		.filter(craft -> craft.isMandatory() || Config.getCrafts())
-		.forEach(craft -> {
-			NamespacedKey n = new NamespacedKey(KuffleMain.getInstance(), craft.getName());
-			GameManager.undiscoverCraft(n);
-			KuffleMain.getInstance().getServer().removeRecipe(n);
-		});
+		.forEach(craft -> KuffleMain.getInstance().getServer().removeRecipe(craft.getKey()));
 	}
 	
+	/**
+	 * Makes a player undiscover recipes
+	 * 
+	 * @param player	The player that have to undiscover recipe
+	 */
 	public static void undiscoverCrafts(Player player) {
 		recipes.stream()
 			.filter(craft -> craft.isMandatory() || Config.getCrafts())
-			.forEach(craft -> player.undiscoverRecipe(new NamespacedKey(KuffleMain.getInstance(), craft.getName())));
+			.forEach(craft -> player.undiscoverRecipe(craft.getKey()));
+	}
+	
+	/**
+	 * Undiscover crafts for all current players
+	 */
+	public static void undiscoverCrafts() {
+		for (ACraft craft : recipes) {
+			if (craft.isMandatory() || Config.getCrafts()) {
+				GameManager.undiscoverCraft(craft.getKey());
+			}
+		}
 	}
 	
 	/**
@@ -278,6 +305,26 @@ public class CraftManager {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Gets ACraft object by its name
+	 * 
+	 * @param name	the craft name
+	 * 
+	 * @return the found ACraft object, null instead
+	 */
+	public static ACraft getCraftByName(String name) {
+		ACraft ret = null;
+		
+		for (ACraft craft : recipes) {
+			if (craft.getName().equals(name)) {
+				ret = craft;
+				break;
+			}
+		}
+		
+		return ret;
 	}
 	
 	/**

@@ -25,7 +25,7 @@ import main.fr.kosmosuniverse.kuffle.utils.Utils;
  */
 public class TeamManager {
 	private static TeamManager instance;
-	private List<Team> teams = new ArrayList<>();;
+	private List<Team> teams = new ArrayList<>();
 
 	public static synchronized TeamManager getInstance() {
 		if (instance == null) {

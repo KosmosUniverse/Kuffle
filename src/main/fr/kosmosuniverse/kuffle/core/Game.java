@@ -49,6 +49,7 @@ public class Game implements Serializable {
 	private boolean finished;
 	private boolean lose;
 	private boolean dead;
+	private boolean discovered;
 
 	private int time;
 	private int targetCount = 1;
@@ -93,6 +94,7 @@ public class Game implements Serializable {
 		finished = false;
 		lose = false;
 		dead = false;
+		discovered = false;
 	}
 	
 	/**
@@ -725,6 +727,13 @@ public class Game implements Serializable {
 	public boolean isDead() {
 		return dead;
 	}
+	
+	/**
+	 * @return the discovery state
+	 */
+	public boolean hasDiscovered() {
+		return discovered;
+	}
 
 	/**
 	 * @return the time
@@ -930,6 +939,13 @@ public class Game implements Serializable {
 	 */
 	public void setDead(boolean dead) {
 		this.dead = dead;
+	}
+	
+	/**
+	 * @param discovered	the discovery state to set
+	 */
+	public void setDiscovered(boolean discovered) {
+		this.discovered = discovered;
 	}
 
 	/**

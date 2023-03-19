@@ -21,16 +21,19 @@ public class Template extends ACraft {
 		name = craftName;
 		item = ItemUtils.itemMaker(Material.EMERALD, 1, ChatColor.DARK_RED + name, "Single Use " + name.replace("Template", "") + " Template.", "Right click to validate your item.");
 		
-		recipe = new ShapelessRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item);
+		ShapelessRecipe r = new ShapelessRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item);
 		
 		setupInventoryBase(Type.WORKBENCH);
 		
 		List<ItemStack> ings = new ArrayList<>();
 		
 		for (int cnt = 0; cnt < Config.getSBTTAmount(); cnt++) {
-			((ShapelessRecipe) recipe).addIngredient(compose.get(cnt));
+			r.addIngredient(compose.get(cnt));
 			ings.add(new ItemStack(compose.get(cnt)));
 		}
+		
+		key = r.getKey();
+		recipe = r;
 		
 		addInvItems(ings);
 	}

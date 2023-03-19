@@ -33,6 +33,7 @@ public abstract class ACraft {
 	protected String type;
 	protected Inventory inv;
 	protected boolean mandatory;
+	protected NamespacedKey key;
 	
 	protected ItemStack grayPane = ItemUtils.itemMaker(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, " ");
 	protected ItemStack limePane = ItemUtils.itemMaker(Material.LIME_STAINED_GLASS_PANE, 1, " ");
@@ -108,7 +109,10 @@ public abstract class ACraft {
 		type = "STONECUTTER";
 		Material ing = Material.valueOf(ingredients.get(ingredients.keySet().toArray()[0]).get("Type"));
 		
-		recipe = new StonecuttingRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item, ing);
+		StonecuttingRecipe r = new StonecuttingRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item, ing);
+		
+		key = r.getKey();
+		recipe = r;
 		
 		ings.add(new ItemStack(ing));
 		
@@ -120,19 +124,23 @@ public abstract class ACraft {
 		String[] shapeRows = shape.split("-");
 		
 		type = "SHAPED";
-		recipe = new ShapedRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item);
-		((ShapedRecipe) recipe).shape(shapeRows[0], shapeRows[1], shapeRows[2]);
+		
+		ShapedRecipe r = new ShapedRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item);
+		r.shape(shapeRows[0], shapeRows[1], shapeRows[2]);
 		
 		for (String line : shapeRows) {
 			for (char c : line.toCharArray()) {
-				setupIngredients(recipe, ingredients, c, ings);
+				setupIngredients(r, ingredients, c, ings);
 			}
 		}
+		
+		key = r.getKey();
+		recipe = r;
 		
 		return ings;
 	}
 	
-	private static void setupIngredients(Recipe recipe, Map<String, Map<String, String>> ingredients, char c, List<ItemStack> ings) {
+	private static void setupIngredients(ShapedRecipe recipe, Map<String, Map<String, String>> ingredients, char c, List<ItemStack> ings) {
 		if (ingredients.containsKey("" + c)) {
 			String ingType = ingredients.get("" + c).get("Type").toUpperCase();
 			
@@ -145,10 +153,10 @@ public abstract class ACraft {
 				
 				MaterialChoice mc = new MaterialChoice(list);
 
-				((ShapedRecipe) recipe).setIngredient(c, mc);
+				recipe.setIngredient(c, mc);
 				ings.add(ItemUtils.itemMaker(list.get(0), 1, ingredients.get("" + c).get("Name")));
 			} else {
-				((ShapedRecipe) recipe).setIngredient(c, Material.valueOf(ingType));
+				recipe.setIngredient(c, Material.valueOf(ingType));
 				ings.add(new ItemStack(Material.valueOf(ingType)));
 			}
 		} else {
@@ -160,7 +168,7 @@ public abstract class ACraft {
 		List<ItemStack> ings = new ArrayList<>();
 		
 		type = "SHAPELESS";
-		recipe = new ShapelessRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item);
+		ShapelessRecipe r = new ShapelessRecipe(new NamespacedKey(KuffleMain.getInstance(), name), item);
 		
 		ingredients.forEach((c, m) -> {
 			String ingType = m.get("Type").toUpperCase();
@@ -174,13 +182,16 @@ public abstract class ACraft {
 				
 				MaterialChoice mc = new MaterialChoice(list);
 
-				((ShapelessRecipe) recipe).addIngredient(mc);
+				r.addIngredient(mc);
 				ings.add(ItemUtils.itemMaker(list.get(0), 1, m.get("Name")));
 			} else {
-				((ShapelessRecipe) recipe).addIngredient(Material.valueOf(ingType));
+				r.addIngredient(Material.valueOf(ingType));
 				ings.add(new ItemStack(Material.valueOf(ingType)));
 			}
 		});
+		
+		key = r.getKey();
+		recipe = r;
 		
 		return ings;
 	}
@@ -270,7 +281,21 @@ public abstract class ACraft {
 		return inv;
 	}
 	
+	/**
+	 * Get the mandatory property of the craft
+	 * 
+	 * @return the mandatory state
+	 */
 	public boolean isMandatory() {
 		return mandatory;
+	}
+	
+	/**
+	 * Get the recipe NamespacedKey
+	 * 
+	 * @return the key
+	 */
+	public NamespacedKey getKey() {
+		return key;
 	}
 }
