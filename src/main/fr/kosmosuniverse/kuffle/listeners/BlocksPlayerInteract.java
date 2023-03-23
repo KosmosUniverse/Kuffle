@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.exceptions.KuffleEventNotUsableException;
 import main.fr.kosmosuniverse.kuffle.type.KuffleType;
+import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
 /**
  * 
@@ -38,7 +39,10 @@ public class BlocksPlayerInteract extends PlayerInteract implements Listener {
 		try {
 			onRightClickGeneric(event);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
-				| SecurityException | ClassNotFoundException | KuffleEventNotUsableException e) {
+				| SecurityException | ClassNotFoundException e) {
+			Utils.logException(e);
+		} catch (KuffleEventNotUsableException e) {
+			//Generic Method not really used for real exceptions
 		}
 	}
 }

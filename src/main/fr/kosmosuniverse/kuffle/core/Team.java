@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -34,12 +35,13 @@ public class Team implements Serializable {
 	 * 
 	 * @param teamName	The team name
 	 */
-	public Team(String teamName) {
-		ChatColor[] colors = ChatColor.values();
+	public Team(String teamName, List<ChatColor> usedColors) {
 		SecureRandom random = new SecureRandom();
+		List<ChatColor> colors = Arrays.asList(ChatColor.values());
+		colors.removeAll(usedColors);
 		
 		name = teamName;
-		color = colors[random.nextInt(colors.length)];
+		color = colors.get(random.nextInt(colors.size()));
 	}
 	
 	/**

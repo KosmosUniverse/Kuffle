@@ -1,5 +1,5 @@
 name: Kuffle
-version: 2.3
+version: 2.4
 author: KosmosUniverse
 main: main.fr.kosmosuniverse.kuffle.KuffleMain
 api-version: 1.15
@@ -88,6 +88,9 @@ commands:
       usage: /<command> <Kuffle Type>
       description: command to set the plugin game type
       permission: inferno.flagrate
+   k-spectate:
+      usage: /<command> [display | reset]
+      description: command to toggle your spectate state (no args) and display/reset spectators
    k-team-show:
       usage: /<command> [TeamName]
       description: command to show all or one team

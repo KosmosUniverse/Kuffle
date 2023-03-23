@@ -15,8 +15,10 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -28,6 +30,7 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.json.simple.JSONObject;
 
+import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 
@@ -40,6 +43,7 @@ public class GameManager {
 	private static Map<String, Game> games = new HashMap<>();
 	private static Map<String, Integer> playersRanks = null;
 	private static Inventory playersHeads = null;
+	private static List<Player> spectators = new ArrayList<>();
 	
 	
 	/**
@@ -75,6 +79,10 @@ public class GameManager {
 		if (playersHeads != null) {
 			playersHeads.clear();
 		}
+		
+		if (spectators != null) {
+			spectators.clear();
+		}
 	}
 	
 	/**
@@ -84,15 +92,20 @@ public class GameManager {
 	 * 
 	 * @return True if success, False if player is already in the list
 	 */
-	public static boolean addPlayer(Player player) {
+	public static boolean addPlayer(Player sender, Player player) {
 		boolean ret;
 		
+		if (spectators.contains(player)) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NO_GAME_ALREADY_SPEC", Config.getLang()));
+			return false;
+		}
+		
 		if (games.containsKey(player.getName())) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("PLAYER_ALREADY_LIST", Config.getLang()));
+			LogManager.getInstanceSystem().writeMsg(sender, LangManager.getMsgLang("PLAYER_ALREADY_LIST", Config.getLang()));
 			ret = false;
 		} else {
 			games.put(player.getName(), new Game(player));
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("ADDED_ONE_LIST", Config.getLang()));
+			LogManager.getInstanceSystem().writeMsg(sender, LangManager.getMsgLang("ADDED_ONE_LIST", Config.getLang()));
 			ret = true;
 		}
 		
@@ -110,13 +123,39 @@ public class GameManager {
 		int cnt = 0;
 		
 		for (Player player : players) {
-			if (!games.containsKey(player.getName())) {
+			if (spectators.contains(player)) {
+				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NO_GAME_ALREADY_SPEC", Config.getLang()));
+			} else if (!games.containsKey(player.getName())) {
 				games.put(player.getName(), new Game(player));
 				cnt++;
 			}
 		}
 		
 		return cnt;
+	}
+	
+	/**
+	 * Adds a Kuffle spectator
+	 * 
+	 * @param player	The player that will spectate
+	 */
+	public static void addSpectator(Player player) {
+		if (games.containsKey(player.getName())) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NO_SPEC_ALREADY_GAME", Config.getLang()));
+			return;
+		}
+		
+		if (!spectators.contains(player)) {
+			spectators.add(player);
+			
+			if (KuffleMain.getInstance().isStarted()) {
+				player.setGameMode(GameMode.SPECTATOR);
+				player.setScoreboard(ScoreManager.getScoreboard());
+			}
+			
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOW_SPEC", Config.getLang()));
+			return;
+		}
 	}
 	
 	/**
@@ -145,12 +184,46 @@ public class GameManager {
 	}
 	
 	/**
+	 * Removes a Kuffle spectator
+	 * 
+	 * @param player	The player that will no longer spectate
+	 */
+	public static void removeSpectator(Player player) {
+		if (spectators.contains(player)) {
+			spectators.remove(player);
+			
+			if (KuffleMain.getInstance().isStarted()) {
+				player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+			}
+			
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_SPEC", Config.getLang()));
+		}
+	}
+	
+	/**
 	 * Resets the games map
 	 */
 	public static void resetList() {
 		if (games != null) {
 			games.forEach((k, v) -> v.clear());
 			games.clear();
+		}
+	}
+	
+	/**
+	 * Resets the spectators list
+	 */
+	public static void resetSpectators() {
+		if (!spectators.isEmpty()) {
+			if (KuffleMain.getInstance().isStarted()) {
+				Scoreboard sc = Bukkit.getScoreboardManager().getNewScoreboard();
+				spectators.forEach(player -> {
+					player.setScoreboard(sc);
+					player.sendMessage(LangManager.getMsgLang("NOT_SPEC", Config.getLang()));
+				});
+			}
+			
+			spectators.clear();
 		}
 	}
 	
@@ -163,6 +236,17 @@ public class GameManager {
 	 */
 	public static boolean hasPlayer(String player) {
 		return games.containsKey(player);
+	}
+	
+	/**
+	 * Checks if spectators list contains a specific player
+	 * 
+	 * @param player	The player to check
+	 * 
+	 * @return True if spectators list has player, False instead
+	 */
+	public static boolean hasSpectator(Player player) {
+		return spectators.contains(player);
 	}
 	
 	/**
@@ -206,14 +290,29 @@ public class GameManager {
 	 * @return the player names list
 	 */
 	public static List<String> getPlayerNames() {
-		List<String> players = new ArrayList<>();
+		List<String> players;
 
-		for (String playerName : games.keySet()) {
-			players.add(playerName);
-		}
-
+		players = games.entrySet().stream()
+			.map(entry -> entry.getKey())
+			.collect(Collectors.toList());
+		
 		return players;
 	}
+	
+	/**
+	 * Get the currently playing player names list
+	 * 
+	 * @return the player names list
+	 */
+	public static List<String> getSpectatorsNames() {
+		List<String> players;
+
+		players = spectators.stream()
+			.map(player ->player.getName())
+			.collect(Collectors.toList());
+		
+		return players;
+	}	
 	
 	public static Location getPlayerSpawnLoc(String player) {
 		return games.get(player).getSpawnLoc();
@@ -403,6 +502,7 @@ public class GameManager {
 		
 		if (games.get(player).getAge() < (Config.getLastAge().getNumber() + 1)) {
 			games.forEach((playerName, playerGame) -> playerGame.getPlayer().sendMessage(LangManager.getMsgLang("AGE_MOVED", playerGame.getConfigLang()).replace("<#>", ChatColor.BLUE + "<" + ChatColor.GOLD + player + ChatColor.BLUE + ">").replace("<##>", "<" + AgeManager.getAgeByNumber(games.get(player).getAge()).getColor() + AgeManager.getAgeByNumber(games.get(player).getAge()).getName().replace("_Age", "") + ChatColor.BLUE + ">")));
+			spectators.forEach(p -> p.sendMessage(LangManager.getMsgLang("AGE_MOVED", Config.getLang()).replace("<#>", ChatColor.BLUE + "<" + ChatColor.GOLD + player + ChatColor.BLUE + ">").replace("<##>", "<" + AgeManager.getAgeByNumber(games.get(player).getAge()).getColor() + AgeManager.getAgeByNumber(games.get(player).getAge()).getName().replace("_Age", "") + ChatColor.BLUE + ">")));
 		}
 	}
 	
@@ -428,6 +528,26 @@ public class GameManager {
 		games.get(playerName).finish(rank);
 		
 		updatePlayersHeadData(playerName, null);
+	}
+	
+	public static void lose(String playerName, int rank) {
+		if (Config.getTeam()) {
+			int tmpRank;
+
+			if ((tmpRank = checkTeamMateRank(games.get(playerName).getTeamName())) != -1) {
+				rank = tmpRank;
+			}
+			
+			playersRanks.put(games.get(playerName).getTeamName(), rank);
+		} else {
+			playersRanks.put(playerName, rank);
+		}
+		
+		games.get(playerName).finish(rank);
+		
+		updatePlayersHeadData(playerName, null);
+		
+		
 	}
 	
 	/**
@@ -650,6 +770,15 @@ public class GameManager {
 	}
 	
 	/**
+	 * Sends a Msg to spectators
+	 * 
+	 * @param msg	The message to send
+	 */
+	public static void sendMsgToSpectators(String msg) {
+		spectators.forEach(player -> player.sendMessage(msg));
+	}
+	
+	/**
 	 * Teleport a specific player to his death location
 	 * 
 	 * @param playerName	The player to teleport
@@ -743,11 +872,13 @@ public class GameManager {
 	 * Logs and Prints game end result tab
 	 */
 	public static void printGameEnd() {
-		games.forEach((playerName, game) -> {
-			logPlayer(playerName);
+		games.entrySet().stream().forEach(entry -> {
+			logPlayer(entry.getKey());
 
-			games.forEach((playerToSend, gameToSend) -> printPlayer(playerName, playerToSend));
+			games.entrySet().stream().forEach(e -> printPlayer(entry.getKey(), e.getKey()));
 		});
+		
+		games.entrySet().stream().forEach(entry -> spectators.forEach(player -> player.sendMessage(entry.getValue().playerString(Config.getLang()))));
 	}
 	
 	/**
@@ -828,6 +959,15 @@ public class GameManager {
 	}
 	
 	/**
+	 * Apply behavior to all spectators.
+	 * 
+	 * @param loop	The actions to apply on all spectators as Lambda
+	 */
+	public static void applyToSpectators(Consumer<Player> loop) {
+		spectators.forEach(player -> loop.accept(player));
+	}
+	
+	/**
 	 * Apply behavior to all players.
 	 * 
 	 * @param loop	The actions to apply on all players as Lambda
@@ -900,6 +1040,32 @@ public class GameManager {
 			}
 
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("PLAYER_LIST", Config.getLang()) + " " + sb.toString());
+		}
+	}
+	
+	/**
+	 * Display the spectators list
+	 * 
+	 * @param player	the player that ask for display
+	 */
+	public static void displaySpecList(Player player) {
+		if (spectators != null && spectators.size() == 0) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NO_SPEC", Config.getLang()));
+		} else if (spectators != null){
+			StringBuilder sb = new StringBuilder();
+			int i = 0;
+			
+			for (Player p : spectators) {
+				if (i == 0) {
+					sb.append(p.getName());
+				} else {
+					sb.append(", ").append(p.getName());
+				}
+
+				i++;
+			}
+
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("SPEC_LIST", Config.getLang()) + " " + sb.toString());
 		}
 	}
 	

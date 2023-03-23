@@ -4,11 +4,13 @@ import java.io.IOException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -57,8 +59,9 @@ public class PlayerEvents implements Listener {
 			return;
 		}
 		
-		CraftManager.discoverCrafts(player);		
+		CraftManager.discoverCrafts(player);
 		GameManager.sendMsgToPlayers(LangManager.getMsgLang("GAME_RELOADED", GameManager.getPlayerLang(player.getName())).replace("%s", player.getName()));
+		GameManager.sendMsgToSpectators(LangManager.getMsgLang("GAME_RELOADED", GameManager.getPlayerLang(player.getName())).replace("%s", player.getName()));
 		LogManager.getInstanceSystem().logMsg(KuffleMain.getInstance().getName(), "<" + player.getName() + "> game is reloaded !");
 	}
 	
@@ -71,8 +74,14 @@ public class PlayerEvents implements Listener {
 	public void onPlayerDisconnectEvent(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		
-		if (!KuffleMain.getInstance().isStarted() || !GameManager.hasPlayer(player.getName())) {
+		if (!KuffleMain.getInstance().isStarted() || (!GameManager.hasPlayer(player.getName()) && GameManager.hasSpectator(player))) {
 			return ;
+		}
+		
+		if (GameManager.hasSpectator(player)) {
+			GameManager.removeSpectator(player);
+			
+			return;
 		}
 		
 		CraftManager.undiscoverCrafts(player);
@@ -82,6 +91,7 @@ public class PlayerEvents implements Listener {
 		GameManager.removePlayer(player.getName());
 		GameManager.updatePlayersHeads();
 		GameManager.sendMsgToPlayers(LangManager.getMsgLang("PLAYER_GAME_SAVED", Config.getLang()).replace("%s", player.getName()));
+		GameManager.sendMsgToSpectators(LangManager.getMsgLang("PLAYER_GAME_SAVED", Config.getLang()).replace("%s", player.getName()));
 		
 		if (GameManager.getGames().size() == 0) {
 			if (Config.getTeam()) {
@@ -92,6 +102,26 @@ public class PlayerEvents implements Listener {
 			
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("ALL_DISCONNECTED", Config.getLang()));
 			LogManager.getInstanceGame().logSystemMsg(LangManager.getMsgLang("ALL_DISCONNECTED", Config.getLang()));
+		}
+	}
+	
+	/**
+	 * Event triggered when player tries to change gamemode
+	 * 
+	 * @param event	The PlayerGameModeChangeEvent
+	 */
+	@EventHandler
+	public void onGameModeChangeEvent(PlayerGameModeChangeEvent event) {
+		if (!KuffleMain.getInstance().isStarted()) {
+			return ;
+		}
+		
+		Player player = event.getPlayer();
+		GameMode gm = event.getNewGameMode();
+		
+		if (GameManager.hasSpectator(player) && gm != GameMode.SPECTATOR) {
+			event.setCancelled(true);
+			player.sendMessage(LangManager.getMsgLang("NOT_CHANGE_GM", Config.getLang()));
 		}
 	}
 	

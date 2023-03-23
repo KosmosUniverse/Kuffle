@@ -62,7 +62,7 @@ public class KuffleList extends AKuffleCommand {
 		Player retComp;
 
 		if ((retComp = Utils.searchPlayerByName(playerName)) != null) {
-			GameManager.addPlayer(retComp);
+			GameManager.addPlayer(player, retComp);
 		} else {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("PLAYER_NOT_EXISTS", Config.getLang()).replace("<#>", playerName));
 		}

@@ -2,6 +2,7 @@ package main.fr.kosmosuniverse.kuffle.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -29,6 +30,8 @@ import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
  *
  */
 public class KuffleStart extends AKuffleCommand {
+	private static final String GAME_STARTED = "GAME_STARTED";
+	
 	public KuffleStart() {
 		super("k-start", true, false, 0, 0, false);
 	}
@@ -56,14 +59,16 @@ public class KuffleStart extends AKuffleCommand {
 				game.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 999999, 10, false, false, false));
 			}
 			
-			game.getPlayer().sendMessage(LangManager.getMsgLang("GAME_STARTED", game.getConfigLang()));
+			game.getPlayer().sendMessage(LangManager.getMsgLang(GAME_STARTED, game.getConfigLang()));
 		});
+		
+		GameManager.applyToSpectators(player -> player.sendMessage(LangManager.getMsgLang(GAME_STARTED, Config.getLang())));
 
 		KuffleMain.getInstance().getType().setXpActivable("EndTeleporter", Config.getXpEnd());
 		KuffleMain.getInstance().getType().setXpActivable("OverworldTeleporter", Config.getXpOverworld());
 		KuffleMain.getInstance().getType().setXpActivable("CoralCompass", Config.getXpCoral());
 		
-		LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("GAME_STARTED", Config.getLang()));
+		LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(GAME_STARTED, Config.getLang()));
 
 		int spread = spreadAndSpawn(player);
 
@@ -122,6 +127,11 @@ public class KuffleStart extends AKuffleCommand {
 			KuffleMain.getInstance().getGameLoop().startRunnable();
 			KuffleMain.getInstance().setStarted(true);
 			KuffleMain.getInstance().setPaused(false);
+			
+			GameManager.applyToSpectators(player -> {
+				player.setGameMode(GameMode.SPECTATOR);
+				player.setScoreboard(ScoreManager.getScoreboard());
+			});
 		}, 120 + spread);
 
 		return true;

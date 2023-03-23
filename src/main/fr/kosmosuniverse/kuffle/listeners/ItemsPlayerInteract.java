@@ -58,8 +58,11 @@ public class ItemsPlayerInteract extends PlayerInteract {
 				return ;
 			}
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
-				| SecurityException | ClassNotFoundException | KuffleEventNotUsableException e) {
+				| SecurityException | ClassNotFoundException e) {
+			Utils.logException(e);
 			return ;
+		} catch (KuffleEventNotUsableException e) {
+			//Generic Method not really used for real exceptions
 		}
 		
 		Player player = event.getPlayer();

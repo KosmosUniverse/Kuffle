@@ -1,11 +1,11 @@
 {
 	"CMD_PERF" : {
 		"en" : "Performed command <#>.",
-		"fr" : "A effectué la commande <#>."
+		"fr" : "A effectue la commande <#>."
 	},
 	"NOT_ALLOWED" : {
 		"en" : "You are not allowed to do this command.",
-		"fr" : "Vous n'êtes pas autorisé a effectuer cette commande."
+		"fr" : "Vous n'êtes pas autorise a effectuer cette commande."
 	},
 	"NOT_PLAYING" : {
 		"en" : "You are not playing in this game.",
@@ -13,7 +13,7 @@
 	},
 	"GAME_NOT_LAUNCHED" : {
 		"en" : "The game has not been launched yet.",
-		"fr" : "Le jeu n'a pas encore commencé."
+		"fr" : "Le jeu n'a pas encore commence."
 	},
 	"AGE_NOT_EXISTS" : {
 		"en" : "This age does not exist.",
@@ -21,23 +21,23 @@
 	},
 	"CONFIG_SET" : {
 		"en" : "Config: parameter [#] set to [##].",
-		"fr" : "Configuration : le paramètre [#] à été défini sur la valeur [##]."
+		"fr" : "Configuration : le parametre [#] a ete defini sur la valeur [##]."
 	},
 	"CONFIG_NOT_SET" : {
 		"en" : "Config: parameter [#] cannot be set to [##] due to current game state.",
-		"fr" : "Configuration : le paramètre [#] n'a pas pu être défini sur [##] à cause de l'état du jeu."
+		"fr" : "Configuration : le parametre [#] n'a pas pu être defini sur [##] a cause de l'etat du jeu."
 	},
 	"KEY_NOT_REC" : {
 		"en" : "Key [#] not recognized.",
-		"fr" : "La clé [#] n'est pas reconnue."
+		"fr" : "La cle [#] n'est pas reconnue."
 	},
 	"LANG_SET" : {
 		"en" : "Language set to [#].",
-		"fr" : "La langue a été définie sur [#]."
+		"fr" : "La langue a ete definie sur [#]."
 	},
 	"REQ_LANG_NOT_AVAIL" : {
 		"en" : "Requested language is not available.",
-		"fr" : "Le langage demandé n'est pas disponible."
+		"fr" : "Le langage demande n'est pas disponible."
 	},
 	"NO_PLAYERS" : {
 		"en" : "No players in the list.",
@@ -49,11 +49,11 @@
 	},
 	"LIST_RESET" : {
 		"en" : "Game list was reseted.",
-		"fr" : "La liste de jeu a été remise à zéro."
+		"fr" : "La liste de jeu a ete remise a zero."
 	},
 	"ADDED_LIST" : {
 		"en" : "Added %i players to the game list.",
-		"fr" : "Ajout de %i joueurs à la liste de jeu."
+		"fr" : "Ajout de %i joueurs a la liste de jeu."
 	},
 	"ADDED_ONE_LIST" : {
 		"en" : "Added 1 player to the game list.",
@@ -61,51 +61,51 @@
 	},
 	"PLAYER_ALREADY_LIST" : {
 		"en" : "This player is already in game list",
-		"fr" : "Ce joueur est déjà dans la liste de jeu"
+		"fr" : "Ce joueur est deja dans la liste de jeu"
 	},
 	"REMOVED_LIST" : {
 		"en" : "Removed 1 player from game list.",
-		"fr" : "Un joueur a été supprimmé de la liste de jeu."
+		"fr" : "Un joueur a ete supprimme de la liste de jeu."
 	},
 	"GAME_LAUNCHED" : {
 		"en" : "A game is already launched.",
-		"fr" : "Le jeu est déjà lancé"
+		"fr" : "Le jeu est deja lance"
 	},
 	"LIST_NOT_EMPTY" : {
 		"en" : "There already are players in list.",
-		"fr" : "Il y a déjà des joueurs dans la liste de jeu."
+		"fr" : "Il y a deja des joueurs dans la liste de jeu."
 	},
 	"LIST_EMPTY" : {
 		"en" : "There are no players in game list.",
 		"fr" : "Il n'y a aucun joueur dans la liste de jeu."
 	},
 	"GAME_ALREADY_PAUSED" : {
-		"en" : "Your game is already paused, you can resume it with ki-resume command.",
-		"fr" : "Le jeu est déjà en pause, vous pouvez le relancer avec la commande ki-resume."
+		"en" : "Your game is already paused, you can resume it with k-resume command.",
+		"fr" : "Le jeu est deja en pause, vous pouvez le relancer avec la commande k-resume."
 	},
 	"GAME_PAUSED" : {
 		"en" : "Game Paused",
 		"fr" : "Le jeu en pause"
 	},
 	"GAME_ALREADY_RUNNING" : {
-		"en" : "Your game is already running, you can pause it with ki-pause command.",
-		"fr" : "Le jeu est déjà en cours, vous pouvez le mettre en pause avec la commande ki-pause."
+		"en" : "Your game is already running, you can pause it with k-pause command.",
+		"fr" : "Le jeu est deja en cours, vous pouvez le mettre en pause avec la commande k-pause."
 	},
 	"GAME_RESUMED" : {
 		"en" : "Game Resumed",
-		"fr" : "Le jeu relancé"
+		"fr" : "Le jeu relance"
 	},
 	"GAME_SAVED" : {
 		"en" : "Game Saved and Stopped.",
-		"fr" : "Jeu sauvegardé et arrêté."
+		"fr" : "Jeu sauvegarde et arrête."
 	},
 	"CONFIG_DISABLED" : {
 		"en" : "This command is disabled in config.",
-		"fr" : "Cette commande est désactivée par la configuration."
+		"fr" : "Cette commande est desactivee par la configuration."
 	},
 	"ITEM_SKIPPED" : {
 		"en" : "Item [#] was skipped for player <#>.",
-		"fr" : "L'objet [#] a été passé pour le joueur <#>."
+		"fr" : "L'objet [#] a ete passe pour le joueur <#>."
 	},
 	"PLAYER_NOT_FOUND" : {
 		"en" : "Can't find player <#> to skip his item.",
@@ -113,39 +113,39 @@
 	},
 	"PLAYER_NOT_IN_TEAM" : {
 		"en" : "Team are enabled and not all players are in a Team.",
-		"fr" : "Le mode equipe est activé et tous les joueurs ne sont pas dans une equipe."
+		"fr" : "Le mode equipe est active et tous les joueurs ne sont pas dans une equipe."
 	},
 	"GAME_STARTED" : {
 		"en" : "Game Started, please wait for the countdown.",
-		"fr" : "Jeu démarré, attendez la fin du compte à rebour."
+		"fr" : "Jeu demarre, attendez la fin du compte a rebour."
 	},
 	"GAME_STOPPED" : {
 		"en" : "Game Stopped.",
-		"fr" : "Jeu stoppé."
+		"fr" : "Jeu stoppe."
 	},
 	"TEAM_GAME_LAUNCHED" : {
 		"en" : "Game is already launched, you cannot modify teams during the game.",
-		"fr" : "Le jeu est déjà lancé, vous ne pouvez plus modifier les équipes."
+		"fr" : "Le jeu est deja lance, vous ne pouvez plus modifier les equipes."
 	},
 	"TEAM_NOT_EXISTS" : {
 		"en" : "Team <#> does not exist, please choose another name.",
-		"fr" : "L'équipe <#> n'existe pas, choisissez un autre nom."
+		"fr" : "L'equipe <#> n'existe pas, choisissez un autre nom."
 	},
 	"TEAM_FULL" : {
-		"en" : "This team is already full, please add him in another team or change team size with ki-config command.",
-		"fr" : "Cette équipe est déjà complète, ajoutez ce joueur a une autre équipe ou changez la taille des équipes avec la commande ki-config."
+		"en" : "This team is already full, please add him in another team or change team size with k-config command.",
+		"fr" : "Cette equipe est deja complete, ajoutez ce joueur a une autre equipe ou changez la taille des equipes avec la commande k-config."
 	},
 	"PLAYER_NOT_IN_GAME" : {
-		"en" : "This player is not in the game, please add him in the game list with ki-list command.",
-		"fr" : "Ce joueur n'est pas dans la liste de jeu, vous pouvez l'ajouter avec la commande ki-list."
+		"en" : "This player is not in the game, please add him in the game list with k-list command.",
+		"fr" : "Ce joueur n'est pas dans la liste de jeu, vous pouvez l'ajouter avec la commande k-list."
 	},
 	"TEAM_ADD_PLAYER" : {
 		"en" : "Player <#> added to team <##>.",
-		"fr" : "Le joueur <#> a été ajouté à l'équipe <##>."
+		"fr" : "Le joueur <#> a ete ajoute a l'equipe <##>."
 	},
 	"COLOR_CHANGED" : {
 		"en" : "Color [#] was changed to [##] for team <#>.",
-		"fr" : "La couleur [#] a été changé pour [##] pour l'équipe <#>."
+		"fr" : "La couleur [#] a ete change pour [##] pour l'equipe <#>."
 	},
 	"COLOR_NOT_EXISTS" : {
 		"en" : "Color [#] does not exists, please choose another one.",
@@ -153,55 +153,55 @@
 	},
 	"COLOR_ALREADY_USED" : {
 		"en" : "Color [#] is already used, please choose another one.",
-		"fr" : "La couleur [#] est déjà utilisée, choisissez-en une autre."
+		"fr" : "La couleur [#] est deja utilisee, choisissez-en une autre."
 	},
 	"TEAM_PLAYER" : {
 		"en" : "This player is already in this team.",
-		"fr" : "Ce joueur est déjà dans cette équipe."
+		"fr" : "Ce joueur est deja dans cette equipe."
 	},
 	"TEAM_ENABLE" : {
-		"en" : "Please enable Teams with ki-config command.",
-		"fr" : "Vous devez activer les équipes avec la commande ki-config."
+		"en" : "Please enable Teams with k-config command.",
+		"fr" : "Vous devez activer les equipes avec la commande k-config."
 	},
 	"TEAM_EXISTS" : {
 		"en" : "Team <#> already exists, please choose another name.",
-		"fr" : "L'équipe <#> existe déjà, choisissez un autre nom."
+		"fr" : "L'equipe <#> existe deja, choisissez un autre nom."
 	},
 	"TEAM_CREATED" : {
 		"en" : "Team <#> was created.",
-		"fr" : "L'équipe <#> a été créée."
+		"fr" : "L'equipe <#> a ete creee."
 	},
 	"TEAM_DELETED" : {
 		"en" : "Team <#> was deleted.",
-		"fr" : "L'équipe <#> a été supprimée."
+		"fr" : "L'equipe <#> a ete supprimee."
 	},
 	"TEAM_TOO_MANY_PLAYERS" : {
-		"en" : "There are too many players for that number of team, please create more teams or change team size with ki-config command.",
-		"fr" : "Il y a trop de joueur pour ce nombre d'équipe, ajoutez des équipes ou changez la taille des équipes avec la commande ki-config."
+		"en" : "There are too many players for that number of team, please create more teams or change team size with k-config command.",
+		"fr" : "Il y a trop de joueur pour ce nombre d'equipe, ajoutez des equipes ou changez la taille des equipes avec la commande k-config."
 	},
 	"TEAM_ALREADY_PLAYERS" : {
-		"en" : "There already are players in some teams, please reset all teams using ki-team-reset-players command.",
-		"fr" : "Il y a déjà des joueur dans certaines équipes, videz toutes les équipes avec la commande ki-team-reset-players."
+		"en" : "There already are players in some teams, please reset all teams using k-team-reset-players command.",
+		"fr" : "Il y a deja des joueur dans certaines equipes, videz toutes les equipes avec la commande k-team-reset-players."
 	},
 	"RANDOM" : {
 		"en" : "Randomly add %i players in %j teams.",
-		"fr" : "Ajout aléatoire de %i joueurs dans %j équipes."
+		"fr" : "Ajout aleatoire de %i joueurs dans %j equipes."
 	},
 	"TEAM_NO_PLAYER" : {
 		"en" : "This player is not in this Team.",
-		"fr" : "Ce joueur n'est pas dans cette équipe."
+		"fr" : "Ce joueur n'est pas dans cette equipe."
 	},
 	"TEAM_REMOVED" : {
 		"en" : "Player <#> was removed from team <##>.",
-		"fr" : "Le joueur <#> a été supprimé de l'équipe <##>."
+		"fr" : "Le joueur <#> a ete supprime de l'equipe <##>."
 	},
 	"TEAM_RESETED" : {
 		"en" : "Team <#> player list was reseted.",
-		"fr" : "La liste de joueur de l'équipe <#> a été vidée."
+		"fr" : "La liste de joueur de l'equipe <#> a ete videe."
 	},
 	"ITEM_VALIDATED" : {
 		"en" : "Item [#] was validated for player <#>.",
-		"fr" : "L'objet [#] a été validé pour le joueur <#>."
+		"fr" : "L'objet [#] a ete valide pour le joueur <#>."
 	},
 	"VALIDATE_PLAYER_ITEM" : {
 		"en" : "Can't find player to validate his item.",
@@ -209,11 +209,11 @@
 	},
 	"GAME_ALREADY_FINISHED" : {
 		"en" : "Game is already finished for player <#>.",
-		"fr" : "Le joueur <#> a déjà fini sa partie."
+		"fr" : "Le joueur <#> a deja fini sa partie."
 	},
 	"AGE_VALIDATED" : {
 		"en" : "Age [#] was validated for player <#>.",
-		"fr" : "L'age [#] a été validé pour le joueur <#>."
+		"fr" : "L'age [#] a ete valide pour le joueur <#>."
 	},
 	"VALIDATE_PLAYER_AGE" : {
 		"en" : "Can't find player to validate his age.",
@@ -237,15 +237,15 @@
 	},
 	"ON" : {
 		"en" : "Plugin turned ON.",
-		"fr" : "Plugin démarré."
+		"fr" : "Plugin demarre."
 	},
 	"OFF" : {
 		"en" : "Plugin turned OFF.",
-		"fr" : "Plugin arrêté."
+		"fr" : "Plugin arrête."
 	},
 	"CONFIG_DEFAULT" : {
 		"en" : "Config for <#> is not correct, use of default value.",
-		"fr" : "La configuration pour <#> n'est pas correcte, utilisation de la valeur par défaut."
+		"fr" : "La configuration pour <#> n'est pas correcte, utilisation de la valeur par defaut."
 	},
 	"INVALID_BOOLEAN" : {
 		"en" : "Invalid value ! True or False awaited.",
@@ -261,11 +261,11 @@
 	},
 	"GAME_DONE" : {
 		"en" : "Game Done ! Rank : %i",
-		"fr" : "Jeu Terminé ! Rang : %i"
+		"fr" : "Jeu Termine ! Rang : %i"
 	},
 	"AGE_MOVED" : {
 		"en" : "<#> has moved to the <##> Age.",
-		"fr" : "<#> est passé à l'age <##>."
+		"fr" : "<#> est passe a l'age <##>."
 	},
 	"DEATH_COUNT" : {
 		"en" : " - Death Count: %i",
@@ -273,7 +273,7 @@
 	},
 	"SKIP_COUNT" : {
 		"en" : " - Skip Count: %i",
-		"fr" : " - Compteur d'objet sautés: %i"
+		"fr" : " - Compteur d'objet sautes: %i"
 	},
 	"TEMPLATE_COUNT" : {
 		"en" : " - Template Count: %i",
@@ -285,11 +285,15 @@
 	},
 	"FINISH_TIME" : {
 		"en" : "    - %s Age: Finished in %t",
-		"fr" : "    - Age %s: Terminé en %t"
+		"fr" : "    - Age %s: Termine en %t"
 	},
 	"FINISH_ABANDON" : {
 		"en" : "    - %s Age: Abandoned",
-		"fr" : "    - Age %s: Abandoné"
+		"fr" : "    - Age %s: Abandone"
+	},
+	"ABANDON_AFTER" : {
+		"en" : "    - %s Age: Abandoned after %t",
+		"fr" : "    - Age %s: Abandone apres "
 	},
 	"FINISH_TOTAL" : {
 		"en" : "    - Total Time: %t",
@@ -301,7 +305,7 @@
 	},
 	"CANT_SKIP_AGE" : {
 		"en" : "You can't skip item this age.",
-		"fr" : "Vous ne pouvez pas passer d'objet à cet Age."
+		"fr" : "Vous ne pouvez pas passer d'objet a cet Age."
 	},
 	"CANT_SKIP_FIRST" : {
 		"en" : "You can't skip the first item of the age.",
@@ -309,11 +313,11 @@
 	},
 	"ITEM_SKIP" : {
 		"en" : "Item [#] was skipped.",
-		"fr" : "L'objet [#] a été passé."
+		"fr" : "L'objet [#] a ete passe."
 	},
 	"ITEMS_SKIP" : {
 		"en" : "Items [#] and [##] were skipped.",
-		"fr" : "Les objets [#]  et [##] ont été passé."
+		"fr" : "Les objets [#]  et [##] ont ete passe."
 	},
 	"GAME_COMPLETE" : {
 		"en" : "<#>  complete this game !",
@@ -321,11 +325,11 @@
 	},
 	"TARGET_NOT_FOUND" : {
 		"en" : "You didn't find your target. Let's give you another one.",
-		"fr" : "Vous n'avez pas trouvé votre cible. En voici une nouvelle."
+		"fr" : "Vous n'avez pas trouve votre cible. En voici une nouvelle."
 	},
 	"TEAM_WAIT" : {
 		"en" : "Waiting for other players of the team.",
-		"fr" : "En attente des autres joueurs de l'équipe."
+		"fr" : "En attente des autres joueurs de l'equipe."
 	},
 	"TARGET_DOUBLE" : {
 		"en" : "[#] or [##]",
@@ -341,7 +345,7 @@
 	},
 	"NO_TEAM" : {
 		"en" : "No Team.",
-		"fr" : "Aucune équipe."
+		"fr" : "Aucune equipe."
 	},
 	"PLAYER_NOT_EXISTS" : {
 		"en" : "Player <#> does not exists.",
@@ -357,43 +361,43 @@
 	},
 	"TIME_AGE" : {
 		"en" : "Total Time at this point: %t",
-		"fr" : "Temps total à cet instant : %t"
+		"fr" : "Temps total a cet instant : %t"
 	},
 	"TEAM_PREVENT_ADD" : {
 		"en" : "Cannot add player due to current team state.",
-		"fr" : "Impossible d'ajouter un joueur a cause de l'état courant des équipes."
+		"fr" : "Impossible d'ajouter un joueur a cause de l'etat courant des equipes."
 	},
 	"GAME_ABANDONED" : {
 		"en" : "<#> abandoned !",
-		"fr" : "<#> a abandonné !"
+		"fr" : "<#> a abandonne !"
 	},
 	"KUFFLE_TYPE_NOT_CONFIG" : {
-		"en" : "Kuffle type not configured, please set it with /k-set-type",
-		"fr" : "Le type de Kuffle n'est pas configuré, définissez le via /k-set-type"
+		"en" : "Kuffle type not configured, please set it with k-set-type command",
+		"fr" : "Le type de Kuffle n'est pas configure, definissez le via la commande k-set-type"
 	},
 	"TP_BACK" : {
 		"en" : "You will be tp back to your death spot in %i seconds.",
-		"fr" : "Vous allez être téléporté à votre lieu de mort dans %i secondes."
+		"fr" : "Vous allez être teleporte a votre lieu de mort dans %i secondes."
 	},
 	"TP_END" : {
 		"en" : "Teleported to the End.",
-		"fr" : "Téléportation dans l'End"
+		"fr" : "Teleportation dans l'End"
 	},
 	"TP_OVERWORLD" : {
 		"en" : "Teleported to the Overworld.",
-		"fr" : "Téléportation dans l'Overworld"
+		"fr" : "Teleportation dans l'Overworld"
 	},
 	"GAME_RELOADED" : {
 		"en" : "[Kuffle] <%s> game is reloaded.",
-		"fr" : "[Kuffle] La partie de <%s> est chargée."
+		"fr" : "[Kuffle] La partie de <%s> est chargee."
 	},
 	"PLAYER_GAME_SAVED" : {
 		"en" : "[Kuffle] <%s> game is saved.",
-		"fr" : "[Kuffle] La partie de <%s> est sauvegardée."
+		"fr" : "[Kuffle] La partie de <%s> est sauvegardee."
 	},
 	"ALL_DISCONNECTED" : {
 		"en" : "No player remain connected, game saved.",
-		"fr" : "Tous les joueurs se sont déconnectés, la partie a été sauvegardée."
+		"fr" : "Tous les joueurs se sont deconnectes, la partie a ete sauvegardee."
 	},
 	"YOU_LOSE" : {
 		"en" : "YOU LOSE !",
@@ -401,15 +405,15 @@
 	},
 	"COMPASS_PAIRED" : {
 		"en" : "This CoralCompass is already paired to a warm ocean.",
-		"fr" : "Ce CoralCompass est déjà lié a un océan chaud."
+		"fr" : "Ce CoralCompass est deja lie a un ocean chaud."
 	},
 	"WARM_FOUND" : {
 		"en" : "Warm ocean found, follow the compass.",
-		"fr" : "Océan chaud trouvé, suivez la boussole."
+		"fr" : "Ocean chaud trouve, suivez la boussole."
 	},
 	"WARM_NOT_FOUND" : {
 		"en" : "Warm ocean not found, move away and try again.",
-		"fr" : "Océan chaud non trouvé, déplacez-vous et réessayez."
+		"fr" : "Ocean chaud non trouve, deplacez-vous et reessayez."
 	},
 	"CONSTRUCTED" : {
 		"en" : "You have just constructed %s.",
@@ -421,11 +425,11 @@
 	},
 	"LOAD_FAIL" : {
 		"en" : "Load failed due to : %s",
-		"fr" : "Chargement en échec a cause de : %s"
+		"fr" : "Chargement en echec a cause de : %s"
 	},
 	"WRONG_TYPE" : {
 		"en" : "You try to load a game with a different type of the current one.",
-		"fr" : "Vous essayez de charger une partie d'un type de Kuffle différent a celui chargé actuellement."
+		"fr" : "Vous essayez de charger une partie d'un type de Kuffle different a celui charge actuellement."
 	},
 	"XP_NEEDED" : {
 		"en" : "You need <#> xp levels to use this item.",
@@ -465,7 +469,7 @@
 	},
 	"FC_LANG_EVERYWHERE" : {
 		"en" : "Lang [%s] is not everywhere in lang file.",
-		"fr" : "La langue [%s] n'est pas présente dans tous les objets du fichier."
+		"fr" : "La langue [%s] n'est pas presente dans tous les objets du fichier."
 	},
 	"FC_REWARD_ENCHANT" : {
 		"en" : "Reward [%s] contains unknown enchant : [%ss].",
@@ -489,7 +493,7 @@
 	},
 	"FC_TARGET_VERSION" : {
 		"en" : "Target version [%s] does not exists in loaded versions.",
-		"fr" : "Pour les cibles, la version [%s] n'existe pas dans les version chargées."
+		"fr" : "Pour les cibles, la version [%s] n'existe pas dans les version chargees."
 	},
 	"FC_TARGET_TYPE" : {
 		"en" : "Target type [%s] for version [%ss] is incorrect.",
@@ -497,7 +501,7 @@
 	},
 	"FC_TARGET_AGE" : {
 		"en" : "Target age [%s] for versoin [%sss] and type [%ss] does not exists in loaded ages.",
-		"fr" : "Pour les cibles, l'age [%s] de la version [%sss] et du type [%ss] n'existe pas dans les ages chargés."
+		"fr" : "Pour les cibles, l'age [%s] de la version [%sss] et du type [%ss] n'existe pas dans les ages charges."
 	},
 	"FC_TARGET_MATERIAL" : {
 		"en" : "Target [%s] of version [%ss] does not exists in Material Enum.",
@@ -505,14 +509,54 @@
 	},
 	"FC_TARGET_MATERIAL_KEYS" : {
 		"en" : "Target [%s] of version [%ss] does not contain all keys.",
-		"fr" : "La cible [%s] de la version [%ss] ne contient pas toutes les clés."
+		"fr" : "La cible [%s] de la version [%ss] ne contient pas toutes les cles."
 	},
 	"FC_TARGET_MATERIAL_SBTT" : {
 		"en" : "Target [%s] of version [%ss] has sbtt value [%sss] that is not boolean.",
-		"fr" : "La cible [%s] de la version [%ss] a une valeur de sbtt [%sss] qui n'est pas un booléen."
+		"fr" : "La cible [%s] de la version [%ss] a une valeur de sbtt [%sss] qui n'est pas un booleen."
 	},
 	"FC_TARGET_MATERIAL_LANG" : {
 		"en" : "Target [%s] of version [%ss] has lang value [%sss] that is not loaded.",
-		"fr" : "La cible [%s] de la version [%ss] a une langue [%sss] qui n'est pas chargée."
+		"fr" : "La cible [%s] de la version [%ss] a une langue [%sss] qui n'est pas chargee."
+	},
+	"SPEC_LIST_RESET" : {
+		"en" : "Spectators list has been reseted.",
+		"fr" : "La liste des spectateurs a ete videe."
+	},
+	"SPEC_NOT_EXISTS" : {
+		"en" : "This spectator <#> does not exists.",
+		"fr" : "Le spectateur <#> n'existe pas."
+	},
+	"REMOVED_SPEC_LIST" : {
+		"en" : "Player no longer spectator.",
+		"fr" : "Le joueur n'est plus spectateur."
+	},
+	"NO_SPEC" : {
+		"en" : "Spectators list is empty.",
+		"fr" : "La liste des spectateurs est vide."
+	},
+	"SPEC_LIST" : {
+		"en" : "Spectators list contains:",
+		"fr" : "La liste de spectateurs contient :"
+	},
+	"NOW_SPEC" : {
+		"en" : "You are now game spectator.",
+		"fr" : "Vous etes spectateur de la partie."
+	},
+	"NOT_SPEC" : {
+		"en" : "You are no longer a game spectator.",
+		"fr" : "Vous n'etes plus spectateur de la partie."
+	},
+	"NOT_CHANGE_GM" : {
+		"en" : "You cannot change your gamemode while being a Kuffle spectator.",
+		"fr" : "Vous ne pouvez pas changer de mode de jeu lorsque vous etes spectateur d'une partie de Kuffle."
+	},
+	"NO_SPEC_ALREADY_GAME" : {
+		"en" : "You cannot become spectator because you already are in game list.",
+		"fr" : "Vous ne pouvez pas devenir spectateur car vous etes deja dans la liste des joueurs."
+	},
+	"NO_GAME_ALREADY_SPEC" : {
+		"en" : "You cannot become player because you already are in spectators list.",
+		"fr" : "Vous ne pouvez pas devenir joueur car vous etes deja dans la liste des spectateurs."
 	}
 }

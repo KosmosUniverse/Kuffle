@@ -358,7 +358,10 @@ public class Game implements Serializable {
 		}
 
 		if (lose) {
-			for (int cnt = age; cnt < Config.getLastAge().getNumber(); cnt++) {
+			times.put(AgeManager.getAgeByNumber(age).getName(), (System.currentTimeMillis() - timeBase) * -1);
+			age++;
+			
+			for (int cnt = age; cnt < (Config.getLastAge().getNumber() + 1); cnt++) {
 				times.put(AgeManager.getAgeByNumber(cnt).getName(), (long) -1);
 			}
 		} else {
@@ -393,21 +396,27 @@ public class Game implements Serializable {
 		sb.append(ChatColor.BLUE + LangManager.getMsgLang("TEMPLATE_COUNT", receiverLang).replace("%i", "" + ChatColor.RESET + sbttCount)).append("\n");
 		sb.append(ChatColor.BLUE + LangManager.getMsgLang("TIME_TAB", receiverLang)).append("\n");
 
+		boolean abandon = false;
+		
 		for (int i = 0; i < (Config.getLastAge().getNumber() + 1); i++) {
 			Age tmpAge = AgeManager.getAgeByNumber(i);
 
 			if (times.get(tmpAge.getName()) == -1) {
 				sb.append(LangManager.getMsgLang("FINISH_ABANDON", receiverLang).replace("%s", tmpAge.getColor() + tmpAge.getName().replace("_Age", "") + ChatColor.BLUE)).append("\n");
-				total = -1;
-				break;
+				abandon = true;
+			} else if (times.get(tmpAge.getName()) < 0) {
+				sb.append(LangManager.getMsgLang("ABANDON_AFTER", receiverLang).replace("%s", tmpAge.getColor() + tmpAge.getName().replace("_Age", "") + ChatColor.BLUE).replace("%t", ChatColor.RESET + Utils.getTimeFromSec((times.get(tmpAge.getName()) * -1) / 1000))).append("\n");
+				total += (times.get(tmpAge.getName()) * -1) / 1000;
+				abandon = true;
 			} else {
 				sb.append(LangManager.getMsgLang("FINISH_TIME", receiverLang).replace("%s", tmpAge.getColor() + tmpAge.getName().replace("_Age", "") + ChatColor.BLUE).replace("%t", ChatColor.RESET + Utils.getTimeFromSec(times.get(tmpAge.getName()) / 1000))).append("\n");
 				total += times.get(tmpAge.getName()) / 1000;
 			}
 		}
 		
-		if (total == -1) {
+		if (abandon) {
 			sb.append(ChatColor.BLUE + LangManager.getMsgLang(FINISH_TOTAL, receiverLang).replace("%t", ChatColor.RESET + LangManager.getMsgLang("ABANDONED", receiverLang)));
+			sb.append(" (").append(Utils.getTimeFromSec(total)).append(")");
 		} else {
 			sb.append(ChatColor.BLUE + LangManager.getMsgLang(FINISH_TOTAL, receiverLang).replace("%t", ChatColor.RESET + Utils.getTimeFromSec(total)));
 		}
@@ -431,21 +440,27 @@ public class Game implements Serializable {
 		sb.append(LangManager.getMsgLang("TEMPLATE_COUNT", lang).replace("%i", "" + sbttCount)).append("\n");
 		sb.append(LangManager.getMsgLang("TIME_TAB", lang)).append("\n");
 
+		boolean abandon = false;
+		
 		for (int i = 0; i < (Config.getLastAge().getNumber() + 1); i++) {
 			Age tmpAge = AgeManager.getAgeByNumber(i);
 
 			if (times.get(tmpAge.getName()) == -1) {
-				sb.append(LangManager.getMsgLang("FINISH_ABANDON", lang).replace("%s", tmpAge.getName().replace("_Age", ""))).append("\n");
-				total = -1;
-				break;
+				sb.append(LangManager.getMsgLang("FINISH_ABANDON", lang).replace("%s", tmpAge.getColor() + tmpAge.getName().replace("_Age", "") + ChatColor.BLUE)).append("\n");
+				abandon = true;
+			} else if (times.get(tmpAge.getName()) < 0) {
+				sb.append(LangManager.getMsgLang("ABANDON_AFTER", lang).replace("%s", tmpAge.getColor() + tmpAge.getName().replace("_Age", "") + ChatColor.BLUE).replace("%t", ChatColor.RESET + Utils.getTimeFromSec((times.get(tmpAge.getName()) * -1) / 1000))).append("\n");
+				total += (times.get(tmpAge.getName()) * -1) / 1000;
+				abandon = true;
 			} else {
-				sb.append(LangManager.getMsgLang("FINISH_TIME", lang).replace("%s", tmpAge.getName().replace("_Age", "")).replace("%t", Utils.getTimeFromSec(times.get(tmpAge.getName()) / 1000))).append("\n");
+				sb.append(LangManager.getMsgLang("FINISH_TIME", lang).replace("%s", tmpAge.getColor() + tmpAge.getName().replace("_Age", "") + ChatColor.BLUE).replace("%t", ChatColor.RESET + Utils.getTimeFromSec(times.get(tmpAge.getName()) / 1000))).append("\n");
 				total += times.get(tmpAge.getName()) / 1000;
 			}
 		}
 
-		if (total == -1) {
+		if (abandon) {
 			sb.append(LangManager.getMsgLang(FINISH_TOTAL, lang).replace("%t", LangManager.getMsgLang("ABANDONED", lang)));
+			sb.append(" (").append(Utils.getTimeFromSec(total)).append(")");
 		} else {
 			sb.append(LangManager.getMsgLang(FINISH_TOTAL, lang).replace("%t", Utils.getTimeFromSec(total)));
 		}
@@ -572,13 +587,7 @@ public class Game implements Serializable {
 			
 			Utils.createSafeBox(loc, player.getName());
 			
-			player.teleport(loc.add(0, 1, 0));
-			
-			for (Entity e : player.getNearbyEntities(3.0, 3.0, 3.0)) {
-				if (e.getType() != EntityType.DROPPED_ITEM) {
-					e.remove();
-				}
-			}
+			player.teleport(loc);
 			
 			restorePlayerInv();
 
@@ -587,6 +596,13 @@ public class Game implements Serializable {
 			}
 			
 			reloadPlayerEffects();
+			
+			for (Entity e : player.getNearbyEntities(3.0, 3.0, 3.0)) {
+				if (e.getType() != EntityType.DROPPED_ITEM &&
+						e.getType() != EntityType.PLAYER) {
+					e.remove();
+				}
+			}
 		}, (Config.getLevel().getSeconds() * 20));
 	}
 	

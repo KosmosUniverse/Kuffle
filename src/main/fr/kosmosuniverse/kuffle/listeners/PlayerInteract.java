@@ -189,8 +189,10 @@ public class PlayerInteract implements Listener  {
 		
 		String placerName = shulkers.get(block.getLocation());
 		
-		if (placerName != null && !placerName.equals(player.getName()) && (Config.getPassiveAll() ||
-				(Config.getTeam() && Config.getPassiveTeam() &&	!TeamManager.getInstance().sameTeam(placerName, player.getName())))) {
+		if (placerName != null && !placerName.equals(player.getName()) &&
+				(Config.getPassiveAll() && !GameManager.hasSpectator(player) ||
+						(Config.getTeam() && Config.getPassiveTeam() &&
+								!TeamManager.getInstance().sameTeam(placerName, player.getName())))) {
 			event.setCancelled(true);
 		}
 	}

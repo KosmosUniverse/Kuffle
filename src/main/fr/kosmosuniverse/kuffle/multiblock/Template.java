@@ -51,6 +51,7 @@ public class Template extends AMultiblock {
 		}
 		
 		GameManager.sendMsgToPlayers(ChatColor.GOLD + "" + ChatColor.BOLD + player.getName() + ChatColor.RESET + "" + ChatColor.BLUE + " just used Template !");
+		GameManager.sendMsgToSpectators(ChatColor.GOLD + "" + ChatColor.BOLD + player.getName() + ChatColor.RESET + "" + ChatColor.BLUE + " just used Template !");
 		GameManager.playerFoundSBTT(player.getName());
 		MultiblockManager.reloadTemplate(age);
 	}

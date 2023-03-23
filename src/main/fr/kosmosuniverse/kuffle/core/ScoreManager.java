@@ -99,7 +99,7 @@ public class ScoreManager {
 			age.unregister();
 			age = null;
 		}
-		
+
 		if (targets.getDisplaySlot() != null) {
 			scoreboard.clearSlot(targets.getDisplaySlot());
 		}

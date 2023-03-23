@@ -21,6 +21,7 @@ import main.fr.kosmosuniverse.kuffle.commands.KuffleResume;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleSave;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleSetType;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleSkip;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleSpectate;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleStart;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleStop;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleTeamAffectPlayer;
@@ -56,6 +57,7 @@ import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleCurrentGamePlayerTab;
 import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleLangTab;
 import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleListTab;
 import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleSetTypeTab;
+import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleSpectateTab;
 import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleTeamAffectPlayerTab;
 import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleTeamColorTab;
 import main.fr.kosmosuniverse.kuffle.tabcompleters.KuffleTeamCreateTab;
@@ -159,6 +161,7 @@ public abstract class KuffleType {
 		// Commands
 		plugin.getCommand("k-config").setExecutor(new KuffleConfig());
 		plugin.getCommand("k-list").setExecutor(new KuffleList());
+		plugin.getCommand("k-spectate").setExecutor(new KuffleSpectate());
 		plugin.getCommand("k-save").setExecutor(new KuffleSave(plugin.getDataFolder()));
 		plugin.getCommand("k-load").setExecutor(new KuffleLoad(plugin.getDataFolder()));
 		plugin.getCommand("k-start").setExecutor(new KuffleStart());
@@ -187,6 +190,7 @@ public abstract class KuffleType {
 		// TabCompleters
 		plugin.getCommand("k-config").setTabCompleter(new KuffleConfigTab());
 		plugin.getCommand("k-list").setTabCompleter(new KuffleListTab());
+		plugin.getCommand("k-spectate").setTabCompleter(new KuffleSpectateTab());
 		plugin.getCommand("k-lang").setTabCompleter(new KuffleLangTab());
 		plugin.getCommand("k-adminskip").setTabCompleter(new KuffleCurrentGamePlayerTab());
 		plugin.getCommand("k-validate").setTabCompleter(new KuffleCurrentGamePlayerTab());

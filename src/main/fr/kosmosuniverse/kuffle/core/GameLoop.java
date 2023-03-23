@@ -84,11 +84,13 @@ public class GameLoop {
 		GameManager.applyToPlayers(game -> {
 			if (game.isLose()) {
 				if (!game.isFinished()) {
-					game.finish(worstRank);
+					GameManager.lose(game.getPlayer().getName(), worstRank);
 					worstRank = GameManager.getWorstRank();
 					GameManager.applyToPlayers(playerGame ->
 						playerGame.getPlayer().sendMessage(LangManager.getMsgLang("GAME_ABANDONED", playerGame.getConfigLang()).replace("<#>", ChatColor.GOLD + "" + ChatColor.BOLD + game.getPlayer().getName() + ChatColor.BLUE))
 					);
+					
+					GameManager.applyToSpectators(player -> player.sendMessage(LangManager.getMsgLang("GAME_ABANDONED", Config.getLang()).replace("<#>", ChatColor.GOLD + "" + ChatColor.BOLD + game.getPlayer().getName() + ChatColor.BLUE)));
 				}
 			} else if (game.isFinished()) {
 				game.playerRandomBarColor();
@@ -117,6 +119,7 @@ public class GameLoop {
 			GameManager.applyToPlayers(playerGame ->
 				playerGame.getPlayer().sendMessage(LangManager.getMsgLang("GAME_COMPLETE", playerGame.getConfigLang()).replace("<#>", ChatColor.GOLD + "" + ChatColor.BOLD + game.getPlayer().getName() + ChatColor.BLUE))
 			);
+			GameManager.applyToSpectators(player -> player.sendMessage(LangManager.getMsgLang("GAME_COMPLETE", Config.getLang()).replace("<#>", ChatColor.GOLD + "" + ChatColor.BOLD + game.getPlayer().getName() + ChatColor.BLUE)));
 		} else if (!Config.getTeam() && game.getTargetCount() >= (Config.getTargetPerAge() + 1)) {
 			GameManager.nextPlayerAge(game.getPlayer().getName());
 		} else if (Config.getTeam() && game.getTargetCount() >= (Config.getTargetPerAge() + 1)) {

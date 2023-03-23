@@ -101,10 +101,7 @@ public class CraftManager {
 	public static void enableCrafts() {
 		recipes.stream()
 			.filter(craft -> craft.isMandatory() || Config.getCrafts())
-			.forEach(craft -> {
-				KuffleMain.getInstance().getServer().addRecipe(craft.getRecipe());
-				GameManager.discoverCraft(new NamespacedKey(KuffleMain.getInstance(), craft.getName()));
-			});
+			.forEach(craft -> KuffleMain.getInstance().getServer().addRecipe(craft.getRecipe()));
 	}
 	
 	/**

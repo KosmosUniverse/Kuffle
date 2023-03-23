@@ -32,6 +32,11 @@ public class KuffleAddDuringGame extends AKuffleCommand {
 		if ((retPlayer = Utils.searchPlayerByName(args[0])) == null) {
 			throw new KuffleCommandFalseException();
 		}
+		
+		if (GameManager.hasSpectator(retPlayer)) {
+			LogManager.getInstanceSystem().writeMsg(retPlayer, LangManager.getMsgLang("NO_GAME_ALREADY_SPEC", Config.getLang()));
+			return true;
+		}
 
 		if (Config.getTeam() && args.length == 2) {
 			if (!TeamManager.getInstance().hasTeam(args[1])) {
@@ -63,7 +68,7 @@ public class KuffleAddDuringGame extends AKuffleCommand {
 	private void startPlayer(Player sender, Player player, String team) {
 		KuffleMain.getInstance().setPaused(true);
 
-		GameManager.addPlayer(player);
+		GameManager.addPlayer(sender, player);
 		LogManager.getInstanceSystem().writeMsg(sender, LangManager.getMsgLang("ADDED_ONE_LIST", Config.getLang()));
 
 		if (team != null) {

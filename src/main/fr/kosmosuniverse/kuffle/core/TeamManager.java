@@ -41,7 +41,7 @@ public class TeamManager {
 	 * @param name	Team name
 	 */
 	public void createTeam(String name) {
-		teams.add(new Team(name));
+		teams.add(new Team(name, getCurrentColors()));
 	}
 	
 	/**
@@ -88,6 +88,17 @@ public class TeamManager {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Gets list of all colors that are currently used by teams
+	 * 
+	 * @return the color list
+	 */
+	private List<ChatColor> getCurrentColors() {
+		return teams.stream()
+				.map(team -> team.getColor())
+				.collect(Collectors.toList());
 	}
 	
 	/**
