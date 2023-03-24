@@ -68,7 +68,11 @@ public class GameManager {
 	 */
 	public static void clear() {
 		if (games != null) {
-			games.forEach((k, v) -> v.clear());
+			games.forEach((k, v) -> {
+				if (v != null) {
+					v.clear();
+				}
+			});
 			games.clear();
 		}
 		

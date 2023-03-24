@@ -216,7 +216,7 @@ public abstract class KuffleType {
 	 */
 	protected void setupType(JavaPlugin plugin) throws KuffleFileLoadException {
 		try {
-			TargetManager.setup(FilesConformity.getContent("targets.json"));
+			TargetManager.setup(getType(), FilesConformity.getContent("targets.json"));
 		} catch (IllegalArgumentException | ParseException e) {
 			Utils.logException(e);
 			TargetManager.clear();

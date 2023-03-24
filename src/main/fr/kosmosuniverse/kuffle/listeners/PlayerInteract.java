@@ -81,7 +81,7 @@ public class PlayerInteract implements Listener  {
 		boolean ret = true;
 		
 		if (!KuffleMain.getInstance().isStarted()) {
-			ret = false;
+			throw new KuffleEventNotUsableException("Not a good event type to use here.");
 		}
 		
 		Player player = event.getPlayer();

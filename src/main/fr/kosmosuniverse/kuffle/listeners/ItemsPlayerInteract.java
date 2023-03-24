@@ -63,6 +63,7 @@ public class ItemsPlayerInteract extends PlayerInteract {
 			return ;
 		} catch (KuffleEventNotUsableException e) {
 			//Generic Method not really used for real exceptions
+			return;
 		}
 		
 		Player player = event.getPlayer();

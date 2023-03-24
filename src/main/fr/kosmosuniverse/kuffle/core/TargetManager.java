@@ -15,7 +15,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
 import main.fr.kosmosuniverse.kuffle.utils.Pair;
@@ -47,30 +46,30 @@ public class TargetManager {
 	 * 
 	 * @throws ParseException if JSONParser.parse fails
 	 */
-	public static void setup(String content) throws ParseException {
+	public static void setup(KuffleType.Type type, String content) throws ParseException {
 		JSONParser jsonParser = new JSONParser();
 		JSONObject allObj = (JSONObject) jsonParser.parse(content);
 		targets = new HashMap<>();
 		sbtts = new HashMap<>();
 		
-		setupVersions(allObj);
+		setupVersions(type, allObj);
 		setupTargetsInvs();
 	}
 	
-	private static void setupVersions(JSONObject allObj) {
+	private static void setupVersions(KuffleType.Type type, JSONObject allObj) {
 		for (Object version : allObj.keySet()) {
 			if (VersionManager.isVersionValid(version.toString(), null)) {
 				JSONObject versionObj = (JSONObject) allObj.get(version);
 				
-				setupTypes(version.toString(), versionObj);
+				setupTypes(type, version.toString(), versionObj);
 			}
 		}
 	}
 	
-	private static void setupTypes(String version, JSONObject versionObj) {
+	private static void setupTypes(KuffleType.Type type, String version, JSONObject versionObj) {
 		for (Object kuffleType : versionObj.keySet()) {
 			if ("BOTH".equalsIgnoreCase(kuffleType.toString()) ||
-					KuffleMain.getInstance().getType().getType() == KuffleType.Type.valueOf(kuffleType.toString().toUpperCase())) {
+					type == KuffleType.Type.valueOf(kuffleType.toString().toUpperCase())) {
 				JSONObject typeObj = (JSONObject) versionObj.get(kuffleType);
 				
 				setupAges(version, typeObj);
@@ -252,7 +251,7 @@ public class TargetManager {
 	private static List<Inventory> setupAgeInvs(String age, List<String> ageTargets) {
 		List<Inventory> invs = new ArrayList<>();
 		Inventory inv;
-		int invCnt = 0;
+		int invCnt = 9;
 		int nbInv = 1;
 		boolean hasNext = ageTargets.size() > 45;
 
@@ -268,7 +267,7 @@ public class TargetManager {
 			inv.addItem(getMaterial(target));
 			
 			if (invCnt == 53) {
-				invCnt = 0;
+				invCnt = 9;
 				invs.add(inv);
 				nbInv++;
 				inv = Bukkit.createInventory(null, 54, ChatColor.BLACK + age + " Targets Tab " + nbInv);
