@@ -17,6 +17,7 @@ import main.fr.kosmosuniverse.kuffle.commands.KuffleList;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleLoad;
 import main.fr.kosmosuniverse.kuffle.commands.KufflePause;
 import main.fr.kosmosuniverse.kuffle.commands.KufflePlayers;
+import main.fr.kosmosuniverse.kuffle.commands.KuffleRestoreInv;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleResume;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleSave;
 import main.fr.kosmosuniverse.kuffle.commands.KuffleSetType;
@@ -177,6 +178,7 @@ public abstract class KuffleType {
 		plugin.getCommand("k-validate-age").setExecutor(new KuffleValidateAge());
 		plugin.getCommand("k-players").setExecutor(new KufflePlayers());
 		plugin.getCommand("k-add-during-game").setExecutor(new KuffleAddDuringGame());
+		plugin.getCommand("k-restoreinv").setExecutor(new KuffleRestoreInv());
 
 		plugin.getCommand("k-team-create").setExecutor(new KuffleTeamCreate());
 		plugin.getCommand("k-team-delete").setExecutor(new KuffleTeamDelete());
@@ -197,6 +199,7 @@ public abstract class KuffleType {
 		plugin.getCommand("k-validate-age").setTabCompleter(new KuffleCurrentGamePlayerTab());
 		plugin.getCommand("k-add-during-game").setTabCompleter(new KuffleAddDuringGameTab());
 		plugin.getCommand("k-set-type").setTabCompleter(kuffleSetTypeTab);
+		plugin.getCommand("k-restoreinv").setTabCompleter(new KuffleCurrentGamePlayerTab());
 		
 		plugin.getCommand("k-team-create").setTabCompleter(new KuffleTeamCreateTab());
 		plugin.getCommand("k-team-delete").setTabCompleter(new KuffleTeamDeleteTab());

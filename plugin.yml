@@ -88,6 +88,10 @@ commands:
       usage: /<command> <Kuffle Type>
       description: command to set the plugin game type
       permission: inferno.flagrate
+   k-restoreinv:
+      usage: /<command> <PlayerName>
+      description: command to access player death inv
+      permission: inferno.flagrate
    k-spectate:
       usage: /<command> [display | reset]
       description: command to toggle your spectate state (no args) and display/reset spectators
@@ -179,6 +183,9 @@ permissions:
       default: op
    k-set-type:
       description: command to set the plugin game type
+      default: op
+   k-restoreinv:
+      description: command to access player death inv
       default: op
    k-team-show:
       description: command to show all or one team
