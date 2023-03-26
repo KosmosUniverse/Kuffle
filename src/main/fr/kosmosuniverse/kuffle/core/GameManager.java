@@ -158,7 +158,6 @@ public class GameManager {
 			}
 			
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOW_SPEC", Config.getLang()));
-			return;
 		}
 	}
 	

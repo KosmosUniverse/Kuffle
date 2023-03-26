@@ -86,7 +86,7 @@ public class PlayerInteract implements Listener  {
 		
 		Player player = event.getPlayer();
 		
-		if (ret && !GameManager.hasPlayer(player.getName())) {
+		if (!GameManager.hasPlayer(player.getName())) {
 			ret = false;
 		}
 		

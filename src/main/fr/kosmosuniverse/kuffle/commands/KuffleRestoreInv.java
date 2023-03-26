@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 import main.fr.kosmosuniverse.kuffle.core.GameManager;
 import main.fr.kosmosuniverse.kuffle.core.LogManager;
+import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 import net.md_5.bungee.api.ChatColor;
 
 /**
@@ -21,9 +22,12 @@ public class KuffleRestoreInv extends AKuffleCommand {
 	}
 
 	@Override
-	public boolean runCommand() {
+	public boolean runCommand() throws KuffleCommandFalseException {
+		if (args.length != 1) {
+			return false;
+		}
+		
 		if (!GameManager.hasPlayer(args[0])) {
-			
 			return true;
 		}
 		
@@ -33,7 +37,7 @@ public class KuffleRestoreInv extends AKuffleCommand {
 			LogManager.getInstanceGame().writeMsg(player, args[0] + " does not have any items in its saved inventory.");
 			return true;
 		}
-		
+
 		Inventory inv = Bukkit.createInventory(null, 54, ChatColor.BLACK + args[0] + " Inventory");
 		
 		items.forEach(item -> inv.addItem(item));

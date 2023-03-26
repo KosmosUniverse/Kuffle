@@ -35,7 +35,7 @@ public class KuffleAddDuringGame extends AKuffleCommand {
 		
 		if (GameManager.hasSpectator(retPlayer)) {
 			LogManager.getInstanceSystem().writeMsg(retPlayer, LangManager.getMsgLang("NO_GAME_ALREADY_SPEC", Config.getLang()));
-			return true;
+			throw new KuffleCommandFalseException();
 		}
 
 		if (Config.getTeam() && args.length == 2) {
