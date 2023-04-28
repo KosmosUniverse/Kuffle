@@ -37,8 +37,13 @@ public class Team implements Serializable {
 	 */
 	public Team(String teamName, List<ChatColor> usedColors) {
 		SecureRandom random = new SecureRandom();
-		List<ChatColor> colors = Arrays.asList(ChatColor.values());
-		colors.removeAll(usedColors);
+		List<ChatColor> colors = new ArrayList<>();
+
+		Arrays.asList(ChatColor.values()).forEach(c -> {
+			if (!usedColors.contains(c)) {
+				colors.add(c);
+			}
+		});
 		
 		name = teamName;
 		color = colors.get(random.nextInt(colors.size()));

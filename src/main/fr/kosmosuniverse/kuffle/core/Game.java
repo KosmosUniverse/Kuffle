@@ -1,4 +1,4 @@
-package main.fr.kosmosuniverse.kuffle.core;
+	package main.fr.kosmosuniverse.kuffle.core;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -501,6 +501,10 @@ public class Game implements Serializable {
 	 * Store actual player inventory into another one
 	 */
 	public void storePlayerInv() {
+		if (deathInv != null) {
+			deathInv.clear();
+		}
+		
 		deathInv = new ArrayList<>();
 
 		for (ItemStack item : player.getInventory().getContents()) {
@@ -526,8 +530,6 @@ public class Game implements Serializable {
 			ret.clear();
 		}
 
-		deathInv.clear();
-		deathInv = null;
 		deathLoc = null;
 		dead = false;
 	}

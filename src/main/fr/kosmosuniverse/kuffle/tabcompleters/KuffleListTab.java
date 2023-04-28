@@ -37,7 +37,7 @@ public class KuffleListTab extends AKuffleTabCommand {
 				ret.add("@a");
 				
 				for (Player player : Bukkit.getOnlinePlayers()) {
-					if (!GameManager.hasPlayer(player.getName())) {
+					if (!GameManager.hasPlayer(player.getName()) && !GameManager.hasSpectator(player)) {
 						ret.add(player.getName());
 					}
 				}

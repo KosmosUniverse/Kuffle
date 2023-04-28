@@ -47,6 +47,8 @@ public class InventoryListeners implements Listener {
 			return;
 		}
 		
+		event.setCancelled(false);
+		
 		if (event.getView().getTitle().contains(ChatColor.BLACK + "AllCustomCrafts")) {
 			event.setCancelled(true);
 
@@ -103,9 +105,9 @@ public class InventoryListeners implements Listener {
 	 * @param item		The clicked item to determine if he clicked on another player head or not
 	 */
 	private void playersInventory(Player player, ItemStack item) {
-		if (GameManager.hasPlayerFinished(player.getName()) && 
+		if (GameManager.hasSpectator(player) || (GameManager.hasPlayer(player.getName()) && GameManager.hasPlayerFinished(player.getName()) && 
 				item.getType() == Material.PLAYER_HEAD && item.hasItemMeta() &&
-				!item.getItemMeta().getDisplayName().equals(player.getName())) {
+				!item.getItemMeta().getDisplayName().equals(player.getName()))) {
 			player.setGameMode(GameMode.SPECTATOR);
 			GameManager.teleportPlayerToPlayer(player, item.getItemMeta().getDisplayName());
 		}

@@ -374,6 +374,10 @@ public class GameManager {
 	 * @param game	The game to save
 	 */
 	public static void savePlayer(String path, Game game) {
+		if (Config.getTeam()) {
+			TeamManager.getInstance().removePlayer(game.getTeamName(), game.getPlayer());
+		}
+		
 		try (FileOutputStream fos = new FileOutputStream(path + File.separator + game.getPlayer().getName() + ".k")) {
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(game);
@@ -405,6 +409,10 @@ public class GameManager {
 			
 			game.setupPostLoad(player);
 			games.put(player.getName(), game);
+		}
+		
+		if (Config.getTeam()) {
+			TeamManager.getInstance().affectPlayer(games.get(player.getName()).getTeamName(), player);
 		}
 	}
 	
