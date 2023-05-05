@@ -459,6 +459,18 @@ public class CraftManager {
 	}
 	
 	/**
+	 * Gets Kuffle Items names list
+	 * 
+	 * @return the items list
+	 */
+	public static List<String> getKuffleItems() {
+		return recipes.stream()
+				.map(recipe -> recipe.getName())
+				.filter(recipe -> Material.matchMaterial(recipe) == null)
+				.collect(Collectors.toList());
+	}
+	
+	/**
 	 * Get Material list for templates in a specific Age
 	 * 
 	 * @param age	The specific Age

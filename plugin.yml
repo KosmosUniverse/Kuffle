@@ -92,6 +92,10 @@ commands:
       usage: /<command> <PlayerName>
       description: command to access player death inv
       permission: inferno.flagrate
+   k-give:
+      usage: /<command> <PlayerName> <<item <kuffleItem> [amount]> | <reward [age]>>
+      description: command to give Kuffle item or reward to a player
+      permission: inferno.flagrate
    k-spectate:
       usage: /<command> [display | reset]
       description: command to toggle your spectate state (no args) and display/reset spectators
@@ -186,6 +190,9 @@ permissions:
       default: op
    k-restoreinv:
       description: command to access player death inv
+      default: op
+   k-give:
+      description: command to give Kuffle item or reward to a player
       default: op
    k-team-show:
       description: command to show all or one team
