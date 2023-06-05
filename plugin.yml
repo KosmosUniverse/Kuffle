@@ -1,5 +1,5 @@
 name: Kuffle
-version: 2.4
+version: 2.5
 author: KosmosUniverse
 main: main.fr.kosmosuniverse.kuffle.KuffleMain
 api-version: 1.15
@@ -123,6 +123,9 @@ commands:
    k-players:
       usage: /<command>
       description: command to tp to other players after game end
+   k-team-inv:
+      usage: /<command>
+      description: command to see team inventory
 
 permissions:
    k-spawn-multiblock:
@@ -220,4 +223,7 @@ permissions:
       default: true
    k-players:
       description: command to tp to other players after game end
+      default: true
+   k-team-inv:
+      description: command to see team inventory
       default: true

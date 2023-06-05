@@ -317,8 +317,26 @@ public class GameManager {
 		return players;
 	}	
 	
+	/**
+	 * Gets the spawn location of a specific player
+	 * 
+	 * @param player	The player to search for
+	 * 
+	 * @return the player's spawn location
+	 */
 	public static Location getPlayerSpawnLoc(String player) {
 		return games.get(player).getSpawnLoc();
+	}
+	
+	/**
+	 * Gets the team name of a specific player
+	 * 
+	 * @param player	The player to search for
+	 * 
+	 * @return the player's team name
+	 */
+	public static String getPlayerTeamName(String player) {
+		return games.get(player).getTeamName();
 	}
 	
 	/**

@@ -72,6 +72,10 @@ public class KuffleStart extends AKuffleCommand {
 
 		int spread = spreadAndSpawn(player);
 
+		if (Config.getTeam() && Config.getTeamInv()) {
+			TeamManager.getInstance().setupTeamsInv();
+		}
+		
 		TargetManager.shuffleTargets();
 		GameManager.updatePlayersHeads();
 		GameManager.setupPlayersRanks();

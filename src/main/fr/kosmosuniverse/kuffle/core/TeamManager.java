@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import main.fr.kosmosuniverse.kuffle.utils.Utils;
 
@@ -99,6 +100,19 @@ public class TeamManager {
 		return teams.stream()
 				.map(team -> team.getColor())
 				.collect(Collectors.toList());
+	}
+	
+	/**
+	 * gets team inventory
+	 * 
+	 * @param teamName	the team's to check for inventory
+	 * 
+	 * @return the team inventory
+	 */
+	public Inventory getTeamInventory(String teamName) {
+		Optional<Team> inv = teams.stream().filter(team -> team.getName().equals(teamName)).findFirst();
+		
+		return inv.isPresent() ? inv.get().getInventory() : null;
 	}
 	
 	/**
@@ -211,6 +225,13 @@ public class TeamManager {
 	}
 	
 	/**
+	 * Setups teams inventory
+	 */
+	public void setupTeamsInv() {
+		teams.forEach(team -> team.setupInv());
+	}
+	
+	/**
 	 * Gets Team that contains a specific player
 	 * 
 	 * @param player	The player to search for
@@ -234,7 +255,16 @@ public class TeamManager {
 	 */
 	public void clear() {
 		if (teams != null) {
-			teams.forEach(t -> t.getPlayers().clear());			
+			teams.forEach(t -> {
+				if (t.getPlayers() != null) {
+					t.getPlayers().clear();
+				}
+				
+				if (t.getInventory() != null) {
+					t.getInventory().clear();
+				}
+			});
+			
 			teams.clear();
 		}
 	}

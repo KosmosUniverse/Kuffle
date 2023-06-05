@@ -56,7 +56,7 @@ public abstract class ACraft {
 	 */
 	protected final void setupResult(JSONObject resultObj) {
 		String resultName = resultObj.containsKey("Name") ? resultObj.get("Name").toString() : null;
-		ChatColor resultColor = resultObj.containsKey("Color") ? ChatColor.valueOf(resultObj.get("Color").toString()) : null;
+		ChatColor resultColor = resultObj.containsKey("Color") ? ChatColor.of(resultObj.get("Color").toString()) : null;
 		List<String> lore = resultObj.containsKey("Lore") ? jsonArrayToList((JSONArray) resultObj.get("Lore")) : null;
 		Material resultType = Material.valueOf(resultObj.get("Type").toString().toUpperCase());
 		int amount = Integer.parseInt(resultObj.get("Amount").toString());

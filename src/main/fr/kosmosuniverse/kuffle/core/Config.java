@@ -60,6 +60,7 @@ public class Config implements Serializable {
 		configElems.put("SKIP", (String b) -> setSkip(Boolean.valueOf(b)));
 		configElems.put("CUSTOM_CRAFTS", (String b) -> setCrafts(Boolean.valueOf(b)));
 		configElems.put("TEAM", (String b) -> setTeam(Boolean.valueOf(b)));
+		configElems.put("TEAM_INV", (String b) -> setTeamInv(Boolean.valueOf(b)));
 		configElems.put("SAME_MODE", (String b) -> setSame(Boolean.valueOf(b)));
 		configElems.put("DOUBLE_MODE", (String b) -> setDoubleMode(Boolean.valueOf(b)));
 		configElems.put("SBTT_MODE", (String b) -> setSbttMode(Boolean.valueOf(b)));
@@ -73,7 +74,8 @@ public class Config implements Serializable {
 		configElems.put("TARGET_PER_AGE", (String i) -> setTargetAge(Integer.parseInt(i)));
 		configElems.put("START_DURATION", (String i) -> setStartTime(Integer.parseInt(i)));
 		configElems.put("ADDED_DURATION", (String i) -> setAddedTime(Integer.parseInt(i)));
-		configElems.put("TEAMSIZE", (String i) -> setTeamSize(Integer.parseInt(i)));
+		configElems.put("TEAM_SIZE", (String i) -> setTeamSize(Integer.parseInt(i)));
+		configElems.put("TEAM_INV_SIZE", (String i) -> setTeamInvSize(Integer.parseInt(i)));
 		configElems.put("SBTT_AMOUNT", (String i) -> setSbttAmount(Integer.parseInt(i)));
 		configElems.put("XP_END_TELEPORTER", (String i) -> setXpEnd(Integer.parseInt(i)));
 		configElems.put("XP_OVERWORLD_TELEPORTER", (String i) -> setXpOverworld(Integer.parseInt(i)));
@@ -185,6 +187,8 @@ public class Config implements Serializable {
 	private static void checkFileModes(FileConfiguration configFile) {
 		String teamConfig = "game_settings.team.enable";
 		String teamSizeConfig = "game_settings.team.size";
+		String teamInvConfig = "game_settings.team.inv.enable";
+		String teamInvSizeConfig = "game_settings.team.inv.size";
 		String sameConfig = "game_settings.modes.same";
 		String sbttConfig = "game_settings.modes.sbtt.enable";
 		String sbttAmountConfig = "game_settings.modes.sbtt.amount";
@@ -201,6 +205,17 @@ public class Config implements Serializable {
 				|| configFile.getInt(teamSizeConfig) > 10) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "max team size"));
 			configFile.set(teamSizeConfig, 2);
+		}
+		
+		if (!configFile.contains(teamInvConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling team inv"));
+			configFile.set(teamConfig, false);
+		}
+		
+		if (!configFile.contains(teamInvSizeConfig) || configFile.getInt(teamInvSizeConfig) < 1
+				|| configFile.getInt(teamInvSizeConfig) > 6) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "team inv size"));
+			configFile.set(teamSizeConfig, 1);
 		}
 		
 		if (!configFile.contains(sameConfig)) {
@@ -359,6 +374,7 @@ public class Config implements Serializable {
 		configValues.setSkip(configFile.getBoolean("game_settings.skip.enable"));
 		configValues.setCrafts(configFile.getBoolean("game_settings.custom_crafts"));
 		configValues.setTeam(configFile.getBoolean("game_settings.team.enable"));
+		configValues.setTeamInv(configFile.getBoolean("game_settings.team.inv.enable"));
 		configValues.setSame(configFile.getBoolean("game_settings.modes.same"));
 		configValues.setPrintTab(configFile.getBoolean("game_settings.print_player_tab.for_you"));
 		configValues.setPrintTabAll(configFile.getBoolean("game_settings.print_player_tab.for_all_players"));
@@ -374,6 +390,7 @@ public class Config implements Serializable {
 		configValues.setStartTime(configFile.getInt("game_settings.time.start"));
 		configValues.setAddedTime(configFile.getInt("game_settings.time.added"));
 		configValues.setTeamSize(configFile.getInt("game_settings.team.size"));
+		configValues.setTeamInvSize(configFile.getInt("game_settings.team.inv.size"));
 		configValues.setSbttAmount(configFile.getInt("game_settings.modes.sbtt.amount"));
 		configValues.setXpEnd(configFile.getInt("game_settings.xp_max.end_teleporter"));
 		configValues.setXpOverworld(configFile.getInt("game_settings.xp_max.overworld_teleporter"));
@@ -419,6 +436,8 @@ public class Config implements Serializable {
 		sb.append("" + ChatColor.BLUE).append("  - Team: " + ChatColor.GOLD).append(configValues.isPassiveTeam()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Team: " + ChatColor.GOLD).append(configValues.isTeam()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("  - Team Size: " + ChatColor.GOLD).append(configValues.getTeamSize()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("  - Team Inv: " + ChatColor.GOLD).append(configValues.isTeamInv()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("    - Team Inv Size: " + ChatColor.GOLD).append(configValues.getTeamInvSize()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Modes: ").append("\n");
 		sb.append("" + ChatColor.BLUE).append("  - Same: " + ChatColor.GOLD).append(configValues.isSame()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("  - Double: " + ChatColor.GOLD).append(configValues.isDuoMode()).append("\n");
@@ -506,6 +525,15 @@ public class Config implements Serializable {
 	}
 	
 	/**
+	 * Get team inventory enable value
+	 * 
+	 * @return if team inventory is enabled
+	 */
+	public static boolean getTeamInv() {
+		return configValues.isTeamInv();
+	}
+	
+	/**
 	 * Get same enable value
 	 * 
 	 * @return if same mode is enabled
@@ -586,6 +614,15 @@ public class Config implements Serializable {
 		return configValues.getTeamSize();
 	}
 
+	/**
+	 * Get team inventory size value
+	 * 
+	 * @return the team inventory size
+	 */
+	public static int getTeamInvSize() {
+		return configValues.getTeamInvSize();
+	}
+	
 	/**
 	 * Get target per age value
 	 * 
@@ -773,6 +810,21 @@ public class Config implements Serializable {
 	}
 	
 	/**
+	 * Set team inv value
+	 * 
+	 * @param configTeamInv	value used to set team inv
+	 */
+	private static void setTeamInv(boolean configTeamInv) {
+		if (KuffleMain.getInstance().isStarted()) {
+			error = "Cannot set Team Inv while game is running !";
+			setRet = false;
+		} else {
+			configValues.setTeamInv(configTeamInv);
+			setRet = true;			
+		}
+	}
+	
+	/**
 	 * Set same value
 	 * 
 	 * @param configSame	value used to set same
@@ -883,6 +935,28 @@ public class Config implements Serializable {
 			setRet = true;
 		}
 	}
+ 	
+ 	/**
+ 	 * Set team in size
+ 	 * 
+ 	 * @param configTeamIntSize	value used to set team inv size
+ 	 */
+ 	private static void setTeamInvSize(int configTeamIntSize) {
+ 		if (KuffleMain.getInstance().isStarted()) {
+ 			error = "Cannot change team inv size when game is running !";
+			setRet = false;
+		}
+ 		
+ 		if (setRet && configTeamIntSize < 1 || configTeamIntSize > 6) {
+ 			error = "Cannot set team inv size, out of 1 to 6 bounds !";
+ 			setRet = false;
+ 		}
+ 		
+ 		if (setRet) {
+			configValues.setTeamInvSize(configTeamIntSize);
+			setRet = true;
+		}
+ 	}
 
  	/**
 	 * Set spread distance value

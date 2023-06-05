@@ -147,6 +147,7 @@ public abstract class KuffleType {
 		plugin.getCommand("k-team-remove-player").setExecutor(new KuffleTeamRemovePlayer());
 		plugin.getCommand("k-team-reset-players").setExecutor(new KuffleTeamResetPlayers());
 		plugin.getCommand("k-team-random-player").setExecutor(new KuffleTeamRandomPlayer());
+		plugin.getCommand("k-team-inv").setExecutor(new KuffleTeamInv());
 		
 		// TabCompleters
 		plugin.getCommand("k-config").setTabCompleter(new KuffleConfigTab());

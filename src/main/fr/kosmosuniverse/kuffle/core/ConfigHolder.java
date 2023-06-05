@@ -16,6 +16,7 @@ class ConfigHolder implements Serializable {
 	private boolean skip;
 	private boolean crafts;
 	private boolean team;
+	private boolean teamInv;
 	private boolean same;
 	private boolean duoMode;
 	private boolean sbttMode;
@@ -26,6 +27,7 @@ class ConfigHolder implements Serializable {
 	private boolean passiveTeam;
 	private int sbttAmount;
 	private int teamSize;
+	private int teamInvSize;
 	private int spreadDistance;
 	private int spreadRadius;
 	private int targetPerAge;
@@ -57,6 +59,7 @@ class ConfigHolder implements Serializable {
 		  skip = config.skip;
 		  crafts = config.crafts;
 		  team = config.team;
+		  teamInv = config.teamInv;
 		  same = config.same;
 		  duoMode = config.duoMode;
 		  sbttMode = config.sbttMode;
@@ -67,6 +70,7 @@ class ConfigHolder implements Serializable {
 		  passiveTeam = config.passiveTeam;
 		  sbttAmount = config.sbttAmount;
 		  teamSize = config.teamSize;
+		  teamInvSize = config.teamInvSize;
 		  spreadDistance = config.spreadDistance;
 		  spreadRadius = config.spreadRadius;
 		  targetPerAge = config.targetPerAge;
@@ -121,6 +125,13 @@ class ConfigHolder implements Serializable {
 	 */
 	public boolean isTeam() {
 		return team;
+	}
+	
+	/**
+	 * @return the team inv
+	 */
+	public boolean isTeamInv() {
+		return teamInv;
 	}
 
 	/**
@@ -191,6 +202,13 @@ class ConfigHolder implements Serializable {
 	 */
 	public int getTeamSize() {
 		return teamSize;
+	}
+	
+	/**
+	 * @return the team inv size
+	 */
+	public int getTeamInvSize() {
+		return teamInvSize;
 	}
 
 	/**
@@ -318,6 +336,13 @@ class ConfigHolder implements Serializable {
 	public void setTeam(boolean team) {
 		this.team = team;
 	}
+	
+	/**
+	 * @param teamInv the team inv
+	 */
+	public void setTeamInv(boolean teamInv) {
+		this.teamInv = teamInv;
+	}
 
 	/**
 	 * @param same the same to set
@@ -389,6 +414,13 @@ class ConfigHolder implements Serializable {
 		this.teamSize = teamSize;
 	}
 
+	/**
+	 * @param teamInvSize the team inv size
+	 */
+	public void setTeamInvSize(int teamInvSize) {
+		this.teamInvSize = teamInvSize;
+	}
+	
 	/**
 	 * @param spreadDistance the spreadDistance to set
 	 */

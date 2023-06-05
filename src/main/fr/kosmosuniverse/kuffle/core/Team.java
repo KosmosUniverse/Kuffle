@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import main.fr.kosmosuniverse.kuffle.utils.SerializeUtils;
 
@@ -21,14 +23,14 @@ import main.fr.kosmosuniverse.kuffle.utils.SerializeUtils;
  */
 public class Team implements Serializable {
 	/**
-	 * 
+	 * Serialize UUID
 	 */
 	private static final long serialVersionUID = 1L;
-	
 	
 	private List<Player> players = new ArrayList<>();
 	private String name;
 	private ChatColor color;
+	private Inventory inv;
 	
 	/**
 	 * Constructor
@@ -58,6 +60,13 @@ public class Team implements Serializable {
 	public Team(String teamName, ChatColor teamColor) {
 		name = teamName;
 		color = teamColor;
+	}
+	
+	/**
+	 * Setups team inventory
+	 */
+	public void setupInv() {
+		inv = Bukkit.createInventory(null, Config.getTeamInvSize() * 9, net.md_5.bungee.api.ChatColor.BLACK + name);
 	}
 	
 	/**
@@ -117,6 +126,15 @@ public class Team implements Serializable {
 	 */
 	public ChatColor getColor() {
 		return color;
+	}
+	
+	/**
+	 * Gets the team inventory
+	 * 
+	 * @return inv
+	 */
+	public Inventory getInventory() {
+		return inv;
 	}
 	
 	/**

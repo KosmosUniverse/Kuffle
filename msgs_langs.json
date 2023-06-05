@@ -558,5 +558,9 @@
 	"NO_GAME_ALREADY_SPEC" : {
 		"en" : "You cannot become player because you already are in spectators list.",
 		"fr" : "Vous ne pouvez pas devenir joueur car vous etes deja dans la liste des spectateurs."
+	},
+	"TEAM_INV" : {
+		"en" : "Team inventories are not enabled in this game.",
+		"fr" : "Les inventaires d'équipes ne sont pas activés dans cette partie."
 	}
 }

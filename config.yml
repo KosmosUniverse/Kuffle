@@ -26,6 +26,9 @@ game_settings:
    team:
       enable: false # Define if team are allowed or not, Default: False
       size: 2 # Size of a team, Default: 2
+      inv:
+         enable: false # Define if team has access to a common inventory, Default: False
+         size: 1 # Amount of rows in common inventory (between 1 and 6 included), Default: 1 
    modes:
       same: false # If true, players will have same target, Default: False
       double: false # If true, players will be able to choose between two target instead of one, Default: false
