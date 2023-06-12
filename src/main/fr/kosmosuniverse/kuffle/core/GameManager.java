@@ -429,6 +429,9 @@ public class GameManager {
 			games.put(player.getName(), game);
 		}
 		
+		games.get(player.getName()).setupPlayerScores(ScoreManager.getScoreboard(), ScoreManager.getPlayerScore(player.getName()));
+		games.get(player.getName()).reloadScore();
+		
 		if (Config.getTeam()) {
 			TeamManager.getInstance().affectPlayer(games.get(player.getName()).getTeamName(), player);
 		}

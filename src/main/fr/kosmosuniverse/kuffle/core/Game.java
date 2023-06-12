@@ -140,6 +140,13 @@ public class Game implements Serializable {
 		this.score.setScore(1);
 		player.setScoreboard(scoreboard);
 	}
+	
+	/**
+	 * Reloads the score based on targetCount
+	 */
+	public void reloadScore() {
+		this.score.setScore(targetCount);
+	}
 
 	/**
 	 * Set player BossBar color randomly
