@@ -34,20 +34,27 @@ public class KuffleGiveTab extends AKuffleTabCommand {
 		} else if (currentArgs.length == 2) {
 			ret.addAll(list);
 		} else if (currentArgs.length == 3) {
-			if ("item".equals(currentArgs[1])) {
-				ret.addAll(AgeManager.getAgesNameList());
-				
-				if (KuffleMain.getInstance().getType().getType() == KuffleType.Type.ITEMS) {
-					ret.add("EndTeleporter");
-					ret.add("OverworldTeleporter");
-				}
-				
-				if (VersionManager.isVersionValid("1.17", null)) {
-					ret.add("CoralCompass");
-				}
-			} else if ("reward".equals(currentArgs[1])) {
-				ret.addAll(AgeManager.getAgesNameList());
+			giveWhat();
+		}
+	}
+	
+	/**
+	 * make the list of item and reward op can give
+	 */
+	private void giveWhat() {
+		if ("item".equals(currentArgs[1])) {
+			ret.addAll(AgeManager.getAgesNameList());
+			
+			if (KuffleMain.getInstance().getType().getType() == KuffleType.Type.ITEMS) {
+				ret.add("EndTeleporter");
+				ret.add("OverworldTeleporter");
 			}
+			
+			if (VersionManager.isVersionValid("1.17", null)) {
+				ret.add("CoralCompass");
+			}
+		} else if ("reward".equals(currentArgs[1])) {
+			ret.addAll(AgeManager.getAgesNameList());
 		}
 	}
 }

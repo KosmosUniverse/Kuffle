@@ -33,18 +33,25 @@ public class KuffleListTab extends AKuffleTabCommand {
 		if (currentArgs.length == 1) {
 			ret.addAll(list);
 		} else if (currentArgs.length == 2) {
-			if (currentArgs[0].equals("add")) {
-				ret.add("@a");
-				
-				for (Player player : Bukkit.getOnlinePlayers()) {
-					if (!GameManager.hasPlayer(player.getName()) && !GameManager.hasSpectator(player)) {
-						ret.add(player.getName());
-					}
+			listAddRemove();
+		}
+	}
+	
+	/**
+	 * List all players and target op can add or remove
+	 */
+	private void listAddRemove() {
+		if (currentArgs[0].equals("add")) {
+			ret.add("@a");
+			
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				if (!GameManager.hasPlayer(player.getName()) && !GameManager.hasSpectator(player)) {
+					ret.add(player.getName());
 				}
-			} else if (currentArgs[0].equals("remove")) {
-				for (String playerName : GameManager.getPlayerNames()) {
-					ret.add(playerName);
-				}
+			}
+		} else if (currentArgs[0].equals("remove")) {
+			for (String playerName : GameManager.getPlayerNames()) {
+				ret.add(playerName);
 			}
 		}
 	}

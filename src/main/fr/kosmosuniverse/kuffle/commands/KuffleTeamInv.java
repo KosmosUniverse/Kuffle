@@ -17,11 +17,9 @@ public class KuffleTeamInv extends AKuffleCommand {
 	protected boolean runCommand() throws KuffleCommandFalseException {
 		if (!Config.getTeamInv()) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_INV", Config.getLang()));
-			return true;
+		} else {
+			player.openInventory(TeamManager.getInstance().getTeamInventory(GameManager.getPlayerTeamName(player.getName())));
 		}
-		
-		player.openInventory(TeamManager.getInstance().getTeamInventory(GameManager.getPlayerTeamName(player.getName())));
-		
 		return true;
 	}
 

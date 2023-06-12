@@ -78,10 +78,8 @@ public class KuffleGive extends AKuffleCommand {
 	 * @return the item if it is a Kuffle one, null instead
 	 */
 	private ItemStack getKuffleItem(String item, int amount) {
-		if (item.endsWith("_Age")) {
-			if (AgeManager.ageExists(item)) {
-				return RewardManager.getAgeRewardBox(item);
-			}
+		if (item.endsWith("_Age") && AgeManager.ageExists(item)) {
+			return RewardManager.getAgeRewardBox(item);
 		}
 		
 		ItemStack result = CraftManager.findItemByName(item);
