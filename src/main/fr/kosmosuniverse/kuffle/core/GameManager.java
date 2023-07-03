@@ -685,6 +685,18 @@ public class GameManager {
 	}
 	
 	/**
+	 * Sets the game lose for all players of a specific team
+	 * 
+	 * @param teamName	The team that will lose
+	 * @param gameLose	The lose state, True if team lose
+	 */
+	public static void setTeamLose(String teamName, boolean gameLose) {
+		games.entrySet().stream()
+		.filter(game -> game.getValue().getTeamName().equals(teamName))
+		.forEach(game -> game.getValue().setLose(gameLose));
+	}
+	
+	/**
 	 * Player Died
 	 * 
 	 * @param playerName	The player that died

@@ -38,6 +38,7 @@ public abstract class KuffleType {
 	protected PlayerInteract playerInteractItems = null;
 	protected PlayerInteract playerInteractBlocks = null;
 	protected KuffleSetType kuffleSetType;
+	protected KuffleAbandon kuffleAbandon;
 	protected KuffleAgeTargetsTab kuffleAgeTargetsTab = null;
 	protected KuffleSetTypeTab kuffleSetTypeTab = null;
 	
@@ -113,6 +114,7 @@ public abstract class KuffleType {
 		
 		kuffleSetType = new KuffleSetType();
 		kuffleSetTypeTab = new KuffleSetTypeTab();
+		kuffleAbandon = new KuffleAbandon();
 		
 		// Listeners
 		plugin.getServer().getPluginManager().registerEvents(new PlayerEvents(), plugin);
@@ -131,7 +133,7 @@ public abstract class KuffleType {
 		plugin.getCommand("k-set-type").setExecutor(kuffleSetType);
 		plugin.getCommand("k-lang").setExecutor(new KuffleLang());
 		plugin.getCommand("k-skip").setExecutor(new KuffleSkip());
-		plugin.getCommand("k-abandon").setExecutor(new KuffleAbandon());
+		plugin.getCommand("k-abandon").setExecutor(kuffleAbandon);
 		plugin.getCommand("k-adminskip").setExecutor(new KuffleSkip());
 		plugin.getCommand("k-validate").setExecutor(new KuffleValidate());
 		plugin.getCommand("k-validate-age").setExecutor(new KuffleValidateAge());
@@ -240,6 +242,10 @@ public abstract class KuffleType {
 		
 		if (kuffleSetTypeTab != null) {
 			kuffleSetTypeTab.clear();	
+		}
+		
+		if (kuffleAbandon != null) {
+			kuffleAbandon.clear();
 		}
 		
 		Config.clear();
