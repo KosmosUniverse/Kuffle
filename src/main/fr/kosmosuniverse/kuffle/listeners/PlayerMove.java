@@ -67,7 +67,7 @@ public class PlayerMove implements Listener {
 			multiblock.onActivate(player, ActivationType.ACTIVATE);	
 		} else {
 			if (!sendMessage.containsKey(player.getName()) || ((sendMessage.get(player.getName()) - System.currentTimeMillis()) / 1000) > 3) {
-				LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("XP_NEEDED", GameManager.getPlayerLang(player.getName())).replace("%i", "" + xpAmount));
+				LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("XP_NEEDED", GameManager.getPlayerLang(player.getName())).replace("<#>", "" + xpAmount));
 				sendMessage.put(player.getName(), System.currentTimeMillis());
 			}
 		}
@@ -83,7 +83,7 @@ public class PlayerMove implements Listener {
 			multiblock.onActivate(player, ActivationType.ACTIVATE);	
 		} else {
 			if (!sendMessage.containsKey(player.getName()) || ((System.currentTimeMillis() - sendMessage.get(player.getName())) / 1000) > 3) {
-				LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("XP_NEEDED", GameManager.getPlayerLang(player.getName())).replace("%i", "5"));
+				LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("XP_NEEDED", GameManager.getPlayerLang(player.getName())).replace("<#>", "" + xpAmount));
 				sendMessage.put(player.getName(), System.currentTimeMillis());
 			}
 		}

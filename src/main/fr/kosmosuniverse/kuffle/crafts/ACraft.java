@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Inventory;
@@ -19,7 +20,6 @@ import org.json.simple.JSONObject;
 
 import main.fr.kosmosuniverse.kuffle.KuffleMain;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
-import net.md_5.bungee.api.ChatColor;
 
 /**
  * 
@@ -56,7 +56,7 @@ public abstract class ACraft {
 	 */
 	protected final void setupResult(JSONObject resultObj) {
 		String resultName = resultObj.containsKey("Name") ? resultObj.get("Name").toString() : null;
-		ChatColor resultColor = resultObj.containsKey("Color") ? ChatColor.of(resultObj.get("Color").toString()) : null;
+		ChatColor resultColor = resultObj.containsKey("Color") ? ChatColor.valueOf(resultObj.get("Color").toString()) : null;
 		List<String> lore = resultObj.containsKey("Lore") ? jsonArrayToList((JSONArray) resultObj.get("Lore")) : null;
 		Material resultType = Material.valueOf(resultObj.get("Type").toString().toUpperCase());
 		int amount = Integer.parseInt(resultObj.get("Amount").toString());

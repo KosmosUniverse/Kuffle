@@ -21,7 +21,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -52,14 +51,10 @@ public class PlayerInteract implements Listener  {
 	 * Delete the player's item from its hand
 	 * 
 	 * @param player	The player
-	 * @param hand		The hand that hold the item to delete
+	 * @param itemSrc	The item to delete
 	 */
-	protected void consumeItem(Player player, EquipmentSlot hand) {
-		if (hand == EquipmentSlot.HAND) {
-			player.getInventory().setItemInMainHand(null);	
-		} else if (hand == EquipmentSlot.OFF_HAND) {
-			player.getInventory().setItemInOffHand(null);
-		}
+	protected void consumeItem(Player player, ItemStack itemSrc) {
+		player.getInventory().remove(itemSrc);
 	}
 		
 	/**

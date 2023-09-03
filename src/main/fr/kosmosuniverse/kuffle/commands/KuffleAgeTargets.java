@@ -42,7 +42,7 @@ public class KuffleAgeTargets extends AKuffleCommand {
 			age = args[0];
 			
 			if (!AgeManager.ageExists(age)) {
-				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("AGE_NOT_EXISTS", GameManager.getPlayerLang(player.getName())));
+				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("AGE_NOT_EXISTS", Config.getLang()));
 				return false;
 			}
 		}

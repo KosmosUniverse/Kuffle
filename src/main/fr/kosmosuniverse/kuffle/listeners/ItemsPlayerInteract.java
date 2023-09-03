@@ -75,29 +75,27 @@ public class ItemsPlayerInteract extends PlayerInteract {
 		}
 		
 		if (ItemUtils.itemComparison(item, CraftManager.findItemByName(END_TELEPORTER)) &&
-				checkXp(player, KuffleMain.getInstance().getType().getXpActivable(END_TELEPORTER))) {
-			consumeItem(player, event.getHand());
-			
+				checkXp(player, KuffleMain.getInstance().getType().getXpActivable(END_TELEPORTER))) {			
 			endTeleporter(player);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> consumeItem(player, item), 40);
 			
 			return ;
 		}
 		
 		if (ItemUtils.itemComparison(item, CraftManager.findItemByName(OVER_TELEPORTER)) &&
-				checkXp(player, KuffleMain.getInstance().getType().getXpActivable(OVER_TELEPORTER))) {
-			consumeItem(player, event.getHand());
-			
+				checkXp(player, KuffleMain.getInstance().getType().getXpActivable(OVER_TELEPORTER))) {			
 			overworldTeleporter(player);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> consumeItem(player, item), 40);
 			
 			return ;
 		}
 				
 		if (CraftManager.isTemplate(item)) {
 			event.setCancelled(true);
-			consumeItem(player, event.getHand());
 			GameManager.playerFoundSBTT(player.getName());
+			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> consumeItem(player, item), 40);
 			CraftManager.reloadTemplate(item.getItemMeta().getDisplayName());
-			LogManager.getInstanceGame().logMsg(player.getName(), "just used " + item.getItemMeta().getDisplayName() + " !");
+			LogManager.getInstanceGame().writeMsg(player, "just used " + item.getItemMeta().getDisplayName() + " !");
 			
 			return ;
 		}
