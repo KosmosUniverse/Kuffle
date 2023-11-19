@@ -17,7 +17,9 @@ game_settings:
       added: 2 # minutes added to start_time after each age, Default: 2
    last_age: "Mythic_Age" # Last Age to finish the game, can be any of ages.json ages, Default : Mythic_Age
    target_per_age: 5 # number of target to complete and move to the next age, min: 1, Default: 5
-   lang: "en" # Lang for all players, Default: "en"
+   personals:
+      lang: "en" # Lang for all players, Default: "en"
+      tips: false # Tips for all players, Default: false
    level: "EASY" # Game difficulty, can be any of the levels.json levels, Default: EASY
    skip:
       enable: true # allow player to skip target if they are after 2nd target of current age, Default: true

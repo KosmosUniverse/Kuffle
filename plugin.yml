@@ -1,5 +1,5 @@
 name: Kuffle
-version: 2.6
+version: 2.7
 author: KosmosUniverse
 main: main.fr.kosmosuniverse.kuffle.KuffleMain
 api-version: 1.15
@@ -126,6 +126,9 @@ commands:
    k-team-inv:
       usage: /<command>
       description: command to see team inventory
+   k-tips:
+      usage: /<command> <true | false>
+      description: command to set player tips state
 
 permissions:
    k-spawn-multiblock:
@@ -226,4 +229,7 @@ permissions:
       default: true
    k-team-inv:
       description: command to see team inventory
+      default: true
+   k-tips:
+      description: command to set player tips state
       default: true

@@ -50,6 +50,7 @@ public class Game implements Serializable {
 	private boolean lose;
 	private boolean dead;
 	private boolean discovered;
+	private boolean tips;
 
 	private int time;
 	private int targetCount = 1;
@@ -95,6 +96,8 @@ public class Game implements Serializable {
 		lose = false;
 		dead = false;
 		discovered = false;
+		configLang = Config.getLang();
+		tips = Config.hasTips();
 	}
 	
 	/**
@@ -122,7 +125,6 @@ public class Game implements Serializable {
 	public void setupPlayer() {
 		time = Config.getStartTime();
 		timeBase = System.currentTimeMillis();
-		configLang = Config.getLang();
 		ageDisplay = Bukkit.createBossBar(LangManager.getMsgLang("START", configLang), BarColor.PURPLE, BarStyle.SOLID);
 		ageDisplay.addPlayer(player);
 		
@@ -330,6 +332,23 @@ public class Game implements Serializable {
 		
 		updatePlayerListName();
 		updatePlayerBar();
+	}
+	
+	/**
+	 * Send Tips to the player
+	 */
+	public void sendTips() {
+		if (tips && age <= Config.getLastAge().getNumber()) {
+			String ageName = AgeManager.getAgeByNumber(age).getName().replace("_Age", "").toUpperCase();
+			
+			player.sendMessage(ChatColor.BLUE + LangManager.getMsgLang("TIPS_" + ageName, configLang) + ChatColor.RESET);
+			
+			if (age == 2) {
+				player.sendMessage(ChatColor.BLUE + LangManager.getMsgLang("TIPS_END_TELEPORTER", configLang) + ChatColor.RESET);
+			} else if (age == 3) {
+				player.sendMessage(ChatColor.BLUE + LangManager.getMsgLang("TIPS_OVERWORLD_TELEPORTER", configLang) + ChatColor.RESET);
+			}
+		}
 	}
 	
 	/**
@@ -589,7 +608,11 @@ public class Game implements Serializable {
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			Location loc = deathLoc;
-				
+			
+			if (loc == null) {
+				return;
+			}
+			
 			if (loc.getWorld().getName().contains("the_end") && loc.getY() < 0) {
 				Utils.changeLocForEnd(loc);
 			}
@@ -758,6 +781,13 @@ public class Game implements Serializable {
 	 */
 	public boolean hasDiscovered() {
 		return discovered;
+	}
+	
+	/**
+	 * @return the tips state
+	 */
+	public boolean hasTips() {
+		return tips;
 	}
 
 	/**
@@ -971,6 +1001,13 @@ public class Game implements Serializable {
 	 */
 	public void setDiscovered(boolean discovered) {
 		this.discovered = discovered;
+	}
+	
+	/**
+	 * @param tips	the tips state to set
+	 */
+	public void setTips(boolean tips) {
+		this.tips = tips;
 	}
 
 	/**

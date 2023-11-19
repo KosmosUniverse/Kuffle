@@ -11,9 +11,9 @@ import main.fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
  * @author KosmosUniverse
  *
  */
-public class KuffleLang extends AKuffleCommand {
-	public KuffleLang() {
-		super("k-lang", null, null, 0, 1, false);
+public class KuffleTips extends AKuffleCommand {
+	public KuffleTips() {
+		super("k-tips", null, null, 0, 1, false);
 	}
 
 	@Override
@@ -22,18 +22,21 @@ public class KuffleLang extends AKuffleCommand {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("PLAYER_NOT_IN_LIST", Config.getLang()));
 		}
 		
-		if (args.length == 0) {
-			LogManager.getInstanceSystem().writeMsg(player, GameManager.getPlayerLang(player.getName()));
-		} else if (args.length == 1) {
-			String lang = args[0].toLowerCase();
+		if (args.length != 1) {
+			return false;
+		}
+		
+		if (args.length == 1) {
+			String sTips = args[0].toLowerCase();
 			
-			if (LangManager.hasLang(lang)) {
-				GameManager.setPlayerLang(player.getName(), lang);
-				
-				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("LANG_SET", Config.getLang()).replace("[#]", " [" + lang + "]"));
-			} else {
-				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("REQ_LANG_NOT_AVAIL", Config.getLang()));
+			if (!"true".equals(sTips) && !"false".equals(sTips)) {
+				return false;
 			}
+			
+			boolean tips = "true".equals(sTips);
+			
+			GameManager.setPlayerTips(player.getName(), tips);
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TIPS_SET", Config.getLang()).replace("[#]", " [" + tips + "]"));
 		}
 		
 		return true;

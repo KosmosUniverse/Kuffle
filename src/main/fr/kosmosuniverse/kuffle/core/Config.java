@@ -54,6 +54,7 @@ public class Config implements Serializable {
 		configValues = new ConfigHolder();
 		configElems = new HashMap<>();
 
+		configElems.put("TIPS", (String b) -> setTips(Boolean.valueOf(b)));
 		configElems.put("SATURATION", (String b) -> setSaturation(Boolean.valueOf(b)));
 		configElems.put("SPREADPLAYERS", (String b) -> setSpreadplayers(Boolean.valueOf(b)));
 		configElems.put("REWARDS", (String b) -> setRewards(Boolean.valueOf(b)));
@@ -130,7 +131,19 @@ public class Config implements Serializable {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkAndSetConfig(FileConfiguration configFile) {
-		String langConfig = "game_settings.lang";
+		checkFilePersonnal(configFile);
+		checkFileSpread(configFile);
+		checkFileModes(configFile);
+		checkFileStart(configFile);
+		checkFileOther(configFile);
+		checkFileEnd(configFile);
+		
+		setValues(configFile);
+	}
+	
+	private static void checkFilePersonnal(FileConfiguration configFile) {
+		String langConfig = "game_settings.personals.lang";
+		String tipsConfig = "game_settings.personals.tips";
 		
 		if (!configFile.contains(langConfig)
 				|| !LangManager.hasLang(configFile.getString(langConfig))) {
@@ -141,13 +154,10 @@ public class Config implements Serializable {
 			configValues.setLang(configFile.getString(langConfig));
 		}
 		
-		checkFileSpread(configFile);
-		checkFileModes(configFile);
-		checkFileStart(configFile);
-		checkFileOther(configFile);
-		checkFileEnd(configFile);
-		
-		setValues(configFile);
+		if (!configFile.contains(tipsConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling tips"));
+			configFile.set(tipsConfig, false);
+		}
 	}
 	
 	/**
@@ -368,6 +378,8 @@ public class Config implements Serializable {
 	 * @param configFile	file that contains all config values
 	 */
 	private static void setValues(FileConfiguration configFile) {
+		configValues.setTips(configFile.getBoolean("game_settings.personals.tips"));
+		
 		configValues.setSaturation(configFile.getBoolean("game_settings.saturation"));
 		configValues.setSpread(configFile.getBoolean("game_settings.spreadplayers.enable"));
 		configValues.setRewards(configFile.getBoolean("game_settings.rewards"));
@@ -426,7 +438,9 @@ public class Config implements Serializable {
 		sb.append("" + ChatColor.BLUE).append("Last age: " + ChatColor.GOLD).append(AgeManager.getAgeByNumber(configValues.getLastAge()).getName()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Start duration: " + ChatColor.GOLD).append(configValues.getStartTime()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Added duration: " + ChatColor.GOLD).append(configValues.getAddedTime()).append("\n");
-		sb.append("" + ChatColor.BLUE).append("Lang: " + ChatColor.GOLD).append(configValues.getLang()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("Personnals: ").append("\n");
+		sb.append("" + ChatColor.BLUE).append("  - Lang: " + ChatColor.GOLD).append(configValues.getLang()).append("\n");
+		sb.append("" + ChatColor.BLUE).append("  - Tips: " + ChatColor.GOLD).append(configValues.isTips()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Level: " + ChatColor.GOLD).append(LevelManager.getInstance().getLevelByNumber(configValues.getLevel()).getName()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Print tab at game end: " + ChatColor.GOLD).append(configValues.isPrintTab()).append("\n");
 		sb.append("" + ChatColor.BLUE).append("Print tab for all players at game end: " + ChatColor.GOLD).append(configValues.isPrintTabAll()).append("\n");
@@ -604,6 +618,15 @@ public class Config implements Serializable {
 	public static boolean getPassiveTeam() {
 		return configValues.isPassiveTeam();
 	}
+	
+	/**
+	 * Get tips value
+	 * 
+	 * @return if tips is enable
+	 */
+	public static boolean hasTips() {
+		return configValues.isTips();
+	}
 
 	/**
 	 * Get team size value
@@ -742,6 +765,16 @@ public class Config implements Serializable {
 		}
 		
 		return configValues.getLang();
+	}
+	
+	/**
+	 * Set tips value
+	 * 
+	 * @param configTips	value used to set tips
+	 */
+	public static void setTips(boolean configTips) {
+		configValues.setTips(configTips);
+		setRet = true;
 	}
 
 	/**

@@ -561,6 +561,50 @@
 	},
 	"TEAM_INV" : {
 		"en" : "Team inventories are not enabled in this game.",
-		"fr" : "Les inventaires d'équipes ne sont pas activés dans cette partie."
+		"fr" : "Les inventaires d'équipes ne sont pas actives dans cette partie."
+	},
+	"TIPS_ARCHAIC" : {
+		"en" : "Found lots of flowers and make some cobblestone or iron tools. Armor is not necessary.",
+		"fr" : "Recuperez plein de fleurs et faites des outils enpierre ou en fer. Pas besoin de faire d'armures."
+	},
+	"TIPS_CLASSIC" : {
+		"en" : "Think to use your age rewards ! And take advantage of speed 2.",
+		"fr" : "Pensez a utiliser les recompenses d'Ages. Profitez le plus possible de l'effet vitesse 2 de cet age."
+	},
+	"TIPS_MINERIC" : {
+		"en" : "Don't forget to use your diamond Silk Touch Pickaxe. You also have custom crafts to craft and uncraft ores.",
+		"fr" : "N'oubliez pas que vous avez une pioche en diamant toucher de soie. Vous pouvez egalement crafter et decrafter les minerais."
+	},
+	"TIPS_NETHERIC" : {
+		"en" : "You have fire resistance so lava is water ! You have a Strider egg to be able to walk on lava. Ender pearl can be trade with piglin or found on Enderman in Warped biomes.",
+		"fr" : "Vous avez resistance au feu donc la lave c'est de l'eau. Vous avez un oeuf de Strider pour pouvoir marcher sur la lave. Les ender pearl peuvent etre echangees avec les Piglin ou trouvees sur les Enderman dans les biomes Warped."
+	},
+	"TIPS_HEROIC" : {
+		"en" : "You have infinite firework so smash that button.",
+		"fr" : "Vous avez une infinite de feu d'artifice donc hesitez pas a marteler le clic !"
+	},
+	"TIPS_MYTHIC" : {
+		"en" : "No tips... you're a master now.",
+		"fr" : "Pas de tips... Vous etes passe maitre maintenant."
+	},
+	"TIPS_OCEANIC" : {
+		"en" : "Majority of things you will need are in Coral biomes.",
+		"fr" : "La majorite de ce que le plugin va vous demander se trouve dans les biomes corail."
+	},
+	"TIPS_END_TELEPORTER" : {
+		"en" : "Do not forget to have a diamond block before going to the Nether.",
+		"fr" : "Ne pas oublier d'avoir un bloc de diamant avant de partir dans le Nether."
+	},
+	"TIPS_OVERWORLD_TELEPORTER" : {
+		"en" : "Do not forget to take some quartz before going to the End.",
+		"fr" : "Ne pas oublier de prendre du quartz avant de partir dans l'End."
+	},
+	"TIPS_SET" : {
+		"en" : "Tips set to [#].",
+		"fr" : "Les tips ont ete defini sur [#]."
+	},
+	"PLAYER_NOT_IN_LIST" : {
+		"en" : "You are not in the game list. You can be added with /k-list <playerName>",
+		"fr" : "Vous n'etes pas dans la liste de jeu. Vous pouvez etre ajoute via /k-list <NomDuJoueur>"
 	}
 }

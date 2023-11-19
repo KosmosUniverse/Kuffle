@@ -10,6 +10,7 @@ import java.io.Serializable;
 class ConfigHolder implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	private boolean tips;
 	private boolean saturation;
 	private boolean spread;
 	private boolean rewards;
@@ -53,36 +54,44 @@ class ConfigHolder implements Serializable {
 	 * @param config	the source config
 	 */
 	public ConfigHolder(ConfigHolder config) {
-		  saturation = config.saturation;
-		  spread = config.spread;
-		  rewards = config.rewards;
-		  skip = config.skip;
-		  crafts = config.crafts;
-		  team = config.team;
-		  teamInv = config.teamInv;
-		  same = config.same;
-		  duoMode = config.duoMode;
-		  sbttMode = config.sbttMode;
-		  printTab = config.printTab;
-		  printTabAll = config.printTabAll;
-		  endOne = config.endOne;
-		  passiveAll = config.passiveAll;
-		  passiveTeam = config.passiveTeam;
-		  sbttAmount = config.sbttAmount;
-		  teamSize = config.teamSize;
-		  teamInvSize = config.teamInvSize;
-		  spreadDistance = config.spreadDistance;
-		  spreadRadius = config.spreadRadius;
-		  targetPerAge = config.targetPerAge;
-		  skipAge = config.skipAge;
-		  lastAge = config.lastAge;
-		  startTime = config.startTime;
-		  addedTime = config.addedTime;
-		  level = config.level;
-		  xpEnd = config.xpEnd;
-		  xpOverworld = config.xpOverworld;
-		  xpCoral = config.xpCoral;
-		  lang = config.lang;
+		tips = config.tips;
+		saturation = config.saturation;
+		spread = config.spread;
+		rewards = config.rewards;
+		skip = config.skip;
+		crafts = config.crafts;
+		team = config.team;
+		teamInv = config.teamInv;
+		same = config.same;
+		duoMode = config.duoMode;
+		sbttMode = config.sbttMode;
+		printTab = config.printTab;
+		printTabAll = config.printTabAll;
+		endOne = config.endOne;
+		passiveAll = config.passiveAll;
+		passiveTeam = config.passiveTeam;
+		sbttAmount = config.sbttAmount;
+		teamSize = config.teamSize;
+		teamInvSize = config.teamInvSize;
+		spreadDistance = config.spreadDistance;
+		spreadRadius = config.spreadRadius;
+		targetPerAge = config.targetPerAge;
+		skipAge = config.skipAge;
+		lastAge = config.lastAge;
+		startTime = config.startTime;
+		addedTime = config.addedTime;
+		level = config.level;
+		xpEnd = config.xpEnd;
+		xpOverworld = config.xpOverworld;
+		xpCoral = config.xpCoral;
+		lang = config.lang;
+	}
+	
+	/**
+	 * @return the tips
+	 */
+	public boolean isTips() {
+		return tips;
 	}
 
 	/**
@@ -295,6 +304,13 @@ class ConfigHolder implements Serializable {
 		return lang;
 	}
 
+	/**
+	 * @param tips the tips to set
+	 */
+	public void setTips(boolean tips) {
+		this.tips = tips;
+	}
+	
 	/**
 	 * @param saturation the saturation to set
 	 */

@@ -132,6 +132,7 @@ public abstract class KuffleType {
 		plugin.getCommand("k-resume").setExecutor(new KuffleResume());
 		plugin.getCommand("k-set-type").setExecutor(kuffleSetType);
 		plugin.getCommand("k-lang").setExecutor(new KuffleLang());
+		plugin.getCommand("k-tips").setExecutor(new KuffleTips());
 		plugin.getCommand("k-skip").setExecutor(new KuffleSkip());
 		plugin.getCommand("k-abandon").setExecutor(kuffleAbandon);
 		plugin.getCommand("k-adminskip").setExecutor(new KuffleSkip());
@@ -156,6 +157,7 @@ public abstract class KuffleType {
 		plugin.getCommand("k-list").setTabCompleter(new KuffleListTab());
 		plugin.getCommand("k-spectate").setTabCompleter(new KuffleSpectateTab());
 		plugin.getCommand("k-lang").setTabCompleter(new KuffleLangTab());
+		plugin.getCommand("k-tips").setTabCompleter(new KuffleTipsTab());
 		plugin.getCommand("k-adminskip").setTabCompleter(new KuffleCurrentGamePlayerTab());
 		plugin.getCommand("k-validate").setTabCompleter(new KuffleCurrentGamePlayerTab());
 		plugin.getCommand("k-validate-age").setTabCompleter(new KuffleCurrentGamePlayerTab());

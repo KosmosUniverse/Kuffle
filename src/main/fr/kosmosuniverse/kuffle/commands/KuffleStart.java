@@ -122,6 +122,7 @@ public class KuffleStart extends AKuffleCommand {
 				ActionBar.sendRawTitle(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + "GO!" + ChatColor.RESET, game.getPlayer());
 				ItemStack box = getStartBox(game.getPlayer().getName());
 				game.getPlayer().getInventory().addItem(box);
+				game.sendTips();
 			});
 
 			if (KuffleMain.getInstance().getGameLoop() == null) {

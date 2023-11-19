@@ -536,6 +536,8 @@ public class GameManager {
 			games.forEach((playerName, playerGame) -> playerGame.getPlayer().sendMessage(LangManager.getMsgLang("AGE_MOVED", playerGame.getConfigLang()).replace("<#>", ChatColor.BLUE + "<" + ChatColor.GOLD + player + ChatColor.BLUE + ">").replace("<##>", "<" + AgeManager.getAgeByNumber(games.get(player).getAge()).getColor() + AgeManager.getAgeByNumber(games.get(player).getAge()).getName().replace("_Age", "") + ChatColor.BLUE + ">")));
 			spectators.forEach(p -> p.sendMessage(LangManager.getMsgLang("AGE_MOVED", Config.getLang()).replace("<#>", ChatColor.BLUE + "<" + ChatColor.GOLD + player + ChatColor.BLUE + ">").replace("<##>", "<" + AgeManager.getAgeByNumber(games.get(player).getAge()).getColor() + AgeManager.getAgeByNumber(games.get(player).getAge()).getName().replace("_Age", "") + ChatColor.BLUE + ">")));
 		}
+		
+		games.get(player).sendTips();
 	}
 	
 	/**
@@ -720,10 +722,20 @@ public class GameManager {
 	 * Sets the player lang
 	 * 
 	 * @param playerName	The player
-	 * @param lang		The lang to set
+	 * @param lang			The lang to set
 	 */
 	public static void setPlayerLang(String playerName, String lang) {
 		games.get(playerName).setPlayerLang(lang);
+	}
+	
+	/**
+	 * Sets the player tips
+	 * 
+	 * @param playerName	The player
+	 * @param lang			The tips to set
+	 */
+	public static void setPlayerTips(String playerName, boolean tips) {
+		games.get(playerName).setTips(tips);
 	}
 
 	/**
