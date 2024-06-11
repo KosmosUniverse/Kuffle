@@ -20,6 +20,7 @@ import main.fr.kosmosuniverse.kuffle.crafts.CraftImpl;
 import main.fr.kosmosuniverse.kuffle.crafts.Template;
 import main.fr.kosmosuniverse.kuffle.type.KuffleType;
 import main.fr.kosmosuniverse.kuffle.utils.ItemUtils;
+import main.fr.kosmosuniverse.kuffle.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 
 /**
@@ -47,10 +48,11 @@ public class CraftManager {
 	 * 
 	 * @throws ParseException raised by JSON parser at crafts.json file reading
 	 */
-	public static void setupCrafts(KuffleType.Type gameType, String content) throws ParseException {
+	public static int setupCrafts(KuffleType.Type gameType, String content) throws ParseException {
 		JSONParser parser = new JSONParser();
 		JSONObject crafts = (JSONObject) parser.parse(content);
 		int i = 1;
+		int badCrafts = 0;
 		
 		while (crafts.containsKey("" + i)) {
 			JSONObject craft = (JSONObject) crafts.get("" + i);
@@ -63,13 +65,19 @@ public class CraftManager {
 			if (VersionManager.isVersionValid(version, remVersion) &&
 					(kuffleType.equals("BOTH") || gameType == KuffleType.Type.valueOf(kuffleType.toUpperCase())) &&
 					(mandatory || Config.getCrafts())) {
-				addCraft(new CraftImpl(craft));
+				try {
+					addCraft(new CraftImpl(craft));
+				} catch (Exception e) {
+					badCrafts++;
+					Utils.logException(e);
+				}
 			}
 			
 			i++;
 		}
 		
 		setupCraftsInventories();
+		return badCrafts;
 	}
 	
 	/**

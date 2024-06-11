@@ -24,7 +24,6 @@ public class KuffleSkip extends AKuffleCommand {
 			return ;
 		}
 		
-		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("ITEM_SKIPPED", Config.getLang()).replace("[#]", " [" + GameManager.getPlayerTarget(playerTarget) + "] ").replace("<#>", " <" + playerTarget + ">"));
 		GameManager.skipPlayerTarget(playerTarget, true);
 	}
 

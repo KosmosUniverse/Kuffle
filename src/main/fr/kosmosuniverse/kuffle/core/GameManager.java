@@ -472,7 +472,7 @@ public class GameManager {
 			return ;
 		}
 
-		tmpGame.setTimeShuffle(System.currentTimeMillis());
+		tmpGame.setTimeShuffle(System.currentTimeMillis() - tmpGame.getInterval() + 5);
 		
 		if (Config.getDouble()) {
 			tmpGame.setTargetDisplay(LangManager.getTargetLang(tmpGame.getCurrentTarget().split("/")[0], tmpGame.getConfigLang()) + "/" + LangManager.getTargetLang(tmpGame.getCurrentTarget().split("/")[1], tmpGame.getConfigLang()));

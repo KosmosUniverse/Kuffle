@@ -65,12 +65,7 @@ public class VersionManager {
 	 * @return the version as a String
 	 */
 	public static String getVersion() {
-		String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-
-		version = version.split("v")[1];
-		version = version.split("_")[0] + "." + version.split("_")[1];
-
-		return version;
+		return Bukkit.getVersion();
 	}
 	
 	/**
@@ -95,7 +90,7 @@ public class VersionManager {
 	 */
 	public static int getVersionByValue(String version) {
 		for (Map.Entry<Integer, String> entry : versions.entrySet()) {
-			if (entry.getValue().equals(version)) {
+			if (version.contains(entry.getValue())) {
 				return entry.getKey();
 			}
 		}

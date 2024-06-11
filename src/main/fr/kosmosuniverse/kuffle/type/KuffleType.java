@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.simple.parser.ParseException;
 
@@ -135,7 +136,7 @@ public abstract class KuffleType {
 		plugin.getCommand("k-tips").setExecutor(new KuffleTips());
 		plugin.getCommand("k-skip").setExecutor(new KuffleSkip());
 		plugin.getCommand("k-abandon").setExecutor(kuffleAbandon);
-		plugin.getCommand("k-adminskip").setExecutor(new KuffleSkip());
+		plugin.getCommand("k-adminskip").setExecutor(new KuffleAdminSkip());
 		plugin.getCommand("k-validate").setExecutor(new KuffleValidate());
 		plugin.getCommand("k-validate-age").setExecutor(new KuffleValidateAge());
 		plugin.getCommand("k-players").setExecutor(new KufflePlayers());
@@ -181,10 +182,10 @@ public abstract class KuffleType {
 	 * 
 	 * @throws KuffleFileLoadException if file loading fails
 	 */
-	protected void setupType(JavaPlugin plugin) throws KuffleFileLoadException {
+	protected void setupType(Player player, JavaPlugin plugin) throws KuffleFileLoadException {
 		try {
 			TargetManager.setup(getType(), FilesConformity.getContent("targets.json"));
-		} catch (IllegalArgumentException | ParseException e) {
+		} catch (Exception e) {
 			Utils.logException(e);
 			TargetManager.clear();
 			
@@ -201,7 +202,11 @@ public abstract class KuffleType {
 		}
 		
 		try {
-			CraftManager.setupCrafts(getType(), FilesConformity.getContent("crafts.json"));
+			int badCrafts = CraftManager.setupCrafts(getType(), FilesConformity.getContent("crafts.json"));
+			
+			if (badCrafts > 0) {
+				LogManager.getInstanceSystem().writeMsg(player, "[WARNING] : Some crafts coul not be load, check Kuffle system logs for more informations.");
+			}
 		} catch (IllegalArgumentException | ParseException e) {
 			Utils.logException(e);
 			CraftManager.clear();

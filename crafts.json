@@ -291,8 +291,9 @@
     "Name" : "MossyCobblestone",
     "Type" : "WorkBench",
     "Version" : "1.15",
+    "RemVersion" : "1.20",
     "Mandatory" : false,
-    "KuffleType" : "ITEMS",
+    "KuffleType" : "BOTH",
     "Result" : {
       "Type" : "MOSSY_COBBLESTONE",
       "Amount" : 1
@@ -310,6 +311,7 @@
     "Name" : "MossyStoneBrick",
     "Type" : "WorkBench",
     "Version" : "1.15",
+    "RemVersion" : "1.20",
     "Mandatory" : false,
     "KuffleType" : "BOTH",
     "Result" : {
@@ -1161,8 +1163,9 @@
     "Type" : "WorkBench",
     "Shape" : "SSS-SSS-SSS",
     "Version" : "1.17",
+    "RemVersion" : "1.20",
     "Mandatory" : true,
-    "KuffleType" : "ITEMS",
+    "KuffleType" : "BOTH",
     "Result" : {
       "Type" : "MOSS_BLOCK",
       "Amount" : 1
@@ -1259,6 +1262,61 @@
     "Ingredients" : {
       "S" : {
         "Type" : "COBWEB"
+      }
+    }
+  },
+  "66" : {
+    "Name" : "MossyCobblestone",
+    "Type" : "WorkBench",
+    "Version" : "1.20",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "MOSSY_COBBLESTONE",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COBBLESTONE"
+      },
+      "B" : {
+        "Type" : "SHORT_GRASS"
+      }
+    }
+  },
+  "67" : {
+    "Name" : "MossyStoneBrick",
+    "Type" : "WorkBench",
+    "Version" : "1.20",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "MOSSY_STONE_BRICKS",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "STONE_BRICKS"
+      },
+      "B" : {
+        "Type" : "SHORT_GRASS"
+      }
+    }
+  },
+  "68" : {
+    "Name" : "MossBlock",
+    "Type" : "WorkBench",
+    "Shape" : "SSS-SSS-SSS",
+    "Version" : "1.20",
+    "Mandatory" : true,
+    "KuffleType" : "ITEMS",
+    "Result" : {
+      "Type" : "MOSS_BLOCK",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "S" : {
+        "Type" : "SHORT_GRASS"
       }
     }
   }

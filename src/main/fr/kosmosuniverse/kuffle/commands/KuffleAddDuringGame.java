@@ -69,7 +69,6 @@ public class KuffleAddDuringGame extends AKuffleCommand {
 		KuffleMain.getInstance().setPaused(true);
 
 		GameManager.addPlayer(sender, player);
-		LogManager.getInstanceSystem().writeMsg(sender, LangManager.getMsgLang("ADDED_ONE_LIST", Config.getLang()));
 
 		if (team != null) {
 			TeamManager.getInstance().affectPlayer(team, player);

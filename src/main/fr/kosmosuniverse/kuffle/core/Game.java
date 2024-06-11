@@ -241,6 +241,7 @@ public class Game implements Serializable {
 	 * @param isSbtt	True if sbtt was used instead of target
 	 */
 	public void playerFoundTarget(boolean isSbtt) {
+		LogManager.getInstanceGame().logMsg(player.getName(), LangManager.getMsgLang("TARGET_FOUND", configLang).replace("[#]", "[" + currentTarget + "]"));
 		currentTarget = null;
 		targetCount++;
 		player.playSound(player.getLocation(), Sound.BLOCK_BELL_USE, 1f, 1f);
@@ -650,6 +651,7 @@ public class Game implements Serializable {
 		oStream.writeBoolean(lose);
 		oStream.writeBoolean(dead);
 		
+		oStream.writeInt(time);
 		oStream.writeInt(targetCount);
 		oStream.writeInt(age);
 		oStream.writeInt(gameRank);
@@ -696,13 +698,13 @@ public class Game implements Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	private void readObject(ObjectInputStream iStream) throws ClassNotFoundException, IOException  {
-		time = Config.getStartTime();
 		timeBase = System.currentTimeMillis();
 		
 		finished = iStream.readBoolean();
 		lose = iStream.readBoolean();
 		dead = iStream.readBoolean();
 		
+		time = iStream.readInt();
 		targetCount = iStream.readInt();
 		age = iStream.readInt();
 		gameRank = iStream.readInt();

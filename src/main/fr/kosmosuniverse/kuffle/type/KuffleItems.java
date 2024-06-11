@@ -1,5 +1,6 @@
 package main.fr.kosmosuniverse.kuffle.type;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import main.fr.kosmosuniverse.kuffle.core.CraftManager;
@@ -19,9 +20,9 @@ public class KuffleItems extends KuffleTypeDecorator {
 	 * 
 	 * @throws KuffleFileLoadException if one of the resource file load fails
 	 */	
-	public KuffleItems(KuffleType type, JavaPlugin plugin) throws KuffleFileLoadException {
+	public KuffleItems(Player player, KuffleType type, JavaPlugin plugin) throws KuffleFileLoadException {
 		super(type);
-		setupKuffleType(plugin);
+		setupKuffleType(player, plugin);
 	}
 	
 	public void setupSbtt() {
@@ -39,8 +40,8 @@ public class KuffleItems extends KuffleTypeDecorator {
 	 * 
 	 * @throws KuffleFileLoadException if file loading fails
 	 */
-	public void setupKuffleType(JavaPlugin plugin) throws KuffleFileLoadException {
-		setupType(plugin);
+	public void setupKuffleType(Player player, JavaPlugin plugin) throws KuffleFileLoadException {
+		setupType(player, plugin);
 		
 		if (playerInteractItems == null) {
 			playerInteractItems = new ItemsPlayerInteract();

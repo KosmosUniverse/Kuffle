@@ -606,5 +606,9 @@
 	"PLAYER_NOT_IN_LIST" : {
 		"en" : "You are not in the game list. You can be added with /k-list <playerName>",
 		"fr" : "Vous n'etes pas dans la liste de jeu. Vous pouvez etre ajoute via /k-list <NomDuJoueur>"
+	},
+	"TARGET_FOUND" : {
+		"en" : "Player found his target : [#].",
+		"fr" : "Le joueur a trouvé sa cible : [#]."
 	}
 }

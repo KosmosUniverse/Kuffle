@@ -41,7 +41,7 @@ public class KuffleSetType extends AKuffleCommand {
 				confirm = null;
 				LogManager.getInstanceSystem().writeMsg(player, "[Warning] : Command /k-set-type cancelled.");
 			}
-		}, 100);
+		}, 200);
 	}
 	
 	private void confirmSubmit(Player player, String key, KuffleType.Type type) {
@@ -68,10 +68,10 @@ public class KuffleSetType extends AKuffleCommand {
 		
 		switch (type) {
 			case ITEMS:
-				KuffleMain.getInstance().setType(new KuffleItems(KuffleMain.getInstance().getType(), KuffleMain.getInstance()));
+				KuffleMain.getInstance().setType(new KuffleItems(player, KuffleMain.getInstance().getType(), KuffleMain.getInstance()));
 				break;
 			case BLOCKS:
-				KuffleMain.getInstance().setType(new KuffleBlocks(KuffleMain.getInstance().getType(), KuffleMain.getInstance()));
+				KuffleMain.getInstance().setType(new KuffleBlocks(player, KuffleMain.getInstance().getType(), KuffleMain.getInstance()));
 				break;
 			case NO_TYPE:
 			default:
