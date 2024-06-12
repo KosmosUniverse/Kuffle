@@ -2,6 +2,7 @@ package main.fr.kosmosuniverse.kuffle.core;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -250,12 +251,14 @@ public class TargetManager {
 	 */
 	private static List<Inventory> setupAgeInvs(String age, List<String> ageTargets) {
 		List<Inventory> invs = new ArrayList<>();
+		List<String> tmpAgeTargets = new ArrayList<>(ageTargets);
 		Inventory inv;
 		int invCnt = 9;
 		int nbInv = 1;
-		boolean hasNext = ageTargets.size() > 45;
+		enrichAgeTarget(tmpAgeTargets);
+		boolean hasNext = tmpAgeTargets.size() > 45;
 
-		if (ageTargets.size() > 45) {
+		if (hasNext) {
 			inv = Bukkit.createInventory(null, 54, ChatColor.BLACK + age + " Targets Tab 1");
 		} else {
 			inv = Bukkit.createInventory(null, 54, ChatColor.BLACK + age + " Targets");
@@ -263,7 +266,7 @@ public class TargetManager {
 		
 		setupFirstRow(inv, true, hasNext);
 		
-		for (String target : ageTargets) {
+		for (String target : tmpAgeTargets) {
 			inv.addItem(getMaterial(target));
 			
 			if (invCnt == 53) {
@@ -282,7 +285,29 @@ public class TargetManager {
 		
 		invs.add(inv);
 		
+		tmpAgeTargets.clear();
+		
 		return invs;
+	}
+	
+	private static void enrichAgeTarget(List<String> ageTargets) {
+		List<String> any = new ArrayList<>();
+		List<String> toRemove = new ArrayList<>();
+		
+		ageTargets.stream().filter(target -> target.startsWith("*")).forEach(target -> {
+			String cleanTarget = target.replace("*", "").toUpperCase();
+			
+			toRemove.add(target);
+			Arrays.asList(Material.values()).stream().filter(material -> material.toString().contains(cleanTarget)).forEach(material -> any.add(material.toString()));
+		});
+		
+		if (!any.isEmpty()) {
+			ageTargets.addAll(any);
+		}
+		
+		if (!toRemove.isEmpty()) {
+			ageTargets.removeAll(toRemove);
+		}
 	}
 	
 	/**

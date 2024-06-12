@@ -467,7 +467,7 @@ public class FilesConformity {
 		boolean ret = true;
 		
 		for (Object ageKey : ageObj.keySet()) {
-			if (Material.matchMaterial(ageKey.toString()) == null) {
+			if (Material.matchMaterial(ageKey.toString()) == null && !ageKey.toString().startsWith("*")) {
 				ret = false;
 				LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_TARGET_MATERIAL", Config.getLang()).replace("%ss", version).replace("%s", ageKey.toString()));
 			}

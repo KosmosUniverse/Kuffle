@@ -227,9 +227,13 @@ public class Game implements Serializable {
 		if (Config.getDouble()) {
 			String[] targets = currentTarget.split("/");
 
-			ret = targets[0].equals(target.getType().name().toLowerCase()) || targets[1].equals(target.getType().name().toLowerCase());
+			ret = targets[0].equals(target.getType().name().toLowerCase()) ||
+					targets[1].equals(target.getType().name().toLowerCase()) ||
+					((targets[0].startsWith("*") && target.getType().name().toLowerCase().contains(targets[0].replace("*", "")))) ||
+					((targets[1].startsWith("*") && target.getType().name().toLowerCase().contains(targets[1].replace("*", ""))));
 		} else {
-			ret = currentTarget.equals(target.getType().name().toLowerCase());
+			ret = currentTarget.equals(target.getType().name().toLowerCase()) ||
+					(currentTarget.startsWith("*") && target.getType().name().toLowerCase().contains(currentTarget.replace("*", "")));
 		}
 		
 		return ret;
@@ -241,7 +245,6 @@ public class Game implements Serializable {
 	 * @param isSbtt	True if sbtt was used instead of target
 	 */
 	public void playerFoundTarget(boolean isSbtt) {
-		LogManager.getInstanceGame().logMsg(player.getName(), LangManager.getMsgLang("TARGET_FOUND", configLang).replace("[#]", "[" + currentTarget + "]"));
 		currentTarget = null;
 		targetCount++;
 		player.playSound(player.getLocation(), Sound.BLOCK_BELL_USE, 1f, 1f);
@@ -250,6 +253,8 @@ public class Game implements Serializable {
 		
 		if (isSbtt) {
 			sbttCount++;
+		} else {
+			LogManager.getInstanceGame().logMsg(player.getName(), LangManager.getMsgLang("TARGET_FOUND", configLang).replace("[#]", "[" + currentTarget + "]"));
 		}
 	}
 	
