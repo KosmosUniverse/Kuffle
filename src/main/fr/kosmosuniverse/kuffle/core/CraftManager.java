@@ -118,24 +118,24 @@ public class CraftManager {
 	 * @param player	The player that have to discover crafts
 	 */
 	public static void discoverCrafts(Player player) {
-		recipes.stream()
-			.filter(craft -> craft.isMandatory() || Config.getCrafts())
-			.forEach(craft -> player.discoverRecipe(craft.getKey()));
+		List<NamespacedKey> keys = getGameKeyList();
+		
+		player.discoverRecipes(keys);
 	}
 	
 	/**
 	 * Discover crafts for all current players
 	 */
 	public static void discoverCrafts() {
-		for (ACraft craft : recipes) {
-			if (craft.isMandatory() || Config.getCrafts()) {
-				GameManager.discoverCraft(craft.getKey());
-			}
-		}
+		List<NamespacedKey> keys = getGameKeyList();
+		
+		GameManager.applyToPlayers(game -> {
+			game.getPlayer().discoverRecipes(keys);
+		});
 	}
 	
-	public static List<NamespacedKey> getRecipesKey() {
-		return recipes.stream().map(craft -> craft.getKey()).collect(Collectors.toList());
+	private static List<NamespacedKey> getGameKeyList() {
+		return recipes.stream().filter(recipe -> recipe.isMandatory() || Config.getCrafts()).map(recipe -> recipe.getKey()).collect(Collectors.toList());
 	}
 	
 	/**

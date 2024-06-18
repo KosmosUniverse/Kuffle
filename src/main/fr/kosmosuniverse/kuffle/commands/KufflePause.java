@@ -36,6 +36,7 @@ public class KufflePause extends AKuffleCommand {
 			game.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 10, false, false, false));			
 		});
 		
-		return true;	}
+		return true;
+	}
 
 }

@@ -229,8 +229,8 @@ public class Game implements Serializable {
 
 			ret = targets[0].equals(target.getType().name().toLowerCase()) ||
 					targets[1].equals(target.getType().name().toLowerCase()) ||
-					((targets[0].startsWith("*") && target.getType().name().toLowerCase().contains(targets[0].replace("*", "")))) ||
-					((targets[1].startsWith("*") && target.getType().name().toLowerCase().contains(targets[1].replace("*", ""))));
+					(targets[0].startsWith("*") && target.getType().name().toLowerCase().contains(targets[0].replace("*", ""))) ||
+					(targets[1].startsWith("*") && target.getType().name().toLowerCase().contains(targets[1].replace("*", "")));
 		} else {
 			ret = currentTarget.equals(target.getType().name().toLowerCase()) ||
 					(currentTarget.startsWith("*") && target.getType().name().toLowerCase().contains(currentTarget.replace("*", "")));

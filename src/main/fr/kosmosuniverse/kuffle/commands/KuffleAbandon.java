@@ -105,13 +105,12 @@ public class KuffleAbandon extends AKuffleCommand {
 	public boolean runCommand() {
 		if (!GameManager.hasPlayer(player.getName())) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_PLAYING", GameManager.getPlayerLang(player.getName())));
-			return true;
-		}
-		
-		if (abandonToConfirm.contains(player.getUniqueId())) {
-			abandonConfirmed();
 		} else {
-			abandonToConfirm(player);
+			if (abandonToConfirm.contains(player.getUniqueId())) {
+				abandonConfirmed();
+			} else {
+				abandonToConfirm(player);
+			}
 		}
 		
 		return true;

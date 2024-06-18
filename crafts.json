@@ -127,7 +127,7 @@
     "Mandatory" : false,
     "KuffleType" : "BOTH",
     "Result" : {
-      "Type" : "bell",
+      "Type" : "BELL",
       "Amount" : 1
     },
     "Ingredients" : {
