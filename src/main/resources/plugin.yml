@@ -1,0 +1,231 @@
+name: Kuffle
+version: 2.8
+author: KosmosUniverse
+main: fr.kosmosuniverse.kuffle.KuffleMain
+api-version: 1.15
+
+commands:
+   k-spawn-multiblock:
+      usage: /<command> <MultiblockName>
+      description: command to spawn multiBlock
+      permission: inferno.flagrate
+   k-config:
+      usage: /<command> [<key> <value>]*
+      description: command to see or change game configuration
+   k-list:
+      usage: /<command> [reset | remove <Player name> | add <@a | Player name>]
+      description: command to add/remove players to the list and view/reset the list
+      permission: inferno.flagrate
+   k-save:
+      usage: /<command>
+      description: command to save and end the game of all players
+      permission: inferno.flagrate
+   k-load:
+      usage: /<command>
+      description: command to load and start the game of all registered players
+      permission: inferno.flagrate
+   k-start:
+      usage: /<command>
+      description: command to start the game
+      permission: inferno.flagrate
+   k-stop:
+      usage: /<command>
+      description: command to stop the game when it is running
+      permission: inferno.flagrate
+   k-pause:
+      usage: /<command>
+      description: command to pause the game when it is running
+      permission: inferno.flagrate
+   k-resume:
+      usage: /<command>
+      description: command to resume the game when it is paused
+      permission: inferno.flagrate
+   k-adminskip:
+      usage: /<command>
+      description: command to skip a target for any player without cost
+      permission: inferno.flagrate
+   k-validate:
+      usage: /<command> <Player name>
+      description: command to validate a target
+      permission: inferno.flagrate
+   k-validate-age:
+      usage: /<command> <Player name>
+      description: command to validate an age
+      permission: inferno.flagrate
+   k-team-create:
+      usage: /<command> <TeamName> [TeamColor]
+      description: command to create Team
+      permission: inferno.flagrate
+   k-team-delete:
+      usage: /<command> <TeamName>
+      description: command to delete Team
+      permission: inferno.flagrate
+   k-team-affect-player:
+      usage: /<command> <TeamName> <PlayerName>
+      description: command to affect a Player to a Team
+      permission: inferno.flagrate
+   k-team-remove-player:
+      usage: /<command> <TeamName> <PlayerName>
+      description: command to remove a Player from a Team
+      permission: inferno.flagrate
+   k-team-reset-players:
+      usage: /<command> <TeamName>
+      description: command to reset player list in a team
+      permission: inferno.flagrate
+   k-team-random-player:
+      usage: /<command>
+      description: command to put random players in teams
+      permission: inferno.flagrate
+   k-team-color:
+      usage: /<command> <TeamName> <TeamColor>
+      description: command to change team color
+      permission: inferno.flagrate
+   k-set-type:
+      usage: /<command> <Kuffle Type>
+      description: command to set the plugin game type
+      permission: inferno.flagrate
+   k-restoreinv:
+      usage: /<command> <PlayerName>
+      description: command to access player death inv
+      permission: inferno.flagrate
+   k-give:
+      usage: /<command> <PlayerName> <<item <kuffleItem> [amount]> | <reward [age]>>
+      description: command to give Kuffle item or reward to a player
+      permission: inferno.flagrate
+   k-spectate:
+      usage: /<command> [display | reset]
+      description: command to toggle your spectate state (no args) and display/reset spectators
+   k-team-show:
+      usage: /<command> [TeamName]
+      description: command to show all or one team
+   k-multiblocks:
+      usage: /<command>
+      description: command to see multiBlocks
+   k-skip:
+      usage: /<command>
+      description: command to skp a target with cost
+   k-abandon:
+      usage: /<command>
+      description: command to abandon a game
+   k-crafts:
+      usage: /<command>
+      description: command to see custom crafts
+   k-agetargets:
+      usage: /<command> [age name]
+      description: command to see current age targets
+   k-lang:
+      usage: /<command> [lang]
+      description: command to see or change personal lang
+   k-players:
+      usage: /<command>
+      description: command to tp to other players after game end
+   k-team-inv:
+      usage: /<command>
+      description: command to see team inventory
+   k-tips:
+      usage: /<command> <true | false>
+      description: command to set player tips state
+
+permissions:
+   k-spawn-multiblock:
+      description: command to spawn multiBlock
+      default: op
+   k-op:
+      description: default op permission
+      default: op
+   k-list:
+      description: command to add players to the list and view the list
+      default: op
+   k-save:
+      description: command to save and end the game of all players
+      default: op
+   k-load:
+      description: command to load and start the game of all registered players
+      default: op
+   k-start:
+      description: command to start the game
+      default: op
+   k-stop:
+      description: command to stop the game when it is running
+      default: op
+   k-pause:
+      description: command to pause the game when it is running
+      default: op
+   k-resume:
+      description: command to resume the game when it is paused
+      default: op
+   k-validate:
+      description: command to validate a block
+      default: op
+   k-validate-age:
+      description: command to validate a block
+      default: op
+   k-adminskip:
+      description: command to skip a target for any player without cost
+      default: op
+   k-team-create:
+      description: command to create Team
+      default: op
+   k-team-delete:
+      description: command to delete Team
+      default: op
+   k-team-affect-player:
+      description: command to affect a Player to a Team
+      default: op
+   k-team-remove-player:
+      description: command to remove a Player from a Team
+      default: op
+   k-team-reset-players:
+      description: command to reset player list in a team
+      default: op
+   k-team-random-player:
+      description: command to put random players in teams
+      default: op
+   k-team-color:
+      description: command to change team color
+      default: op
+   k-add-during-game:
+      description: command to add a player during the game
+      default: op
+   k-set-type:
+      description: command to set the plugin game type
+      default: op
+   k-restoreinv:
+      description: command to access player death inv
+      default: op
+   k-give:
+      description: command to give Kuffle item or reward to a player
+      default: op
+   k-team-show:
+      description: command to show all or one team
+      default: true
+   k-multiblocks:
+      description: command to see multiBlocks
+      default: true
+   k-config:
+      default: true
+      description: command to see or change game configuration
+   k-skip:
+      description: command to skip a block
+      default: true
+   k-abandon:
+      description: command to abandon a game
+      default: true
+   k-crafts:
+      description: command to see custom crafts
+      default: true
+   k-agetargets:
+      description: command to see current age targets
+      default: true
+   k-lang:
+      description: command to see or change personal lang
+      default: true
+   k-players:
+      description: command to tp to other players after game end
+      default: true
+   k-team-inv:
+      description: command to see team inventory
+      default: true
+   k-tips:
+      description: command to set player tips state
+      default: true

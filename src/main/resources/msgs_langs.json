@@ -1,0 +1,618 @@
+{
+    "PLAYER_NOT_FOUND": {
+        "en": "Can't find player <#> to skip his item.",
+        "fr": "Impossible de trouver le joueur <#> pour passer son objet."
+    },
+    "TARGET_FOUND": {
+        "en": "Player found his target : [#].",
+        "fr": "Le joueur a trouvé sa cible : [#]."
+    },
+    "KEY_NOT_REC": {
+        "en": "Key [#] not recognized.",
+        "fr": "La cle [#] n'est pas reconnue."
+    },
+    "FC_TARGET_MATERIAL_KEYS": {
+        "en": "Target [%s] of version [%ss] does not contain all keys.",
+        "fr": "La cible [%s] de la version [%ss] ne contient pas toutes les cles."
+    },
+    "COMPASS_PAIRED": {
+        "en": "This CoralCompass is already paired to a warm ocean.",
+        "fr": "Ce CoralCompass est deja lie a un ocean chaud."
+    },
+    "WARM_NOT_FOUND": {
+        "en": "Warm ocean not found, move away and try again.",
+        "fr": "Ocean chaud non trouve, deplacez-vous et reessayez."
+    },
+    "ADD_LISTENERS": {
+        "en": "Add %i game listeners.",
+        "fr": "Ajout de %i listeners de jeu."
+    },
+    "LANG_SET": {
+        "en": "Language set to [#].",
+        "fr": "La langue a ete definie sur [#]."
+    },
+    "GAME_LAUNCHED": {
+        "en": "A game is already launched.",
+        "fr": "Le jeu est deja lance"
+    },
+    "TIPS_OVERWORLD_TELEPORTER": {
+        "en": "Do not forget to take some quartz before going to the End.",
+        "fr": "Ne pas oublier de prendre du quartz avant de partir dans l'End."
+    },
+    "ITEM_SKIP": {
+        "en": "Item [#] was skipped.",
+        "fr": "L'objet [#] a ete passe."
+    },
+    "GAME_PAUSED": {
+        "en": "Game Paused",
+        "fr": "Le jeu en pause"
+    },
+    "FC_TARGET_TYPE": {
+        "en": "Target type [%s] for version [%ss] is incorrect.",
+        "fr": "Pour les cibles, le type [%s] de la version [%ss] est incorrecte."
+    },
+    "VALIDATE_PLAYER_ITEM": {
+        "en": "Can't find player to validate his item.",
+        "fr": "Impossible de trouver le joueur pour valider son objet."
+    },
+    "FC_LANG_EVERYWHERE": {
+        "en": "Lang [%s] is not everywhere in lang file.",
+        "fr": "La langue [%s] n'est pas presente dans tous les objets du fichier."
+    },
+    "FC_TARGET_MATERIAL_SBTT": {
+        "en": "Target [%s] of version [%ss] has sbtt value [%sss] that is not boolean.",
+        "fr": "La cible [%s] de la version [%ss] a une valeur de sbtt [%sss] qui n'est pas un booleen."
+    },
+    "FC_REWARD_EFFECT": {
+        "en": "Reward [%s] contains unknown effect : [%ss].",
+        "fr": "Le Reward [%s] contient un effet inconnu : [%ss]."
+    },
+    "NOT_ALLOWED": {
+        "en": "You are not allowed to do this command.",
+        "fr": "Vous n'êtes pas autorise a effectuer cette commande."
+    },
+    "FINISH_TOTAL": {
+        "en": "    - Total Time: %t",
+        "fr": "    - Temps total: %t"
+    },
+    "HERE_DIES": {
+        "en": "Here dies",
+        "fr": "Ici est mort"
+    },
+    "TEAM_ENABLE": {
+        "en": "Please enable Teams with k-config command.",
+        "fr": "Vous devez activer les equipes avec la commande k-config."
+    },
+    "GAME_DONE": {
+        "en": "Game Done ! Rank : %i",
+        "fr": "Jeu Termine ! Rang : %i"
+    },
+    "NO_SPEC": {
+        "en": "Spectators list is empty.",
+        "fr": "La liste des spectateurs est vide."
+    },
+    "CONSTRUCTED": {
+        "en": "You have just constructed %s.",
+        "fr": "Vous venez de construire %s."
+    },
+    "GAME_STARTED": {
+        "en": "Game Started, please wait for the countdown.",
+        "fr": "Jeu demarre, attendez la fin du compte a rebour."
+    },
+    "TEAM_PLAYER": {
+        "en": "This player is already in this team.",
+        "fr": "Ce joueur est deja dans cette equipe."
+    },
+    "FC_TARGET_MATERIAL": {
+        "en": "Target [%s] of version [%ss] does not exists in Material Enum.",
+        "fr": "La cible [%s] de la version [%ss] n'existe pas dans Material."
+    },
+    "COLOR_ALREADY_USED": {
+        "en": "Color [#] is already used, please choose another one.",
+        "fr": "La couleur [#] est deja utilisee, choisissez-en une autre."
+    },
+    "TEAM_CREATED": {
+        "en": "Team <#> was created.",
+        "fr": "L'equipe <#> a ete creee."
+    },
+    "ADD_CMD": {
+        "en": "Add %i commands.",
+        "fr": "Ajout de %i commandes."
+    },
+    "TEAM_PREVENT_ADD": {
+        "en": "Cannot add player due to current team state.",
+        "fr": "Impossible d'ajouter un joueur a cause de l'etat courant des equipes."
+    },
+    "FC_TARGET_VERSION": {
+        "en": "Target version [%s] does not exists in loaded versions.",
+        "fr": "Pour les cibles, la version [%s] n'existe pas dans les version chargees."
+    },
+    "TARGET_DOUBLE": {
+        "en": "[#] or [##]",
+        "fr": "[#] ou [##]"
+    },
+    "AGE_NOT_EXISTS": {
+        "en": "This age does not exist.",
+        "fr": "Cet Age n'existe pas."
+    },
+    "FC_TARGET_MATERIAL_LANG": {
+        "en": "Target [%s] of version [%ss] has lang value [%sss] that is not loaded.",
+        "fr": "La cible [%s] de la version [%ss] a une langue [%sss] qui n'est pas chargee."
+    },
+    "REMOVED_SPEC_LIST": {
+        "en": "Player no longer spectator.",
+        "fr": "Le joueur n'est plus spectateur."
+    },
+    "NOT_PLAYING": {
+        "en": "You are not playing in this game.",
+        "fr": "Vous ne jouez pas dans cette partie."
+    },
+    "TEAM_TOO_MANY_PLAYERS": {
+        "en": "There are too many players for that number of team, please create more teams or change team size with k-config command.",
+        "fr": "Il y a trop de joueur pour ce nombre d'equipe, ajoutez des equipes ou changez la taille des equipes avec la commande k-config."
+    },
+    "CONFIG_SET": {
+        "en": "Config: parameter [#] set to [##].",
+        "fr": "Configuration : le parametre [#] a ete defini sur la valeur [##]."
+    },
+    "LIST_NOT_EMPTY": {
+        "en": "There already are players in list.",
+        "fr": "Il y a deja des joueurs dans la liste de jeu."
+    },
+    "GAME_NOT_LAUNCHED": {
+        "en": "The game has not been launched yet.",
+        "fr": "Le jeu n'a pas encore commence."
+    },
+    "NO_TEAM": {
+        "en": "No Team.",
+        "fr": "Aucune equipe."
+    },
+    "OFF": {
+        "en": "Plugin turned OFF.",
+        "fr": "Plugin arrête."
+    },
+    "PLAYER_NOT_EXISTS": {
+        "en": "Player <#> does not exists.",
+        "fr": "Le joueur <#> n'existe pas."
+    },
+    "AGE_MOVED": {
+        "en": "<#> has moved to the <##> Age.",
+        "fr": "<#> est passe a l'age <##>."
+    },
+    "ABANDONED": {
+        "en": "Abandoned",
+        "fr": "Abandon"
+    },
+    "ALL_DISCONNECTED": {
+        "en": "No player remain connected, game saved.",
+        "fr": "Tous les joueurs se sont deconnectes, la partie a ete sauvegardee."
+    },
+    "TEAM_ALREADY_PLAYERS": {
+        "en": "There already are players in some teams, please reset all teams using k-team-reset-players command.",
+        "fr": "Il y a deja des joueur dans certaines equipes, videz toutes les equipes avec la commande k-team-reset-players."
+    },
+    "FC_AGE_TEXTCOLOR": {
+        "en": "Age [%s] does not contain 'TextColor' Object.",
+        "fr": "L'age [%s] ne contient pas d'objet 'TextColor'"
+    },
+    "CONFIG_DEFAULT": {
+        "en": "Config for <#> is not correct, use of default value.",
+        "fr": "La configuration pour <#> n'est pas correcte, utilisation de la valeur par defaut."
+    },
+    "TOO_SHORT": {
+        "en": "Distance is too short.",
+        "fr": "La distance est trop courte."
+    },
+    "GAME_ABANDONED": {
+        "en": "<#> abandoned !",
+        "fr": "<#> a abandonne !"
+    },
+    "PLAYER_ALREADY_LIST": {
+        "en": "This player is already in game list",
+        "fr": "Ce joueur est deja dans la liste de jeu"
+    },
+    "TIPS_MYTHIC": {
+        "en": "No tips... you're a master now.",
+        "fr": "Pas de tips... Vous etes passe maitre maintenant."
+    },
+    "FC_LOAD_FILE": {
+        "en": "Load  %s from custom plugin files.",
+        "fr": "Chargement de %s depuis les fichiers modifiables du plugin."
+    },
+    "COLOR_CHANGED": {
+        "en": "Color [#] was changed to [##] for team <#>.",
+        "fr": "La couleur [#] a ete change pour [##] pour l'equipe <#>."
+    },
+    "RANDOM": {
+        "en": "Randomly add %i players in %j teams.",
+        "fr": "Ajout aleatoire de %i joueurs dans %j equipes."
+    },
+    "PLAYER_GAME_SAVED": {
+        "en": "[Kuffle] <%s> game is saved.",
+        "fr": "[Kuffle] La partie de <%s> est sauvegardee."
+    },
+    "TEAM_EXISTS": {
+        "en": "Team <#> already exists, please choose another name.",
+        "fr": "L'equipe <#> existe deja, choisissez un autre nom."
+    },
+    "GAME_RELOADED": {
+        "en": "[Kuffle] <%s> game is reloaded.",
+        "fr": "[Kuffle] La partie de <%s> est chargee."
+    },
+    "FC_AGE_BOXCOLOR": {
+        "en": "Age [%s] does not contain 'BoxColor' Object.",
+        "fr": "L'age [%s] ne contient pas d'objet 'BoxColor'"
+    },
+    "TEAM_NOT_EXISTS": {
+        "en": "Team <#> does not exist, please choose another name.",
+        "fr": "L'equipe <#> n'existe pas, choisissez un autre nom."
+    },
+    "TEAM_NO_PLAYER": {
+        "en": "This player is not in this Team.",
+        "fr": "Ce joueur n'est pas dans cette equipe."
+    },
+    "TEAM_FULL": {
+        "en": "This team is already full, please add him in another team or change team size with k-config command.",
+        "fr": "Cette equipe est deja complete, ajoutez ce joueur a une autre equipe ou changez la taille des equipes avec la commande k-config."
+    },
+    "FINISH_ABANDON": {
+        "en": "    - %s Age: Abandoned",
+        "fr": "    - Age %s: Abandone"
+    },
+    "LOAD_FAIL": {
+        "en": "Load failed due to : %s",
+        "fr": "Chargement en echec a cause de : %s"
+    },
+    "TIPS_SET": {
+        "en": "Tips set to [#].",
+        "fr": "Les tips ont ete defini sur [#]."
+    },
+    "TEAM_WAIT": {
+        "en": "Waiting for other players of the team.",
+        "fr": "En attente des autres joueurs de l'equipe."
+    },
+    "CANT_SKIP_FINISHED": {
+        "en": "You cannot skip in a Age you already finished.",
+        "fr": "Vous ne pouvez passer un objet alors que votre Age en cours est terminé."
+    },
+    "CMD_PERF": {
+        "en": "Performed command <#>.",
+        "fr": "A effectue la commande <#>."
+    },
+    "ABANDON_AFTER": {
+        "en": "    - %s Age: Abandoned after %t",
+        "fr": "    - Age %s: Abandone apres "
+    },
+    "CANT_SKIP_AGE": {
+        "en": "You can't skip item this age.",
+        "fr": "Vous ne pouvez pas passer d'objet a cet Age."
+    },
+    "NO_PLAYERS": {
+        "en": "No players in the list.",
+        "fr": "Il n'y a aucun joueur dans la liste."
+    },
+    "PLAYER_LIST": {
+        "en": "Player list contains:",
+        "fr": "La liste de joueur contient :"
+    },
+    "FC_LOAD_FAIL": {
+        "en": "File %s does not exist.",
+        "fr": "Le fichier %s n'existe pas."
+    },
+    "ADDED_LIST": {
+        "en": "Added %i players to the game list.",
+        "fr": "Ajout de %i joueurs a la liste de jeu."
+    },
+    "XP_NEEDED": {
+        "en": "You need <#> xp levels to use this item.",
+        "fr": "Vous devez avoir <#> niveau(x) d'xp pour utiliser cet objet."
+    },
+    "TIPS_END_TELEPORTER": {
+        "en": "Do not forget to have a diamond block before going to the Nether.",
+        "fr": "Ne pas oublier d'avoir un bloc de diamant avant de partir dans le Nether."
+    },
+    "FC_AGE_TEXTCOLOR_ENUM": {
+        "en": "Age [%s] the color [%ss] is not in ChatColor Enum.",
+        "fr": "L'age [%s] contient la couleur [%ss] qui n'existe pas dans ChatColor."
+    },
+    "GAME_SAVED": {
+        "en": "Game Saved and Stopped.",
+        "fr": "Jeu sauvegarde et arrête."
+    },
+    "GAME_STOPPED": {
+        "en": "Game Stopped.",
+        "fr": "Jeu stoppe."
+    },
+    "ITEM_SKIPPED": {
+        "en": "Item [#] was skipped for player <#>.",
+        "fr": "L'objet [#] a ete passe pour le joueur <#>."
+    },
+    "TIME_AGE": {
+        "en": "Total Time at this point: %t",
+        "fr": "Temps total a cet instant : %t"
+    },
+    "TIPS_CLASSIC": {
+        "en": "Think to use your age rewards ! And take advantage of speed 2.",
+        "fr": "Pensez a utiliser les recompenses d'Ages. Profitez le plus possible de l'effet vitesse 2 de cet age."
+    },
+    "NO_GAME_ALREADY_SPEC": {
+        "en": "You cannot become player because you already are in spectators list.",
+        "fr": "Vous ne pouvez pas devenir joueur car vous etes deja dans la liste des spectateurs."
+    },
+    "TP_END": {
+        "en": "Teleported to the End.",
+        "fr": "Teleportation dans l'End"
+    },
+    "FINISH_TIME": {
+        "en": "    - %s Age: Finished in %t",
+        "fr": "    - Age %s: Termine en %t"
+    },
+    "NOT_CHANGE_GM": {
+        "en": "You cannot change your gamemode while being a Kuffle spectator.",
+        "fr": "Vous ne pouvez pas changer de mode de jeu lorsque vous etes spectateur d'une partie de Kuffle."
+    },
+    "TIPS_ARCHAIC": {
+        "en": "Found lots of flowers and make some cobblestone or iron tools. Armor is not necessary.",
+        "fr": "Recuperez plein de fleurs et faites des outils enpierre ou en fer. Pas besoin de faire d'armures."
+    },
+    "PLAYER_NOT_IN_GAME": {
+        "en": "This player is not in the game, please add him in the game list with k-list command.",
+        "fr": "Ce joueur n'est pas dans la liste de jeu, vous pouvez l'ajouter avec la commande k-list."
+    },
+    "FC_LEVEL_NUMBER": {
+        "en": "Level [%s] does not contain 'Number' Object.",
+        "fr": "Le niveau [%s] ne contient pas d'objet 'Number'"
+    },
+    "SOMETHING_NEW": {
+        "en": "Something New...",
+        "fr": "Quelque chose de nouveau..."
+    },
+    "NO_SPEC_ALREADY_GAME": {
+        "en": "You cannot become spectator because you already are in game list.",
+        "fr": "Vous ne pouvez pas devenir spectateur car vous etes deja dans la liste des joueurs."
+    },
+    "COLOR_NOT_EXISTS": {
+        "en": "Color [#] does not exists, please choose another one.",
+        "fr": "La couleur [#] n'existe pas, choisissez-en une autre."
+    },
+    "FC_LEVEL_SECONDS": {
+        "en": "Level [%s] does not contain 'Seconds' Object.",
+        "fr": "Le niveau [%s] ne contient pas d'objet 'Seconds'"
+    },
+    "COUNTDOWN": {
+        "en": "Time left: %i seconds to find: %s.",
+        "fr": "Temps restant: %i secondes pour trouver %s."
+    },
+    "KUFFLE_TYPE_NOT_CONFIG": {
+        "en": "Kuffle type not configured, please set it with k-set-type command",
+        "fr": "Le type de Kuffle n'est pas configure, definissez le via la commande k-set-type"
+    },
+    "TP_BACK": {
+        "en": "You will be tp back to your death spot in %i seconds.",
+        "fr": "Vous allez être teleporte a votre lieu de mort dans %i secondes."
+    },
+    "WRONG_TYPE": {
+        "en": "You try to load a game with a different type of the current one.",
+        "fr": "Vous essayez de charger une partie d'un type de Kuffle different a celui charge actuellement."
+    },
+    "CANT_SKIP_FIRST": {
+        "en": "You can't skip the first item of the age.",
+        "fr": "Vous ne pouvez pas passer le premier objet de l'Age."
+    },
+    "LIST_EMPTY": {
+        "en": "There are no players in game list.",
+        "fr": "Il n'y a aucun joueur dans la liste de jeu."
+    },
+    "NOT_SPEC": {
+        "en": "You are no longer a game spectator.",
+        "fr": "Vous n'etes plus spectateur de la partie."
+    },
+    "TEAM_INV": {
+        "en": "Team inventories are not enabled in this game.",
+        "fr": "Les inventaires d'équipes ne sont pas actives dans cette partie."
+    },
+    "GAME_ALREADY_FINISHED": {
+        "en": "Game is already finished for player <#>.",
+        "fr": "Le joueur <#> a deja fini sa partie."
+    },
+    "TP_OVERWORLD": {
+        "en": "Teleported to the Overworld.",
+        "fr": "Teleportation dans l'Overworld"
+    },
+    "REQ_LANG_NOT_AVAIL": {
+        "en": "Requested language is not available.",
+        "fr": "Le langage demande n'est pas disponible."
+    },
+    "GAME_ALREADY_PAUSED": {
+        "en": "Your game is already paused, you can resume it with k-resume command.",
+        "fr": "Le jeu est deja en pause, vous pouvez le relancer avec la commande k-resume."
+    },
+    "GAME_COMPLETE": {
+        "en": "<#>  complete this game !",
+        "fr": "<#> a fini sa partie !"
+    },
+    "FC_AGE_NUMBER": {
+        "en": "Age [%s] does not contain 'Number' Object.",
+        "fr": "L'age [%s] ne contient pas d'objet 'Number'"
+    },
+    "TARGET_NOT_FOUND": {
+        "en": "You didn't find your target. Let's give you another one.",
+        "fr": "Vous n'avez pas trouve votre cible. En voici une nouvelle."
+    },
+    "FC_AGE_BOXCOLOR_ENUM": {
+        "en": "Age [%s] the box [%ss] is not in Material Enum.",
+        "fr": "L'age [%s] contient la boite [%ss] qui n'existe pas dans Material."
+    },
+    "TEAM_ADD_PLAYER": {
+        "en": "Player <#> added to team <##>.",
+        "fr": "Le joueur <#> a ete ajoute a l'equipe <##>."
+    },
+    "TIPS_MINERIC": {
+        "en": "Don't forget to use your diamond Silk Touch Pickaxe. You also have custom crafts to craft and uncraft ores.",
+        "fr": "N'oubliez pas que vous avez une pioche en diamant toucher de soie. Vous pouvez egalement crafter et decrafter les minerais."
+    },
+    "TEAM_RESETED": {
+        "en": "Team <#> player list was reseted.",
+        "fr": "La liste de joueur de l'equipe <#> a ete videe."
+    },
+    "DEATH_COUNT": {
+        "en": " - Death Count: %i",
+        "fr": " - Compteur de mort: %i"
+    },
+    "TEAM_REMOVED": {
+        "en": "Player <#> was removed from team <##>.",
+        "fr": "Le joueur <#> a ete supprime de l'equipe <##>."
+    },
+    "SPEC_NOT_EXISTS": {
+        "en": "This spectator <#> does not exists.",
+        "fr": "Le spectateur <#> n'existe pas."
+    },
+    "VALIDATE_PLAYER_AGE": {
+        "en": "Can't find player to validate his age.",
+        "fr": "Impossible de trouver le joueur pour valider son age."
+    },
+    "GAME_ALREADY_RUNNING": {
+        "en": "Your game is already running, you can pause it with k-pause command.",
+        "fr": "Le jeu est deja en cours, vous pouvez le mettre en pause avec la commande k-pause."
+    },
+    "PLAYER_NOT_IN_TEAM": {
+        "en": "Team are enabled and not all players are in a Team.",
+        "fr": "Le mode equipe est active et tous les joueurs ne sont pas dans une equipe."
+    },
+    "GAME_RESUMED": {
+        "en": "Game Resumed",
+        "fr": "Le jeu relance"
+    },
+    "LIST_RESET": {
+        "en": "Game list was reseted.",
+        "fr": "La liste de jeu a ete remise a zero."
+    },
+    "ADD_CRAFTS": {
+        "en": "Add %i custom crafts.",
+        "fr": "Ajout de %i crafts custom."
+    },
+    "CONFIG_NOT_SET": {
+        "en": "Config: parameter [#] cannot be set to [##] due to current game state.",
+        "fr": "Configuration : le parametre [#] n'a pas pu être defini sur [##] a cause de l'etat du jeu."
+    },
+    "ITEM_VALIDATED": {
+        "en": "Item [#] was validated for player <#>.",
+        "fr": "L'objet [#] a ete valide pour le joueur <#>."
+    },
+    "SKIP_COUNT": {
+        "en": " - Skip Count: %i",
+        "fr": " - Compteur d'objet sautes: %i"
+    },
+    "FC_LOAD_RESOURCE": {
+        "en": "Load %s from plugin resources.",
+        "fr": "Chargement de %s depuis les ressources du plugin."
+    },
+    "NOW_SPEC": {
+        "en": "You are now game spectator.",
+        "fr": "Vous etes spectateur de la partie."
+    },
+    "FC_TARGET_AGE": {
+        "en": "Target age [%s] for versoin [%sss] and type [%ss] does not exists in loaded ages.",
+        "fr": "Pour les cibles, l'age [%s] de la version [%sss] et du type [%ss] n'existe pas dans les ages charges."
+    },
+    "ADD_TAB": {
+        "en": "Add %i tab completers.",
+        "fr": "Ajout de %i completeurs de commande."
+    },
+    "INVALID_BOOLEAN": {
+        "en": "Invalid value ! True or False awaited.",
+        "fr": "Valeur Invalide ! True ou False attendu."
+    },
+    "ON": {
+        "en": "Plugin turned ON.",
+        "fr": "Plugin demarre."
+    },
+    "FC_LEVEL_LOSE": {
+        "en": "Level [%s] does not contain 'Lose' Object.",
+        "fr": "Le niveau [%s] ne contient pas d'objet 'Lose'"
+    },
+    "TIME_TAB": {
+        "en": " - Times Tab:",
+        "fr": " - Tableau des temps:"
+    },
+    "ITEMS_SKIP": {
+        "en": "Items [#] and [##] were skipped.",
+        "fr": "Les objets [#]  et [##] ont ete passe."
+    },
+    "TIPS_HEROIC": {
+        "en": "You have infinite firework so smash that button.",
+        "fr": "Vous avez une infinite de feu d'artifice donc hesitez pas a marteler le clic !"
+    },
+    "REMOVED_LIST": {
+        "en": "Removed 1 player from game list.",
+        "fr": "Un joueur a ete supprimme de la liste de jeu."
+    },
+    "TEMPLATE_COUNT": {
+        "en": " - Template Count: %i",
+        "fr": " - Compteur de Template: %i"
+    },
+    "YOU_LOSE": {
+        "en": "YOU LOSE !",
+        "fr": "VOUS AVEZ PERDU !"
+    },
+    "SPEC_LIST_RESET": {
+        "en": "Spectators list has been reseted.",
+        "fr": "La liste des spectateurs a ete videe."
+    },
+    "SPEC_LIST": {
+        "en": "Spectators list contains:",
+        "fr": "La liste de spectateurs contient :"
+    },
+    "ADDED_ONE_LIST": {
+        "en": "Added 1 player to the game list.",
+        "fr": "Ajout d'un joueur dans la liste de jeu."
+    },
+    "AGE_VALIDATED": {
+        "en": "Age [#] was validated for player <#>.",
+        "fr": "L'age [#] a ete valide pour le joueur <#>."
+    },
+    "INVALID_INT": {
+        "en": "Invalid value ! Number awaited.",
+        "fr": "Valeur Invalide ! Nombre attendu."
+    },
+    "TIPS_OCEANIC": {
+        "en": "Majority of things you will need are in Coral biomes.",
+        "fr": "La majorite de ce que le plugin va vous demander se trouve dans les biomes corail."
+    },
+    "TEAM_GAME_LAUNCHED": {
+        "en": "Game is already launched, you cannot modify teams during the game.",
+        "fr": "Le jeu est deja lance, vous ne pouvez plus modifier les equipes."
+    },
+    "TIPS_NETHERIC": {
+        "en": "You have fire resistance so lava is water ! You have a Strider egg to be able to walk on lava. Ender pearl can be trade with piglin or found on Enderman in Warped biomes.",
+        "fr": "Vous avez resistance au feu donc la lave c'est de l'eau. Vous avez un oeuf de Strider pour pouvoir marcher sur la lave. Les ender pearl peuvent etre echangees avec les Piglin ou trouvees sur les Enderman dans les biomes Warped."
+    },
+    "PLAYER_NOT_IN_LIST": {
+        "en": "You are not in the game list. You can be added with /k-list <playerName>",
+        "fr": "Vous n'etes pas dans la liste de jeu. Vous pouvez etre ajoute via /k-list <NomDuJoueur>"
+    },
+    "ACTIVATED": {
+        "en": "You have just activated %s.",
+        "fr": "Vous venez d'activer %s."
+    },
+    "TEAM_DELETED": {
+        "en": "Team <#> was deleted.",
+        "fr": "L'equipe <#> a ete supprimee."
+    },
+    "WARM_FOUND": {
+        "en": "Warm ocean found, follow the compass.",
+        "fr": "Ocean chaud trouve, suivez la boussole."
+    },
+    "CONFIG_DISABLED": {
+        "en": "This command is disabled in config.",
+        "fr": "Cette commande est desactivee par la configuration."
+    },
+    "START": {
+        "en": "STARTING\u2026",
+        "fr": "DEMARRAGE\u2026"
+    },
+    "FC_REWARD_ENCHANT": {
+        "en": "Reward [%s] contains unknown enchant : [%ss].",
+        "fr": "Le Reward [%s] contient un enchantement inconnu : [%ss]."
+    }
+}

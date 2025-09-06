@@ -1,0 +1,27 @@
+{
+    "EXPERT": {
+        "Lose": false,
+        "Number": 3,
+        "Seconds": 30
+    },
+    "EASY": {
+        "Lose": false,
+        "Number": 1,
+        "Seconds": 10
+    },
+    "CHILD": {
+        "Lose": false,
+        "Number": 0,
+        "Seconds": 1
+    },
+    "ULTRA": {
+        "Lose": true,
+        "Number": 4,
+        "Seconds": -1
+    },
+    "NORMAL": {
+        "Lose": false,
+        "Number": 2,
+        "Seconds": 20
+    }
+}
