@@ -15,7 +15,7 @@ public class ActionBar {
 	/**
 	 * Private ActionBar constructor
 	 * 
-	 * @throws IllegalStateException
+	 * @throws IllegalStateException Utility Class Constructor Exception
 	 */
 	private ActionBar() {
 		throw new IllegalStateException("Utility class");

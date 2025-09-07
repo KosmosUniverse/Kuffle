@@ -339,7 +339,7 @@ public final class Utils {
 	 * 
 	 * @param str	The string to capitalize
 	 * 
-	 * @return the capitablized string
+	 * @return the capitalized string
 	 */
 	public static String capitalize(String str) {
 		if (str == null || str.isEmpty()) {
@@ -389,7 +389,7 @@ public final class Utils {
 	}
 	
 	/**
-	 * Changes the location Y value to highest block, Or 61 if no block
+	 * Changes the location Y value to the highest block, Or 61 if no block
 	 * 
 	 * @param loc location to modify to be at End ground level
 	 */
@@ -421,9 +421,9 @@ public final class Utils {
 					if (x == 0 && y == -1 && z == 0) {
 						setSign(wall, playerName);
 					} else if (x <= 1 && x >= -1 && y <= 1 && y >= -1 && z <= 1 && z >= -1) {
-						replaceExeption(wall, Material.AIR);
+						replaceException(wall, Material.AIR);
 					} else {
-						replaceExeption(wall, Material.DIRT);
+						replaceException(wall, Material.DIRT);
 					}
 				}
 			}
@@ -436,7 +436,7 @@ public final class Utils {
 	 * @param loc	The location to transform
 	 * @param m		The block type to set
 	 */
-	private static void replaceExeption(Location loc, Material m) {
+	private static void replaceException(Location loc, Material m) {
 		if (!exceptions.contains(loc.getBlock().getType())) {
 			loc.getBlock().setType(m);
 		}

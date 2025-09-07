@@ -3,7 +3,6 @@ package fr.kosmosuniverse.kuffle.commands;
 import fr.kosmosuniverse.kuffle.core.AgeManager;
 import fr.kosmosuniverse.kuffle.core.CraftManager;
 import fr.kosmosuniverse.kuffle.core.RewardManager;
-import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -14,7 +13,7 @@ public class KuffleGive extends AKuffleCommand {
 	}
 
 	@Override
-	protected boolean runCommand() throws KuffleCommandFalseException {
+	protected boolean runCommand() {
 		Player target = Bukkit.getPlayer(args[0]);
 		
 		if (target == null) {

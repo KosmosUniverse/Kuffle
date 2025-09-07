@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import fr.kosmosuniverse.kuffle.core.Party;
-import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -21,7 +20,7 @@ public class KuffleListTab extends AKuffleTabCommand {
 	 * Constructor
 	 */
 	public KuffleListTab() {
-		super("k-list", 0, 2);
+		super();
 		
 		list.add("add");
 		list.add("remove");
@@ -29,7 +28,7 @@ public class KuffleListTab extends AKuffleTabCommand {
 	}
 	
 	@Override
-	protected void runCommand() throws KuffleCommandFalseException {
+	protected void runCommand() {
 		if (currentArgs.length == 1) {
 			ret.addAll(list);
 		} else if (currentArgs.length == 2) {

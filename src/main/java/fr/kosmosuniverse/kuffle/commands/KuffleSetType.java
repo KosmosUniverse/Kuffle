@@ -68,7 +68,7 @@ public class KuffleSetType extends AKuffleCommand {
 	}
 
 	private void confirmSubmit(Player player, String key, KuffleType.Type type) {
-		if (((UUID) confirm.getKey()) != player.getUniqueId()) {
+		if ((confirm.getKey()) != player.getUniqueId()) {
 			LogManager.getInstanceSystem().writeMsg(player, "Please wait because another player in setting the kuffle game type.");
 			return ;
 		} else if (!confirm.getValue().toString().equals(key)) {

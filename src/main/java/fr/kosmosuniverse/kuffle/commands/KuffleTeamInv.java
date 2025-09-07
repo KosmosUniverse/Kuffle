@@ -4,7 +4,6 @@ import fr.kosmosuniverse.kuffle.core.Config;
 import fr.kosmosuniverse.kuffle.core.LangManager;
 import fr.kosmosuniverse.kuffle.core.LogManager;
 import fr.kosmosuniverse.kuffle.core.TeamManager;
-import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 
 public class KuffleTeamInv extends AKuffleCommand {
 
@@ -13,7 +12,7 @@ public class KuffleTeamInv extends AKuffleCommand {
 	}
 	
 	@Override
-	protected boolean runCommand() throws KuffleCommandFalseException {
+	protected boolean runCommand() {
 		if (!Config.getTeamInv()) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAM_INV", Config.getLang()));
 		} else {

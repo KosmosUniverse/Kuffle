@@ -91,26 +91,6 @@ public class PartyList {
     }
 
     /**
-     * Removes a list of players from party
-     *
-     * @param playersName Players to remove
-     *
-     * @return The amount of player removed
-     */
-    public int removePlayers(List<String> playersName) {
-        AtomicInteger cnt = new AtomicInteger();
-
-        list.stream().filter(list::contains)
-                .forEach(playerName -> {
-                    if (removePlayer(playerName)) {
-                        cnt.incrementAndGet();
-                    }
-                });
-
-        return cnt.get();
-    }
-
-    /**
      * Clears the player list
      */
     public void clear() {

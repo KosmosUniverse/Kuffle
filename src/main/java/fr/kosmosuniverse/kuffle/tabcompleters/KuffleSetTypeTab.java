@@ -1,6 +1,5 @@
 package fr.kosmosuniverse.kuffle.tabcompleters;
 
-import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 import fr.kosmosuniverse.kuffle.type.KuffleType;
 
 import java.util.ArrayList;
@@ -18,8 +17,8 @@ public class KuffleSetTypeTab extends AKuffleTabCommand {
 	 * Constructor
 	 */
 	public KuffleSetTypeTab() {
-		super("k-set-type", 1, 1);
-		
+		super();
+
 		for (KuffleType.Type type : KuffleType.Type.values()) {
 			types.add(type.name());
 		}
@@ -33,7 +32,7 @@ public class KuffleSetTypeTab extends AKuffleTabCommand {
 	}
 
 	@Override
-	protected void runCommand() throws KuffleCommandFalseException {
+	protected void runCommand() {
 		if (currentArgs.length == 1) {
 			ret.addAll(types);
 		}

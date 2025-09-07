@@ -2,7 +2,6 @@ package fr.kosmosuniverse.kuffle.tabcompleters;
 
 import fr.kosmosuniverse.kuffle.core.Team;
 import fr.kosmosuniverse.kuffle.core.TeamManager;
-import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 
 import java.util.stream.Collectors;
 
@@ -13,11 +12,11 @@ import java.util.stream.Collectors;
  */
 public class KuffleTeamRemovePlayerTab extends AKuffleTabCommand {
 	public KuffleTeamRemovePlayerTab() {
-		super("k-team-remove-player", 2, 2);
+		super();
 	}
 
 	@Override
-	protected void runCommand() throws KuffleCommandFalseException {
+	protected void runCommand() {
 		if (currentArgs.length == 1) {
 			ret.addAll(TeamManager.getInstance().getTeams().stream()
 					.filter(t -> !t.getPlayers().isEmpty())

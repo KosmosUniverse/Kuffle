@@ -18,7 +18,7 @@ public class VersionManager {
 	/**
 	 * Private VersionManager constructor
 	 * 
-	 * @throws IllegalStateException
+	 * @throws IllegalStateException Utility Class Constructor Exception
 	 */
 	private VersionManager() {
 		throw new IllegalStateException("Utility class");

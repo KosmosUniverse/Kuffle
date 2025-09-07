@@ -20,7 +20,7 @@ public class AgeManager {
 	/**
 	 * Private AgeManager constructor
 	 * 
-	 * @throws IllegalStateException
+	 * @throws IllegalStateException Utility Class Constructor Exception
 	 */
 	private AgeManager() {
 		throw new IllegalStateException("Utility class");
@@ -144,13 +144,5 @@ public class AgeManager {
 	public static List<String> getAgesNameList() {
 		return Collections.unmodifiableList(ages.stream().map(Age::getName).collect(Collectors.toList()));
 	}
-	
-	/**
-	 * Gets the Ages list as an unmodifiable list
-	 * 
-	 * @return the ages list
-	 */
-	public static List<Age> getAges() {
-		return Collections.unmodifiableList(ages);
-	}
+
 }

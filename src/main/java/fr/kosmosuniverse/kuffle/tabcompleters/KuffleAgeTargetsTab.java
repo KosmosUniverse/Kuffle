@@ -1,7 +1,6 @@
 package fr.kosmosuniverse.kuffle.tabcompleters;
 
 import fr.kosmosuniverse.kuffle.core.AgeManager;
-import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ public class KuffleAgeTargetsTab extends AKuffleTabCommand {
 	 * Constructor
 	 */
 	public KuffleAgeTargetsTab() {
-		super("k-agetargets", 0, 1);
+		super();
 		
 		int max = AgeManager.getLastAgeIndex();
 		
@@ -37,7 +36,7 @@ public class KuffleAgeTargetsTab extends AKuffleTabCommand {
 	}
 	
 	@Override
-	protected void runCommand() throws KuffleCommandFalseException {
+	protected void runCommand() {
 		if (currentArgs.length == 1) {
 			ret.addAll(ages);
 		}

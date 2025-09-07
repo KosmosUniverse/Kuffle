@@ -18,23 +18,5 @@ public class KuffleCommandFalseException extends Exception {
 	public KuffleCommandFalseException() {
 		super("false");
 	}
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param errorMsg	The error message
-	 */
-	public KuffleCommandFalseException(String errorMsg) {
-		super(errorMsg);
-	}
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param errorMsg	The error message
-	 * @param error		Another Exception to link
-	 */
-	public KuffleCommandFalseException(String errorMsg, Throwable error) {
-		super(errorMsg, error);
-	}
+
 }

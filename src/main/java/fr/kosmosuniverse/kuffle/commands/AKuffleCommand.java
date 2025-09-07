@@ -16,11 +16,11 @@ import org.jetbrains.annotations.NotNull;
  *
  */
 public abstract class AKuffleCommand implements CommandExecutor  {
-	protected String name;
-	protected boolean checkType;
-	protected boolean checkStarted;
-	protected boolean checkArgs;
-	protected boolean checkTeamEnable;
+	protected final String name;
+	protected final boolean checkType;
+	protected final boolean checkStarted;
+	protected final boolean checkArgs;
+	protected final boolean checkTeamEnable;
 	protected boolean isTyped = false;
 	protected boolean isStarted = false;
 	protected int argsMin = -1;
@@ -70,7 +70,7 @@ public abstract class AKuffleCommand implements CommandExecutor  {
 			return true;
 		}
 		
-		if (checkType && Party.getInstance().getType().getType() == KuffleType.Type.NO_TYPE) {
+		if (checkType && isTyped && Party.getInstance().getType().getType() == KuffleType.Type.NO_TYPE) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("KUFFLE_TYPE_NOT_CONFIG", Config.getLang()));
 			return true;
 		}

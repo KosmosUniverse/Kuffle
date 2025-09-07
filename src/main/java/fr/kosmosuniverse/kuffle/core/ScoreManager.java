@@ -97,20 +97,6 @@ public class ScoreManager {
 	}
 	
 	/**
-	 * Setups score for a specific player
-	 * 
-	 * @param player	The player that will be setup
-	 */
-	/*public static void setupPlayerScore(String player) {
-		Party.getInstance().getGames().getGames().forEach();
-
-		GameManager.applyToPlayer(player, game -> {
-			GameManager.setupPlayerScores(game.getPlayer().getName(), scoreboard, targets.getScore(game.getPlayer().getName()));
-			game.updatePlayerListName();
-		});
-	}*/
-	
-	/**
 	 * Clears the scores
 	 */
 	public static void clear() {

@@ -1,7 +1,6 @@
 package fr.kosmosuniverse.kuffle.tabcompleters;
 
 import fr.kosmosuniverse.kuffle.KuffleMain;
-import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 import fr.kosmosuniverse.kuffle.utils.FileUtils;
 import fr.kosmosuniverse.kuffle.utils.Utils;
 import org.json.JSONObject;
@@ -24,7 +23,7 @@ public class KuffleConfigTab extends AKuffleTabCommand {
 	 * Constructor that read file and fill display values map
 	 */
 	public KuffleConfigTab() {
-		super("k-config", -1, -1);
+		super();
 		
 		try {
 			String rawValues = Utils.readFileContent(KuffleMain.getInstance().getResource("configValuesDisplay.json"));
@@ -39,10 +38,9 @@ public class KuffleConfigTab extends AKuffleTabCommand {
 	 * Process file content into a map, key is config element and value are possible values
 	 * 
 	 * @param content	File content to parse
-	 * 
-	 * @throws IOException raised in case of JSON parse fail
+	 *
 	 */
-	private void processStringsToList(String content) throws IOException {
+	private void processStringsToList(String content) {
 		JSONObject mainObj = FileUtils.readJSONObjectFromContent(content);
 		
 		for (String key : mainObj.keySet()) {
@@ -55,7 +53,7 @@ public class KuffleConfigTab extends AKuffleTabCommand {
 	}
 
 	@Override
-	protected void runCommand() throws KuffleCommandFalseException {
+	protected void runCommand() {
 		if (currentArgs.length == 0) {
 			ret.addAll(all.keySet());
 		} else if (currentArgs.length % 2 == 1) {

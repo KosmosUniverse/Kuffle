@@ -15,22 +15,7 @@ public class Age {
 	private final int number;
 	private final ChatColor color;
 	private final Material box;
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param ageName		The Age name
-	 * @param ageNumber		The Age number
-	 * @param ageColor		The Age color as ChatColor object
-	 * @param ageBox		The Age shulker box as Material object
-	 */
-	public Age(String ageName, int ageNumber, ChatColor ageColor, Material ageBox) {
-		name = ageName;
-		number = ageNumber;
-		color = ageColor;
-		box = ageBox;
-	}
-	
+
 	/**
 	 * Constructor
 	 * 

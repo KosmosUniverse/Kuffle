@@ -23,7 +23,7 @@ public class Config implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * Config Default messgage
+	 * Config Default message
 	 */
 	private static final String CONFIG_DEFAULT = "CONFIG_DEFAULT";
 	
@@ -35,7 +35,7 @@ public class Config implements Serializable {
 	private static boolean setRet;
 	
 	/**
-	 * Error messgae
+	 * Error message
 	 */
 	private static String error;
 
@@ -130,7 +130,7 @@ public class Config implements Serializable {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkAndSetConfig(FileConfiguration configFile) {
-		checkFilePersonnal(configFile);
+		checkFilePersonal(configFile);
 		checkFileSpread(configFile);
 		checkFileModes(configFile);
 		checkFileStart(configFile);
@@ -140,7 +140,7 @@ public class Config implements Serializable {
 		setValues(configFile);
 	}
 	
-	private static void checkFilePersonnal(FileConfiguration configFile) {
+	private static void checkFilePersonal(FileConfiguration configFile) {
 		String langConfig = "game_settings.personals.lang";
 		String tipsConfig = "game_settings.personals.tips";
 		
@@ -160,7 +160,7 @@ public class Config implements Serializable {
 	}
 	
 	/**
-	 * Check spread values in config file to ensure they exists and are conform
+	 * Check spread values in config file to ensure they exist and are conform
 	 * 
 	 * @param configFile	configuration file used to setup config values
 	 */
@@ -189,7 +189,7 @@ public class Config implements Serializable {
 	}
 	
 	/**
-	 * Check modes values in config file to ensure they exists and are conform
+	 * Check modes values in config file to ensure they exist and are conform
 	 * 
 	 * @param configFile	configuration file used to setup config values
 	 */
@@ -261,7 +261,7 @@ public class Config implements Serializable {
 	}
 	
 	/**
-	 * Check basic values in config file to ensure they exists and are conform
+	 * Check basic values in config file to ensure they exist and are conform
 	 * 
 	 * @param configFile	configuration file used to setup config values
 	 */
@@ -301,7 +301,7 @@ public class Config implements Serializable {
 	}
 	
 	/**
-	 * Check other values in config file to ensure they exists and are conform
+	 * Check other values in config file to ensure they exist and are conform
 	 * 
 	 * @param configFile	configuration file used to setup config values
 	 */
@@ -345,7 +345,7 @@ public class Config implements Serializable {
 	}
 	
 	/**
-	 * Check end values in config file to ensure they exists and are conform
+	 * Check end values in config file to ensure they exist and are conform
 	 * 
 	 * @param configFile	configuration file used to setup config values
 	 */
@@ -434,7 +434,7 @@ public class Config implements Serializable {
 				+ ChatColor.BLUE + "Last age: " + ChatColor.GOLD + AgeManager.getAgeByNumber(configValues.getLastAge()).getName() + "\n"
 				+ ChatColor.BLUE + "Start duration: " + ChatColor.GOLD + configValues.getStartTime() + "\n"
 				+ ChatColor.BLUE + "Added duration: " + ChatColor.GOLD + configValues.getAddedTime() + "\n"
-				+ ChatColor.BLUE + "Personnals: " + "\n"
+				+ ChatColor.BLUE + "Personals: " + "\n"
 				+ ChatColor.BLUE + "  - Lang: " + ChatColor.GOLD + configValues.getLang() + "\n"
 				+ ChatColor.BLUE + "  - Tips: " + ChatColor.GOLD + configValues.isTips() + "\n"
 				+ ChatColor.BLUE + "Level: " + ChatColor.GOLD + LevelManager.getInstance().getLevelByNumber(configValues.getLevel()).getName() + "\n"
@@ -606,7 +606,7 @@ public class Config implements Serializable {
 	/**
 	 * Get passive team enable value
 	 * 
-	 * @return if passive is enabled for team mates
+	 * @return if passive is enabled for teammates
 	 */
 	public static boolean getPassiveTeam() {
 		return configValues.isPassiveTeam();
@@ -942,7 +942,7 @@ public class Config implements Serializable {
 	 */
  	private static void setTeamSize(int configTeamSize) {
  		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
- 			error = "Cannot change team siez when game is running !";
+ 			error = "Cannot change team size when game is running !";
 			setRet = false;
 		}
  		

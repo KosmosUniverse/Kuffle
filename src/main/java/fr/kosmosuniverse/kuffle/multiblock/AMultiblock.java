@@ -29,7 +29,7 @@ public abstract class AMultiblock {
 	protected String name;
 	protected int squareSize;
 	protected MultiBlock multiblock;
-	protected List<Inventory> invs = new ArrayList<>();
+	protected final List<Inventory> invs = new ArrayList<>();
 	protected ItemStack item;
 	protected World world = null;
 	

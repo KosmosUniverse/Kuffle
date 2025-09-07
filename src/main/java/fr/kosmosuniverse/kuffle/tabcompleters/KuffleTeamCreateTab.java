@@ -3,7 +3,6 @@ package fr.kosmosuniverse.kuffle.tabcompleters;
 import java.util.List;
 
 import fr.kosmosuniverse.kuffle.core.TeamManager;
-import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 import org.bukkit.ChatColor;
 
 /**
@@ -13,11 +12,11 @@ import org.bukkit.ChatColor;
  */
 public class KuffleTeamCreateTab extends AKuffleTabCommand {
 	public KuffleTeamCreateTab() {
-		super("k-team-create", 1, 2);
+		super();
 	}
 
 	@Override
-	protected void runCommand() throws KuffleCommandFalseException {
+	protected void runCommand() {
 		if (currentArgs.length == 2) {
 			List<String> colorUsed = TeamManager.getInstance().getTeamColors();
 			

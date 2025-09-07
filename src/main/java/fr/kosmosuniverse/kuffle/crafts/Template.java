@@ -15,7 +15,7 @@ import org.bukkit.inventory.ShapelessRecipe;
 
 public class Template extends ACraft {
 	@Getter
-	private List<Material> compose;
+	private final List<Material> compose;
 	
 	public Template(String craftName, List<Material> craftCompose) {
 		compose = craftCompose;

@@ -1,7 +1,5 @@
 package fr.kosmosuniverse.kuffle.tabcompleters;
 
-import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,14 +15,14 @@ public class KuffleSpectateTab extends AKuffleTabCommand {
 	 * Constructor
 	 */
 	public KuffleSpectateTab() {
-		super("k-spectate", 0, 2);
+		super();
 		
 		list.add("display");
 		list.add("reset");
 	}
 	
 	@Override
-	protected void runCommand() throws KuffleCommandFalseException {
+	protected void runCommand() {
 		if (currentArgs.length == 1) {
 			ret.addAll(list);
 		}

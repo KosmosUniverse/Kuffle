@@ -1,7 +1,6 @@
 package fr.kosmosuniverse.kuffle.tabcompleters;
 
 import fr.kosmosuniverse.kuffle.core.LangManager;
-import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 
 /**
  * 
@@ -10,11 +9,11 @@ import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
  */
 public class KuffleLangTab extends AKuffleTabCommand {
 	public KuffleLangTab() {
-		super("k-lang", 0, 0);
+		super();
 	}
 
 	@Override
-	protected void runCommand() throws KuffleCommandFalseException {
+	protected void runCommand() {
 		if (currentArgs.length == 1) {
 			ret.addAll(LangManager.getLangs());
 		}

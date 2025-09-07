@@ -1,7 +1,9 @@
 package fr.kosmosuniverse.kuffle.listeners;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import fr.kosmosuniverse.kuffle.KuffleMain;
 import fr.kosmosuniverse.kuffle.core.*;
@@ -87,7 +89,9 @@ public class PlayerEvents implements Listener {
 		Party.getInstance().getGames().savePlayer(KuffleMain.getInstance().getDataFolder().getPath(), player.getName(), Party.getInstance().getGames().getGames().get(player.getName()));
 		Party.getInstance().getGames().stopPlayer(player.getName(), Party.getInstance().getGames().getGames().get(player.getName()));
 		Party.getInstance().getGames().getGames().remove(player.getName());
-		Party.getInstance().getPlayers().updatePlayersHeads();
+		Party.getInstance().getPlayers().updatePlayersHeads(Party.getInstance().getGames().getGames().entrySet()
+				.stream()
+				.collect(Collectors.toMap(Map.Entry::getKey, e -> (e.getValue().getCurrentTarget() != null ? e.getValue().getCurrentTarget() : "null"))));
 		Party.getInstance().getPlayers().getList().forEach(p -> Objects.requireNonNull(Bukkit.getPlayer(p)).sendMessage(LangManager.getMsgLang("PLAYER_GAME_SAVED", Party.getInstance().getGames().getGames().get(p).getConfigLang()).replace("%s", player.getName())));
 		Party.getInstance().getSpectators().getList().forEach(p -> Objects.requireNonNull(Bukkit.getPlayer(p)).sendMessage(LangManager.getMsgLang("PLAYER_GAME_SAVED", Party.getInstance().getGames().getGames().get(p).getConfigLang()).replace("%s", player.getName())));
 

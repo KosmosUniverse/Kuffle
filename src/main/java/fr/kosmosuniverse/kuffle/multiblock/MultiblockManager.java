@@ -50,27 +50,7 @@ public class MultiblockManager {
 	public static List<AMultiblock> getMultiblocks() {
 		return Collections.unmodifiableList(multiblocks);
 	}
-	
-	/**
-	 * Gets multiblocks cores
-	 * 
-	 * @return a Map of Cores and the name of their multiblocks
-	 */
-	public static Map<Material, String> getCores() {
-		return multiblocks.stream().collect(Collectors.toMap(AMultiblock::getType, AMultiblock::getName));
-	}
-	
-	/**
-	 * Checks if @name multiblock exists
-	 * 
-	 * @param name	The name to check
-	 * 
-	 * @return True if a multiblock exists with this name, False instead
-	 */
-	public static boolean hasMultiblock(String name) {
-		return multiblocks.stream().anyMatch(m -> name.equals(m.getName()));
-	}
-	
+
 	/**
 	 * Clears @multiblocks list
 	 */
@@ -210,18 +190,7 @@ public class MultiblockManager {
 	public static AMultiblock searchMultiBlockByInventoryName(String invName) {
 		return multiblocks.stream().filter(m -> invName.contains(m.getName())).findFirst().orElse(null);
 	}
-	
-	/**
-	 * Searches a multiblock by its item type
-	 * 
-	 * @param item	The item type to search for
-	 * 
-	 * @return The Multiblock
-	 */
-	public static AMultiblock searchMultiBlockByItemType(Material item) {
-		return multiblocks.stream().filter(m -> item == m.getType()).findFirst().orElse(null);
-	}
-	
+
 	/**
 	 * Searches a multiblock by its item
 	 * 

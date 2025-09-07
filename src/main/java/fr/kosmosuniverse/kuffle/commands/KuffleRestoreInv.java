@@ -3,7 +3,6 @@ package fr.kosmosuniverse.kuffle.commands;
 import java.util.List;
 import fr.kosmosuniverse.kuffle.core.LogManager;
 import fr.kosmosuniverse.kuffle.core.Party;
-import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -20,7 +19,7 @@ public class KuffleRestoreInv extends AKuffleCommand {
 	}
 
 	@Override
-	public boolean runCommand() throws KuffleCommandFalseException {
+	public boolean runCommand() {
 		if (args.length != 1) {
 			return false;
 		}

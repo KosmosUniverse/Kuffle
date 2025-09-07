@@ -3,7 +3,6 @@ package fr.kosmosuniverse.kuffle.tabcompleters;
 import java.util.List;
 
 import fr.kosmosuniverse.kuffle.core.TeamManager;
-import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 import org.bukkit.ChatColor;
 
 /**
@@ -13,11 +12,11 @@ import org.bukkit.ChatColor;
  */
 public class KuffleTeamColorTab extends AKuffleTabCommand {
 	public KuffleTeamColorTab() {
-		super("k-team-color", 2, 2);
+		super();
 	}
 
 	@Override
-	protected void runCommand() throws KuffleCommandFalseException {
+	protected void runCommand() {
 		if (currentArgs.length == 1) {
 			TeamManager.getInstance().getTeams().forEach(t -> ret.add(t.getName()));
 		} else if (currentArgs.length == 2) {

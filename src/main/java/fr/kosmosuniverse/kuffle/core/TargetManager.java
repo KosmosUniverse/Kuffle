@@ -1,6 +1,5 @@
 package fr.kosmosuniverse.kuffle.core;
 
-import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +34,7 @@ public class TargetManager {
 	/**
 	 * Private TargetManager constructor
 	 * 
-	 * @throws IllegalStateException
+	 * @throws IllegalStateException Utility Class Constructor Exception
 	 */
 	private TargetManager() {
 		throw new IllegalStateException("Utility class");
@@ -45,10 +44,9 @@ public class TargetManager {
 	 * Setup all targets from file string content
 	 * 
 	 * @param content	the content to parse
-	 * 
-	 * @throws IOException if JSONParser.parse fails
+	 *
 	 */
-	public static void setup(KuffleType.Type type, String content) throws IOException {
+	public static void setup(KuffleType.Type type, String content) {
 		JSONObject allObj = FileUtils.readJSONObjectFromContent(content);
 		targets = new HashMap<>();
 		sbtts = new HashMap<>();
@@ -311,9 +309,9 @@ public class TargetManager {
 	}
 	
 	/**
-	 * Setup the first row of an inventory
+	 * Set up the first row of an inventory
 	 * 
-	 * @param inv		the inv inwhich the first row will be set
+	 * @param inv		the inv which the first row will be set
 	 * @param isFirst	True if it is the first inventory of the Age, False instead
 	 * @param hasNext	True if there is an inventory after this one, False instead
 	 */

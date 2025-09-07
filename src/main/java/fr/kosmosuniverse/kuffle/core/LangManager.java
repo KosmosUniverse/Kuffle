@@ -23,7 +23,7 @@ public class LangManager {
 	/**
 	 * Private LangManager constructor
 	 * 
-	 * @throws IllegalStateException
+	 * @throws IllegalStateException Utility Class Constructor Exception
 	 */
 	private LangManager() {
 		throw new IllegalStateException("Utility class");
@@ -40,19 +40,19 @@ public class LangManager {
 		}
 		
 		msgsLangs = new HashMap<>();
-		JSONObject langages = FileUtils.readJSONObjectFromContent(jsonContent);
+		JSONObject languages = FileUtils.readJSONObjectFromContent(jsonContent);
 
-		for (String key : langages.keySet()) {
-			JSONObject target = langages.getJSONObject(key);
+		for (String key : languages.keySet()) {
+			JSONObject target = languages.getJSONObject(key);
 			Map<String, String> targetLangs = new HashMap<>();
 			
-			for (String keylang : target.keySet()) {
-				String value = target.getString(keylang);
+			for (String keyLang : target.keySet()) {
+				String value = target.getString(keyLang);
 				
-				targetLangs.put(keylang, value);
+				targetLangs.put(keyLang, value);
 				
-				if (!langs.contains(keylang)) {
-					langs.add(keylang);
+				if (!langs.contains(keyLang)) {
+					langs.add(keyLang);
 				}
 			}
 			

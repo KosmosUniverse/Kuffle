@@ -12,7 +12,7 @@ public final class SerializeUtils {
 	/**
 	 * Private SerializeUtils constructor
 	 * 
-	 * @throws IllegalStateException
+	 * @throws IllegalStateException Utility Class Constructor Exception
 	 */
 	private SerializeUtils() {
 		throw new IllegalStateException("Utility class");

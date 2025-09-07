@@ -30,7 +30,7 @@ public class RewardManager {
 	/**
 	 * Private RewardManager constructor
 	 * 
-	 * @throws IllegalStateException
+	 * @throws IllegalStateException Utility Class Constructor Exception
 	 */
 	private RewardManager() {
 		throw new IllegalStateException("Utility class");
@@ -264,7 +264,7 @@ public class RewardManager {
 	 * Set up an enchanted item
 	 * 
 	 * @param key	Item type
-	 * @param elem	RewardElemn object
+	 * @param elem	RewardElem object
 	 * 
 	 * @return the ItemStack corresponding to the enchanted item
 	 */

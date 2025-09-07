@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  */
 public abstract class KuffleTypeDecorator extends KuffleType {
-	protected KuffleType type;
+	protected final KuffleType type;
 	
 	protected KuffleTypeDecorator(KuffleType kuffleType) {
 		type = kuffleType;

@@ -25,7 +25,7 @@ public class FilesConformity {
 	
 	/**
 	 * Private FilesConformity constructor
-	 * This class is utility class and must not be instantiate
+	 * This class is utility class and must not be instantiated
 	 * 
 	 * @throws IllegalStateException if somebody try to instantiate
 	 */
@@ -133,7 +133,7 @@ public class FilesConformity {
 	private static String getFromResource(String file) {
 		String result = null;
 
-		try (InputStream in = KuffleMain.getInstance().getResource(file);) {
+		try (InputStream in = KuffleMain.getInstance().getResource(file)) {
 			String content = Utils.readFileContent(in);
 			JSONObject mainObject = FileUtils.readJSONObjectFromContent(content);
 			result = mainObject.toString();
@@ -206,7 +206,7 @@ public class FilesConformity {
 	/**
 	 * Check an Age JSON object content
 	 * 
-	 * @param ageObj	The Age objetc to check
+	 * @param ageObj	The Age object to check
 	 * @param age		The getInstance() Age name
 	 * 
 	 * @return True if ageObj is valid, False instead
@@ -226,10 +226,10 @@ public class FilesConformity {
 		}
 		
 		if (!ret) {
-			return ret;
+			return false;
 		}
 
-		int number = ageObj.getInt(NBR_STR);
+		ageObj.getInt(NBR_STR);
 		String color = ageObj.getString("TextColor");
 		String box = ageObj.getString("BoxColor") + "_SHULKER_BOX";
 
@@ -256,7 +256,7 @@ public class FilesConformity {
 	 * @return True if content is conform to awaited lang file content, False instead
 	 */
 	public static boolean langConformity(String content) {
-		JSONObject jsonObj = FileUtils.readJSONObjectFromContent(content);;
+		JSONObject jsonObj = FileUtils.readJSONObjectFromContent(content);
 		List<String> langs = null;
 		boolean ret = true;
 		
@@ -291,14 +291,14 @@ public class FilesConformity {
 	 * @param langObj	The lang object to check
 	 * @param langs		The allowed langs
 	 * 
-	 * @return True if langObj is conform, False instead
+	 * @return True if langObj is conformed, False instead
 	 */
 	private static boolean checkLangKey(JSONObject langObj, List<String> langs) {
 		boolean ret = true;
 		
 		for (String keyLang : langObj.keySet()) {
 			if (!langs.contains(keyLang)) {
-				LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_LANG_EVERYWHERE", Config.getLang()).replace("%s", keyLang.toString()));
+				LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_LANG_EVERYWHERE", Config.getLang()).replace("%s", keyLang));
 				ret = false;
 				break;
 			}
@@ -322,7 +322,7 @@ public class FilesConformity {
 			
 			for (String mainKey : mainObj.keySet()) {
 				if (!VersionManager.hasVersion(mainKey)) {
-					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_TARGET_VERSION", Config.getLang()).replace("%s", mainKey.toString()));
+					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_TARGET_VERSION", Config.getLang()).replace("%s", mainKey));
 					ret = false;
 				}
 				
@@ -424,7 +424,7 @@ public class FilesConformity {
 		for (String ageKey : ageObj.keySet()) {
 			if (Material.matchMaterial(ageKey) == null && !ageKey.startsWith("*")) {
 				ret = false;
-				LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_TARGET_MATERIAL", Config.getLang()).replace("%ss", version).replace("%s", ageKey.toString()));
+				LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_TARGET_MATERIAL", Config.getLang()).replace("%ss", version).replace("%s", ageKey));
 			}
 
 			if (ret) {
@@ -469,7 +469,7 @@ public class FilesConformity {
 			
 			for (String langKey : langObj.keySet()) {
 				if (!LangManager.hasLang(langKey)) {
-					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_TARGET_MATERIAL_LANG", Config.getLang()).replace("%sss", langKey.toString()).replace("%ss", version).replace("%s", target));
+					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_TARGET_MATERIAL_LANG", Config.getLang()).replace("%sss", langKey).replace("%ss", version).replace("%s", target));
 					ret = false;
 					break;
 				}
@@ -698,13 +698,13 @@ public class FilesConformity {
 				JSONObject levelObj = (JSONObject) jsonObj.get(key);
 				
 				if (!levelObj.has(NBR_STR)) {
-					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_LEVEL_NUMBER", Config.getLang()).replace("%s", key.toString()));
+					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_LEVEL_NUMBER", Config.getLang()).replace("%s", key));
 					ret = false;
 				} else if (!levelObj.has("Seconds")) {
-					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_LEVEL_SECONDS", Config.getLang()).replace("%s", key.toString()));
+					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_LEVEL_SECONDS", Config.getLang()).replace("%s", key));
 					ret = false;
 				} else if (!levelObj.has("Lose")) {
-					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_LEVEL_LOSE", Config.getLang()).replace("%s", key.toString()));
+					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_LEVEL_LOSE", Config.getLang()).replace("%s", key));
 					ret = false;
 				}
 				

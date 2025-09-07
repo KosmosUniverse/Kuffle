@@ -250,7 +250,10 @@ public class Games {
         Party.getInstance().getRanks().abandonRank(playerName);
         games.get(playerName).setLose(true);
         playerFinish(playerName);
-        Party.getInstance().getPlayers().updatePlayersHeads(games.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getCurrentTarget())));
+        Party.getInstance().getPlayers()
+                .updatePlayersHeads(games.entrySet()
+                        .stream()
+                        .collect(Collectors.toMap(Map.Entry::getKey, e -> (e.getValue().getCurrentTarget() != null ? e.getValue().getCurrentTarget() : "null"))));
     }
     public void playerFinish(String playerName) {
         Party.getInstance().getRanks().finishRank(playerName);
@@ -586,7 +589,9 @@ public class Games {
         loadPlayer(path, player);
 
         GameLoop.updatePlayerDisplayTarget(games.get(player.getName()));
-        Party.getInstance().getPlayers().updatePlayersHeads();
+        Party.getInstance().getPlayers().updatePlayersHeads(games.entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> (e.getValue().getCurrentTarget() != null ? e.getValue().getCurrentTarget() : "null"))));
 
         if (games.get(player.getName()).isDead()) {
             teleportAutoBack(player);

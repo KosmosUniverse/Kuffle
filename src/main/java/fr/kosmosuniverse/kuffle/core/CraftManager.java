@@ -158,9 +158,9 @@ public class CraftManager {
 	}
 	
 	/**
-	 * Makes a player undiscover recipes
+	 * Makes a player undiscovered recipes
 	 * 
-	 * @param player	The player that have to undiscover recipe
+	 * @param player	The player that have to undiscovered recipe
 	 */
 	public static void undiscoverCrafts(Player player) {
 		recipes.stream()

@@ -4,7 +4,6 @@ import fr.kosmosuniverse.kuffle.core.Config;
 import fr.kosmosuniverse.kuffle.core.LangManager;
 import fr.kosmosuniverse.kuffle.core.LogManager;
 import fr.kosmosuniverse.kuffle.core.Party;
-import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 
 /**
  * 
@@ -17,7 +16,7 @@ public class KuffleTips extends AKuffleCommand {
 	}
 
 	@Override
-	public boolean runCommand() throws KuffleCommandFalseException {
+	public boolean runCommand() {
 		if (!Party.getInstance().getPlayers().has(player.getName())) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("PLAYER_NOT_IN_LIST", Config.getLang()));
 		}

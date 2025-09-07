@@ -21,7 +21,7 @@ import org.bukkit.inventory.ItemStack;
  *
  */
 public class Template extends AMultiblock {
-	List<Material> compose;
+	final List<Material> compose;
 	
 	public Template(String templateName, List<Material> tmp) {
 		name = templateName;

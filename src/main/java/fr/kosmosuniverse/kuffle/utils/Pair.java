@@ -9,8 +9,8 @@ import lombok.Getter;
  */
 @Getter
 public class Pair {
-	private Object key;
-	private Object value;
+	private final Object key;
+	private final Object value;
 	
 	/**
 	 * Constructor

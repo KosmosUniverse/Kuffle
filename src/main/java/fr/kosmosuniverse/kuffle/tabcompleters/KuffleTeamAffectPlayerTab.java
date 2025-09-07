@@ -3,7 +3,6 @@ package fr.kosmosuniverse.kuffle.tabcompleters;
 import fr.kosmosuniverse.kuffle.core.Party;
 import fr.kosmosuniverse.kuffle.core.Team;
 import fr.kosmosuniverse.kuffle.core.TeamManager;
-import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 
 import java.util.stream.Collectors;
 
@@ -14,11 +13,11 @@ import java.util.stream.Collectors;
  */
 public class KuffleTeamAffectPlayerTab extends AKuffleTabCommand {
 	public KuffleTeamAffectPlayerTab() {
-		super("k-team-affect-player", 2, 2);
+		super();
 	}
 
 	@Override
-	protected void runCommand() throws KuffleCommandFalseException {
+	protected void runCommand() {
 		if (currentArgs.length == 1) {
 			for (Team item : TeamManager.getInstance().getTeams()) {
 				ret.add(item.getName());

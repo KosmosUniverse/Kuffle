@@ -1,7 +1,5 @@
 package fr.kosmosuniverse.kuffle.tabcompleters;
 
-import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
-
 /**
  * 
  * @author KosmosUniverse
@@ -9,11 +7,11 @@ import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
  */
 public class KuffleTipsTab extends AKuffleTabCommand {
 	public KuffleTipsTab() {
-		super("k-tips", 0, 0);
+		super();
 	}
 
 	@Override
-	protected void runCommand() throws KuffleCommandFalseException {
+	protected void runCommand() {
 		if (currentArgs.length == 1) {
 			ret.add("TRUE");
 			ret.add("FALSE");

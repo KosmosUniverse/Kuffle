@@ -142,7 +142,7 @@ public abstract class KuffleType {
 		Objects.requireNonNull(plugin.getCommand("k-team-random-player")).setExecutor(new KuffleTeamRandomPlayer());
 		Objects.requireNonNull(plugin.getCommand("k-team-inv")).setExecutor(new KuffleTeamInv());
 		
-		// TabCompleters
+		// TabCompleter
 		Objects.requireNonNull(plugin.getCommand("k-config")).setTabCompleter(new KuffleConfigTab());
 		Objects.requireNonNull(plugin.getCommand("k-list")).setTabCompleter(new KuffleListTab());
 		Objects.requireNonNull(plugin.getCommand("k-spectate")).setTabCompleter(new KuffleSpectateTab());

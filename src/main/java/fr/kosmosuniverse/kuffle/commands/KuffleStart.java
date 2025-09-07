@@ -82,18 +82,14 @@ public class KuffleStart extends AKuffleCommand {
 				}
 			}, 20 + spread);
 
-			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
-				ActionBar.sendRawTitle(ChatColor.BOLD + String.valueOf(ChatColor.GOLD) + "4" + ChatColor.RESET, Objects.requireNonNull(Bukkit.getPlayer(playerName)));
-			}, 40 + spread);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> ActionBar.sendRawTitle(ChatColor.BOLD + String.valueOf(ChatColor.GOLD) + "4" + ChatColor.RESET, Objects.requireNonNull(Bukkit.getPlayer(playerName))), 40 + spread);
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 				ActionBar.sendRawTitle(ChatColor.BOLD + String.valueOf(ChatColor.YELLOW) + "3" + ChatColor.RESET, Objects.requireNonNull(Bukkit.getPlayer(playerName)));
 				CraftManager.enableCrafts();
 			}, 60 + spread);
 
-			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
-				ActionBar.sendRawTitle(ChatColor.BOLD + String.valueOf(ChatColor.GREEN) + "2" + ChatColor.RESET, Objects.requireNonNull(Bukkit.getPlayer(playerName)));
-			}, 80 + spread);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> ActionBar.sendRawTitle(ChatColor.BOLD + String.valueOf(ChatColor.GREEN) + "2" + ChatColor.RESET, Objects.requireNonNull(Bukkit.getPlayer(playerName))), 80 + spread);
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 				ActionBar.sendRawTitle(ChatColor.BOLD + String.valueOf(ChatColor.BLUE) + "1" + ChatColor.RESET, Objects.requireNonNull(Bukkit.getPlayer(playerName)));
@@ -111,9 +107,7 @@ public class KuffleStart extends AKuffleCommand {
 			}, 120 + spread);
 		});
 
-		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
-			Party.getInstance().launch();
-		}, 120 + spread);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> Party.getInstance().launch(), 120 + spread);
 
 		return true;
 	}
@@ -131,10 +125,6 @@ public class KuffleStart extends AKuffleCommand {
 					Party.getInstance().getPlayers().getList());
 
 			Party.getInstance().getPlayers().getList().forEach(playerName -> {
-				/*if (Config.getTeam()) {
-					Party.getInstance().getGames().getGames().get(playerName).setTeamName(TeamManager.getInstance().findTeamByPlayer(Objects.requireNonNull(Bukkit.getPlayer(playerName)).getName()).getName());
-				}*/
-
 				Objects.requireNonNull(Bukkit.getPlayer(playerName)).setBedSpawnLocation(Objects.requireNonNull(Bukkit.getPlayer(playerName)).getLocation(), true);
 				Party.getInstance().getGames().getGames().get(playerName).setSpawnLoc(Objects.requireNonNull(Bukkit.getPlayer(playerName)).getLocation());
 				Party.getInstance().getGames().getGames().get(playerName).getSpawnLoc().add(0, -1, 0).getBlock().setType(Material.BEDROCK);
