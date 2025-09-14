@@ -1,11 +1,11 @@
 {
     "1.19": {
         "Blocks": {
-            "Mineric_Age": {"sculk_sensor": {
+            "Mineric_Age": {"reinforced_deepslate": {
                 "Sbtt": false,
                 "Langs": {
-                    "en": "Sculk Sensor",
-                    "fr": "Capteur Sculk"
+                    "en": "Reinforced Deepslate",
+                    "fr": "Ardoise des Abimes Renforcee"
                 }
             }},
             "Mythic_Age": {
@@ -105,13 +105,6 @@
                         "fr": "Hurleur Sculk"
                     }
                 },
-                "reinforced_deepslate": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Reinforced Deepslate",
-                        "fr": "Ardoise des Abimes Renforcee"
-                    }
-                },
                 "sculk": {
                     "Sbtt": false,
                     "Langs": {
@@ -131,6 +124,13 @@
                     "Langs": {
                         "en": "Sculk Catalyst",
                         "fr": "Catalyseur Sculk"
+                    }
+                },
+                "sculk_sensor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Sculk Sensor",
+                        "fr": "Capteur Sculk"
                     }
                 }
             },
@@ -329,6 +329,13 @@
                     "fr": "Torche des Âmes Murale"
                 }
             },
+            "twisting_vines_plant": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Twisting Vines Plant",
+                    "fr": "Plant de Lianes Tortueuses"
+                }
+            },
             "potted_warped_fungus": {
                 "Sbtt": false,
                 "Langs": {
@@ -357,6 +364,13 @@
                     "fr": "Pancarte Murale Biscornue"
                 }
             },
+            "weeping_vines_plant": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Weeping Vines Plant",
+                    "fr": "Plant de Lianes Pleureuses"
+                }
+            },
             "potted_crimson_fungus": {
                 "Sbtt": false,
                 "Langs": {
@@ -381,13 +395,6 @@
         }},
         "Items": {
             "Mineric_Age": {
-                "chain": {
-                    "Sbtt": true,
-                    "Langs": {
-                        "en": "Chain",
-                        "fr": "Chaîne"
-                    }
-                },
                 "chainmail_helmet": {
                     "Sbtt": true,
                     "Langs": {
@@ -417,13 +424,6 @@
                     }
                 }
             },
-            "Heroic_Age": {"elytra": {
-                "Sbtt": false,
-                "Langs": {
-                    "en": "Elytra",
-                    "fr": "Elytra"
-                }
-            }},
             "Netheric_Age": {
                 "netherite_ingot": {
                     "Sbtt": false,
@@ -445,24 +445,40 @@
                         "en": "Warped Fungus on a Stick",
                         "fr": "Champignon Biscornu sur un Baton"
                     }
+                },
+                "weeping_vines": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Weeping Vines",
+                        "fr": "Lianes Pleureuses"
+                    }
+                },
+                "twisting_vines": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Twisting Vines",
+                        "fr": "Lianes Tortueuses"
+                    }
                 }
             }
         },
         "Both": {
-            "Mineric_Age": {"target": {
-                "Sbtt": false,
-                "Langs": {
-                    "en": "Target",
-                    "fr": "Cible"
+            "Mineric_Age": {
+                "chain": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Chain",
+                        "fr": "Chaîne"
+                    }
+                },
+                "target": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Target",
+                        "fr": "Cible"
+                    }
                 }
-            }},
-            "Archaic_Age": {"cracked_stone_bricks": {
-                "Sbtt": false,
-                "Langs": {
-                    "en": "Cracked Stone Bricks",
-                    "fr": "Pierre Taillee Craquelee"
-                }
-            }},
+            },
             "Netheric_Age": {
                 "gilded_blackstone": {
                     "Sbtt": false,
@@ -511,13 +527,6 @@
                     "Langs": {
                         "en": "Stripped Warped Hyphae",
                         "fr": "Hyphe Biscornue Denudee"
-                    }
-                },
-                "weeping_vines": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Weeping Vines",
-                        "fr": "Lianes Pleureuses"
                     }
                 },
                 "crimson_button": {
@@ -630,13 +639,6 @@
                     "Langs": {
                         "en": "Polished Blackstone Brick Slab",
                         "fr": "Dalle de Pierre Noire Taillee"
-                    }
-                },
-                "twisting_vines": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Twisting Vines",
-                        "fr": "Lianes Tortueuses"
                     }
                 },
                 "crimson_fungus": {
@@ -973,13 +975,6 @@
                         "en": "Cave Vines",
                         "fr": "Lianes de Cave"
                     }
-                },
-                "spore_blossom": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Spore Blossom",
-                        "fr": "Fleur Sporifere"
-                    }
                 }
             },
             "Classic_Age": {
@@ -1235,13 +1230,22 @@
                     "fr": "Seau de Poudreuse"
                 }
             }},
-            "Mythic_Age": {"glow_ink_sac": {
-                "Sbtt": false,
-                "Langs": {
-                    "en": "Glow Ink Sac",
-                    "fr": "Poche d'encre luisante"
+            "Mythic_Age": {
+                "glow_ink_sac": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Glow Ink Sac",
+                        "fr": "Poche d'encre luisante"
+                    }
+                },
+                "glow_item_frame": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Glow Item Frame",
+                        "fr": "Cadre Luisant"
+                    }
                 }
-            }}
+            }
         },
         "Both": {
             "Mineric_Age": {
@@ -1257,6 +1261,13 @@
                     "Langs": {
                         "en": "Cobbled Deepslate Wall",
                         "fr": "Mur de Pierre des Abimes"
+                    }
+                },
+                "spore_blossom": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Spore Blossom",
+                        "fr": "Fleur Sporifere"
                     }
                 },
                 "cut_copper_stairs": {
@@ -1983,11 +1994,25 @@
     "1.15": {
         "Blocks": {
             "Mineric_Age": {
+                "redstone_wire": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Redstone Wire",
+                        "fr": "Fil de Redstone"
+                    }
+                },
                 "chipped_anvil": {
                     "Sbtt": false,
                     "Langs": {
                         "en": "Chipped Anvil",
                         "fr": "Enclume Endommagee"
+                    }
+                },
+                "bedrock": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bedrock",
+                        "fr": "Bedrock"
                     }
                 },
                 "tripwire": {
@@ -2062,6 +2087,13 @@
                         "fr": "Fougere en Pot"
                     }
                 },
+                "large_fern": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Large Fern",
+                        "fr": "Haute Fougere"
+                    }
+                },
                 "kelp_plant": {
                     "Sbtt": false,
                     "Langs": {
@@ -2095,6 +2127,13 @@
                     "Langs": {
                         "en": "Potted Spruce Sapling",
                         "fr": "Pousse de Sapin en Pot"
+                    }
+                },
+                "yellow_wall_banner": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Yellow Wall Banner",
+                        "fr": "Banniere Murale Jaune"
                     }
                 },
                 "lava": {
@@ -2162,6 +2201,13 @@
                         "fr": "Pousse d'Acacia en Pot"
                     }
                 },
+                "potatoes": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Potatoes",
+                        "fr": "Patates"
+                    }
+                },
                 "blue_wall_banner": {
                     "Sbtt": false,
                     "Langs": {
@@ -2218,6 +2264,13 @@
                         "fr": "Pousse de Bamboo"
                     }
                 },
+                "beetroots": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Beetroots",
+                        "fr": "Betterave"
+                    }
+                },
                 "potted_red_tulip": {
                     "Sbtt": false,
                     "Langs": {
@@ -2230,6 +2283,13 @@
                     "Langs": {
                         "en": "Potted Dead Bush",
                         "fr": "Arbuste Mort en Pot"
+                    }
+                },
+                "carrots": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Carrots",
+                        "fr": "Carottes"
                     }
                 },
                 "light_blue_wall_banner": {
@@ -2352,13 +2412,22 @@
                     }
                 }
             },
-            "Heroic_Age": {"dragon_wall_head": {
-                "Sbtt": false,
-                "Langs": {
-                    "en": "Dragon Wall Head",
-                    "fr": "Tête Murale de Dragon"
+            "Heroic_Age": {
+                "chorus_plant": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Chorus Plant",
+                        "fr": "Plante de Chorus"
+                    }
+                },
+                "dragon_wall_head": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Dragon Wall Head",
+                        "fr": "Tête Murale de Dragon"
+                    }
                 }
-            }},
+            },
             "Archaic_Age": {
                 "potted_oak_sapling": {
                     "Sbtt": false,
@@ -2453,6 +2522,13 @@
                 }
             },
             "Netheric_Age": {
+                "spawner": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Spawner",
+                        "fr": "Spawner"
+                    }
+                },
                 "nether_portal": {
                     "Sbtt": false,
                     "Langs": {
@@ -2599,6 +2675,13 @@
                         "fr": "Lingot d'Or"
                     }
                 },
+                "golden_horse_armor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Golden Horse Armor",
+                        "fr": "Armure de Cheval en Or"
+                    }
+                },
                 "firework_rocket": {
                     "Sbtt": false,
                     "Langs": {
@@ -2641,6 +2724,13 @@
                         "fr": "Houe en Diamant"
                     }
                 },
+                "iron_horse_armor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Iron Horse Armor",
+                        "fr": "Armure de Cheval en Fer"
+                    }
+                },
                 "clock": {
                     "Sbtt": true,
                     "Langs": {
@@ -2674,6 +2764,13 @@
                     "Langs": {
                         "en": "Golden Hoe",
                         "fr": "Houe en Or"
+                    }
+                },
+                "diamond_horse_armor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Diamond Horse Armor",
+                        "fr": "Armure de Cheval en Diamant"
                     }
                 },
                 "compass": {
@@ -2899,6 +2996,13 @@
                         "en": "Diamond",
                         "fr": "Diamant"
                     }
+                },
+                "enchanted_golden_apple": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Enchanted Golden Apple",
+                        "fr": "Pomme d'Or Enchantee"
+                    }
                 }
             },
             "Classic_Age": {
@@ -2907,6 +3011,125 @@
                     "Langs": {
                         "en": "Water Bucket",
                         "fr": "Seau d'Eau"
+                    }
+                },
+                "purple_dye": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Purple Dye",
+                        "fr": "Colorant Violet"
+                    }
+                },
+                "pumpkin_seeds": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Pumpkin Seeds",
+                        "fr": "Graines de Citrouilles"
+                    }
+                },
+                "saddle": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Saddle",
+                        "fr": "Selle"
+                    }
+                },
+                "baked_potato": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Baked Potato",
+                        "fr": "Patate Cuite"
+                    }
+                },
+                "spruce_boat": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Spruce Boat",
+                        "fr": "Bateau de Sapin"
+                    }
+                },
+                "shears": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Shears",
+                        "fr": "Cisailles"
+                    }
+                },
+                "iron_sword": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Iron Sword",
+                        "fr": "Epee en Fer"
+                    }
+                },
+                "rabbit": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Rabbit",
+                        "fr": "Lapin Cru"
+                    }
+                },
+                "slime_ball": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Slime Ball",
+                        "fr": "Boule de Slime"
+                    }
+                },
+                "iron_nugget": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Iron Nugget",
+                        "fr": "Pepite de Fer"
+                    }
+                },
+                "rabbit_hide": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Rabbit Hide",
+                        "fr": "Peau de Lapin"
+                    }
+                },
+                "salmon": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Salmon",
+                        "fr": "Saumon Cru"
+                    }
+                },
+                "furnace_minecart": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Furnace Minecart",
+                        "fr": "Minecart Four"
+                    }
+                },
+                "bucket": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bucket",
+                        "fr": "Seau"
+                    }
+                },
+                "flint_and_steel": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Flint and Steel",
+                        "fr": "Briquet"
+                    }
+                },
+                "snowball": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Snowball",
+                        "fr": "Boule de Neige"
+                    }
+                },
+                "blue_dye": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Blue Dye",
+                        "fr": "Colorant Bleu"
                     }
                 },
                 "shield": {
@@ -2923,25 +3146,11 @@
                         "fr": "Bouteille"
                     }
                 },
-                "purple_dye": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Purple Dye",
-                        "fr": "Colorant Violet"
-                    }
-                },
                 "cod_bucket": {
                     "Sbtt": false,
                     "Langs": {
                         "en": "Cod Bucket",
                         "fr": "Morue dans un Seau"
-                    }
-                },
-                "pumpkin_seeds": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Pumpkin Seeds",
-                        "fr": "Graines de Citrouilles"
                     }
                 },
                 "dark_oak_boat": {
@@ -2979,13 +3188,6 @@
                         "fr": "Baies Sucrees"
                     }
                 },
-                "baked_potato": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Baked Potato",
-                        "fr": "Patate Cuite"
-                    }
-                },
                 "tropical_fish": {
                     "Sbtt": false,
                     "Langs": {
@@ -3021,20 +3223,6 @@
                         "fr": "Lingot de Fer"
                     }
                 },
-                "spruce_boat": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Spruce Boat",
-                        "fr": "Bateau de Sapin"
-                    }
-                },
-                "shears": {
-                    "Sbtt": true,
-                    "Langs": {
-                        "en": "Shears",
-                        "fr": "Cisailles"
-                    }
-                },
                 "potato": {
                     "Sbtt": false,
                     "Langs": {
@@ -3042,46 +3230,11 @@
                         "fr": "Patate"
                     }
                 },
-                "iron_sword": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Iron Sword",
-                        "fr": "Epee en Fer"
-                    }
-                },
-                "rabbit": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Rabbit",
-                        "fr": "Lapin Cru"
-                    }
-                },
-                "slime_ball": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Slime Ball",
-                        "fr": "Boule de Slime"
-                    }
-                },
-                "iron_nugget": {
-                    "Sbtt": true,
-                    "Langs": {
-                        "en": "Iron Nugget",
-                        "fr": "Pepite de Fer"
-                    }
-                },
                 "iron_pickaxe": {
                     "Sbtt": false,
                     "Langs": {
                         "en": "Iron Pickaxe",
                         "fr": "Pioche en Fer"
-                    }
-                },
-                "rabbit_hide": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Rabbit Hide",
-                        "fr": "Peau de Lapin"
                     }
                 },
                 "yellow_dye": {
@@ -3126,13 +3279,6 @@
                         "fr": "Algues Sechees"
                     }
                 },
-                "salmon": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Salmon",
-                        "fr": "Saumon Cru"
-                    }
-                },
                 "melon_slice": {
                     "Sbtt": false,
                     "Langs": {
@@ -3147,13 +3293,6 @@
                         "fr": "Algue"
                     }
                 },
-                "furnace_minecart": {
-                    "Sbtt": true,
-                    "Langs": {
-                        "en": "Furnace Minecart",
-                        "fr": "Minecart Four"
-                    }
-                },
                 "beetroot": {
                     "Sbtt": false,
                     "Langs": {
@@ -3166,13 +3305,6 @@
                     "Langs": {
                         "en": "Gray Dye",
                         "fr": "Colorant Gris"
-                    }
-                },
-                "bucket": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bucket",
-                        "fr": "Seau"
                     }
                 },
                 "iron_shovel": {
@@ -3201,27 +3333,6 @@
                     "Langs": {
                         "en": "Cod",
                         "fr": "Morue"
-                    }
-                },
-                "flint_and_steel": {
-                    "Sbtt": true,
-                    "Langs": {
-                        "en": "Flint and Steel",
-                        "fr": "Briquet"
-                    }
-                },
-                "snowball": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Snowball",
-                        "fr": "Boule de Neige"
-                    }
-                },
-                "blue_dye": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Blue Dye",
-                        "fr": "Colorant Bleu"
                     }
                 },
                 "melon_seeds": {
@@ -3259,6 +3370,13 @@
                     "Langs": {
                         "en": "Filled map",
                         "fr": "Carte Remplie"
+                    }
+                },
+                "honey_bottle": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Honey Bottle",
+                        "fr": "Bouteille de Miel"
                     }
                 },
                 "green_dye": {
@@ -3303,6 +3421,13 @@
                         "fr": "Tarte à la Citrouille"
                     }
                 },
+                "turtle_helmet": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Turtle Helmet",
+                        "fr": "Casque de Tortue"
+                    }
+                },
                 "pufferfish": {
                     "Sbtt": false,
                     "Langs": {
@@ -3329,6 +3454,13 @@
                     "Langs": {
                         "en": "Suspicious Stew",
                         "fr": "Soupe Suspecte"
+                    }
+                },
+                "phantom_membrane": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Phantom Membrane",
+                        "fr": "Membrane de Phantom"
                     }
                 },
                 "pufferfish_bucket": {
@@ -3380,6 +3512,13 @@
                         "fr": "Colorant Marron"
                     }
                 },
+                "honeycomb": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Honey Comb",
+                        "fr": "Rayon de Miel"
+                    }
+                },
                 "cyan_dye": {
                     "Sbtt": false,
                     "Langs": {
@@ -3417,6 +3556,20 @@
                 }
             },
             "Heroic_Age": {
+                "dragon_breath": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Dragon Breath",
+                        "fr": "Souffle de Dragon"
+                    }
+                },
+                "elytra": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Elytra",
+                        "fr": "Elytra"
+                    }
+                },
                 "ender_eye": {
                     "Sbtt": false,
                     "Langs": {
@@ -3908,6 +4061,13 @@
                     "Langs": {
                         "en": "Detector Rail",
                         "fr": "Rails Detecteurs"
+                    }
+                },
+                "damaged_anvil": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Damaged Anvil",
+                        "fr": "Enclume Endomagee"
                     }
                 },
                 "anvil": {
@@ -4500,6 +4660,13 @@
                         "fr": "Table de Forgeron"
                     }
                 },
+                "red_mushroom_block": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Red Mushroom Block",
+                        "fr": "Bloc de Champignon Rouge"
+                    }
+                },
                 "black_banner": {
                     "Sbtt": false,
                     "Langs": {
@@ -5039,6 +5206,13 @@
                         "fr": "Escaliers de Sapin"
                     }
                 },
+                "brown_mushroom_block": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Brown Mushroom Block",
+                        "fr": "Bloc de Champignon Marron"
+                    }
+                },
                 "gray_wool": {
                     "Sbtt": false,
                     "Langs": {
@@ -5202,6 +5376,13 @@
                         "fr": "Vitre Marron"
                     }
                 },
+                "honey_block": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Honey Block",
+                        "fr": "Bloc de Miel"
+                    }
+                },
                 "light_blue_banner": {
                     "Sbtt": false,
                     "Langs": {
@@ -5228,6 +5409,13 @@
                     "Langs": {
                         "en": "White Concrete Powder",
                         "fr": "Beton Blanc en Poudre"
+                    }
+                },
+                "white_shulker_box": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "While Shulker Box",
+                        "fr": "boite de Shulker Blanche"
                     }
                 },
                 "light_blue_wool": {
@@ -5319,6 +5507,13 @@
                     "Langs": {
                         "en": "Packed Ice",
                         "fr": "Glace Compactee"
+                    }
+                },
+                "cyan_shulker_box": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cyan Shulker Box",
+                        "fr": "Biote de Shulker Cyan"
                     }
                 },
                 "scaffolding": {
@@ -5454,6 +5649,13 @@
                         "fr": "Pivoine"
                     }
                 },
+                "light_blue_shulker_box": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Light Blue Shulker Box",
+                        "fr": "Boite de Shulker Bleue Clair"
+                    }
+                },
                 "lime_bed": {
                     "Sbtt": false,
                     "Langs": {
@@ -5515,6 +5717,13 @@
                     "Langs": {
                         "en": "Blue Terracotta",
                         "fr": "Terre Cuite Bleue"
+                    }
+                },
+                "magenta_shulker_box": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Magenta Shulker Box",
+                        "fr": "Biote de Shulker Magenta"
                     }
                 },
                 "jungle_slab": {
@@ -5601,6 +5810,13 @@
                         "fr": "Beton Vert en Poudre"
                     }
                 },
+                "slime_block": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Slime Block",
+                        "fr": "Bloc de Slime"
+                    }
+                },
                 "emerald_block": {
                     "Sbtt": false,
                     "Langs": {
@@ -5678,6 +5894,13 @@
                         "fr": "Tapis Vert"
                     }
                 },
+                "mycelium": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Mycelium",
+                        "fr": "Mycelium"
+                    }
+                },
                 "acacia_fence": {
                     "Sbtt": false,
                     "Langs": {
@@ -5718,6 +5941,13 @@
                     "Langs": {
                         "en": "Ice",
                         "fr": "Glace"
+                    }
+                },
+                "green_shulker_box": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Green Shulker Box",
+                        "fr": "Boite de Shulker Verte"
                     }
                 },
                 "pink_tulip": {
@@ -5874,6 +6104,13 @@
                         "fr": "Vitre Bleu Clair"
                     }
                 },
+                "sticky_piston": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Sticky Piston",
+                        "fr": "Piston Collant"
+                    }
+                },
                 "white_concrete": {
                     "Sbtt": true,
                     "Langs": {
@@ -5893,6 +6130,13 @@
                     "Langs": {
                         "en": "Red Tulip",
                         "fr": "Tulipe Rouge"
+                    }
+                },
+                "beacon": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Beacon",
+                        "fr": "Balise"
                     }
                 },
                 "jungle_planks": {
@@ -5923,6 +6167,13 @@
                         "fr": "Plaque de Pression d'Acajou"
                     }
                 },
+                "lime_shulker_box": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Line Shulker Box",
+                        "fr": "Boite de Shulker Verte Clair"
+                    }
+                },
                 "light_blue_terracotta": {
                     "Sbtt": false,
                     "Langs": {
@@ -5942,6 +6193,13 @@
                     "Langs": {
                         "en": "Jungle Sapling",
                         "fr": "Pousse d'acajou"
+                    }
+                },
+                "mushroom_stem": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Mushroom Stem",
+                        "fr": "Tige de Champignon"
                     }
                 },
                 "jungle_button": {
@@ -6061,6 +6319,13 @@
                     "Langs": {
                         "en": "Jungle Door",
                         "fr": "Porte d'Acajou"
+                    }
+                },
+                "honeycomb_block": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Honey Comb Block",
+                        "fr": "Bloc de Rayon de Miel"
                     }
                 },
                 "jungle_log": {
@@ -6196,6 +6461,13 @@
                         "fr": "Banniere Rose"
                     }
                 },
+                "brown_shulker_box": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Brown Shulker Box",
+                        "fr": "Boite de Shulker Marron"
+                    }
+                },
                 "pink_concrete": {
                     "Sbtt": false,
                     "Langs": {
@@ -6219,6 +6491,76 @@
                         "fr": "Boite de Shulker Violette"
                     }
                 },
+                "pink_shulker_box": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Pink Shulker Box",
+                        "fr": "Boite de Shulkey Rose"
+                    }
+                },
+                "dragon_head": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Dragon Head",
+                        "fr": "Tete de Dragon"
+                    }
+                },
+                "orange_shulker_box": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Orange Shulker Box",
+                        "fr": "Boite de Shulker Orange"
+                    }
+                },
+                "purpur_stairs": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Purpur Stairs",
+                        "fr": "Escaliers de Purpur"
+                    }
+                },
+                "blue_shulker_box": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Blue Shulker Box",
+                        "fr": "Boite de Shulker Bleue"
+                    }
+                },
+                "chorus_flower": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Chorus Flower",
+                        "fr": "Fleur de Chorus"
+                    }
+                },
+                "end_stone": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "End Stone",
+                        "fr": "Pierre de l'End"
+                    }
+                },
+                "dragon_egg": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Dragon Egg",
+                        "fr": "Œuf de Dragon"
+                    }
+                },
+                "end_rod": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "End Rod",
+                        "fr": "Barre de l'End"
+                    }
+                },
+                "yellow_shulker_box": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Yellow Shulker Box",
+                        "fr": "Boite de Shulker Jaune"
+                    }
+                },
                 "end_stone_brick_stairs": {
                     "Sbtt": true,
                     "Langs": {
@@ -6233,13 +6575,6 @@
                         "fr": "Boite de Shulker"
                     }
                 },
-                "dragon_head": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Dragon Head",
-                        "fr": "Tete de Dragon"
-                    }
-                },
                 "purpur_block": {
                     "Sbtt": true,
                     "Langs": {
@@ -6252,13 +6587,6 @@
                     "Langs": {
                         "en": "Ender Chest",
                         "fr": "Coffre de l'Ender"
-                    }
-                },
-                "orange_shulker_box": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Orange Shulker Box",
-                        "fr": "Boite de Shulker Orange"
                     }
                 },
                 "end_stone_bricks": {
@@ -6282,25 +6610,11 @@
                         "fr": "Cadre du Portail de l'End"
                     }
                 },
-                "purpur_stairs": {
-                    "Sbtt": true,
-                    "Langs": {
-                        "en": "Purpur Stairs",
-                        "fr": "Escaliers de Purpur"
-                    }
-                },
                 "black_shulker_box": {
                     "Sbtt": false,
                     "Langs": {
                         "en": "Black Shulker Box",
                         "fr": "Boite de Shulker Noire"
-                    }
-                },
-                "blue_shulker_box": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Blue Shulker Box",
-                        "fr": "Boite de Shulker Bleue"
                     }
                 },
                 "end_stone_brick_wall": {
@@ -6310,25 +6624,11 @@
                         "fr": "Mur de Pierre Taillee de l'End"
                     }
                 },
-                "chorus_flower": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Chorus Flower",
-                        "fr": "Fleur de Chorus"
-                    }
-                },
                 "gray_shulker_box": {
                     "Sbtt": false,
                     "Langs": {
                         "en": "Gray Shulker Box",
                         "fr": "Boite de Shulker Grise"
-                    }
-                },
-                "end_stone": {
-                    "Sbtt": true,
-                    "Langs": {
-                        "en": "End Stone",
-                        "fr": "Pierre de l'End"
                     }
                 },
                 "purpur_slab": {
@@ -6345,25 +6645,11 @@
                         "fr": "Boite de Shulker Rouge"
                     }
                 },
-                "end_rod": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "End Rod",
-                        "fr": "Barre de l'End"
-                    }
-                },
                 "purpur_pillar": {
                     "Sbtt": true,
                     "Langs": {
                         "en": "Purpur Pillar",
                         "fr": "Pilier de Purpur"
-                    }
-                },
-                "yellow_shulker_box": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Yellow Shulker Box",
-                        "fr": "Boite de Shulker Jaune"
                     }
                 }
             },
@@ -7019,6 +7305,13 @@
                         "fr": "Bois de chêne ecorcee"
                     }
                 },
+                "cracked_stone_bricks": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cracked Stone Bricks",
+                        "fr": "Pierre Taillee Craquelee"
+                    }
+                },
                 "oak_pressure_plate": {
                     "Sbtt": false,
                     "Langs": {
@@ -7670,6 +7963,574 @@
             }
         }
     },
+    "1.21.6": {
+        "Items": {
+            "Mineric_Age": {"lead": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Lead",
+                    "fr": "Laisse"
+                }
+            }},
+            "Classic_Age": {
+                "light_gray_harness": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Light Gray Harness",
+                        "fr": "Harnais Gris Clair"
+                    }
+                },
+                "orange_harness": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Orange Harness",
+                        "fr": "Harnais Orange"
+                    }
+                },
+                "red_harness": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Red Harness",
+                        "fr": "Harnais Rouge"
+                    }
+                },
+                "yellow_harness": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Yellow Harness",
+                        "fr": "Harnais Jaune"
+                    }
+                },
+                "light_blue_harness": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Light Blue Harness",
+                        "fr": "Harnais Bleu Clair"
+                    }
+                },
+                "purple_harness": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Purple Harness",
+                        "fr": "Harnais Violet"
+                    }
+                },
+                "black_harness": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Black Harness",
+                        "fr": "Harnais Noir"
+                    }
+                },
+                "blue_harness": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Blue Harness",
+                        "fr": "Harnais Bleu"
+                    }
+                },
+                "magenta_harness": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Magenta Harness",
+                        "fr": "Harnais Magenta"
+                    }
+                }
+            },
+            "Mythic_Age": {
+                "pink_harness": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Pink Harness",
+                        "fr": "Harnais Rose"
+                    }
+                },
+                "gray_harness": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Gray Harness",
+                        "fr": "Harnais Gris"
+                    }
+                },
+                "green_harness": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Green Harness",
+                        "fr": "Harnais Vert Clair"
+                    }
+                },
+                "white_harness": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "White Harness",
+                        "fr": "Harnais Blanc"
+                    }
+                },
+                "brown_harness": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Brown Harness",
+                        "fr": "Harnais Marron"
+                    }
+                },
+                "cyan_harness": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Cyan Harness",
+                        "fr": "Harnais Cyan"
+                    }
+                },
+                "lime_harness": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Lime Harness",
+                        "fr": "Harnais Vert Clair"
+                    }
+                }
+            }
+        },
+        "Both": {"Netheric_Age": {"dried_ghast": {
+            "Sbtt": false,
+            "Langs": {
+                "en": "Dried Ghast",
+                "fr": "Ghast Desseche"
+            }
+        }}}
+    },
+    "1.21": {
+        "Blocks": {"Mythic_Age": {
+            "trial_spawner": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Trial Spawner",
+                    "fr": "Generateur des Epreuves"
+                }
+            },
+            "vault": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Vault",
+                    "fr": "Coffre-fort"
+                }
+            }
+        }},
+        "Items": {"Mythic_Age": {
+            "ominous_bottle": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Ominous Bottle",
+                    "fr": "Fiole Funeste"
+                }
+            },
+            "wind_charge": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Wind Charge",
+                    "fr": "Charge de Vent"
+                }
+            },
+            "trial_key": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Trial Key",
+                    "fr": "Cle des Epreuves"
+                }
+            },
+            "breeze_rod": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Breeze Rod",
+                    "fr": "Baton de Breeze"
+                }
+            }
+        }},
+        "Both": {
+            "Mineric_Age": {
+                "tuff_bricks": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Tuff Bricks",
+                        "fr": "Tuf Taille"
+                    }
+                },
+                "polished_tuff_wall": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Polished Tuff Wall",
+                        "fr": "Mur de Tuf poli"
+                    }
+                },
+                "tuff_brick_slab": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Tuff Brick Slab",
+                        "fr": "Dalle de Tuf Taille"
+                    }
+                },
+                "copper_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Copper Door",
+                        "fr": "Porte en Cuivre"
+                    }
+                },
+                "tuff_brick_stairs": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Tuff Brick Stairs",
+                        "fr": "Escaliers en Tuf Taille"
+                    }
+                },
+                "copper_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Copper Trapdoor",
+                        "fr": "Trappe en Cuivre"
+                    }
+                },
+                "crafter": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Crafter",
+                        "fr": "Fabricateur"
+                    }
+                },
+                "oxidized_copper_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Oxidized Copper Door",
+                        "fr": "Porte en Cuivre Oxide"
+                    }
+                },
+                "chiseled_copper": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Chiseled Copper",
+                        "fr": "Cuivre Sculpte"
+                    }
+                },
+                "polished_tuff_slab": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Polished Tuff Slab",
+                        "fr": "Dalle de Tuf Poli"
+                    }
+                },
+                "oxidized_copper_grate\t": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Oxidized Copper Grate\t",
+                        "fr": "Grille en Cuivre Oxide"
+                    }
+                },
+                "exposed_copper_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Exposed Copper Trapdoor",
+                        "fr": "Trappe en Cuivre Expose"
+                    }
+                },
+                "chiseled_tuff_bricks": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Chiseled Tuff Bricks",
+                        "fr": "Tuf Taille Sculpte"
+                    }
+                },
+                "tuff_slab": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Tuff Slab",
+                        "fr": "Dalle de Tuf"
+                    }
+                },
+                "oxidized_copper_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Oxidized Copper Trapdoor",
+                        "fr": "Trappe en Cuivre Oxide"
+                    }
+                },
+                "tuff_wall": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Tuff Wall",
+                        "fr": "Mur de Tuf"
+                    }
+                },
+                "chiseled_tuff": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Chiseled Tuff",
+                        "fr": "Tuf Sculpte"
+                    }
+                },
+                "weathered_chiseled_copper": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Weathered Chiseled Copper",
+                        "fr": "Cuivre Sculpte Erode"
+                    }
+                },
+                "tuff_brick_wall": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Tuff Brick Wall",
+                        "fr": "Mur de Tuf Taille"
+                    }
+                },
+                "exposed_chiseled_copper": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Exposed Chiseled Copper",
+                        "fr": "Cuivre Sculpte Expose"
+                    }
+                },
+                "tuff_stairs": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Tuff Stairs",
+                        "fr": "Escaliers en Tuf"
+                    }
+                },
+                "oxidized_chiseled_copper": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Oxidized Chiseled Copper",
+                        "fr": "Cuivre Sculpte Oxide"
+                    }
+                },
+                "polished_tuff": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Polished Tuff",
+                        "fr": "Tuf Poli"
+                    }
+                },
+                "copper_grate": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Copper Grate",
+                        "fr": "Grille en Cuivre"
+                    }
+                },
+                "exposed_copper_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Exposed Copper Door",
+                        "fr": "Porte en Cuivre Expose"
+                    }
+                },
+                "weathered_copper_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Weathered Copper Door",
+                        "fr": "Porte en Cuivre Erode"
+                    }
+                },
+                "weathered_copper_grate": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Weathered Copper Grate",
+                        "fr": "Grille en Cuivre Erode"
+                    }
+                },
+                "polished_tuff_stairs": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Polished Tuff Stairs",
+                        "fr": "Escaliers en Tuf Poli"
+                    }
+                },
+                "exposed_copper_grate": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Exposed Copper Grate",
+                        "fr": "Grille en Cuivre Expose"
+                    }
+                },
+                "weathered_copper_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Weathered Copper Trapdoor",
+                        "fr": "Trappe en Cuivre Erode"
+                    }
+                }
+            },
+            "Mythic_Age": {
+                "waxed_exposed_copper_grate": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Exposed Copper Grate",
+                        "fr": "Grille en Cuivre Expose Cire"
+                    }
+                },
+                "waxed_oxidized_copper_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Oxidized Copper Door",
+                        "fr": "Porte en Cuivre Oxide Cire"
+                    }
+                },
+                "waxed_weathered_copper_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Weathered Copper Trapdoor",
+                        "fr": "Trappe en Cuivre Erode Cire"
+                    }
+                },
+                "waxed_copper_bulb": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Copper Bulb",
+                        "fr": "Ampoule en Cuivre Cire"
+                    }
+                },
+                "waxed_exposed_copper_bulb": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Exposed Copper Bulb",
+                        "fr": "Ampoule en Cuivre Expose Cire"
+                    }
+                },
+                "waxed_copper_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Copper Trapdoor",
+                        "fr": "Trappe en Cuivre Cire"
+                    }
+                },
+                "waxed_weathered_copper_grate": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Weathered Copper Grate",
+                        "fr": "Grille en Cuivre Erode Cire"
+                    }
+                },
+                "waxed_oxidized_copper_bulb": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Oxidized Copper Bulb",
+                        "fr": "Ampoule en Cuivre Oxide Cire"
+                    }
+                },
+                "waxed_oxidized_copper_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Oxidized Copper Trapdoor",
+                        "fr": "Trappe en Cuivre Oxide Cire"
+                    }
+                },
+                "waxed_weathered_chiseled_copper": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Weathered Chiseled Copper",
+                        "fr": "Cuivre Sculpte Erode Cire"
+                    }
+                },
+                "waxed_exposed_copper_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Exposed Copper Door",
+                        "fr": "Porte en Cuivre Expose Cire"
+                    }
+                },
+                "waxed_exposed_copper_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Exposed Copper Trapdoor",
+                        "fr": "Trappe en Cuivre Expose Cire"
+                    }
+                },
+                "waxed_oxidized_copper_grate\t": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Oxidized Copper Grate\t",
+                        "fr": "Grille en Cuivre Oxide Cire"
+                    }
+                },
+                "waxed_copper_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Copper Door",
+                        "fr": "Porte en Cuivre Cire"
+                    }
+                },
+                "waxed_weathered_copper_bulb": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Weathered Copper Bulb",
+                        "fr": "Ampoule en Cuivre Erode Cire"
+                    }
+                },
+                "waxed_oxidized_chiseled_copper": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Oxidized Chiseled Copper",
+                        "fr": "Cuivre Sculpte Oxide Cire"
+                    }
+                },
+                "waxed_copper_grate": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Copper Grate",
+                        "fr": "Grille en Cuivre Cire"
+                    }
+                },
+                "waxed_exposed_chiseled_copper": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Exposed Chiseled Copper",
+                        "fr": "Cuivre Sculpte Expose Cire"
+                    }
+                },
+                "waxed_weathered_copper_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Weathered Copper Door",
+                        "fr": "Porte en Cuivre Erode Cire"
+                    }
+                },
+                "waxed_chiseled_copper": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Chiseled Copper",
+                        "fr": "Cuivre Sculpte Cire"
+                    }
+                }
+            },
+            "Netheric_Age": {
+                "weathered_copper_bulb": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Weathered Copper Bulb",
+                        "fr": "Ampoule en Cuivre Erode"
+                    }
+                },
+                "oxidized_copper_bulb": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Oxidized Copper Bulb",
+                        "fr": "Ampoule en Cuivre Oxide"
+                    }
+                },
+                "copper_bulb": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Copper Bulb",
+                        "fr": "Ampoule en Cuivre"
+                    }
+                },
+                "exposed_copper_bulb": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Exposed Copper Bulb",
+                        "fr": "Ampoule en Cuivre Expose"
+                    }
+                }
+            }
+        }
+    },
     "1.20": {
         "Blocks": {
             "Classic_Age": {
@@ -7807,13 +8668,6 @@
                         "fr": "Bateau en Cerisier"
                     }
                 },
-                "wolf_armor": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Wolf Armor",
-                        "fr": "Armure pour Loup"
-                    }
-                },
                 "*_smithing_template": {
                     "Sbtt": false,
                     "Langs": {
@@ -7821,25 +8675,11 @@
                         "fr": "Modele de Forge"
                     }
                 },
-                "armadillo_scute": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Armadillo Scute",
-                        "fr": "Ecaille de Tatou"
-                    }
-                },
                 "bamboo_chest_raft": {
                     "Sbtt": false,
                     "Langs": {
                         "en": "Bamboo Chest Raft",
                         "fr": "Radeau de Stockage en Bambou"
-                    }
-                },
-                "turtle_scute": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Turtle Scute",
-                        "fr": "Ecaille de Tortue"
                     }
                 },
                 "bamboo_raft": {
@@ -7859,22 +8699,13 @@
             }
         },
         "Both": {
-            "Classic_Age": {
-                "short_grass": {
-                    "Sbtt": true,
-                    "Langs": {
-                        "en": "Short Grass",
-                        "fr": "Herbe"
-                    }
-                },
-                "decorated_pot": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Decorated Pot",
-                        "fr": "Vase Decore"
-                    }
+            "Classic_Age": {"decorated_pot": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Decorated Pot",
+                    "fr": "Vase Decore"
                 }
-            },
+            }},
             "Mythic_Age": {
                 "calibrated_sculk_sensor": {
                     "Sbtt": false,
@@ -7995,18 +8826,18 @@
                         "fr": "Pancarte Suspendue Carmin"
                     }
                 },
-                "mangrove_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Mangrove Hanging Sign",
-                        "fr": "Pancarte Suspendue en Paletuvier"
-                    }
-                },
                 "cherry_stairs": {
                     "Sbtt": false,
                     "Langs": {
                         "en": "Cherry Stairs",
                         "fr": "Escaliers en Cerisier"
+                    }
+                },
+                "mangrove_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Mangrove Hanging Sign",
+                        "fr": "Pancarte Suspendue en Paletuvier"
                     }
                 },
                 "cherry_sign": {
@@ -8079,13 +8910,6 @@
                         "fr": "Barriere en Bambou"
                     }
                 },
-                "cherry_pressure_plate": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Pressure Plate",
-                        "fr": "Plaque de Pression en Cerisier"
-                    }
-                },
                 "cherry_button": {
                     "Sbtt": false,
                     "Langs": {
@@ -8098,6 +8922,13 @@
                     "Langs": {
                         "en": "Cherry Leaves",
                         "fr": "Feuilles de Cerisier"
+                    }
+                },
+                "cherry_pressure_plate": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Pressure Plate",
+                        "fr": "Plaque de Pression en Cerisier"
                     }
                 },
                 "birch_hanging_sign": {
@@ -8114,18 +8945,18 @@
                         "fr": "Pancarte Suspendue en Bambou"
                     }
                 },
-                "dark_oak_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Dark Oak Hanging Sign",
-                        "fr": "Pancarte Suspendue en Chene Noir"
-                    }
-                },
                 "cherry_sapling": {
                     "Sbtt": false,
                     "Langs": {
                         "en": "Cherry Sapling",
                         "fr": "Pousse de Cerisier"
+                    }
+                },
+                "dark_oak_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Dark Oak Hanging Sign",
+                        "fr": "Pancarte Suspendue en Chene Noir"
                     }
                 },
                 "cherry_planks": {
@@ -8193,5 +9024,493 @@
                 }
             }}
         }
+    },
+    "1.20.3": {"Both": {"Classic_Age": {"short_grass": {
+        "Sbtt": true,
+        "Langs": {
+            "en": "Short Grass",
+            "fr": "Herbe"
+        }
+    }}}},
+    "1.21.2": {"Items": {
+        "Classic_Age": {
+            "magenta_bundle": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Magenta Bundle",
+                    "fr": "Sac Magenta"
+                }
+            },
+            "orange_bundle": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Orange Bundle",
+                    "fr": "Sav Orange"
+                }
+            },
+            "blue_bundle": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Blue Bundle",
+                    "fr": "Sac Bleu"
+                }
+            },
+            "purple_bundle": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Purple Bundle",
+                    "fr": "Sac Violet"
+                }
+            },
+            "black_bundle": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Black Bundle",
+                    "fr": "Sac Noir"
+                }
+            },
+            "red_bundle": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Red Bundle",
+                    "fr": "Sac Rouge"
+                }
+            },
+            "light_gray_bundle": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Light Gray Bundle",
+                    "fr": "Sac Gris Clair"
+                }
+            },
+            "bundle": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Bundle",
+                    "fr": "Sac"
+                }
+            },
+            "yellow_bundle": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Yellow Bundle",
+                    "fr": "Sac Jaune"
+                }
+            }
+        },
+        "Mythic_Age": {
+            "light_blue_bundle": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Light Blue Bundle",
+                    "fr": "Sac Bleu Clair"
+                }
+            },
+            "green_bundle": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Green Bundle",
+                    "fr": "Sac Vert"
+                }
+            },
+            "cyan_bundle": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Cyan Bundle",
+                    "fr": "Sac Cyan"
+                }
+            },
+            "pink_bundle": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Pink Bundle",
+                    "fr": "Sac Rose"
+                }
+            },
+            "brown_bundle": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Brown Bundle",
+                    "fr": "Sac Marron"
+                }
+            },
+            "white_bundle": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "White Bundle",
+                    "fr": "Sac Blanc"
+                }
+            },
+            "gray_bundle": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Gray Bundle",
+                    "fr": "Sac Gris"
+                }
+            },
+            "lime_bundle": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Lime Bundle",
+                    "fr": "Sac Vert Clair"
+                }
+            }
+        }
+    }},
+    "1.21.5": {
+        "Items": {"Mythic_Age": {
+            "blue_egg": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Blue Egg",
+                    "fr": "Oeuf Bleu"
+                }
+            },
+            "brown_egg": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Brown Egg",
+                    "fr": "Oeuf Brun"
+                }
+            }
+        }},
+        "Both": {
+            "Mineric_Age": {"lodestone": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Lodestone",
+                    "fr": "Magnetite"
+                }
+            }},
+            "Classic_Age": {"wildflowers": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Wildflowers",
+                    "fr": "Fleurs Sauvages"
+                }
+            }},
+            "Mythic_Age": {
+                "tall_dry_grass": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Tall Dry Grass",
+                        "fr": "Hautes Herbes Seches"
+                    }
+                },
+                "short_dry_grass": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Short Dry Grass",
+                        "fr": "Herbes Courtes Seches"
+                    }
+                },
+                "cactus_flower": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cactus Flower",
+                        "fr": "Fleur de Cactus"
+                    }
+                }
+            },
+            "Archaic_Age": {
+                "bush": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Bush",
+                        "fr": "Buisson"
+                    }
+                },
+                "leaf_litter": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Leaf Litter",
+                        "fr": "Tas de Feuilles"
+                    }
+                },
+                "firefly_bush": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Firefly Bush",
+                        "fr": "Buisson a Lucioles"
+                    }
+                }
+            }
+        }
+    },
+    "1.20.5": {"Items": {"Mythic_Age": {
+        "wolf_armor": {
+            "Sbtt": false,
+            "Langs": {
+                "en": "Wolf Armor",
+                "fr": "Armure pour Loup"
+            }
+        },
+        "armadillo_scute": {
+            "Sbtt": false,
+            "Langs": {
+                "en": "Armadillo Scute",
+                "fr": "Ecaille de Tatou"
+            }
+        },
+        "turtle_scute": {
+            "Sbtt": false,
+            "Langs": {
+                "en": "Turtle Scute",
+                "fr": "Ecaille de Tortue"
+            }
+        }
+    }}},
+    "1.21.4": {
+        "Blocks": {"Mythic_Age": {
+            "pale_oak_wall_sign": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Wall Sign",
+                    "fr": "Pancarte Murale de Chene pale"
+                }
+            },
+            "pale_oak_wall_hanging_sign": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Wall Hanging Sign",
+                    "fr": "Pancarte Murale Suspendue de Chene Pale"
+                }
+            }
+        }},
+        "Items": {"Mythic_Age": {
+            "pale_oak_boat": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Boat",
+                    "fr": "Bateau en Chene Pale"
+                }
+            },
+            "pale_oak_chest_boat": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Chest Boat",
+                    "fr": "Bateau de Stockage en Chene Pale"
+                }
+            },
+            "resin_clump": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Resin Clump",
+                    "fr": "Amas de Resine"
+                }
+            }
+        }},
+        "Both": {"Mythic_Age": {
+            "pale_oak_stairs": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Stairs",
+                    "fr": "Escalier en Chene Pale"
+                }
+            },
+            "resin_bricks": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Resin Bricks",
+                    "fr": "Briques de Resine"
+                }
+            },
+            "pale_oak_fence_gate": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Fence Gate",
+                    "fr": "Portillon en Chene Pale"
+                }
+            },
+            "pale_oak_sapling": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Sapling",
+                    "fr": "Pousse de Chene Pale"
+                }
+            },
+            "resin_brick": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Resin Brick",
+                    "fr": "Brique de Resine"
+                }
+            },
+            "pale_oak_fence": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Fence",
+                    "fr": "Barriere en Chene Pale"
+                }
+            },
+            "pale_oak_trapdoor": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Trapdoor",
+                    "fr": "Trappe en Chene Pale"
+                }
+            },
+            "pale_hanging_moss": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Hanging Moss",
+                    "fr": "Mousse Pale Suspendue"
+                }
+            },
+            "chiseled_resin_bricks": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Chiseled Resin Bricks",
+                    "fr": "Briques de Resine Sculptee"
+                }
+            },
+            "pale_oak_hanging_sign": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Hanging Sign",
+                    "fr": "Pancarte Suspendue de Chene Pale"
+                }
+            },
+            "pale_oak_door": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Door",
+                    "fr": "Porte en Chene Pale"
+                }
+            },
+            "closed_eyeblossom": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Closed Eyeblossom",
+                    "fr": "Oeilchidee Fermee"
+                }
+            },
+            "stripped_pale_oak_log": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Stripped Pale Oak Log",
+                    "fr": "Buche de Chene Pale Ecorce"
+                }
+            },
+            "pale_oak_log": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Log",
+                    "fr": "Buche de Chene Pale"
+                }
+            },
+            "open_eyeblossom": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Open Eyeblossom",
+                    "fr": "Oeilchidee Ouverte"
+                }
+            },
+            "resin_brick_wall": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Resin Brick Wall",
+                    "fr": "Muret de Brique de Resine"
+                }
+            },
+            "resin_block": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Resin Block",
+                    "fr": "Bloc de Resine"
+                }
+            },
+            "creaking_heart": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Creaking Heart",
+                    "fr": "Coeur de Grinceur"
+                }
+            },
+            "pale_oak_leaves": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Leaves",
+                    "fr": "Feuilles de Chene Pale"
+                }
+            },
+            "resin_brick_slab": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Resin Brick Slab",
+                    "fr": "Dalle de Briques de Resine"
+                }
+            },
+            "pale_oak_wood": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Wood",
+                    "fr": "Bois de Chene Pale"
+                }
+            },
+            "stripped_pale_oak_wood": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Stripped Pale Oak Wood",
+                    "fr": "Bois de Chene Pale Ecorce"
+                }
+            },
+            "pale_oak_button": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Button",
+                    "fr": "Boutton en Chene Pale"
+                }
+            },
+            "resin_brick_stairs": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Resin Brick Stairs",
+                    "fr": "Escalier en Briques de Resine"
+                }
+            },
+            "pale_oak_slab": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Slab",
+                    "fr": "Dalle de Chene Pale"
+                }
+            },
+            "pale_oak_planks": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Planks",
+                    "fr": "Planches de Chene Pale"
+                }
+            },
+            "pale_moss_block": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Moss Block",
+                    "fr": "Bloc de Mousse Pale"
+                }
+            },
+            "pale_oak_sign": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Sign",
+                    "fr": "Pancarte de Chene Pale"
+                }
+            },
+            "pale_oak_pressure_plate": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Oak Pressure Plate",
+                    "fr": "Plaque de Pression en Chene Pale"
+                }
+            },
+            "pale_moss_carpet": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Pale Moss Carpet",
+                    "fr": "Tapis de Mousse pale"
+                }
+            }
+        }}
     }
 }

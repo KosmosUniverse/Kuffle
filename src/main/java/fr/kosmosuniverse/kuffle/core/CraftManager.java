@@ -210,7 +210,7 @@ public class CraftManager {
 		
 		for (int i = 0; i < nbSlot; i++) {
 			if (i == 0 && cnt != 1) {
-				inv.setItem(i, ItemsUtils.getEmptyPane());
+				inv.setItem(i, ItemsUtils.getBackPane());
 			} else if (i == 8 && !last) {
 				inv.setItem(i, ItemsUtils.getNextPane());
 			} else if (i < 9) {

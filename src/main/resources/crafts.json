@@ -205,7 +205,7 @@
     }
   },
   "12" : {
-    "Name" : "DiamondHorseArmor",
+    "Name" : "DiamondqArmor",
     "Type" : "WorkBench",
     "Shape" : "RRD-DWD-DDD",
     "Version" : "1.15",
@@ -272,6 +272,7 @@
     "Type" : "WorkBench",
     "Shape" : "LLL-RLR-TRT",
     "Version" : "1.15",
+    "RemVersion" : "1.21.6",
     "Mandatory" : false,
     "KuffleType" : "ITEMS",
     "Result" : {
@@ -1317,6 +1318,159 @@
     "Ingredients" : {
       "S" : {
         "Type" : "SHORT_GRASS"
+      }
+    }
+  },
+
+  "69" : {
+    "Name" : "EnchantedGoldenApple",
+    "Type" : "WorkBench",
+    "Shape" : "GGG-GAG-GGG",
+    "Version" : "1.15",
+    "Mandatory" : true,
+    "KuffleType" : "ITEMS",
+    "Result" : {
+      "Type" : "ENCHANTED_GOLDEN_APPLE",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "G" : {
+        "Type" : "GOLD_BLOCK"
+      },
+      "A" : {
+        "Type" : "APPLE"
+      }
+    }
+  },
+  "70" : {
+    "Name" : "ExposedCopperDoor",
+    "Type" : "WorkBench",
+    "Version" : "1.21",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "EXPOSED_COPPER_DOOR",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_DOOR"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "71" : {
+    "Name" : "WeatheredCopperDoor",
+    "Type" : "WorkBench",
+    "Version" : "1.21",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "WEATHERED_COPPER_DOOR",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_DOOR"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "C" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "72" : {
+    "Name" : "OxidizedCopperDoor",
+    "Type" : "WorkBench",
+    "Version" : "1.21",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "OXIDIZED_COPPER_DOOR",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_DOOR"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "C" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "D" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "73" : {
+    "Name" : "ExposedCopperTrapdoor",
+    "Type" : "WorkBench",
+    "Version" : "1.21",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "EXPOSED_COPPER_TRAPDOOR",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_TRAPDOOR"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "74" : {
+    "Name" : "WeatheredCopperTrapdoor",
+    "Type" : "WorkBench",
+    "Version" : "1.21",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "WEATHERED_COPPER_TRAPDOOR",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_TRAPDOOR"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "C" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "75" : {
+    "Name" : "OxidizedCopperTrapdoor",
+    "Type" : "WorkBench",
+    "Version" : "1.21",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "OXIDIZED_COPPER_TRAPDOOR",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_TRAPDOOR"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "C" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "D" : {
+        "Type" : "WATER_BUCKET"
       }
     }
   }

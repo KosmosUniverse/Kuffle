@@ -374,7 +374,9 @@ public class Main {
         targets = new ArrayList<>();
 
         for (Row row : targetSheet.read()) {
-            if (row.getRowNum() > 1 && row.getCell(0) != null && row.getCell(0).getRawValue() != null) {
+            if (row.getRowNum() > 1 &&
+                    row.getCell(0) != null &&
+                    row.getCell(0).getRawValue() != null) {
                 targets.add(new RawTargets(row.getCell(1).getRawValue(),
                         row.getCell(2).getRawValue(),
                         row.getCell(3).getRawValue(),
