@@ -9,6 +9,8 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -98,7 +100,10 @@ public class ResultManager {
             }
         });
 
-        try (FileOutputStream fos = new FileOutputStream(KuffleMain.getInstance().getDataFolder() + File.separator + "results.k")) {
+        LocalDateTime ldt = LocalDateTime.now();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH:mm:ss");
+
+        try (FileOutputStream fos = new FileOutputStream(KuffleMain.getInstance().getDataFolder() + File.separator + "results" + dtf.format(ldt) + ".k")) {
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(rd);
             oos.flush();
@@ -112,7 +117,7 @@ public class ResultManager {
      * Load in variable Game results from file
      */
     public boolean loadGameResult(String filename) {
-        try (FileInputStream fis = new FileInputStream(KuffleMain.getInstance().getDataFolder() + File.separator + filename + ".k")) {
+        try (FileInputStream fis = new FileInputStream(KuffleMain.getInstance().getDataFolder() + File.separator + filename)) {
             ObjectInputStream ois = new ObjectInputStream(fis);
             rd = (ResultData) ois.readObject();
             ois.close();

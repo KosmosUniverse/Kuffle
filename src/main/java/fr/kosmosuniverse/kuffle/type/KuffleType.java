@@ -155,7 +155,8 @@ public abstract class KuffleType {
 		//Objects.requireNonNull(plugin.getCommand("k-add-during-game")).setTabCompleter(new KuffleAddDuringGameTab());
 		Objects.requireNonNull(plugin.getCommand("k-set-type")).setTabCompleter(kuffleSetTypeTab);
 		Objects.requireNonNull(plugin.getCommand("k-restoreinv")).setTabCompleter(new KuffleCurrentGamePlayerTab());
-		
+		Objects.requireNonNull(plugin.getCommand("k-results")).setTabCompleter(new KuffleResultsTab());
+
 		Objects.requireNonNull(plugin.getCommand("k-team-create")).setTabCompleter(new KuffleTeamCreateTab());
 		Objects.requireNonNull(plugin.getCommand("k-team-delete")).setTabCompleter(new KuffleTeamDeleteTab());
 		Objects.requireNonNull(plugin.getCommand("k-team-color")).setTabCompleter(new KuffleTeamColorTab());

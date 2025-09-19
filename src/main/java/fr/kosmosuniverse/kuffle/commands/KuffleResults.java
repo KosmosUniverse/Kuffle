@@ -9,7 +9,7 @@ import fr.kosmosuniverse.kuffle.core.*;
  */
 public class KuffleResults extends AKuffleCommand {
 	public KuffleResults() {
-		super("k-results", null, null, 0, 1, false);
+		super("k-results", true, null, 0, 1, false);
 	}
 
 	@Override
@@ -17,7 +17,7 @@ public class KuffleResults extends AKuffleCommand {
 		if (args.length == 0) {
 			tryOpenResults();
 		} else if (args.length == 1) {
-			if (ResultManager.getInstance().loadGameResult("results")) {
+			if (ResultManager.getInstance().loadGameResult(args[0])) {
 				tryOpenResults();
 			}
 		}
