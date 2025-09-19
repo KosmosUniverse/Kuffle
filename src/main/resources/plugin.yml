@@ -1,5 +1,5 @@
 name: Kuffle
-version: 2.8
+version: 2.9
 author: KosmosUniverse
 main: fr.kosmosuniverse.kuffle.KuffleMain
 api-version: 1.15
@@ -11,7 +11,10 @@ commands:
       permission: inferno.flagrate
    k-config:
       usage: /<command> [<key> <value>]*
-      description: command to see or change game configuration
+      description: command to see or change game configuration (change only for OP)
+   k-results:
+      usage : /<command> [<party result name>]
+      description : command to see party result, with param to load (only for OP)
    k-list:
       usage: /<command> [reset | remove <Player name> | add <@a | Player name>]
       description: command to add/remove players to the list and view/reset the list
@@ -203,8 +206,11 @@ permissions:
       description: command to see multiBlocks
       default: true
    k-config:
-      default: true
       description: command to see or change game configuration
+      default: true
+   k-results:
+      description: command to see party result, with param to load (only for OP)
+      default: true
    k-skip:
       description: command to skip a block
       default: true

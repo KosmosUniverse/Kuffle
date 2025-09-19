@@ -27,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 
@@ -183,9 +184,14 @@ public final class Utils {
 	 * 
 	 * @return the ItemStack corresponding to the specified player head
 	 */
-	public static ItemStack getHead(Player player) {
-        ItemStack item = new ItemStack(Material.PLAYER_HEAD);
-        SkullMeta skull = (SkullMeta) item.getItemMeta();
+	public static ItemStack getHead(@Nullable Player player) {
+		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+
+		if (player == null) {
+			return item;
+		}
+
+		SkullMeta skull = (SkullMeta) item.getItemMeta();
 
         Objects.requireNonNull(skull).setDisplayName(player.getName());
         skull.setOwningPlayer(player);

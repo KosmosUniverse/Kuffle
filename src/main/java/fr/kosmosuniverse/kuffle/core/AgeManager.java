@@ -1,6 +1,7 @@
 package fr.kosmosuniverse.kuffle.core;
 
 import fr.kosmosuniverse.kuffle.utils.FileUtils;
+import lombok.Getter;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
  *
  */
 public class AgeManager {
+	@Getter
 	private static List<Age> ages = null;
 	
 	/**

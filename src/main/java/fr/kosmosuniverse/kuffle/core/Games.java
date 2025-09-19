@@ -278,7 +278,7 @@ public class Games {
                 games.get(playerName).getAgeTimes().put(AgeManager.getAgeByNumber(cnt).getName(), (long) -1);
             }
         } else {
-            games.get(playerName).getAgeTimes().put(AgeManager.getAgeByNumber(games.get(playerName).getAge()).getName(), (System.currentTimeMillis() - games.get(playerName).getTimeStartAge()));
+            //games.get(playerName).getAgeTimes().put(AgeManager.getAgeByNumber(games.get(playerName).getAge()).getName(), (System.currentTimeMillis() - games.get(playerName).getTimeStartAge()));
         }
 
         games.get(playerName).setAge(-1);
@@ -710,6 +710,9 @@ public class Games {
      * Logs and Prints game end result tab
      */
     public void printGameEnd() {
+        ResultManager.getInstance().saveGameResults(games);
+        ResultManager.getInstance().createInventories();
+
         games.forEach((senderName, senderData) -> {
             games.forEach((playerName, playerData) ->
                     Objects.requireNonNull(Bukkit.getPlayer(playerName)).sendMessage(playerString(senderName, playerData.getConfigLang())));

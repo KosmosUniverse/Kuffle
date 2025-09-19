@@ -131,6 +131,7 @@ public abstract class KuffleType {
 		Objects.requireNonNull(plugin.getCommand("k-players")).setExecutor(new KufflePlayers());
 		//Objects.requireNonNull(plugin.getCommand("k-add-during-game")).setExecutor(new KuffleAddDuringGame());
 		Objects.requireNonNull(plugin.getCommand("k-restoreinv")).setExecutor(new KuffleRestoreInv());
+		Objects.requireNonNull(plugin.getCommand("k-results")).setExecutor(new KuffleResults());
 
 		Objects.requireNonNull(plugin.getCommand("k-team-create")).setExecutor(new KuffleTeamCreate());
 		Objects.requireNonNull(plugin.getCommand("k-team-delete")).setExecutor(new KuffleTeamDelete());
