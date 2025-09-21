@@ -98,9 +98,9 @@ commands:
    k-spectate:
       usage: /<command> [display | reset]
       description: command to toggle your spectate state (no args) and display/reset spectators
-   k-team-show:
-      usage: /<command> [TeamName]
-      description: command to show all or one team
+   k-team:
+      usage: /<command> <show | load | save>
+      description: command to show, load or save team config (load and save only for OP)
    k-multiblocks:
       usage: /<command>
       description: command to see multiBlocks

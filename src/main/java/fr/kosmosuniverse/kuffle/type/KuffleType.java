@@ -136,7 +136,7 @@ public abstract class KuffleType {
 		Objects.requireNonNull(plugin.getCommand("k-team-create")).setExecutor(new KuffleTeamCreate());
 		Objects.requireNonNull(plugin.getCommand("k-team-delete")).setExecutor(new KuffleTeamDelete());
 		Objects.requireNonNull(plugin.getCommand("k-team-color")).setExecutor(new KuffleTeamColor());
-		Objects.requireNonNull(plugin.getCommand("k-team-show")).setExecutor(new KuffleTeamShow());
+		Objects.requireNonNull(plugin.getCommand("k-team")).setExecutor(new KuffleTeam());
 		Objects.requireNonNull(plugin.getCommand("k-team-affect-player")).setExecutor(new KuffleTeamAffectPlayer());
 		Objects.requireNonNull(plugin.getCommand("k-team-remove-player")).setExecutor(new KuffleTeamRemovePlayer());
 		Objects.requireNonNull(plugin.getCommand("k-team-reset-players")).setExecutor(new KuffleTeamResetPlayers());
@@ -160,7 +160,7 @@ public abstract class KuffleType {
 		Objects.requireNonNull(plugin.getCommand("k-team-create")).setTabCompleter(new KuffleTeamCreateTab());
 		Objects.requireNonNull(plugin.getCommand("k-team-delete")).setTabCompleter(new KuffleTeamDeleteTab());
 		Objects.requireNonNull(plugin.getCommand("k-team-color")).setTabCompleter(new KuffleTeamColorTab());
-		Objects.requireNonNull(plugin.getCommand("k-team-show")).setTabCompleter(new KuffleTeamShowTab());
+		Objects.requireNonNull(plugin.getCommand("k-team")).setTabCompleter(new KuffleTeamTab());
 		Objects.requireNonNull(plugin.getCommand("k-team-affect-player")).setTabCompleter(new KuffleTeamAffectPlayerTab());
 		Objects.requireNonNull(plugin.getCommand("k-team-remove-player")).setTabCompleter(new KuffleTeamRemovePlayerTab());
 		Objects.requireNonNull(plugin.getCommand("k-team-reset-players")).setTabCompleter(new KuffleTeamResetPlayersTab());

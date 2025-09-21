@@ -1,21 +1,23 @@
 package fr.kosmosuniverse.kuffle.core;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import fr.kosmosuniverse.kuffle.utils.CommandUtils;
 import fr.kosmosuniverse.kuffle.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 /**
  * 
@@ -387,5 +389,66 @@ public class TeamManager {
 		Team team = findTeamByPlayer(player1);
 
 		return team == null || !team.hasPlayer(player2);
+	}
+
+	public void loadTeamsConfig(Player player, String filePath) throws IOException {
+		try (InputStream is = Files.newInputStream(Paths.get(filePath))) {
+			String content = Utils.readFileContent(is);
+
+			if (content.isEmpty()) {
+				throw new IllegalArgumentException("file's empty");
+			}
+
+			JSONTokener tokenizer = new JSONTokener(content);
+			JSONObject main = new JSONObject(tokenizer);
+
+			for (String teamName : main.keySet()) {
+				JSONObject teamObj = main.getJSONObject(teamName);
+
+				if (!teamObj.has("color") || !teamObj.has("players")) {
+					throw new IllegalArgumentException("invalid team");
+				}
+
+				ChatColor color = CommandUtils.checkTeamColor(player, teamObj.getString("color"));
+
+				if (color == null) {
+					throw new IllegalArgumentException("invalid color");
+				}
+
+				createTeam(teamName, color);
+
+				JSONArray playersObj = teamObj.getJSONArray("players");
+
+				for (AtomicInteger i = new AtomicInteger(0); i.get() < playersObj.length(); i.incrementAndGet()) {
+					String playerName = playersObj.getString(i.get());
+
+					if (Bukkit.getOnlinePlayers().stream().anyMatch(p -> p.getName().equals(playerName))) {
+						affectPlayer(teamName, playerName);
+					} else {
+						LogManager.getInstanceSystem().writeMsg(player, "Player " + playerName + " is not connected");
+					}
+				}
+			}
+		}
+	}
+
+	public void saveTeamsConfig(String filePath) throws IOException {
+		try (FileWriter fw = new FileWriter(filePath)) {
+			JSONObject mainObj = new JSONObject();
+
+			TeamManager.getInstance().getTeams().forEach(t -> {
+				JSONObject teamObj = new JSONObject();
+				JSONArray playerList = new JSONArray();
+
+				t.getPlayers().forEach(playerList::put);
+
+				teamObj.put("color", t.getColor().name());
+				teamObj.put("players", playerList);
+
+				mainObj.put(t.getName(), teamObj);
+			});
+
+			fw.write(mainObj.toString(4));
+		}
 	}
 }
