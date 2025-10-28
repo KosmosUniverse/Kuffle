@@ -4,6 +4,7 @@ import fr.kosmosuniverse.kuffle.core.Config;
 import fr.kosmosuniverse.kuffle.core.LangManager;
 import fr.kosmosuniverse.kuffle.core.LogManager;
 import fr.kosmosuniverse.kuffle.core.Party;
+import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -12,8 +13,10 @@ import org.bukkit.plugin.java.JavaPlugin;
  *
  */
 public class KuffleMain extends JavaPlugin {
-	private static KuffleMain instance = null;
-	private String version = null;
+	@Getter
+    private static KuffleMain instance = null;
+	@Getter
+    private String version = null;
 	private boolean loaded = false;
 
 	@Override
@@ -38,12 +41,5 @@ public class KuffleMain extends JavaPlugin {
 			Party.getInstance().getType().clear();
 		}
 	}
-	
-	public static KuffleMain getInstance() {
-		return instance;
-	}
-	
-	public String getVersion() {
-		return version;
-	}
+
 }

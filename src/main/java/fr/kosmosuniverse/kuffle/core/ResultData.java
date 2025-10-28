@@ -97,6 +97,7 @@ public class ResultData implements Serializable {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream iStream) throws IOException, ClassNotFoundException {
         isTeam = iStream.readBoolean();
         isSkip = iStream.readBoolean();

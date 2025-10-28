@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import fr.kosmosuniverse.kuffle.type.KuffleType;
 import fr.kosmosuniverse.kuffle.utils.Utils;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -21,7 +22,8 @@ import net.md_5.bungee.api.ChatColor;
  */
 public class ScoreManager {
 	private static final String DUMMY = "dummy";
-	private static Scoreboard scoreboard;
+	@Getter
+    private static Scoreboard scoreboard;
 	private static Objective age = null;
 	private static Objective targets = null;
 	private static final List<Score> sAges = new ArrayList<>();
@@ -124,12 +126,8 @@ public class ScoreManager {
 			data.getScore().setScore(1);
 		});
 	}
-	
-	public static Scoreboard getScoreboard() {
-		return scoreboard;
-	}
-	
-	public static Score getPlayerScore(String playerName) {
+
+    public static Score getPlayerScore(String playerName) {
 		return targets.getScore(playerName);
 	}
 }

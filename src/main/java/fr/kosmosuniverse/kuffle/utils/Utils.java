@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -96,40 +94,8 @@ public final class Utils {
 		
 		return tmp.exists();
 	}
-	
-	/**
-	 * Checks if a path exists
-	 * 
-	 * @param path		The path to check
-	 * 
-	 * @return True if the path exists, False instead
-	 */
-	public static boolean fileExists(String path) {
-		File tmp = new File(path);
 
-		return tmp.exists();
-	}
-
-	/**
-	 * Delete a file located at a specific path
-	 * 
-	 * @param path		The file location
-	 * @param fileName	The file to delete
-	 * 
-	 * @return True if file is deleted, False instead
-	 */
-	public static boolean fileDelete(String path, String fileName) {
-		try {
-			Files.delete(Paths.get(path + File.separator + fileName));
-		} catch (IOException e) {
-			logException(e);
-			return false;
-		}
-		
-		return true;
-	}
-
-	/**
+    /**
 	 * Checks if a file exists for the current version
 	 * 
 	 * @param fileName	The file to check
@@ -199,38 +165,8 @@ public final class Utils {
 
         return item;
     }
-	
-	/**
-	 * Get the Head of a specific player and set its lore to a specific item
-	 * 
-	 * @param player		The player of whom we take the head
-	 * @param currentItem	The item in which we will get the lore
-	 * 
-	 * @return the ItemStack corresponding to the specified player head
-	 */
-	public static ItemStack getHead(Player player, String currentItem) {
-        ItemStack item = new ItemStack(Material.PLAYER_HEAD);
-        
-        if (currentItem != null) {        
-	        ItemMeta itM = item.getItemMeta();
-	        
-	        List<String> lore = new ArrayList<>();
-	        lore.add(currentItem);
-	
-			Objects.requireNonNull(itM).setLore(lore);
-			item.setItemMeta(itM);
-		}
-		
-		SkullMeta skull = (SkullMeta) item.getItemMeta();
 
-        Objects.requireNonNull(skull).setDisplayName(player.getName());
-        skull.setOwningPlayer(player);
-        item.setItemMeta(skull);
-
-        return item;
-    }
-
-	/**
+    /**
 	 * Get the Head of a specific player and set its lore to a specific item
 	 *
 	 * @param playerName	The name of whom we take the head

@@ -760,7 +760,8 @@ public class FilesConformity {
 		File file = new File(path);
 		 
         if (!file.isDirectory()) {
-        	file.mkdir();
+            //noinspection ResultOfMethodCallIgnored
+            file.mkdir();
         }
 	}
 }

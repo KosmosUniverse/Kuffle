@@ -28,7 +28,7 @@ public class KuffleStart extends AKuffleCommand {
 
 	@Override
 	public boolean runCommand() {
-		if (Party.getInstance().getPlayers().getList().size() == 0) {
+		if (Party.getInstance().getPlayers().getList().isEmpty()) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NO_PLAYERS", Config.getLang()));
 
 			return false;

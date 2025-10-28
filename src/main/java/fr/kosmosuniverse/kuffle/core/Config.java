@@ -951,7 +951,7 @@ public class Config implements Serializable {
  			setRet = false;
  		}
  		
-		if (setRet && configValues.isTeam() && TeamManager.getInstance().getTeams().size() > 0 && TeamManager.getInstance().getMaxTeamSize() > configTeamSize) {
+		if (setRet && configValues.isTeam() && !TeamManager.getInstance().getTeams().isEmpty() && TeamManager.getInstance().getMaxTeamSize() > configTeamSize) {
 			error = "Cannot set team size less than a current team size !";
 			setRet = false;
 		}

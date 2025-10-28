@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import fr.kosmosuniverse.kuffle.utils.CommandUtils;
 import fr.kosmosuniverse.kuffle.utils.Utils;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -24,9 +25,10 @@ import org.json.JSONTokener;
  * @author KosmosUniverse
  *
  */
+@Getter
 public class TeamManager {
 	private static TeamManager instance;
-	private List<Team> teams = new ArrayList<>();
+    private List<Team> teams = new ArrayList<>();
 
 	public static synchronized TeamManager getInstance() {
 		if (instance == null) {
@@ -269,17 +271,6 @@ public class TeamManager {
 	}
 	
 	/**
-	 * Gets the String representation of a specific Team
-	 * 
-	 * @param teamName	The team it gets the string
-	 * 
-	 * @return string that represent Team teamName, null if team not exists
-	 */
-	public String printTeam(String teamName) {
-		return teams == null ? null : teams.stream().filter(team -> team.getName().equals(teamName)).map(Team::toString).findAny().orElse(null);
-	}
-	
-	/**
 	 * Gets a String representation of all teams
 	 * 
 	 * @return string representation of all teams
@@ -287,7 +278,7 @@ public class TeamManager {
 	public String printTeams() {
 		StringBuilder sb = new StringBuilder();
 		
-		if (teams != null && teams.size() != 0) {
+		if (teams != null && !teams.isEmpty()) {
 			for (int cnt = 0; cnt < teams.size(); cnt++) {
 				sb.append(teams.get(cnt).toString());
 				
@@ -341,7 +332,7 @@ public class TeamManager {
 				teams = new ArrayList<>();
 			}
 			
-			if (teams.size() != 0) {
+			if (!teams.isEmpty()) {
 				clear();
 			}
 			
@@ -354,17 +345,8 @@ public class TeamManager {
 			ois.close();
 		}
 	}
-	
-	/**
-	 * Gets list of all teams
-	 * 
-	 * @return the teams list
-	 */
-	public List<Team> getTeams() {
-		return teams;
-	}
-	
-	/**
+
+    /**
 	 * Gets Team object from team name
 	 * 
 	 * @param name	The name of searched teams

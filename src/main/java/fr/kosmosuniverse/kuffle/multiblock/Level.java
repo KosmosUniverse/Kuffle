@@ -15,7 +15,7 @@ import org.bukkit.Material;
  */
 @Getter
 public class Level {
-	private final int levelNb;
+    private final int levelNb;
 	private final int length;
 	private final List<List<Pattern>> levelNS = new ArrayList<>();
 	private List<List<Pattern>> levelEW = null;
@@ -153,17 +153,8 @@ public class Level {
 		
 		return true;
 	}
-	
-	/**
-	 * Gets level index
-	 * 
-	 * @return the @levelNb
-	 */
-	public int getLevelNb() {
-		return (levelNb);
-	}
-	
-	/**
+
+    /**
 	 * Gets Level Lists
 	 * 
 	 * @return levelNS list that contains level pattern

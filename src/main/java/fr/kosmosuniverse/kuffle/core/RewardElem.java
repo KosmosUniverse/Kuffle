@@ -30,7 +30,7 @@ public class RewardElem {
 		name = rewardName;
 		amount = rewardAmount;
 
-		if (rewardEnchant != null && !rewardEnchant.equals("")) {
+		if (rewardEnchant != null && !rewardEnchant.isEmpty()) {
 			enchantOn = true;
 			enchant = rewardEnchant;
 			level = rewardLevel;
@@ -40,7 +40,7 @@ public class RewardElem {
 			level = 0;
 		}
 		
-		if (rewardEffect != null && !rewardEffect.equals("")) {
+		if (rewardEffect != null && !rewardEffect.isEmpty()) {
 			effectOn = true;
 			effect = rewardEffect;
 		} else {
