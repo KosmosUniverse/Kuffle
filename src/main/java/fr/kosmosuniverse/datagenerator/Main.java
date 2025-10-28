@@ -335,12 +335,12 @@ public class Main {
                     ageObj.put(r.getName(), rewardObj);
                 });
 
-                if (ageObj.keySet().size() != 0) {
+                if (!ageObj.keySet().isEmpty()) {
                     versionObj.put(a, ageObj);
                 }
             });
 
-            if (versionObj.keySet().size() != 0) {
+            if (!versionObj.keySet().isEmpty()) {
                 mainObj.put(v, versionObj);
             }
         });
@@ -441,17 +441,17 @@ public class Main {
                         ageObj.put(t.getName(), targetObj);
                     });
 
-                    if (ageObj.keySet().size() != 0) {
+                    if (!ageObj.keySet().isEmpty()) {
                         categoryObj.put(a, ageObj);
                     }
                 });
 
-                if (categoryObj.keySet().size() != 0) {
+                if (!categoryObj.keySet().isEmpty()) {
                     versionObj.put(c, categoryObj);
                 }
             });
 
-            if (versionObj.keySet().size() != 0) {
+            if (!versionObj.keySet().isEmpty()) {
                 mainObj.put(v, versionObj);
             }
         });

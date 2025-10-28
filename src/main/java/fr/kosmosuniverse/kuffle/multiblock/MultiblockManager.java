@@ -3,9 +3,7 @@ package fr.kosmosuniverse.kuffle.multiblock;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import fr.kosmosuniverse.kuffle.core.Age;
 import fr.kosmosuniverse.kuffle.core.AgeManager;
@@ -51,19 +49,7 @@ public class MultiblockManager {
 		return Collections.unmodifiableList(multiblocks);
 	}
 
-	/**
-	 * Clears @multiblocks list
-	 */
-	public static void clear() {
-		multiblocks.forEach(mb -> {
-			mb.getMultiblock().clear();
-			mb.getInvs().clear();
-		});
-		
-		multiblocks.clear();
-	}
-	
-	/**
+    /**
 	 * Creates templates
 	 */
 	public static void createTemplates() {

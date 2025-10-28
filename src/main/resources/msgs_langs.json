@@ -31,6 +31,10 @@
         "en": "Language set to [#].",
         "fr": "La langue a ete definie sur [#]."
     },
+    "TEAMS_LOADED": {
+        "en": "Teams loaded.",
+        "fr": "Les equipes ont ete chargees."
+    },
     "GAME_LAUNCHED": {
         "en": "A game is already launched.",
         "fr": "Le jeu est deja lance"
@@ -58,6 +62,10 @@
     "FC_LANG_EVERYWHERE": {
         "en": "Lang [%s] is not everywhere in lang file.",
         "fr": "La langue [%s] n'est pas presente dans tous les objets du fichier."
+    },
+    "TEAMS_SAVED": {
+        "en": "Teams saved.",
+        "fr": "Les equipes ont ete sauvegardees."
     },
     "FC_TARGET_MATERIAL_SBTT": {
         "en": "Target [%s] of version [%ss] has sbtt value [%sss] that is not boolean.",
@@ -151,6 +159,10 @@
         "en": "There are too many players for that number of team, please create more teams or change team size with k-config command.",
         "fr": "Il y a trop de joueur pour ce nombre d'equipe, ajoutez des equipes ou changez la taille des equipes avec la commande k-config."
     },
+    "TEAMS_CLEARED": {
+        "en": "Teams have been cleared.",
+        "fr": "Les equipes ont ete videes."
+    },
     "CONFIG_SET": {
         "en": "Config: parameter [#] set to [##].",
         "fr": "Configuration : le parametre [#] a ete defini sur la valeur [##]."
@@ -178,6 +190,10 @@
     "AGE_MOVED": {
         "en": "<#> has moved to the <##> Age.",
         "fr": "<#> est passe a l'age <##>."
+    },
+    "NO_TEAMS_SAVE": {
+        "en": "No teams to save, create some teams to save them.",
+        "fr": "Il n'y a pas d'equipes a sauvegarder, creez-en pour les sauvegarder."
     },
     "ABANDONED": {
         "en": "Abandoned",
@@ -409,7 +425,7 @@
     },
     "TEAM_INV": {
         "en": "Team inventories are not enabled in this game.",
-        "fr": "Les inventaires d'équipes ne sont pas actives dans cette partie."
+        "fr": "Les inventaires d'equipes ne sont pas actives dans cette partie."
     },
     "GAME_ALREADY_FINISHED": {
         "en": "Game is already finished for player <#>.",
@@ -430,6 +446,10 @@
     "GAME_COMPLETE": {
         "en": "<#>  complete this game !",
         "fr": "<#> a fini sa partie !"
+    },
+    "TEAMS_LOAD_FAILED": {
+        "en": "Teams load failed, please contact an administrator.",
+        "fr": "Le chargement des equipes a echoue, contactez un admin."
     },
     "FC_AGE_NUMBER": {
         "en": "Age [%s] does not contain 'Number' Object.",
@@ -527,6 +547,10 @@
         "en": "Plugin turned ON.",
         "fr": "Plugin demarre."
     },
+    "TEAMS_SAVE_FAILED": {
+        "en": "Teams save failed, please contact an administrator.",
+        "fr": "La sauvegarde des equipes a echoue, contactez un admin."
+    },
     "FC_LEVEL_LOSE": {
         "en": "Level [%s] does not contain 'Lose' Object.",
         "fr": "Le niveau [%s] ne contient pas d'objet 'Lose'"
@@ -554,6 +578,10 @@
     "YOU_LOSE": {
         "en": "YOU LOSE !",
         "fr": "VOUS AVEZ PERDU !"
+    },
+    "TEAMS_ALREADY_EXISTS": {
+        "en": "Some teams are already exist, please clean them to load from file.",
+        "fr": "Des equipes existent déjà, supprimez-les pour pouvoir charger un fichier."
     },
     "SPEC_LIST_RESET": {
         "en": "Spectators list has been reseted.",

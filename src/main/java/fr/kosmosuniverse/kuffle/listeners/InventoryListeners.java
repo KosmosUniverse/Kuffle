@@ -3,16 +3,14 @@ package fr.kosmosuniverse.kuffle.listeners;
 import java.util.List;
 import java.util.Objects;
 
-import fr.kosmosuniverse.kuffle.core.AgeManager;
-import fr.kosmosuniverse.kuffle.core.CraftManager;
-import fr.kosmosuniverse.kuffle.core.Party;
-import fr.kosmosuniverse.kuffle.core.TargetManager;
+import fr.kosmosuniverse.kuffle.core.*;
 import fr.kosmosuniverse.kuffle.crafts.ACraft;
 import fr.kosmosuniverse.kuffle.multiblock.AMultiblock;
 import fr.kosmosuniverse.kuffle.multiblock.MultiblockManager;
 import fr.kosmosuniverse.kuffle.type.KuffleType;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,6 +19,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.persistence.PersistentDataType;
 
 /**
  * 
@@ -46,7 +45,7 @@ public class InventoryListeners implements Listener {
 		if (item == null) {
 			return;
 		}
-		
+
 		event.setCancelled(false);
 		
 		if (event.getView().getTitle().contains(ChatColor.BLACK + "AllCustomCrafts")) {
@@ -77,6 +76,11 @@ public class InventoryListeners implements Listener {
 			event.setCancelled(true);
 			
 			playersInventory(player, item);
+		} else if (ResultManager.getInstance().isResultsLoaded() &&
+				ResultManager.getInstance().hasInv(event.getView().getTitle())) {
+			event.setCancelled(true);
+
+			resultInventory(player, item);
 		} else if (event.getView().getTitle().contains(" Targets ")) {
 			itemsInventory(event);
 		}
@@ -157,5 +161,12 @@ public class InventoryListeners implements Listener {
 		}
 		
 		return name;
+	}
+
+	private void resultInventory(Player player, ItemStack item) {
+		if (item.hasItemMeta() &&
+				Objects.requireNonNull(item.getItemMeta()).getPersistentDataContainer().has(NamespacedKey.minecraft("invname"), PersistentDataType.STRING)) {
+			player.openInventory(ResultManager.getInstance().getInv(item.getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("invname"), PersistentDataType.STRING)));
+		}
 	}
 }

@@ -11,7 +11,7 @@ game_settings:
    rewards: true # True: give reward after each age, Default: True
    passive:
       all: false # True: pvp disabled and open other player box is disable, Default: False
-      team: false # True: pvp between team mates is disabled, Default: False
+      team: false # True: pvp between teammates is disabled, Default: False
    time:
       start: 4 # minutes, Default: 4
       added: 2 # minutes added to start_time after each age, Default: 2

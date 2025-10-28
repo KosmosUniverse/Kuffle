@@ -1,7 +1,5 @@
 package fr.kosmosuniverse.kuffle.commands;
 
-import java.util.UUID;
-
 import fr.kosmosuniverse.kuffle.KuffleMain;
 import fr.kosmosuniverse.kuffle.core.LogManager;
 import fr.kosmosuniverse.kuffle.core.Party;

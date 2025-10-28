@@ -14,9 +14,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @author KosmosUniverse
  */
+@Getter
 public class PartyList {
     private final List<String> list;
-    @Getter
     private Inventory playerHeads;
 
     /**
@@ -24,15 +24,6 @@ public class PartyList {
      */
     public PartyList() {
         list = new ArrayList<>();
-    }
-
-    /**
-     * Gets players list as unmodifiable list
-     *
-     * @return unmodifiable player list
-     */
-    public List<String> getList() {
-        return list;
     }
 
     /**

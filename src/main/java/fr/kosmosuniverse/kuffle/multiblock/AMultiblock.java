@@ -195,15 +195,6 @@ public abstract class AMultiblock {
 	}
 
 	/**
-	 * Gets multi-block's item type
-	 *
-	 * @return the item type
-	 */
-	public Material getType() {
-		return item.getType();
-	}
-
-	/**
 	 * Gets multi-block's core type
 	 *
 	 * @return the core type

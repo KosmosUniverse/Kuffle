@@ -326,8 +326,7 @@ public class PlayerInteract implements Listener  {
 				item.setAmount(64);
 				player.getInventory().setItemInMainHand(item);
 			}
-		} else if (player.getInventory().getItemInOffHand() != null &&
-				player.getInventory().getItemInOffHand().getType() == Material.FIREWORK_ROCKET) {
+		} else if (player.getInventory().getItemInOffHand().getType() == Material.FIREWORK_ROCKET) {
 			item = player.getInventory().getItemInOffHand();
 			
 			if (item.getAmount() == 1) {

@@ -119,7 +119,7 @@ public class Team implements Serializable {
 		sb.append(color).append(name);
 		sb.append("\n  Color: ").append(color.name());
 		sb.append("\n  Players:");
-		if (players.size() == 0) {
+		if (players.isEmpty()) {
 			sb.append(" NONE.");
 		} else {
 			for (String item : players) {

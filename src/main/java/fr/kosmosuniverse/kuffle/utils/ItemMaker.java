@@ -20,11 +20,18 @@ public class ItemMaker {
     final ItemStack item;
 
     public ItemMaker(Material material) {
-        item = new ItemStack(material);
+        this.item = new ItemStack(material);
+    }
+
+    public ItemMaker(ItemStack item) {
+        this.item = item.clone();
     }
 
     public static ItemMaker newItem(Material material) {
         return new ItemMaker(material);
+    }
+    public static ItemMaker newItem(ItemStack item) {
+        return new ItemMaker(item);
     }
 
     public ItemMaker addQuantity(int quantity) {

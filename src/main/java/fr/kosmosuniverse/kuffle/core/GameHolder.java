@@ -83,6 +83,7 @@ public final class GameHolder implements Serializable {
 	 * @throws ClassNotFoundException 	Raised at read fail
 	 * @throws IOException				Raised at read fail
 	 */
+    @SuppressWarnings("unchecked")
 	private void readObject(ObjectInputStream iStream) throws ClassNotFoundException, IOException  {
 		kuffleType = SerializeUtils.readString(iStream);
 		config = (ConfigHolder) iStream.readObject();

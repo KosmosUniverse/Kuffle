@@ -77,7 +77,7 @@ public class ItemsUtils {
         }
 
         for (int i = 0; i < firstLore.size(); i++) {
-            if (firstLore.get(i).equals(secondLore.get(i)) && firstLore.get(i).equals("")) {
+            if (firstLore.get(i).equals(secondLore.get(i)) && firstLore.get(i).isEmpty()) {
                 break;
             }
 

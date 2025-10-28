@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,7 +15,8 @@ import org.bukkit.entity.Player;
  *
  */
 public class MultiBlock {
-	private final Material core;
+    @Getter
+    private final Material core;
 	private final List<Level> pattern;
 	
 	/**
@@ -34,17 +36,8 @@ public class MultiBlock {
 		pattern.forEach(Level::clear);
 		pattern.clear();
 	}
-	
-	/**
-	 * Gets multiblock core
-	 * 
-	 * @return	The core as Material
-	 */
-	public Material getCore() {
-		return core;
-	}
-	
-	/**
+
+    /**
 	 * Adds a level to the multiblock pattern
 	 * 
 	 * @param l	The level to add

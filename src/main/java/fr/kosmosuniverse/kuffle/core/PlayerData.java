@@ -72,7 +72,6 @@ public class PlayerData implements Serializable {
     private List<ItemStack> deathInv = null;
     private Score score = null;
     private BossBar ageDisplay = null;
-    private static final String GAME_DONE = "GAME_DONE";
 
     public PlayerData() {
         tips = Config.hasTips();
@@ -218,6 +217,7 @@ public class PlayerData implements Serializable {
      * @throws ClassNotFoundException In case Cast is not working
      * @throws IOException  Classic read input stream exception
      */
+    @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream iStream) throws ClassNotFoundException, IOException {
         finished = iStream.readBoolean();
         lose = iStream.readBoolean();

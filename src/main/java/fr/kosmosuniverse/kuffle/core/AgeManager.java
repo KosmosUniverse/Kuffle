@@ -1,6 +1,7 @@
 package fr.kosmosuniverse.kuffle.core;
 
 import fr.kosmosuniverse.kuffle.utils.FileUtils;
+import lombok.Getter;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
  *
  */
 public class AgeManager {
+	@Getter
 	private static List<Age> ages = null;
 	
 	/**
@@ -97,7 +99,7 @@ public class AgeManager {
 	/**
 	 * Gets the default Age if exists
 	 * 
-	 * @return the Age object of Default age is exists, null instead
+	 * @return the Age object of Default age is existing, null instead
 	 */
 	public static Age getDefaultAge() {
 		return ages.stream().filter(age -> age.getNumber() == -1).findAny().orElse(null);
