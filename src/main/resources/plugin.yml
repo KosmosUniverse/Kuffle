@@ -55,34 +55,6 @@ commands:
       usage: /<command> <Player name>
       description: command to validate an age
       permission: inferno.flagrate
-   k-team-create:
-      usage: /<command> <TeamName> [TeamColor]
-      description: command to create Team
-      permission: inferno.flagrate
-   k-team-delete:
-      usage: /<command> <TeamName>
-      description: command to delete Team
-      permission: inferno.flagrate
-   k-team-affect-player:
-      usage: /<command> <TeamName> <PlayerName>
-      description: command to affect a Player to a Team
-      permission: inferno.flagrate
-   k-team-remove-player:
-      usage: /<command> <TeamName> <PlayerName>
-      description: command to remove a Player from a Team
-      permission: inferno.flagrate
-   k-team-reset-players:
-      usage: /<command> <TeamName>
-      description: command to reset player list in a team
-      permission: inferno.flagrate
-   k-team-random-player:
-      usage: /<command>
-      description: command to put random players in teams
-      permission: inferno.flagrate
-   k-team-color:
-      usage: /<command> <TeamName> <TeamColor>
-      description: command to change team color
-      permission: inferno.flagrate
    k-set-type:
       usage: /<command> <Kuffle Type>
       description: command to set the plugin game type
@@ -99,7 +71,7 @@ commands:
       usage: /<command> [display | reset]
       description: command to toggle your spectate state (no args) and display/reset spectators
    k-team:
-      usage: /<command> <show | load | save>
+      usage: /<command> <show | load | save | random | clear | delete <TeamName> | create <TeamName [TeamColor]> | players <TeamName> <add <PlayerName> | remove <PlayerName> | color <ColorName> | reset>>
       description: command to show, load or save team config (load and save only for OP)
    k-multiblocks:
       usage: /<command>
@@ -166,27 +138,6 @@ permissions:
    k-adminskip:
       description: command to skip a target for any player without cost
       default: op
-   k-team-create:
-      description: command to create Team
-      default: op
-   k-team-delete:
-      description: command to delete Team
-      default: op
-   k-team-affect-player:
-      description: command to affect a Player to a Team
-      default: op
-   k-team-remove-player:
-      description: command to remove a Player from a Team
-      default: op
-   k-team-reset-players:
-      description: command to reset player list in a team
-      default: op
-   k-team-random-player:
-      description: command to put random players in teams
-      default: op
-   k-team-color:
-      description: command to change team color
-      default: op
    k-add-during-game:
       description: command to add a player during the game
       default: op
@@ -199,7 +150,7 @@ permissions:
    k-give:
       description: command to give Kuffle item or reward to a player
       default: op
-   k-team-show:
+   k-team:
       description: command to show all or one team
       default: true
    k-multiblocks:

@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 /**
  * @author KosmosUniverse
  */
+@Getter
 public class Games {
     private final Map<String, PlayerData> games;
-    @Getter
     private GameLoop gameLoop;
 
     /**
@@ -36,20 +36,14 @@ public class Games {
     }
 
     /**
-     * Gets the unmodifiable Games map
-     *
-     * @return Games map
-     */
-    public Map<String, PlayerData> getGames() {
-        return games;
-    }
-
-    /**
      * Clears games map
      */
     public void clear() {
-        games.forEach((key, value) -> value.clear());
-        games.clear();
+        if (!games.isEmpty()) {
+            games.forEach((key, value) -> value.clear());
+            games.clear();
+        }
+
         if (gameLoop != null) {
             gameLoop.kill();
         }
@@ -277,8 +271,6 @@ public class Games {
             for (int cnt = games.get(playerName).getAge(); cnt < (Config.getLastAge().getNumber() + 1); cnt++) {
                 games.get(playerName).getAgeTimes().put(AgeManager.getAgeByNumber(cnt).getName(), (long) -1);
             }
-        } else {
-            //games.get(playerName).getAgeTimes().put(AgeManager.getAgeByNumber(games.get(playerName).getAge()).getName(), (System.currentTimeMillis() - games.get(playerName).getTimeStartAge()));
         }
 
         games.get(playerName).setAge(-1);
@@ -400,7 +392,7 @@ public class Games {
      */
     public void resetPlayerBar(String playerName) {
         if (games.get(playerName).getAgeDisplay() != null &&
-                games.get(playerName).getAgeDisplay().getPlayers().size() != 0) {
+                !games.get(playerName).getAgeDisplay().getPlayers().isEmpty()) {
             games.get(playerName).getAgeDisplay().removeAll();
         }
     }
