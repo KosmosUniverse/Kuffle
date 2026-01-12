@@ -1,4 +1,932 @@
 {
+    "1.21": {
+        "Blocks": {"Mythic_Age": {
+            "trial_spawner": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Trial Spawner",
+                    "fr": "Generateur des Epreuves"
+                }
+            },
+            "vault": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Vault",
+                    "fr": "Coffre-fort"
+                }
+            }
+        }},
+        "Items": {"Mythic_Age": {
+            "ominous_bottle": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Ominous Bottle",
+                    "fr": "Fiole Funeste"
+                }
+            },
+            "wind_charge": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Wind Charge",
+                    "fr": "Charge de Vent"
+                }
+            },
+            "trial_key": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Trial Key",
+                    "fr": "Cle des Epreuves"
+                }
+            },
+            "breeze_rod": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Breeze Rod",
+                    "fr": "Baton de Breeze"
+                }
+            }
+        }},
+        "Both": {
+            "Mineric_Age": {
+                "tuff_bricks": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Tuff Bricks",
+                        "fr": "Tuf Taille"
+                    }
+                },
+                "polished_tuff_wall": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Polished Tuff Wall",
+                        "fr": "Mur de Tuf poli"
+                    }
+                },
+                "tuff_brick_slab": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Tuff Brick Slab",
+                        "fr": "Dalle de Tuf Taille"
+                    }
+                },
+                "copper_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Copper Door",
+                        "fr": "Porte en Cuivre"
+                    }
+                },
+                "tuff_brick_stairs": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Tuff Brick Stairs",
+                        "fr": "Escaliers en Tuf Taille"
+                    }
+                },
+                "copper_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Copper Trapdoor",
+                        "fr": "Trappe en Cuivre"
+                    }
+                },
+                "crafter": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Crafter",
+                        "fr": "Fabricateur"
+                    }
+                },
+                "oxidized_copper_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Oxidized Copper Door",
+                        "fr": "Porte en Cuivre Oxide"
+                    }
+                },
+                "chiseled_copper": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Chiseled Copper",
+                        "fr": "Cuivre Sculpte"
+                    }
+                },
+                "polished_tuff_slab": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Polished Tuff Slab",
+                        "fr": "Dalle de Tuf Poli"
+                    }
+                },
+                "oxidized_copper_grate\t": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Oxidized Copper Grate\t",
+                        "fr": "Grille en Cuivre Oxide"
+                    }
+                },
+                "exposed_copper_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Exposed Copper Trapdoor",
+                        "fr": "Trappe en Cuivre Expose"
+                    }
+                },
+                "chiseled_tuff_bricks": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Chiseled Tuff Bricks",
+                        "fr": "Tuf Taille Sculpte"
+                    }
+                },
+                "tuff_slab": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Tuff Slab",
+                        "fr": "Dalle de Tuf"
+                    }
+                },
+                "oxidized_copper_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Oxidized Copper Trapdoor",
+                        "fr": "Trappe en Cuivre Oxide"
+                    }
+                },
+                "tuff_wall": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Tuff Wall",
+                        "fr": "Mur de Tuf"
+                    }
+                },
+                "chiseled_tuff": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Chiseled Tuff",
+                        "fr": "Tuf Sculpte"
+                    }
+                },
+                "weathered_chiseled_copper": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Weathered Chiseled Copper",
+                        "fr": "Cuivre Sculpte Erode"
+                    }
+                },
+                "tuff_brick_wall": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Tuff Brick Wall",
+                        "fr": "Mur de Tuf Taille"
+                    }
+                },
+                "exposed_chiseled_copper": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Exposed Chiseled Copper",
+                        "fr": "Cuivre Sculpte Expose"
+                    }
+                },
+                "tuff_stairs": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Tuff Stairs",
+                        "fr": "Escaliers en Tuf"
+                    }
+                },
+                "oxidized_chiseled_copper": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Oxidized Chiseled Copper",
+                        "fr": "Cuivre Sculpte Oxide"
+                    }
+                },
+                "polished_tuff": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Polished Tuff",
+                        "fr": "Tuf Poli"
+                    }
+                },
+                "copper_grate": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Copper Grate",
+                        "fr": "Grille en Cuivre"
+                    }
+                },
+                "exposed_copper_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Exposed Copper Door",
+                        "fr": "Porte en Cuivre Expose"
+                    }
+                },
+                "weathered_copper_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Weathered Copper Door",
+                        "fr": "Porte en Cuivre Erode"
+                    }
+                },
+                "weathered_copper_grate": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Weathered Copper Grate",
+                        "fr": "Grille en Cuivre Erode"
+                    }
+                },
+                "polished_tuff_stairs": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Polished Tuff Stairs",
+                        "fr": "Escaliers en Tuf Poli"
+                    }
+                },
+                "exposed_copper_grate": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Exposed Copper Grate",
+                        "fr": "Grille en Cuivre Expose"
+                    }
+                },
+                "weathered_copper_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Weathered Copper Trapdoor",
+                        "fr": "Trappe en Cuivre Erode"
+                    }
+                }
+            },
+            "Mythic_Age": {
+                "waxed_exposed_copper_grate": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Exposed Copper Grate",
+                        "fr": "Grille en Cuivre Expose Cire"
+                    }
+                },
+                "waxed_oxidized_copper_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Oxidized Copper Door",
+                        "fr": "Porte en Cuivre Oxide Cire"
+                    }
+                },
+                "waxed_weathered_copper_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Weathered Copper Trapdoor",
+                        "fr": "Trappe en Cuivre Erode Cire"
+                    }
+                },
+                "waxed_copper_bulb": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Copper Bulb",
+                        "fr": "Ampoule en Cuivre Cire"
+                    }
+                },
+                "waxed_exposed_copper_bulb": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Exposed Copper Bulb",
+                        "fr": "Ampoule en Cuivre Expose Cire"
+                    }
+                },
+                "waxed_copper_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Copper Trapdoor",
+                        "fr": "Trappe en Cuivre Cire"
+                    }
+                },
+                "waxed_weathered_copper_grate": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Weathered Copper Grate",
+                        "fr": "Grille en Cuivre Erode Cire"
+                    }
+                },
+                "waxed_oxidized_copper_bulb": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Oxidized Copper Bulb",
+                        "fr": "Ampoule en Cuivre Oxide Cire"
+                    }
+                },
+                "waxed_oxidized_copper_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Oxidized Copper Trapdoor",
+                        "fr": "Trappe en Cuivre Oxide Cire"
+                    }
+                },
+                "waxed_weathered_chiseled_copper": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Weathered Chiseled Copper",
+                        "fr": "Cuivre Sculpte Erode Cire"
+                    }
+                },
+                "waxed_exposed_copper_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Exposed Copper Door",
+                        "fr": "Porte en Cuivre Expose Cire"
+                    }
+                },
+                "waxed_exposed_copper_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Exposed Copper Trapdoor",
+                        "fr": "Trappe en Cuivre Expose Cire"
+                    }
+                },
+                "waxed_oxidized_copper_grate\t": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Oxidized Copper Grate\t",
+                        "fr": "Grille en Cuivre Oxide Cire"
+                    }
+                },
+                "waxed_copper_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Copper Door",
+                        "fr": "Porte en Cuivre Cire"
+                    }
+                },
+                "waxed_weathered_copper_bulb": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Weathered Copper Bulb",
+                        "fr": "Ampoule en Cuivre Erode Cire"
+                    }
+                },
+                "waxed_oxidized_chiseled_copper": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Oxidized Chiseled Copper",
+                        "fr": "Cuivre Sculpte Oxide Cire"
+                    }
+                },
+                "waxed_copper_grate": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Copper Grate",
+                        "fr": "Grille en Cuivre Cire"
+                    }
+                },
+                "waxed_exposed_chiseled_copper": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Exposed Chiseled Copper",
+                        "fr": "Cuivre Sculpte Expose Cire"
+                    }
+                },
+                "waxed_weathered_copper_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Weathered Copper Door",
+                        "fr": "Porte en Cuivre Erode Cire"
+                    }
+                },
+                "waxed_chiseled_copper": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Chiseled Copper",
+                        "fr": "Cuivre Sculpte Cire"
+                    }
+                }
+            },
+            "Netheric_Age": {
+                "weathered_copper_bulb": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Weathered Copper Bulb",
+                        "fr": "Ampoule en Cuivre Erode"
+                    }
+                },
+                "oxidized_copper_bulb": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Oxidized Copper Bulb",
+                        "fr": "Ampoule en Cuivre Oxide"
+                    }
+                },
+                "copper_bulb": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Copper Bulb",
+                        "fr": "Ampoule en Cuivre"
+                    }
+                },
+                "exposed_copper_bulb": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Exposed Copper Bulb",
+                        "fr": "Ampoule en Cuivre Expose"
+                    }
+                }
+            }
+        }
+    },
+    "1.20": {
+        "Blocks": {
+            "Classic_Age": {
+                "suspicious_gravel": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Suspicious Gravel",
+                        "fr": "Gravier Suspect"
+                    }
+                },
+                "suspicious_sand": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Suspicious Sand",
+                        "fr": "Sable Suspect"
+                    }
+                }
+            },
+            "Mythic_Age": {
+                "bamboo_wall_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Wall Hanging Sign",
+                        "fr": "Pancarte Murale Suspendue en Bambou"
+                    }
+                },
+                "warped_wall_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Warped Wall Hanging Sign",
+                        "fr": "Pancarte Murale Suspendue Biscornue"
+                    }
+                },
+                "bamboo_wall_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Wall Sign",
+                        "fr": "Pancarte Murale en Bambou"
+                    }
+                },
+                "crimson_wall_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Crimson Wall Hanging Sign",
+                        "fr": "Pancarte Murale Suspendue Carmin"
+                    }
+                },
+                "jungle_wall_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Jungle Wall Hanging Sign",
+                        "fr": "Pancarte Murale Suspendue en Acajou"
+                    }
+                },
+                "acacia_wall_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Acacia Wall Hanging Sign",
+                        "fr": "Pancarte Murale Suspendue en Acacia"
+                    }
+                },
+                "dark_oak_wall_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Dark Oak Wall Hanging Sign",
+                        "fr": "Pancarte Murale Suspendue en Chene Noir"
+                    }
+                },
+                "spruce_wall_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Spruce Wall Hanging Sign",
+                        "fr": "Pancarte Murale Suspendue en Sapin"
+                    }
+                },
+                "birch_wall_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Birch Wall Hanging Sign",
+                        "fr": "Pancarte Murale Suspendue en Bouleau"
+                    }
+                },
+                "cherry_wall_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Wall Sign",
+                        "fr": "Pancarte Murale en Cerisier"
+                    }
+                },
+                "mangrove_wall_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Mangrove Wall Hanging Sign",
+                        "fr": "Pancarte Murale Suspendue en Paletuvier"
+                    }
+                },
+                "oak_wall_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Oak Wall Hanging Sign",
+                        "fr": "Pancarte Murale Suspendue en Chene"
+                    }
+                },
+                "cherry_wall_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Wall Hanging Sign",
+                        "fr": "Pancarte Murale Suspendue en Cerisier"
+                    }
+                }
+            }
+        },
+        "Items": {
+            "Classic_Age": {
+                "brush": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Brush",
+                        "fr": "Pinceau"
+                    }
+                },
+                "*_pottery_sherd": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Any Pottery Sherd",
+                        "fr": "Tesson de Poterie"
+                    }
+                }
+            },
+            "Mythic_Age": {
+                "cherry_boat": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Boat",
+                        "fr": "Bateau en Cerisier"
+                    }
+                },
+                "*_smithing_template": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Any Smithing Template",
+                        "fr": "Modele de Forge"
+                    }
+                },
+                "bamboo_chest_raft": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Chest Raft",
+                        "fr": "Radeau de Stockage en Bambou"
+                    }
+                },
+                "bamboo_raft": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Raft",
+                        "fr": "Radeau en Bambou"
+                    }
+                },
+                "cherry_chest_boat": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Chest Boat",
+                        "fr": "Bateau de Stockage en Cerisier"
+                    }
+                }
+            }
+        },
+        "Both": {
+            "Classic_Age": {"decorated_pot": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Decorated Pot",
+                    "fr": "Vase Decore"
+                }
+            }},
+            "Mythic_Age": {
+                "calibrated_sculk_sensor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Calibrated Sculk Sensor",
+                        "fr": "Capteur Sculk Calibre"
+                    }
+                },
+                "bamboo_slab": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Slab",
+                        "fr": "Dalle en Bambou"
+                    }
+                },
+                "cherry_fence": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Fence",
+                        "fr": "Barriere en Cerisier"
+                    }
+                },
+                "spruce_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Spruce Hanging Sign",
+                        "fr": "Pancarte Suspendue en Sapin"
+                    }
+                },
+                "bamboo_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Door",
+                        "fr": "Porte en Bambou"
+                    }
+                },
+                "bamboo_block": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Block",
+                        "fr": "Bloc de Bambou"
+                    }
+                },
+                "bamboo_mosaic_slab": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Mosaic Slab",
+                        "fr": "Dalle en Mosaique de Bambou"
+                    }
+                },
+                "oak_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Oak Hanging Sign",
+                        "fr": "Pancarte Suspendue en Chene"
+                    }
+                },
+                "stripped_bamboo_block": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Stripped Bamboo Block",
+                        "fr": "Bloc de Bambou Ecorce"
+                    }
+                },
+                "bamboo_button": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Button",
+                        "fr": "Bouton en Bambou"
+                    }
+                },
+                "bamboo_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Sign",
+                        "fr": "Pancarte en Bambou"
+                    }
+                },
+                "bamboo_planks": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Planks",
+                        "fr": "Planches de Bambou"
+                    }
+                },
+                "bamboo_mosaic_stairs": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Mosaic Stairs",
+                        "fr": "Escalier en Mosaique de Bambou"
+                    }
+                },
+                "jungle_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Jungle Hanging Sign",
+                        "fr": "Pancarte Suspendue en Acajou"
+                    }
+                },
+                "cherry_wood": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Wood",
+                        "fr": "Bois de Cerisier"
+                    }
+                },
+                "pink_petals": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Pink Petals",
+                        "fr": "Petales Roses"
+                    }
+                },
+                "crimson_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Crimson Hanging Sign",
+                        "fr": "Pancarte Suspendue Carmin"
+                    }
+                },
+                "cherry_stairs": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Stairs",
+                        "fr": "Escaliers en Cerisier"
+                    }
+                },
+                "mangrove_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Mangrove Hanging Sign",
+                        "fr": "Pancarte Suspendue en Paletuvier"
+                    }
+                },
+                "cherry_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Sign",
+                        "fr": "Pancarte en Cerisier"
+                    }
+                },
+                "cherry_slab": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Slab",
+                        "fr": "Dalle en Cerisier"
+                    }
+                },
+                "bamboo_fence_gate": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Fence Gate",
+                        "fr": "Portillon en Bambou"
+                    }
+                },
+                "stripped_cherry_log": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Stripped Cherry Log",
+                        "fr": "Buche de Cerisier Ecorce"
+                    }
+                },
+                "acacia_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Acacia Hanging Sign",
+                        "fr": "Pancarte Suspendue en Acacia"
+                    }
+                },
+                "cherry_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Hanging Sign",
+                        "fr": "Pancarte Suspendue en Cerisier"
+                    }
+                },
+                "bamboo_pressure_plate": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Pressure Plate",
+                        "fr": "Plaque de Pression en Bambou"
+                    }
+                },
+                "cherry_door": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Door",
+                        "fr": "Porte en Cerisier"
+                    }
+                },
+                "cherry_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Trapdoor",
+                        "fr": "Trappe en Cerisier"
+                    }
+                },
+                "bamboo_fence": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Fence",
+                        "fr": "Barriere en Bambou"
+                    }
+                },
+                "cherry_button": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Button",
+                        "fr": "Bouton en Cerisier"
+                    }
+                },
+                "cherry_leaves": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Leaves",
+                        "fr": "Feuilles de Cerisier"
+                    }
+                },
+                "cherry_pressure_plate": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Pressure Plate",
+                        "fr": "Plaque de Pression en Cerisier"
+                    }
+                },
+                "birch_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Birch Hanging Sign",
+                        "fr": "Pancarte Suspendue en Bouleau"
+                    }
+                },
+                "bamboo_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Hanging Sign",
+                        "fr": "Pancarte Suspendue en Bambou"
+                    }
+                },
+                "cherry_sapling": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Sapling",
+                        "fr": "Pousse de Cerisier"
+                    }
+                },
+                "dark_oak_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Dark Oak Hanging Sign",
+                        "fr": "Pancarte Suspendue en Chene Noir"
+                    }
+                },
+                "cherry_planks": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Planks",
+                        "fr": "Planches de Cerisier"
+                    }
+                },
+                "warped_hanging_sign": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Warped Hanging Sign",
+                        "fr": "Pancarte Suspendue Biscornue"
+                    }
+                },
+                "bamboo_trapdoor": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Trapdoor",
+                        "fr": "Trappe en Bambou"
+                    }
+                },
+                "cherry_log": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Log",
+                        "fr": "Buche de Cerisier"
+                    }
+                },
+                "bamboo_mosaic": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Mosaic",
+                        "fr": "Mosaique de Bambou"
+                    }
+                },
+                "bamboo_stairs": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Bamboo Stairs",
+                        "fr": "Escaliers en Bambou"
+                    }
+                },
+                "cherry_fence_gate": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Cherry Fence Gate",
+                        "fr": "Portillon en Cerisier"
+                    }
+                },
+                "stripped_cherry_wood": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Stripped Cherry Wood",
+                        "fr": "Bois de Cerisier Ecorce"
+                    }
+                }
+            },
+            "Archaic_Age": {"chiseled_bookshelf": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Chiseled Bookshelf",
+                    "fr": "Bibliotheque Sculptee"
+                }
+            }}
+        }
+    },
     "1.19": {
         "Blocks": {
             "Mineric_Age": {"reinforced_deepslate": {
@@ -195,7 +1123,10 @@
                 },
                 "ochre_froglight": {
                     "Sbtt": false,
-                    "Langs": {"en": "Ochre Froglight"}
+                    "Langs": {
+                        "en": "Ochre Froglight",
+                        "fr": "Grelampe Ocree"
+                    }
                 },
                 "mangrove_button": {
                     "Sbtt": false,
@@ -206,7 +1137,10 @@
                 },
                 "verdant_froglight": {
                     "Sbtt": false,
-                    "Langs": {"en": "Verdant Froglight"}
+                    "Langs": {
+                        "en": "Verdant Froglight",
+                        "fr": "Grelampe Verdoyante"
+                    }
                 },
                 "mangrove_log": {
                     "Sbtt": false,
@@ -224,7 +1158,10 @@
                 },
                 "pearlescent_froglight": {
                     "Sbtt": false,
-                    "Langs": {"en": "Pearlescent Froglight"}
+                    "Langs": {
+                        "en": "Pearlescent Froglight",
+                        "fr": "Grelampe Nacree"
+                    }
                 },
                 "stripped_mangrove_log": {
                     "Sbtt": false,
@@ -1991,6 +2928,107 @@
             }
         }
     },
+    "1.21.11": {"Items": {
+        "Mineric_Age": {
+            "golden_spear": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Golden Spear",
+                    "fr": "Lance en Or"
+                }
+            },
+            "copper_spear": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Copper Spear",
+                    "fr": "Lance en Cuivre"
+                }
+            },
+            "diamond_nautilus_armor": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Diamond Nautilus Armor",
+                    "fr": "Armure en Diamant pour Nautile"
+                }
+            },
+            "diamond_spear": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Diamond Spear",
+                    "fr": "Lance en Diamant"
+                }
+            },
+            "golden_nautilus_armor": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Golden Nautilus Armor",
+                    "fr": "Armure en Or pour Nautile"
+                }
+            },
+            "copper_nautilus_armor": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Copper Nautilus Armor",
+                    "fr": "Armure en Cuivre pour Nautile"
+                }
+            }
+        },
+        "Classic_Age": {
+            "iron_nautilus_armor": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Iron Nautilus Armor",
+                    "fr": "Armure en Fer pour Nautile"
+                }
+            },
+            "iron_spear": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Iron Spear",
+                    "fr": "Lance en Fer"
+                }
+            }
+        },
+        "Archaic_Age": {
+            "stone_spear": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Stone Spear",
+                    "fr": "Lance en Pierre"
+                }
+            },
+            "wooden_spear": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Wooden Spear",
+                    "fr": "Lance en Bois"
+                }
+            }
+        },
+        "Netheric_Age": {
+            "netherite_spear": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Netherite Spear",
+                    "fr": "Lance en Netherite"
+                }
+            },
+            "netherite_nautilus_armor": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Netherite Nautilus Armor",
+                    "fr": "Armure en Netherite pour Nautile"
+                }
+            },
+            "netherite_horse_armor": {
+                "Sbtt": false,
+                "Langs": {
+                    "en": "Netherite Horse Armor",
+                    "fr": "Armure en Netherite Pour Cheval"
+                }
+            }
+        }
+    }},
     "1.15": {
         "Blocks": {
             "Mineric_Age": {
@@ -8097,932 +9135,531 @@
             }
         }}}
     },
-    "1.21": {
-        "Blocks": {"Mythic_Age": {
-            "trial_spawner": {
-                "Sbtt": false,
-                "Langs": {
-                    "en": "Trial Spawner",
-                    "fr": "Generateur des Epreuves"
-                }
-            },
-            "vault": {
-                "Sbtt": false,
-                "Langs": {
-                    "en": "Vault",
-                    "fr": "Coffre-fort"
-                }
+    "1.21.9": {
+        "Blocks": {"Mineric_Age": {"copper_wall_torch": {
+            "Sbtt": true,
+            "Langs": {
+                "en": "Copper Wall Torch",
+                "fr": "Torche de Cuivre Murale"
             }
-        }},
-        "Items": {"Mythic_Age": {
-            "ominous_bottle": {
-                "Sbtt": false,
+        }}},
+        "Items": {"Mineric_Age": {
+            "copper_horse_armor": {
+                "Sbtt": true,
                 "Langs": {
-                    "en": "Ominous Bottle",
-                    "fr": "Fiole Funeste"
+                    "en": "Copper Horse Armor",
+                    "fr": "Armure en Cuivre pour Cheval"
                 }
             },
-            "wind_charge": {
-                "Sbtt": false,
+            "copper_nugget": {
+                "Sbtt": true,
                 "Langs": {
-                    "en": "Wind Charge",
-                    "fr": "Charge de Vent"
+                    "en": "Copper Nugget",
+                    "fr": "Pepite de Cuivre"
                 }
             },
-            "trial_key": {
-                "Sbtt": false,
+            "copper_helmet": {
+                "Sbtt": true,
                 "Langs": {
-                    "en": "Trial Key",
-                    "fr": "Cle des Epreuves"
+                    "en": "Copper Helmet",
+                    "fr": "Casque en Cuivre"
                 }
             },
-            "breeze_rod": {
-                "Sbtt": false,
+            "copper_chestplate": {
+                "Sbtt": true,
                 "Langs": {
-                    "en": "Breeze Rod",
-                    "fr": "Baton de Breeze"
+                    "en": "Copper Chestplate",
+                    "fr": "Plastron en Cuivre"
+                }
+            },
+            "copper_sword": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Copper Sword",
+                    "fr": "Epee en Cuivre"
+                }
+            },
+            "copper_axe": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Copper Axe",
+                    "fr": "Hache en Cuivre"
+                }
+            },
+            "copper_hoe": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Copper Hoe",
+                    "fr": "Houe en Cuivre"
+                }
+            },
+            "copper_leggings": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Copper Leggings",
+                    "fr": "Jambieres en Cuivre"
+                }
+            },
+            "copper_boots": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Copper Boots",
+                    "fr": "Bottes en Cuivre"
+                }
+            },
+            "copper_shovel": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Copper Shovel",
+                    "fr": "Pelle en Cuivre"
+                }
+            },
+            "copper_pickaxe": {
+                "Sbtt": true,
+                "Langs": {
+                    "en": "Copper Pickaxe",
+                    "fr": "Pioche en Cuivre"
                 }
             }
         }},
         "Both": {
             "Mineric_Age": {
-                "tuff_bricks": {
-                    "Sbtt": false,
+                "oxidized_copper_golem_statue": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Tuff Bricks",
-                        "fr": "Tuf Taille"
+                        "en": "Oxidized Copper Golem Statue",
+                        "fr": "Statue de Golem de Cuivre Oxide"
                     }
                 },
-                "polished_tuff_wall": {
-                    "Sbtt": false,
+                "weathered_copper_chain": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Polished Tuff Wall",
-                        "fr": "Mur de Tuf poli"
+                        "en": "Weathered Copper Chain",
+                        "fr": "Chaine en Cuivre Erode"
                     }
                 },
-                "tuff_brick_slab": {
-                    "Sbtt": false,
+                "iron_chain": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Tuff Brick Slab",
-                        "fr": "Dalle de Tuf Taille"
+                        "en": "Iron Chain",
+                        "fr": "Chaine en Fer"
                     }
                 },
-                "copper_door": {
-                    "Sbtt": false,
+                "weathered_copper_lantern": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Copper Door",
-                        "fr": "Porte en Cuivre"
+                        "en": "Weathered Copper Lantern",
+                        "fr": "Lanterne en Cuivre Erode"
                     }
                 },
-                "tuff_brick_stairs": {
-                    "Sbtt": false,
+                "copper_bars": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Tuff Brick Stairs",
-                        "fr": "Escaliers en Tuf Taille"
+                        "en": "Copper Bars",
+                        "fr": "Barreaux de Cuivre"
                     }
                 },
-                "copper_trapdoor": {
-                    "Sbtt": false,
+                "oxidized_copper_bars": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Copper Trapdoor",
-                        "fr": "Trappe en Cuivre"
+                        "en": "Oxidized Copper Bars",
+                        "fr": "Barreaux de Cuivre Oxide"
                     }
                 },
-                "crafter": {
-                    "Sbtt": false,
+                "exposed_copper_golem_statue": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Crafter",
-                        "fr": "Fabricateur"
+                        "en": "Exposed Copper Golem Statue",
+                        "fr": "Statue de Golem de Cuivre Expose"
                     }
                 },
-                "oxidized_copper_door": {
-                    "Sbtt": false,
+                "copper_torch": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Oxidized Copper Door",
-                        "fr": "Porte en Cuivre Oxide"
+                        "en": "Copper Torch",
+                        "fr": "Torche de Cuivre"
                     }
                 },
-                "chiseled_copper": {
-                    "Sbtt": false,
+                "copper_lantern": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Chiseled Copper",
-                        "fr": "Cuivre Sculpte"
+                        "en": "Copper Lantern",
+                        "fr": "Lanterne en Cuivre"
                     }
                 },
-                "polished_tuff_slab": {
-                    "Sbtt": false,
+                "oxidized_copper_lantern": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Polished Tuff Slab",
-                        "fr": "Dalle de Tuf Poli"
+                        "en": "Oxidized Copper Lantern",
+                        "fr": "Lanterne en Cuivre Oxide"
                     }
                 },
-                "oxidized_copper_grate\t": {
-                    "Sbtt": false,
+                "copper_golem_statue": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Oxidized Copper Grate\t",
-                        "fr": "Grille en Cuivre Oxide"
+                        "en": "Copper Golem Statue",
+                        "fr": "Statue de Golem de Cuivre"
                     }
                 },
-                "exposed_copper_trapdoor": {
-                    "Sbtt": false,
+                "exposed_copper_chain": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Exposed Copper Trapdoor",
-                        "fr": "Trappe en Cuivre Expose"
+                        "en": "Exposed Copper Chain",
+                        "fr": "Chaine en Cuivre Expose"
                     }
                 },
-                "chiseled_tuff_bricks": {
-                    "Sbtt": false,
+                "exposed_lightning_rod": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Chiseled Tuff Bricks",
-                        "fr": "Tuf Taille Sculpte"
+                        "en": "Exposed Lightning Rod",
+                        "fr": "Paratonnerre Expose"
                     }
                 },
-                "tuff_slab": {
-                    "Sbtt": false,
+                "copper_chain": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Tuff Slab",
-                        "fr": "Dalle de Tuf"
+                        "en": "Copper Chain",
+                        "fr": "Chaine en Cuivre"
                     }
                 },
-                "oxidized_copper_trapdoor": {
-                    "Sbtt": false,
+                "oxidized_lightning_rod": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Oxidized Copper Trapdoor",
-                        "fr": "Trappe en Cuivre Oxide"
+                        "en": "Oxidized Lightning Rod",
+                        "fr": "Paratonnerre Oxide"
                     }
                 },
-                "tuff_wall": {
-                    "Sbtt": false,
+                "weathered_lightning_rod": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Tuff Wall",
-                        "fr": "Mur de Tuf"
+                        "en": "Weathered Lightning Rod",
+                        "fr": "Paratonnerre Erode"
                     }
                 },
-                "chiseled_tuff": {
-                    "Sbtt": false,
+                "weathered_copper_golem_statue": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Chiseled Tuff",
-                        "fr": "Tuf Sculpte"
+                        "en": "Weathered Copper Golem Statue",
+                        "fr": "Statue de Golem de Cuivre Erode"
                     }
                 },
-                "weathered_chiseled_copper": {
-                    "Sbtt": false,
+                "oxidized_copper_chain": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Weathered Chiseled Copper",
-                        "fr": "Cuivre Sculpte Erode"
+                        "en": "Oxidized Copper Chain",
+                        "fr": "Chaine en Cuivre Oxide"
                     }
                 },
-                "tuff_brick_wall": {
-                    "Sbtt": false,
+                "weathered_copper_bars": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Tuff Brick Wall",
-                        "fr": "Mur de Tuf Taille"
+                        "en": "Weathered Copper Bars",
+                        "fr": "Barreaux de Cuivre Erode"
                     }
                 },
-                "exposed_chiseled_copper": {
-                    "Sbtt": false,
+                "exposed_copper_bars": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Exposed Chiseled Copper",
-                        "fr": "Cuivre Sculpte Expose"
+                        "en": "Exposed Copper Bars",
+                        "fr": "Barreaux de Cuivre Expose"
                     }
                 },
-                "tuff_stairs": {
-                    "Sbtt": false,
+                "exposed_copper_lantern": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Tuff Stairs",
-                        "fr": "Escaliers en Tuf"
+                        "en": "Exposed Copper Lantern",
+                        "fr": "Lanterne en Cuivre Expose"
+                    }
+                }
+            },
+            "Classic_Age": {
+                "dark_oak_shelf": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Dark Oak Shelf",
+                        "fr": "Etagere en Chene Noir"
                     }
                 },
-                "oxidized_chiseled_copper": {
-                    "Sbtt": false,
+                "spruce_shelf": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Oxidized Chiseled Copper",
-                        "fr": "Cuivre Sculpte Oxide"
-                    }
-                },
-                "polished_tuff": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Polished Tuff",
-                        "fr": "Tuf Poli"
-                    }
-                },
-                "copper_grate": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Copper Grate",
-                        "fr": "Grille en Cuivre"
-                    }
-                },
-                "exposed_copper_door": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Exposed Copper Door",
-                        "fr": "Porte en Cuivre Expose"
-                    }
-                },
-                "weathered_copper_door": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Weathered Copper Door",
-                        "fr": "Porte en Cuivre Erode"
-                    }
-                },
-                "weathered_copper_grate": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Weathered Copper Grate",
-                        "fr": "Grille en Cuivre Erode"
-                    }
-                },
-                "polished_tuff_stairs": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Polished Tuff Stairs",
-                        "fr": "Escaliers en Tuf Poli"
-                    }
-                },
-                "exposed_copper_grate": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Exposed Copper Grate",
-                        "fr": "Grille en Cuivre Expose"
-                    }
-                },
-                "weathered_copper_trapdoor": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Weathered Copper Trapdoor",
-                        "fr": "Trappe en Cuivre Erode"
+                        "en": "Spruce Shelf",
+                        "fr": "Etagere en Sapin"
                     }
                 }
             },
             "Mythic_Age": {
-                "waxed_exposed_copper_grate": {
+                "waxed_copper_bars": {
                     "Sbtt": false,
                     "Langs": {
-                        "en": "Waxed Exposed Copper Grate",
-                        "fr": "Grille en Cuivre Expose Cire"
+                        "en": "Waxed Copper Bars",
+                        "fr": "Barreaux de Cuivre Cire"
                     }
                 },
-                "waxed_oxidized_copper_door": {
+                "waxed_weathered_copper_chain": {
                     "Sbtt": false,
                     "Langs": {
-                        "en": "Waxed Oxidized Copper Door",
-                        "fr": "Porte en Cuivre Oxide Cire"
+                        "en": "Waxed Weathered Copper Chain",
+                        "fr": "Chaine en Cuivre Erode Cire"
                     }
                 },
-                "waxed_weathered_copper_trapdoor": {
+                "waxed_weathered_copper_chest": {
                     "Sbtt": false,
                     "Langs": {
-                        "en": "Waxed Weathered Copper Trapdoor",
-                        "fr": "Trappe en Cuivre Erode Cire"
+                        "en": "Waxed Weathered Copper Chest",
+                        "fr": "Coffre en Cuivre Erode Cire"
                     }
                 },
-                "waxed_copper_bulb": {
+                "waxed_weathered_copper_bars": {
                     "Sbtt": false,
                     "Langs": {
-                        "en": "Waxed Copper Bulb",
-                        "fr": "Ampoule en Cuivre Cire"
+                        "en": "Waxed Weathered Copper Bars",
+                        "fr": "Barreaux de Cuivre Erode Cire"
                     }
                 },
-                "waxed_exposed_copper_bulb": {
+                "waxed_weathered_copper_golem_statue": {
                     "Sbtt": false,
                     "Langs": {
-                        "en": "Waxed Exposed Copper Bulb",
-                        "fr": "Ampoule en Cuivre Expose Cire"
+                        "en": "Waxed Weathered Copper Golem Statue",
+                        "fr": "Statue de Golem de Cuivre Erode Cire"
                     }
                 },
-                "waxed_copper_trapdoor": {
-                    "Sbtt": false,
+                "acacia_shelf": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Waxed Copper Trapdoor",
-                        "fr": "Trappe en Cuivre Cire"
+                        "en": "Acacia Shelf",
+                        "fr": "Etagere en Acajou"
                     }
                 },
-                "waxed_weathered_copper_grate": {
+                "waxed_weathered_copper_lantern": {
                     "Sbtt": false,
                     "Langs": {
-                        "en": "Waxed Weathered Copper Grate",
-                        "fr": "Grille en Cuivre Erode Cire"
+                        "en": "Waxed Weathered Copper Lantern",
+                        "fr": "Lanterne en Cuivre Erode Cire"
                     }
                 },
-                "waxed_oxidized_copper_bulb": {
+                "waxed_oxidized_copper_golem_statue": {
                     "Sbtt": false,
                     "Langs": {
-                        "en": "Waxed Oxidized Copper Bulb",
-                        "fr": "Ampoule en Cuivre Oxide Cire"
+                        "en": "Waxed Oxidized Copper Golem Statue",
+                        "fr": "Statue de Golem de Cuivre Oxide Cire"
                     }
                 },
-                "waxed_oxidized_copper_trapdoor": {
+                "waxed_lightning_rod": {
                     "Sbtt": false,
                     "Langs": {
-                        "en": "Waxed Oxidized Copper Trapdoor",
-                        "fr": "Trappe en Cuivre Oxide Cire"
+                        "en": "Waxed Lightning Rod",
+                        "fr": "Paratonnerre Cire"
                     }
                 },
-                "waxed_weathered_chiseled_copper": {
-                    "Sbtt": false,
+                "jungle_shelf": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Waxed Weathered Chiseled Copper",
-                        "fr": "Cuivre Sculpte Erode Cire"
+                        "en": "Jungle Shelf",
+                        "fr": "Etagere en Acacia"
                     }
                 },
-                "waxed_exposed_copper_door": {
-                    "Sbtt": false,
+                "cherry_shelf": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Waxed Exposed Copper Door",
-                        "fr": "Porte en Cuivre Expose Cire"
+                        "en": "Cherry Shelf",
+                        "fr": "Etagere en Cerisier"
                     }
                 },
-                "waxed_exposed_copper_trapdoor": {
-                    "Sbtt": false,
+                "exposed_copper_chest": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Waxed Exposed Copper Trapdoor",
-                        "fr": "Trappe en Cuivre Expose Cire"
+                        "en": "Exposed Copper Chest",
+                        "fr": "Coffre en Cuivre Expose"
                     }
                 },
-                "waxed_oxidized_copper_grate\t": {
+                "waxed_oxidized_copper_chain": {
                     "Sbtt": false,
                     "Langs": {
-                        "en": "Waxed Oxidized Copper Grate\t",
-                        "fr": "Grille en Cuivre Oxide Cire"
+                        "en": "Waxed Oxidized Copper Chain",
+                        "fr": "Chaine en Cuivre Oxide Cire"
                     }
                 },
-                "waxed_copper_door": {
-                    "Sbtt": false,
+                "copper_chest": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Waxed Copper Door",
-                        "fr": "Porte en Cuivre Cire"
+                        "en": "Copper Chest",
+                        "fr": "Coffre en Cuivre"
                     }
                 },
-                "waxed_weathered_copper_bulb": {
+                "waxed_oxidized_copper_chest": {
                     "Sbtt": false,
                     "Langs": {
-                        "en": "Waxed Weathered Copper Bulb",
-                        "fr": "Ampoule en Cuivre Erode Cire"
+                        "en": "Waxed Oxidized Copper Chest",
+                        "fr": "Coffre en Cuivre Oxide Cire"
                     }
                 },
-                "waxed_oxidized_chiseled_copper": {
+                "waxed_copper_golem_statue": {
                     "Sbtt": false,
                     "Langs": {
-                        "en": "Waxed Oxidized Chiseled Copper",
-                        "fr": "Cuivre Sculpte Oxide Cire"
+                        "en": "Waxed Copper Golem Statue",
+                        "fr": "Statue de Golem de Cuivre Cire"
                     }
                 },
-                "waxed_copper_grate": {
-                    "Sbtt": false,
+                "pale_oak_shelf": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Waxed Copper Grate",
-                        "fr": "Grille en Cuivre Cire"
+                        "en": "Pale Oak Shelf",
+                        "fr": "Etagere en Chene pale"
                     }
                 },
-                "waxed_exposed_chiseled_copper": {
+                "waxed_oxidized_lightning_rod": {
                     "Sbtt": false,
                     "Langs": {
-                        "en": "Waxed Exposed Chiseled Copper",
-                        "fr": "Cuivre Sculpte Expose Cire"
+                        "en": "Waxed Oxidized Lightning Rod",
+                        "fr": "Paratonnerre Oxide Cire"
                     }
                 },
-                "waxed_weathered_copper_door": {
+                "waxed_copper_chain": {
                     "Sbtt": false,
                     "Langs": {
-                        "en": "Waxed Weathered Copper Door",
-                        "fr": "Porte en Cuivre Erode Cire"
+                        "en": "Waxed Copper Chain",
+                        "fr": "Chaine en Cuivre Cire"
                     }
                 },
-                "waxed_chiseled_copper": {
+                "waxed_copper_chest": {
                     "Sbtt": false,
                     "Langs": {
-                        "en": "Waxed Chiseled Copper",
-                        "fr": "Cuivre Sculpte Cire"
+                        "en": "Waxed Copper Chest",
+                        "fr": "Coffre en Cuivre Cire"
+                    }
+                },
+                "weathered_copper_chest": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Weathered Copper Chest",
+                        "fr": "Coffre en Cuivre Erode"
+                    }
+                },
+                "waxed_exposed_copper_golem_statue": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Exposed Copper Golem Statue",
+                        "fr": "Statue de Golem de Cuivre Expose Cire"
+                    }
+                },
+                "waxed_exposed_copper_bars": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Exposed Copper Bars",
+                        "fr": "Barreaux de Cuivre Expose Cire"
+                    }
+                },
+                "waxed_exposed_lightning_rod": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Exposed Lightning Rod",
+                        "fr": "Paratonnerre Expose Cire"
+                    }
+                },
+                "waxed_exposed_copper_lantern": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Exposed Copper Lantern",
+                        "fr": "Lanterne en Cuivre Expose Cire"
+                    }
+                },
+                "bamboo_shelf": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Bamboo Shelf",
+                        "fr": "Etagere en Bambou"
+                    }
+                },
+                "mangrove_shelf": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Mangrove Shelf",
+                        "fr": "Etagere en Paletuvier"
+                    }
+                },
+                "waxed_weathered_lightning_rod": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Weathered Lightning Rod",
+                        "fr": "Paratonnerre Erode Cire"
+                    }
+                },
+                "waxed_oxidized_copper_lantern": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Oxidized Copper Lantern",
+                        "fr": "Lanterne en Cuivre Oxide Cire"
+                    }
+                },
+                "waxed_oxidized_copper_bars": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Oxidized Copper Bars",
+                        "fr": "Barreaux de Cuivre Oxide Cire"
+                    }
+                },
+                "waxed_copper_lantern": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Copper Lantern",
+                        "fr": "Lanterne en Cuivre Cire"
+                    }
+                },
+                "waxed_exposed_copper_chain": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Exposed Copper Chain",
+                        "fr": "Chaine en Cuivre Expose Cire"
+                    }
+                },
+                "oxidized_copper_chest": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Oxidized Copper Chest",
+                        "fr": "Coffre en Cuivre Oxide"
+                    }
+                },
+                "waxed_exposed_copper_chest": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Waxed Exposed Copper Chest",
+                        "fr": "Coffre en Cuivre Expose Cire"
+                    }
+                }
+            },
+            "Archaic_Age": {
+                "birch_shelf": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Birch Shelf",
+                        "fr": "Etagere en Bouleau"
+                    }
+                },
+                "oak_shelf": {
+                    "Sbtt": true,
+                    "Langs": {
+                        "en": "Oak Shelf",
+                        "fr": "Etagere en Chene"
                     }
                 }
             },
             "Netheric_Age": {
-                "weathered_copper_bulb": {
-                    "Sbtt": false,
+                "crimson_shelf": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Weathered Copper Bulb",
-                        "fr": "Ampoule en Cuivre Erode"
+                        "en": "Crimson Shelf",
+                        "fr": "Etagere Carmin"
                     }
                 },
-                "oxidized_copper_bulb": {
-                    "Sbtt": false,
+                "warped_shelf": {
+                    "Sbtt": true,
                     "Langs": {
-                        "en": "Oxidized Copper Bulb",
-                        "fr": "Ampoule en Cuivre Oxide"
-                    }
-                },
-                "copper_bulb": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Copper Bulb",
-                        "fr": "Ampoule en Cuivre"
-                    }
-                },
-                "exposed_copper_bulb": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Exposed Copper Bulb",
-                        "fr": "Ampoule en Cuivre Expose"
+                        "en": "Warped Shelf",
+                        "fr": "Etagere Biscurnue"
                     }
                 }
             }
-        }
-    },
-    "1.20": {
-        "Blocks": {
-            "Classic_Age": {
-                "suspicious_gravel": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Suspicious Gravel",
-                        "fr": "Gravier Suspect"
-                    }
-                },
-                "suspicious_sand": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Suspicious Sand",
-                        "fr": "Sable Suspect"
-                    }
-                }
-            },
-            "Mythic_Age": {
-                "bamboo_wall_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Wall Hanging Sign",
-                        "fr": "Pancarte Murale Suspendue en Bambou"
-                    }
-                },
-                "warped_wall_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Warped Wall Hanging Sign",
-                        "fr": "Pancarte Murale Suspendue Biscornue"
-                    }
-                },
-                "bamboo_wall_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Wall Sign",
-                        "fr": "Pancarte Murale en Bambou"
-                    }
-                },
-                "crimson_wall_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Crimson Wall Hanging Sign",
-                        "fr": "Pancarte Murale Suspendue Carmin"
-                    }
-                },
-                "jungle_wall_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Jungle Wall Hanging Sign",
-                        "fr": "Pancarte Murale Suspendue en Acajou"
-                    }
-                },
-                "acacia_wall_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Acacia Wall Hanging Sign",
-                        "fr": "Pancarte Murale Suspendue en Acacia"
-                    }
-                },
-                "dark_oak_wall_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Dark Oak Wall Hanging Sign",
-                        "fr": "Pancarte Murale Suspendue en Chene Noir"
-                    }
-                },
-                "spruce_wall_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Spruce Wall Hanging Sign",
-                        "fr": "Pancarte Murale Suspendue en Sapin"
-                    }
-                },
-                "birch_wall_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Birch Wall Hanging Sign",
-                        "fr": "Pancarte Murale Suspendue en Bouleau"
-                    }
-                },
-                "cherry_wall_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Wall Sign",
-                        "fr": "Pancarte Murale en Cerisier"
-                    }
-                },
-                "mangrove_wall_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Mangrove Wall Hanging Sign",
-                        "fr": "Pancarte Murale Suspendue en Paletuvier"
-                    }
-                },
-                "oak_wall_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Oak Wall Hanging Sign",
-                        "fr": "Pancarte Murale Suspendue en Chene"
-                    }
-                },
-                "cherry_wall_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Wall Hanging Sign",
-                        "fr": "Pancarte Murale Suspendue en Cerisier"
-                    }
-                }
-            }
-        },
-        "Items": {
-            "Classic_Age": {
-                "brush": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Brush",
-                        "fr": "Pinceau"
-                    }
-                },
-                "*_pottery_sherd": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Any Pottery Sherd",
-                        "fr": "Tesson de Poterie"
-                    }
-                }
-            },
-            "Mythic_Age": {
-                "cherry_boat": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Boat",
-                        "fr": "Bateau en Cerisier"
-                    }
-                },
-                "*_smithing_template": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Any Smithing Template",
-                        "fr": "Modele de Forge"
-                    }
-                },
-                "bamboo_chest_raft": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Chest Raft",
-                        "fr": "Radeau de Stockage en Bambou"
-                    }
-                },
-                "bamboo_raft": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Raft",
-                        "fr": "Radeau en Bambou"
-                    }
-                },
-                "cherry_chest_boat": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Chest Boat",
-                        "fr": "Bateau de Stockage en Cerisier"
-                    }
-                }
-            }
-        },
-        "Both": {
-            "Classic_Age": {"decorated_pot": {
-                "Sbtt": false,
-                "Langs": {
-                    "en": "Decorated Pot",
-                    "fr": "Vase Decore"
-                }
-            }},
-            "Mythic_Age": {
-                "calibrated_sculk_sensor": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Calibrated Sculk Sensor",
-                        "fr": "Capteur Sculk Calibre"
-                    }
-                },
-                "bamboo_slab": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Slab",
-                        "fr": "Dalle en Bambou"
-                    }
-                },
-                "cherry_fence": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Fence",
-                        "fr": "Barriere en Cerisier"
-                    }
-                },
-                "spruce_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Spruce Hanging Sign",
-                        "fr": "Pancarte Suspendue en Sapin"
-                    }
-                },
-                "bamboo_door": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Door",
-                        "fr": "Porte en Bambou"
-                    }
-                },
-                "bamboo_block": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Block",
-                        "fr": "Bloc de Bambou"
-                    }
-                },
-                "bamboo_mosaic_slab": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Mosaic Slab",
-                        "fr": "Dalle en Mosaique de Bambou"
-                    }
-                },
-                "oak_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Oak Hanging Sign",
-                        "fr": "Pancarte Suspendue en Chene"
-                    }
-                },
-                "stripped_bamboo_block": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Stripped Bamboo Block",
-                        "fr": "Bloc de Bambou Ecorce"
-                    }
-                },
-                "bamboo_button": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Button",
-                        "fr": "Bouton en Bambou"
-                    }
-                },
-                "bamboo_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Sign",
-                        "fr": "Pancarte en Bambou"
-                    }
-                },
-                "bamboo_planks": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Planks",
-                        "fr": "Planches de Bambou"
-                    }
-                },
-                "bamboo_mosaic_stairs": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Mosaic Stairs",
-                        "fr": "Escalier en Mosaique de Bambou"
-                    }
-                },
-                "jungle_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Jungle Hanging Sign",
-                        "fr": "Pancarte Suspendue en Acajou"
-                    }
-                },
-                "cherry_wood": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Wood",
-                        "fr": "Bois de Cerisier"
-                    }
-                },
-                "pink_petals": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Pink Petals",
-                        "fr": "Petales Roses"
-                    }
-                },
-                "crimson_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Crimson Hanging Sign",
-                        "fr": "Pancarte Suspendue Carmin"
-                    }
-                },
-                "cherry_stairs": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Stairs",
-                        "fr": "Escaliers en Cerisier"
-                    }
-                },
-                "mangrove_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Mangrove Hanging Sign",
-                        "fr": "Pancarte Suspendue en Paletuvier"
-                    }
-                },
-                "cherry_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Sign",
-                        "fr": "Pancarte en Cerisier"
-                    }
-                },
-                "cherry_slab": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Slab",
-                        "fr": "Dalle en Cerisier"
-                    }
-                },
-                "bamboo_fence_gate": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Fence Gate",
-                        "fr": "Portillon en Bambou"
-                    }
-                },
-                "stripped_cherry_log": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Stripped Cherry Log",
-                        "fr": "Buche de Cerisier Ecorce"
-                    }
-                },
-                "acacia_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Acacia Hanging Sign",
-                        "fr": "Pancarte Suspendue en Acacia"
-                    }
-                },
-                "cherry_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Hanging Sign",
-                        "fr": "Pancarte Suspendue en Cerisier"
-                    }
-                },
-                "bamboo_pressure_plate": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Pressure Plate",
-                        "fr": "Plaque de Pression en Bambou"
-                    }
-                },
-                "cherry_door": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Door",
-                        "fr": "Porte en Cerisier"
-                    }
-                },
-                "cherry_trapdoor": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Trapdoor",
-                        "fr": "Trappe en Cerisier"
-                    }
-                },
-                "bamboo_fence": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Fence",
-                        "fr": "Barriere en Bambou"
-                    }
-                },
-                "cherry_button": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Button",
-                        "fr": "Bouton en Cerisier"
-                    }
-                },
-                "cherry_leaves": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Leaves",
-                        "fr": "Feuilles de Cerisier"
-                    }
-                },
-                "cherry_pressure_plate": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Pressure Plate",
-                        "fr": "Plaque de Pression en Cerisier"
-                    }
-                },
-                "birch_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Birch Hanging Sign",
-                        "fr": "Pancarte Suspendue en Bouleau"
-                    }
-                },
-                "bamboo_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Hanging Sign",
-                        "fr": "Pancarte Suspendue en Bambou"
-                    }
-                },
-                "cherry_sapling": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Sapling",
-                        "fr": "Pousse de Cerisier"
-                    }
-                },
-                "dark_oak_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Dark Oak Hanging Sign",
-                        "fr": "Pancarte Suspendue en Chene Noir"
-                    }
-                },
-                "cherry_planks": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Planks",
-                        "fr": "Planches de Cerisier"
-                    }
-                },
-                "warped_hanging_sign": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Warped Hanging Sign",
-                        "fr": "Pancarte Suspendue Biscornue"
-                    }
-                },
-                "bamboo_trapdoor": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Trapdoor",
-                        "fr": "Trappe en Bambou"
-                    }
-                },
-                "cherry_log": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Log",
-                        "fr": "Buche de Cerisier"
-                    }
-                },
-                "bamboo_mosaic": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Mosaic",
-                        "fr": "Mosaique de Bambou"
-                    }
-                },
-                "bamboo_stairs": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Bamboo Stairs",
-                        "fr": "Escaliers en Bambou"
-                    }
-                },
-                "cherry_fence_gate": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Cherry Fence Gate",
-                        "fr": "Portillon en Cerisier"
-                    }
-                },
-                "stripped_cherry_wood": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Stripped Cherry Wood",
-                        "fr": "Bois de Cerisier Ecorce"
-                    }
-                }
-            },
-            "Archaic_Age": {"chiseled_bookshelf": {
-                "Sbtt": false,
-                "Langs": {
-                    "en": "Chiseled Bookshelf",
-                    "fr": "Bibliotheque Sculptee"
-                }
-            }}
         }
     },
     "1.20.3": {"Both": {"Classic_Age": {"short_grass": {

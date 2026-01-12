@@ -61,7 +61,7 @@ public class VersionManager {
 	 * @return the version as a String
 	 */
 	public static String getVersion() {
-		return Bukkit.getBukkitVersion().substring(0, 6);
+		return Bukkit.getBukkitVersion().substring(0, Bukkit.getBukkitVersion().indexOf("-"));
 	}
 	
 	/**

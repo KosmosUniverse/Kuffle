@@ -1,9 +1,6 @@
 package fr.kosmosuniverse.kuffle;
 
-import fr.kosmosuniverse.kuffle.core.Config;
-import fr.kosmosuniverse.kuffle.core.LangManager;
-import fr.kosmosuniverse.kuffle.core.LogManager;
-import fr.kosmosuniverse.kuffle.core.Party;
+import fr.kosmosuniverse.kuffle.core.*;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 

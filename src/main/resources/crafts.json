@@ -136,32 +136,16 @@
       }
     }
   },
-  "9" : {
-    "Name" : "ChainmailBoots",
+  "6" : {
+    "Name" : "ChainmailHelmet",
     "Type" : "WorkBench",
-    "Shape" : "RRR-CRC-CRC",
+    "Shape" : "CCC-CRC-RRR",
     "Version" : "1.16",
+    "RemVersion" : "1.21.11",
     "Mandatory" : true,
     "KuffleType" : "ITEMS",
     "Result" : {
-      "Type" : "CHAINMAIL_BOOTS",
-      "Amount" : 1
-    },
-    "Ingredients" : {
-      "C" : {
-        "Type" : "CHAIN"
-      }
-    }
-  },
-  "8" : {
-    "Name" : "ChainmailLeggings",
-    "Type" : "WorkBench",
-    "Shape" : "CCC-CRC-CRC",
-    "Version" : "1.16",
-    "Mandatory" : true,
-    "KuffleType" : "ITEMS",
-    "Result" : {
-      "Type" : "CHAINMAIL_LEGGINGS",
+      "Type" : "CHAINMAIL_HELMET",
       "Amount" : 1
     },
     "Ingredients" : {
@@ -175,6 +159,7 @@
     "Type" : "WorkBench",
     "Shape" : "CRC-CCC-CCC",
     "Version" : "1.16",
+    "RemVersion" : "1.21.11",
     "Mandatory" : true,
     "KuffleType" : "ITEMS",
     "Result" : {
@@ -187,15 +172,16 @@
       }
     }
   },
-  "6" : {
-    "Name" : "ChainmailHelmet",
+  "8" : {
+    "Name" : "ChainmailLeggings",
     "Type" : "WorkBench",
-    "Shape" : "CCC-CRC-RRR",
+    "Shape" : "CCC-CRC-CRC",
     "Version" : "1.16",
+    "RemVersion" : "1.21.11",
     "Mandatory" : true,
     "KuffleType" : "ITEMS",
     "Result" : {
-      "Type" : "CHAINMAIL_HELMET",
+      "Type" : "CHAINMAIL_LEGGINGS",
       "Amount" : 1
     },
     "Ingredients" : {
@@ -204,20 +190,38 @@
       }
     }
   },
-  "12" : {
-    "Name" : "DiamondqArmor",
+  "9" : {
+    "Name" : "ChainmailBoots",
+    "Type" : "WorkBench",
+    "Shape" : "RRR-CRC-CRC",
+    "Version" : "1.16",
+    "RemVersion" : "1.21.11",
+    "Mandatory" : true,
+    "KuffleType" : "ITEMS",
+    "Result" : {
+      "Type" : "CHAINMAIL_BOOTS",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "C" : {
+        "Type" : "CHAIN"
+      }
+    }
+  },
+  "10" : {
+    "Name" : "IronHorseArmor",
     "Type" : "WorkBench",
     "Shape" : "RRD-DWD-DDD",
     "Version" : "1.15",
     "Mandatory" : true,
     "KuffleType" : "ITEMS",
     "Result" : {
-      "Type" : "DIAMOND_HORSE_ARMOR",
+      "Type" : "IRON_HORSE_ARMOR",
       "Amount" : 1
     },
     "Ingredients" : {
       "D" : {
-        "Type" : "DIAMOND"
+        "Type" : "IRON_INGOT"
       },
       "W" : {
         "Type" : "WHITE_WOOL,BLACK_WOOL,GRAY_WOOL,LIGHT_GRAY_WOOL,ORANGE_WOOL,PURPLE_WOOL,RED_WOOL,YELLOW_WOOL,BLUE_WOOL,BROWN_WOOL,CYAN_WOOL,GREEN_WOOL,LIGHT_BLUE_WOOL,LIME_WOOL,MAGENTA_WOOL,PINK_WOOL",
@@ -246,20 +250,20 @@
       }
     }
   },
-  "10" : {
-    "Name" : "IronHorseArmor",
+  "12" : {
+    "Name" : "DiamondHorseArmor",
     "Type" : "WorkBench",
     "Shape" : "RRD-DWD-DDD",
     "Version" : "1.15",
     "Mandatory" : true,
     "KuffleType" : "ITEMS",
     "Result" : {
-      "Type" : "IRON_HORSE_ARMOR",
+      "Type" : "DIAMOND_HORSE_ARMOR",
       "Amount" : 1
     },
     "Ingredients" : {
       "D" : {
-        "Type" : "IRON_INGOT"
+        "Type" : "DIAMOND"
       },
       "W" : {
         "Type" : "WHITE_WOOL,BLACK_WOOL,GRAY_WOOL,LIGHT_GRAY_WOOL,ORANGE_WOOL,PURPLE_WOOL,RED_WOOL,YELLOW_WOOL,BLUE_WOOL,BROWN_WOOL,CYAN_WOOL,GREEN_WOOL,LIGHT_BLUE_WOOL,LIME_WOOL,MAGENTA_WOOL,PINK_WOOL",
@@ -1471,6 +1475,595 @@
       },
       "D" : {
         "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "76" : {
+    "Name" : "ExposedCopperChain",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "EXPOSED_COPPER_CHAIN",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_CHAIN"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "77" : {
+    "Name" : "WeatheredCopperChain",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "WEATHERED_COPPER_CHAIN",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_CHAIN"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "C" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "78" : {
+    "Name" : "OxidizedCopperChain",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "OXIDIZED_COPPER_CHAIN",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_CHAIN"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "C" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "D" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "79" : {
+    "Name" : "ExposedCopperChest",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "EXPOSED_COPPER_CHEST",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_CHEST"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "80" : {
+    "Name" : "WeatheredCopperChest",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "WEATHERED_COPPER_CHEST",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_CHEST"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "C" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "81" : {
+    "Name" : "OxidizedCopperChest",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "OXIDIZED_COPPER_CHEST",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_CHEST"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "C" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "D" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "82" : {
+    "Name" : "CopperGolem",
+    "Type" : "WorkBench",
+    "Shape" : "NPN-NCN-NCN",
+    "Version" : "1.21.9",
+    "Mandatory" : true,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "COPPER_GOLEM_STATUE",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "C" : {
+        "Type" : "COPPER_BLOCK"
+      },
+      "P" : {
+        "Type" : "CARVED_PUMPKIN"
+      }
+    }
+  },
+  "83" : {
+    "Name" : "ExposedCopperGolem",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "EXPOSED_COPPER_GOLEM_STATUE",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_GOLEM_STATUE"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "84" : {
+    "Name" : "WeatheredCopperGolem",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "WEATHERED_COPPER_GOLEM_STATUE",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_GOLEM_STATUE"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "C" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "85" : {
+    "Name" : "OxidizedCopperGolem",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "OXIDIZED_COPPER_GOLEM_STATUE",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_GOLEM_STATUE"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "C" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "D" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "86" : {
+    "Name" : "ExposedCopperLantern",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "EXPOSED_COPPER_LANTERN",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_LANTERN"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "87" : {
+    "Name" : "WeatheredCopperLantern",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "WEATHERED_COPPER_LANTERN",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_LANTERN"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "C" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "88" : {
+    "Name" : "OxidizedCopperLantern",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "OXIDIZED_COPPER_LANTERN",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_LANTERN"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "C" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "D" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "89" : {
+    "Name" : "ExposedLightningRod",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "EXPOSED_LIGHTNING_ROD",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "LIGHTNING_ROD"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "90" : {
+    "Name" : "WeatheredLightningRod",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "WEATHERED_LIGHTNING_ROD",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "LIGHTNING_ROD"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "C" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "91" : {
+    "Name" : "OxidizedLightningRod",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "OXIDIZED_LIGHTNING_ROD",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "LIGHTNING_ROD"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "C" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "D" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "92" : {
+    "Name" : "ExposedCopperBars",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "EXPOSED_COPPER_BARS",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_BARS"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "93" : {
+    "Name" : "WeatheredCopperBars",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "WEATHERED_COPPER_BARS",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_BARS"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "C" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "94" : {
+    "Name" : "OxidizedCopperBars",
+    "Type" : "WorkBench",
+    "Version" : "1.21.9",
+    "Mandatory" : false,
+    "KuffleType" : "BOTH",
+    "Result" : {
+      "Type" : "OXIDIZED_COPPER_BARS",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "A" : {
+        "Type" : "COPPER_BARS"
+      },
+      "B" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "C" : {
+        "Type" : "WATER_BUCKET"
+      },
+      "D" : {
+        "Type" : "WATER_BUCKET"
+      }
+    }
+  },
+  "95" : {
+    "Name" : "CopperHorseArmor",
+    "Type" : "WorkBench",
+    "Shape" : "RRD-DWD-DDD",
+    "Version" : "1.21.9",
+    "Mandatory" : true,
+    "KuffleType" : "ITEMS",
+    "Result" : {
+      "Type" : "COPPER_HORSE_ARMOR",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "D" : {
+        "Type" : "COPPER_INGOT"
+      },
+      "W" : {
+        "Type" : "WHITE_WOOL,BLACK_WOOL,GRAY_WOOL,LIGHT_GRAY_WOOL,ORANGE_WOOL,PURPLE_WOOL,RED_WOOL,YELLOW_WOOL,BLUE_WOOL,BROWN_WOOL,CYAN_WOOL,GREEN_WOOL,LIGHT_BLUE_WOOL,LIME_WOOL,MAGENTA_WOOL,PINK_WOOL",
+        "Name" : "Any Wool"
+      }
+    }
+  },
+  "96" : {
+    "Name" : "CopperNautilusArmor",
+    "Type" : "WorkBench",
+    "Shape" : "III-IWI-III",
+    "Version" : "1.21.11",
+    "Mandatory" : true,
+    "KuffleType" : "ITEMS",
+    "Result" : {
+      "Type" : "COPPER_NAUTILUS_ARMOR",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "I" : {
+        "Type" : "COPPER_INGOT"
+      },
+      "W" : {
+        "Type" : "WHITE_WOOL,BLACK_WOOL,GRAY_WOOL,LIGHT_GRAY_WOOL,ORANGE_WOOL,PURPLE_WOOL,RED_WOOL,YELLOW_WOOL,BLUE_WOOL,BROWN_WOOL,CYAN_WOOL,GREEN_WOOL,LIGHT_BLUE_WOOL,LIME_WOOL,MAGENTA_WOOL,PINK_WOOL",
+        "Name" : "Any Wool"
+      }
+    }
+  },
+  "97" : {
+    "Name" : "IronNautilusArmor",
+    "Type" : "WorkBench",
+    "Shape" : "III-IWI-III",
+    "Version" : "1.21.11",
+    "Mandatory" : true,
+    "KuffleType" : "ITEMS",
+    "Result" : {
+      "Type" : "IRON_NAUTILUS_ARMOR",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "I" : {
+        "Type" : "IRON_INGOT"
+      },
+      "W" : {
+        "Type" : "WHITE_WOOL,BLACK_WOOL,GRAY_WOOL,LIGHT_GRAY_WOOL,ORANGE_WOOL,PURPLE_WOOL,RED_WOOL,YELLOW_WOOL,BLUE_WOOL,BROWN_WOOL,CYAN_WOOL,GREEN_WOOL,LIGHT_BLUE_WOOL,LIME_WOOL,MAGENTA_WOOL,PINK_WOOL",
+        "Name" : "Any Wool"
+      }
+    }
+  },
+  "98" : {
+    "Name" : "GoldenNautilusArmor",
+    "Type" : "WorkBench",
+    "Shape" : "III-IWI-III",
+    "Version" : "1.21.11",
+    "Mandatory" : true,
+    "KuffleType" : "ITEMS",
+    "Result" : {
+      "Type" : "GOLDEN_NAUTILUS_ARMOR",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "I" : {
+        "Type" : "GOLD_INGOT"
+      },
+      "W" : {
+        "Type" : "WHITE_WOOL,BLACK_WOOL,GRAY_WOOL,LIGHT_GRAY_WOOL,ORANGE_WOOL,PURPLE_WOOL,RED_WOOL,YELLOW_WOOL,BLUE_WOOL,BROWN_WOOL,CYAN_WOOL,GREEN_WOOL,LIGHT_BLUE_WOOL,LIME_WOOL,MAGENTA_WOOL,PINK_WOOL",
+        "Name" : "Any Wool"
+      }
+    }
+  },
+  "99" : {
+    "Name" : "DiamondNautilusArmor",
+    "Type" : "WorkBench",
+    "Shape" : "III-IWI-III",
+    "Version" : "1.21.11",
+    "Mandatory" : true,
+    "KuffleType" : "ITEMS",
+    "Result" : {
+      "Type" : "DIAMOND_NAUTILUS_ARMOR",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "I" : {
+        "Type" : "DIAMOND"
+      },
+      "W" : {
+        "Type" : "WHITE_WOOL,BLACK_WOOL,GRAY_WOOL,LIGHT_GRAY_WOOL,ORANGE_WOOL,PURPLE_WOOL,RED_WOOL,YELLOW_WOOL,BLUE_WOOL,BROWN_WOOL,CYAN_WOOL,GREEN_WOOL,LIGHT_BLUE_WOOL,LIME_WOOL,MAGENTA_WOOL,PINK_WOOL",
+        "Name" : "Any Wool"
+      }
+    }
+  },
+  "100" : {
+    "Name" : "ChainmailHelmet",
+    "Type" : "WorkBench",
+    "Shape" : "CCC-CRC-RRR",
+    "Version" : "1.21.11",
+    "Mandatory" : true,
+    "KuffleType" : "ITEMS",
+    "Result" : {
+      "Type" : "CHAINMAIL_HELMET",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "C" : {
+        "Type" : "IRON_CHAIN"
+      }
+    }
+  },
+  "101" : {
+    "Name" : "ChainmailChestplate",
+    "Type" : "WorkBench",
+    "Shape" : "CRC-CCC-CCC",
+    "Version" : "1.21.11",
+    "Mandatory" : true,
+    "KuffleType" : "ITEMS",
+    "Result" : {
+      "Type" : "CHAINMAIL_CHESTPLATE",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "C" : {
+        "Type" : "IRON_CHAIN"
+      }
+    }
+  },
+  "102" : {
+    "Name" : "ChainmailLeggings",
+    "Type" : "WorkBench",
+    "Shape" : "CCC-CRC-CRC",
+    "Version" : "1.21.11",
+    "Mandatory" : true,
+    "KuffleType" : "ITEMS",
+    "Result" : {
+      "Type" : "CHAINMAIL_LEGGINGS",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "C" : {
+        "Type" : "IRON_CHAIN"
+      }
+    }
+  },
+  "103" : {
+    "Name" : "ChainmailBoots",
+    "Type" : "WorkBench",
+    "Shape" : "RRR-CRC-CRC",
+    "Version" : "1.21.11",
+    "Mandatory" : true,
+    "KuffleType" : "ITEMS",
+    "Result" : {
+      "Type" : "CHAINMAIL_BOOTS",
+      "Amount" : 1
+    },
+    "Ingredients" : {
+      "C" : {
+        "Type" : "IRON_CHAIN"
       }
     }
   }
