@@ -265,7 +265,11 @@ public class TargetManager {
 		setupFirstRow(inv, true, hasNext);
 		
 		for (String target : tmpAgeTargets) {
-			inv.addItem(getMaterial(target));
+			try {
+				inv.addItem(getMaterial(target));
+			} catch (Exception e) {
+				inv.addItem(ItemMaker.newItem(Material.BARRIER).addName(target).getItem());
+			}
 			
 			if (invCnt == 53) {
 				invCnt = 9;

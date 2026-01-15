@@ -31,14 +31,14 @@ public class KuffleSetType extends AKuffleCommand {
 			type = KuffleType.Type.valueOf(args[0].toUpperCase());
 		} catch (IllegalArgumentException e) {
 			LogManager.getInstanceSystem().writeMsg(player, "[ERROR] Unknown Kuffle Type");
-			throw new KuffleCommandFalseException();
+			return false;
 		}
 		
 		if (Party.getInstance().getType().getType() == type) {
 			LogManager.getInstanceSystem().writeMsg(player, "Kuffle Type is already set as [" + type.name() + "]");
-			throw new KuffleCommandFalseException();
+			return true;
 		}
-		
+
 		if (confirm == null) {				
 			firstSubmit(player, name+args[0]);
 		} else {
