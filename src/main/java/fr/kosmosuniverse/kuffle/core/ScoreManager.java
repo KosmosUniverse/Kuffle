@@ -108,7 +108,7 @@ public class ScoreManager {
 			age = null;
 		}
 
-		if (targets.getDisplaySlot() != null) {
+		if (targets != null && targets.getDisplaySlot() != null) {
 			scoreboard.clearSlot(targets.getDisplaySlot());
 		}
 
@@ -125,9 +125,5 @@ public class ScoreManager {
 			Objects.requireNonNull(Bukkit.getPlayer(name)).setPlayerListName(ChatColor.WHITE + name);
 			data.getScore().setScore(1);
 		});
-	}
-
-    public static Score getPlayerScore(String playerName) {
-		return targets.getScore(playerName);
 	}
 }

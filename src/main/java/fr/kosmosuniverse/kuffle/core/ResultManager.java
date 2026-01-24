@@ -15,6 +15,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 /**
@@ -165,6 +166,7 @@ public class ResultManager {
         }
 
         createTimesInv();
+        createTotalTimeInv();
     }
 
     private void createMainInv() {
@@ -181,6 +183,8 @@ public class ResultManager {
         }
 
         main.addItem(ItemMaker.newItem(Material.CLOCK).addName("Times Board").addTag("invname", "Times Board").getItem());
+
+        main.addItem(ItemMaker.newItem(Material.COMPASS).addName("Total Time Board").addTag("invname", "Total Time Board").getItem());
 
         invs.put("Party Results", main);
     }
@@ -205,7 +209,8 @@ public class ResultManager {
         invs.put(invName + " Board", cntInv);
 
         Inventory playerInv = Bukkit.createInventory(null, Utils.getNbInventoryRows(playerData.size()) + 9, "Player " + invName + " Ranks");
-        AtomicInteger aInt = new AtomicInteger(1);
+        AtomicInteger rank = new AtomicInteger(0);
+        AtomicInteger previousValue = new AtomicInteger(-1);
 
         setupFirstRow(playerInv, invName + " Board");
 
@@ -213,18 +218,22 @@ public class ResultManager {
                 .stream()
                 .sorted(Map.Entry.comparingByValue())
                 .forEach(e -> {
+                    int tmp = e.getValue() == previousValue.get() ? rank.get() : rank.incrementAndGet();
+
                     playerInv.addItem(ItemMaker.newItem(Utils.getHead(Bukkit.getPlayer(e.getKey())))
-                            .addName(aInt.get() + "# " + e.getKey())
+                            .addName(tmp + "# " + e.getKey())
                             .addLore(invName + " : " + e.getValue())
                             .getItem());
-                    aInt.incrementAndGet();
+
+                    previousValue.set(e.getValue());
                 });
 
         invs.put("Player " + invName + " Ranks", playerInv);
 
         if (rd.isTeam()) {
             Inventory teamInv = Bukkit.createInventory(null, Utils.getNbInventoryRows(teamData.size()) + 9, "Team " + invName + " Ranks");
-            aInt.set(1);
+            rank.set(0);
+            previousValue.set(-1);
 
             setupFirstRow(teamInv, invName + " Board");
 
@@ -232,11 +241,14 @@ public class ResultManager {
                     .stream()
                     .sorted(Map.Entry.comparingByValue())
                     .forEach(e -> {
+                        int tmp = e.getValue() == previousValue.get() ? rank.get() : rank.incrementAndGet();
+
                         teamInv.addItem(ItemMaker.newItem(Utils.getHead(Bukkit.getPlayer(e.getKey())))
-                                .addName(aInt.get() + "# " + e.getKey())
+                                .addName(tmp + "# " + e.getKey())
                                 .addLore(invName + " : " + e.getValue())
                                 .getItem());
-                        aInt.incrementAndGet();
+
+                        previousValue.set(e.getValue());
                     });
 
             invs.put("Team " + invName + " Ranks", teamInv);
@@ -380,7 +392,8 @@ public class ResultManager {
 
         setupFirstRow(inv, prevInvName + " Ages Times Board");
 
-        AtomicInteger aInt = new AtomicInteger(1);
+        AtomicInteger rank = new AtomicInteger(0);
+        AtomicLong previousValue = new AtomicLong(-1);
 
         datas.entrySet()
                 .stream()
@@ -388,11 +401,63 @@ public class ResultManager {
                 .entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue())
-                .forEach(e -> inv.addItem(ItemMaker.newItem(Utils.getHead(Bukkit.getPlayer(e.getKey())))
-                        .addName(aInt.getAndIncrement() + "# : " + e.getKey())
-                        .addLore("Time : " + (e.getValue() != Long.MAX_VALUE ? Utils.getTimeFromSec(e.getValue() / 1000) : "Abandoned"))
-                        .getItem()));
+                .forEach(e -> {
+                    int tmp = e.getValue() == previousValue.get() ? rank.get() : rank.incrementAndGet();
+
+                    inv.addItem(ItemMaker.newItem(Utils.getHead(Bukkit.getPlayer(e.getKey())))
+                            .addName(tmp + "# : " + e.getKey())
+                            .addLore("Time : " + (e.getValue() != Long.MAX_VALUE ? Utils.getTimeFromSec(e.getValue() / 1000) : "Abandoned"))
+                            .getItem());
+
+                    previousValue.set(e.getValue());
+                });
 
         invs.put(prevInvName + " " + ageName.replace("_", " ") + " Times", inv);
+    }
+
+    private void createTotalTimeInv() {
+        Inventory inv = Bukkit.createInventory(null, 18, "Total Time Board");
+
+        setupFirstRow(inv, "Party Results");
+
+        inv.addItem(ItemMaker.newItem(Material.PLAYER_HEAD)
+                .addName("Players Total Time")
+                .addTag("invname", "Players Total Time Board")
+                .getItem());
+
+        if (rd.isTeam()) {
+            inv.addItem(ItemMaker.newItem(Material.PLAYER_HEAD)
+                    .addName("Teams Total Time")
+                    .addTag("invname", "Teams Total Time Board")
+                    .getItem());
+        }
+
+        invs.put("Total Time Board", inv);
+
+        createTotalTimeSpecificInv("Players", rd.getPlayersTimes());
+        createTotalTimeSpecificInv("Teams", rd.getTeamTimes());
+    }
+
+    private void createTotalTimeSpecificInv(String invName, Map<String, Map<String, Long>> datas) {
+        Inventory totalTimeInv = Bukkit.createInventory(null, Utils.getNbInventoryRows(datas.size()) + 9, invName + " Total Time Board");
+        AtomicInteger rank = new AtomicInteger(0);
+        AtomicLong previousValue = new AtomicLong(-1);
+
+        setupFirstRow(totalTimeInv, "Total Time Board");
+
+        datas.forEach((name, times) -> {
+            long timeSum = times.containsValue(Long.MAX_VALUE) ? Long.MAX_VALUE : times.values().stream().mapToLong(l -> l).sum();
+
+            int tmp = previousValue.get() == timeSum ? rank.get() : rank.incrementAndGet();
+
+            totalTimeInv.addItem(ItemMaker.newItem(Utils.getHead(Bukkit.getPlayer(name)))
+                    .addName(tmp + "# : " + name)
+                    .addLore("Time : " + (timeSum != Long.MAX_VALUE ? Utils.getTimeFromSec(timeSum / 1000) : "Abandoned after " + Utils.getTimeFromSec(timeSum / 1000)))
+                    .getItem());
+
+            previousValue.set(timeSum);
+        });
+
+        invs.put(invName + " Total Time Board", totalTimeInv);
     }
 }
