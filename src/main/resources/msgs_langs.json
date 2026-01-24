@@ -507,6 +507,10 @@
         "en": "Game list was reseted.",
         "fr": "La liste de jeu a ete remise a zero."
     },
+    "TEAMS_FILE_MISSING": {
+        "en": "No teamconfig.json file present in Kuffle file.",
+        "fr": "Il n'y a pas de fichier teamconfig.json dans le dossier Kuffle"
+    },
     "ADD_CRAFTS": {
         "en": "Add %i custom crafts.",
         "fr": "Ajout de %i crafts custom."

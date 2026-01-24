@@ -123,7 +123,6 @@ public class Party {
             TeamManager.getInstance().clear();
         }
 
-        games.clear();
         clear();
     }
 

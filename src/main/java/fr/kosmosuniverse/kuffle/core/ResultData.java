@@ -129,4 +129,60 @@ public class ResultData implements Serializable {
             playersSbtt = (Map<String, Integer>) iStream.readObject();
         }
     }
+
+    public void printResult() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Results:\n");
+        sb.append("\t- isTeam : [").append(isTeam).append("]\n");
+        sb.append("\t- isSkip : [").append(isSkip).append("]\n");
+        sb.append("\t- isSbtt : [").append(isSbtt).append("]\n");
+        sb.append("\t- LastAge : [").append(lastAge).append("]\n");
+
+        if (isTeam) {
+            sb.append("\t- Teams :\n");
+            sb.append("\t\t- Teams size : [").append(teams.size()).append("]\n");
+            sb.append("\t\t- Teams Death : [").append(teamDeath).append("]\n");
+
+            if (isSkip) {
+                sb.append("\t\t- Teams Skip : [").append(teamSkip).append("]\n");
+            }
+
+            if (isSbtt) {
+                sb.append("\t\t- Teams Sbtt : [").append(teamSbtt).append("]\n");
+            }
+
+            sb.append("\t\t- Teams Times : \n");
+
+            teamTimes.forEach((teamName, times) -> {
+                sb.append("\t\t\t - [").append(teamName).append("]\n");
+
+                times.forEach((ageName, time) ->
+                    sb.append("\t\t\t\t - [").append(ageName).append("] : [").append(time).append("]\n"));
+            });
+        }
+
+        sb.append("\t- Players :\n");
+        sb.append("\t\t- Players size : [").append(playersTimes.size()).append("]\n");
+        sb.append("\t\t- Players Death : [").append(playersDeath).append("]\n");
+
+        if (isSkip) {
+            sb.append("\t\t- Players Skip : [").append(playersSkip).append("]\n");
+        }
+
+        if (isSbtt) {
+            sb.append("\t\t- Players Sbtt : [").append(playersSbtt).append("]\n");
+        }
+
+        sb.append("\t\t- Players Times : \n");
+
+        playersTimes.forEach((playerName, times) -> {
+            sb.append("\t\t\t - [").append(playerName).append("]\n");
+
+            times.forEach((ageName, time) ->
+                sb.append("\t\t\t\t - [").append(ageName).append("] : [").append(time).append("]\n"));
+        });
+
+        LogManager.getInstanceSystem().logSystemMsg(sb.toString());
+    }
 }

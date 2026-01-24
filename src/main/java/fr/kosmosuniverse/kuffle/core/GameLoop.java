@@ -37,9 +37,7 @@ public class GameLoop {
 						Party.getInstance().getGames().finishLast();
 					}
 
-					if (Config.getPrintTabAll()) {
-						Party.getInstance().getGames().printGameEnd();
-					}
+					Party.getInstance().getGames().processGameResults();
 
 					runnable.cancel();
 				}

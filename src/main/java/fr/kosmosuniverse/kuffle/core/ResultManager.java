@@ -60,21 +60,21 @@ public class ResultManager {
         rd.setSbtt(Config.getSBTT());
         rd.setLastAge(Config.getLastAge().getNumber());
 
-        if (Config.getTeam()) {
+        if (rd.isTeam()) {
             TeamManager.getInstance().getTeams().forEach(t -> {
                 rd.addTeam(t.getName(), t.getPlayers());
                 rd.addTeamDeath(t.getName(), games.entrySet().stream()
                         .filter(e -> t.getPlayers().contains(e.getKey()))
                         .mapToInt(e -> e.getValue().getDeathCount())
                         .sum());
-                if (Config.getSkip()) {
+                if (rd.isSkip()) {
                     rd.addTeamSkip(t.getName(), games.entrySet().stream()
                             .filter(e -> t.getPlayers().contains(e.getKey()))
                             .mapToInt(e -> e.getValue().getSkipCount())
                             .sum());
                 }
 
-                if (Config.getSBTT()) {
+                if (rd.isSbtt()) {
                     rd.addTeamSbtt(t.getName(), games.entrySet().stream()
                             .filter(e -> t.getPlayers().contains(e.getKey()))
                             .mapToInt(e -> e.getValue().getSbttCount())
@@ -91,11 +91,11 @@ public class ResultManager {
             rd.addPlayerTimes(key, value.getAgeTimes());
             rd.addPlayerDeath(key, value.getDeathCount());
 
-            if (Config.getSkip()) {
+            if (rd.isSkip()) {
                 rd.addPlayerSkip(key, value.getSkipCount());
             }
 
-            if (Config.getSBTT()) {
+            if (rd.isSbtt()) {
                 rd.addPlayerSbtt(key, value.getSkipCount());
             }
         });
@@ -130,9 +130,11 @@ public class ResultManager {
             LogManager.getInstanceSystem().logSystemMsg("Cannot load Results.");
             return false;
         } else {
-            //printResults();
-
-            createInventories();
+            try {
+                createInventories();
+            } catch (Exception ignored) {
+                rd.printResult();
+            }
             LogManager.getInstanceSystem().logSystemMsg("Results data loaded.");
             return true;
         }
@@ -141,7 +143,7 @@ public class ResultManager {
     private Map<String, Long> getTeamTimesFromPlayerTimes(Map<String, Map<String, Long>> playersAgeTimes) {
         Map<String, Long> result = new HashMap<>();
 
-        for (AtomicInteger i = new AtomicInteger(0); i.get() < Config.getLastAge().getNumber(); i.incrementAndGet()) {
+        for (AtomicInteger i = new AtomicInteger(0); i.get() <= rd.getLastAge(); i.incrementAndGet()) {
             result.put(AgeManager.getAgeByNumber(i.get()).getName(), playersAgeTimes.values().stream()
                     .mapToLong(stringLongMap -> stringLongMap.get(AgeManager.getAgeByNumber(i.get()).getName()))
                     .max().orElse(-1));

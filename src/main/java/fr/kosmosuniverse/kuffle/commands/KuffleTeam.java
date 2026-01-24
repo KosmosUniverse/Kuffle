@@ -95,14 +95,16 @@ public class KuffleTeam extends AKuffleCommand {
         }
 
         try {
-            TeamManager.getInstance().loadTeamsConfig(player, KuffleMain.getInstance().getDataFolder() + File.separator + "teamconfig.json");
+            boolean ret = TeamManager.getInstance().loadTeamsConfig(player, KuffleMain.getInstance().getDataFolder() + File.separator + "teamconfig.json");
+
+            if (ret) {
+                LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAMS_LOADED", Config.getLang()));
+            }
         } catch (IOException e) {
             Utils.logException(e);
             error = LangManager.getMsgLang("TEAMS_LOAD_FAILED", Config.getLang());
             return false;
         }
-
-        LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAMS_LOADED", Config.getLang()));
 
         return true;
     }

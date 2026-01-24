@@ -153,7 +153,7 @@ public final class Utils {
 	public static ItemStack getHead(@Nullable Player player) {
 		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
 
-		if (player == null) {
+		if (player == null || !KuffleMain.getInstance().getServer().getOnlineMode()) {
 			return item;
 		}
 

@@ -9,7 +9,7 @@ import fr.kosmosuniverse.kuffle.core.*;
  */
 public class KuffleResults extends AKuffleCommand {
 	public KuffleResults() {
-		super("k-results", true, null, 0, 1, false);
+		super("k-results", null, null, 0, 1, false);
 	}
 
 	@Override

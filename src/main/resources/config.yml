@@ -1,7 +1,5 @@
 game_settings:
-   print_player_tab:
-      for_you: true # If True, it will print end game tab at least for the player that finished, Default: True
-      for_all_players: true # If True, it will print the end game tab for all players in the game, Default: True
+   print_player_tab: true # If True, it will print end game tab at least for the player that finished, Default: True
    end_game_when_one_remains: false # If True, the game ends if only one player remains (do not enable if the game contains only one player), Default: False
    spreadplayers:
       enable: false # True: when start the game, spread players., Default: False

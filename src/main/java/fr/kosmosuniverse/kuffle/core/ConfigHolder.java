@@ -27,7 +27,6 @@ public class ConfigHolder implements Serializable {
 	private boolean duoMode;
 	private boolean sbttMode;
 	private boolean printTab;
-	private boolean printTabAll;
 	private boolean endOne;
 	private boolean passiveAll;
 	private boolean passiveTeam;
@@ -71,7 +70,6 @@ public class ConfigHolder implements Serializable {
 		duoMode = config.duoMode;
 		sbttMode = config.sbttMode;
 		printTab = config.printTab;
-		printTabAll = config.printTabAll;
 		endOne = config.endOne;
 		passiveAll = config.passiveAll;
 		passiveTeam = config.passiveTeam;

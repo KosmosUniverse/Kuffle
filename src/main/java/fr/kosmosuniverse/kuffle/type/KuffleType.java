@@ -191,8 +191,7 @@ public abstract class KuffleType {
 		}
 		
 		xpActivables = new HashMap<>();
-		
-		ScoreManager.setupScores(getType());
+
 		Utils.setupLists();
 		
 		Objects.requireNonNull(plugin.getCommand("k-agetargets")).setExecutor(new KuffleAgeTargets());

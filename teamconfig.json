@@ -1,0 +1,9 @@
+{
+	"teamName1" : {
+		"color" : "",
+		"players" : [
+			"playerName1",
+			"playerName2"
+		]
+	}
+}

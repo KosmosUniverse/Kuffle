@@ -699,9 +699,9 @@ public class Games {
     }
 
     /**
-     * Logs and Prints game end result tab
+     * Save Game results and create inventories
      */
-    public void printGameEnd() {
+    public void processGameResults() {
         ResultManager.getInstance().saveGameResults(games);
         ResultManager.getInstance().createInventories();
 

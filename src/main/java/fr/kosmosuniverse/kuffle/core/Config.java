@@ -65,7 +65,6 @@ public class Config implements Serializable {
 		configElems.put("DOUBLE_MODE", (String b) -> setDoubleMode(Boolean.parseBoolean(b)));
 		configElems.put("SBTT_MODE", (String b) -> setSbttMode(Boolean.parseBoolean(b)));
 		configElems.put("PRINT_TAB", (String b) -> setPrintTab(Boolean.parseBoolean(b)));
-		configElems.put("PRINT_TAB_ALL", (String b) -> setPrintTabAll(Boolean.parseBoolean(b)));
 		configElems.put("END_WHEN_ONE", (String b) -> setEndOne(Boolean.parseBoolean(b)));
 		configElems.put("PASSIVE_ALL", (String b) -> setPassiveAll(Boolean.parseBoolean(b)));
 		configElems.put("PASSIVE_TEAM", (String b) -> setPassiveTeam(Boolean.parseBoolean(b)));
@@ -350,19 +349,12 @@ public class Config implements Serializable {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkFileEnd(FileConfiguration configFile) {
-		String persoTabConfig = "game_settings.print_player_tab.for_you";
-		String everyTabConfig = "game_settings.print_player_tab.for_all_players";
+		String persoTabConfig = "game_settings.print_player_tab";
 		String endOneConfig = "game_settings.end_game_when_one_remains";
 		
 		if (!configFile.contains(persoTabConfig)) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling game end tab display"));
 			configFile.set(persoTabConfig, true);
-		}
-		
-		if (!configFile.contains(everyTabConfig) &&
-				configFile.getBoolean(everyTabConfig)) {
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling game end tab for all display"));
-			configFile.set(everyTabConfig, true);
 		}
 		
 		if (!configFile.contains(endOneConfig)) {
@@ -387,8 +379,7 @@ public class Config implements Serializable {
 		configValues.setTeam(configFile.getBoolean("game_settings.team.enable"));
 		configValues.setTeamInv(configFile.getBoolean("game_settings.team.inv.enable"));
 		configValues.setSame(configFile.getBoolean("game_settings.modes.same"));
-		configValues.setPrintTab(configFile.getBoolean("game_settings.print_player_tab.for_you"));
-		configValues.setPrintTabAll(configFile.getBoolean("game_settings.print_player_tab.for_all_players"));
+		configValues.setPrintTab(configFile.getBoolean("game_settings.print_player_tab"));
 		configValues.setEndOne(configFile.getBoolean("game_settings.end_game_when_one_remains"));
 		configValues.setDuoMode(configFile.getBoolean("game_settings.modes.double"));
 		configValues.setSbttMode(configFile.getBoolean("game_settings.modes.sbtt.enable"));
@@ -439,7 +430,6 @@ public class Config implements Serializable {
 				+ ChatColor.BLUE + "  - Tips: " + ChatColor.GOLD + configValues.isTips() + "\n"
 				+ ChatColor.BLUE + "Level: " + ChatColor.GOLD + LevelManager.getInstance().getLevelByNumber(configValues.getLevel()).getName() + "\n"
 				+ ChatColor.BLUE + "Print tab at game end: " + ChatColor.GOLD + configValues.isPrintTab() + "\n"
-				+ ChatColor.BLUE + "Print tab for all players at game end: " + ChatColor.GOLD + configValues.isPrintTabAll() + "\n"
 				+ ChatColor.BLUE + "Game ends when remains one: " + ChatColor.GOLD + configValues.isEndOne() + "\n"
 				+ ChatColor.BLUE + "Passive: " + "\n"
 				+ ChatColor.BLUE + "  - All: " + ChatColor.GOLD + configValues.isPassiveAll() + "\n"
@@ -575,16 +565,7 @@ public class Config implements Serializable {
 	public static boolean getPrintTab() {
 		return configValues.isPrintTab();
 	}
-	
-	/**
-	 * Get print end game tab for all players enable value
-	 * 
-	 * @return if print tab all is enabled
-	 */
-	public static boolean getPrintTabAll() {
-		return configValues.isPrintTabAll();
-	}
-	
+
 	/**
 	 * Get end one enable value
 	 * 
@@ -892,16 +873,6 @@ public class Config implements Serializable {
 	 */
 	private static void setPrintTab(boolean configPrintTab) {
 		configValues.setPrintTab(configPrintTab);
-		setRet = true;
-	}
-	
-	/**
-	 * Set print tab all value
-	 * 
-	 * @param configPrintTabAll	value used to set printTabAll
-	 */
-	private static void setPrintTabAll(boolean configPrintTabAll) {
-		configValues.setPrintTabAll(configPrintTabAll);
 		setRet = true;
 	}
 	

@@ -2,6 +2,7 @@ package fr.kosmosuniverse.kuffle.core;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -373,8 +374,15 @@ public class TeamManager {
 		return team == null || !team.hasPlayer(player2);
 	}
 
-	public void loadTeamsConfig(Player player, String filePath) throws IOException {
-		try (InputStream is = Files.newInputStream(Paths.get(filePath))) {
+	public boolean loadTeamsConfig(Player player, String filePath) throws IOException {
+		Path path = Paths.get(filePath);
+
+		if (!Files.exists(path)) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TEAMS_FILE_MISSING", Config.getLang()));
+			return false;
+		}
+
+		try (InputStream is = Files.newInputStream(path)) {
 			String content = Utils.readFileContent(is);
 
 			if (content.isEmpty()) {
@@ -405,13 +413,19 @@ public class TeamManager {
 					String playerName = playersObj.getString(i.get());
 
 					if (Bukkit.getOnlinePlayers().stream().anyMatch(p -> p.getName().equals(playerName))) {
-						affectPlayer(teamName, playerName);
+						if (Party.getInstance().getPlayers().has(playerName)) {
+							affectPlayer(teamName, playerName);
+						} else {
+							LogManager.getInstanceSystem().writeMsg(player, "Player " + playerName + " is not in the list. Team loading continue without this player.");
+						}
 					} else {
 						LogManager.getInstanceSystem().writeMsg(player, "Player " + playerName + " is not connected");
 					}
 				}
 			}
 		}
+
+		return true;
 	}
 
 	public void saveTeamsConfig(String filePath) throws IOException {

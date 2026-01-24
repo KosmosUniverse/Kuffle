@@ -30,11 +30,13 @@ public class Ranks {
      */
     public void init() {
         nextGoodPlayerRank = 1;
-        nextBadPlayerRank = Config.getTeam() ? TeamManager.getInstance().getTeams().size() : Party.getInstance().getPlayers().getList().size();
+        nextBadPlayerRank = Party.getInstance().getPlayers().getList().size();
 
         Party.getInstance().getPlayers().getList().forEach(name -> playerRanks.put(name, -1));
 
         if (Config.getTeam()) {
+            nextGoodTeamRank = 1;
+            nextBadTeamRank = TeamManager.getInstance().getTeams().size();
             TeamManager.getInstance().getTeams().forEach(team -> teamRanks.put(team.getName(), -1));
         }
     }
@@ -114,6 +116,10 @@ public class Ranks {
      */
     public void clear() {
         playerRanks.clear();
+
+        if (Config.getTeam()) {
+            teamRanks.clear();
+        }
     }
 
     public Map<String, Integer> getNextRanks() {
