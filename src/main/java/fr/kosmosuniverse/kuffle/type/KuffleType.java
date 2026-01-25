@@ -42,6 +42,16 @@ public abstract class KuffleType {
 		ITEMS,
 		BLOCKS
 	}
+
+	public static boolean hasType(String type) {
+		try {
+			Type.valueOf(type);
+		} catch (IllegalArgumentException ignored) {
+			return false;
+		}
+
+		return true;
+	}
 	
 	/**
 	 * Constructor

@@ -14,7 +14,12 @@ import java.io.Serializable;
 @Setter
 public class ConfigHolder implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
+	// System config
+	private boolean logResults;
+	private String startType;
+
+	// Game config
 	private boolean tips;
 	private boolean saturation;
 	private boolean spread;
@@ -58,6 +63,9 @@ public class ConfigHolder implements Serializable {
 	 * @param config	the source config
 	 */
 	public ConfigHolder(ConfigHolder config) {
+		logResults = config.logResults;
+		startType = config.startType;
+
 		tips = config.tips;
 		saturation = config.saturation;
 		spread = config.spread;

@@ -10,7 +10,7 @@ commands:
       description: command to spawn multiBlock
       permission: inferno.flagrate
    k-config:
-      usage: /<command> [<key> <value>]*
+      usage: /<command> [<print> | <<key> <value>>+]
       description: command to see or change game configuration (change only for OP)
    k-results:
       usage : /<command> [<party result name>]

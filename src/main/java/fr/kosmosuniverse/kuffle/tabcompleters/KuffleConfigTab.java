@@ -6,10 +6,7 @@ import fr.kosmosuniverse.kuffle.utils.Utils;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 
@@ -55,15 +52,22 @@ public class KuffleConfigTab extends AKuffleTabCommand {
 	@Override
 	protected void runCommand() {
 		if (currentArgs.length == 0) {
+			ret.add("print");
 			ret.addAll(all.keySet());
 		} else if (currentArgs.length % 2 == 1) {
-			ret.addAll(all.keySet());
-			
-			for (String arg : currentArgs) {
-				ret.remove(arg);
+			if (currentArgs[0].equals("print")) {
+				ret = new ArrayList<>();
+			} else {
+				ret.addAll(all.keySet());
+
+				for (String arg : currentArgs) {
+					ret.remove(arg);
+				}
 			}
 		} else {
-			if (all.containsKey(currentArgs[currentArgs.length - 2])) {
+			if (currentArgs[0].equals("print")) {
+				ret = new ArrayList<>();
+			} else if (all.containsKey(currentArgs[currentArgs.length - 2])) {
 				ret.addAll(all.get(currentArgs[currentArgs.length - 2]));
 			}
 		}

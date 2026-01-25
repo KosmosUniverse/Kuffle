@@ -4,10 +4,7 @@ import fr.kosmosuniverse.kuffle.utils.FileUtils;
 import lombok.Getter;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -147,4 +144,11 @@ public class AgeManager {
 		return Collections.unmodifiableList(ages.stream().map(Age::getName).collect(Collectors.toList()));
 	}
 
+	public static List<String> getOrderedAgesNameList() {
+		return Collections.unmodifiableList(ages.stream()
+				.filter(age -> age.getNumber() != -1)
+				.sorted(Comparator.comparingInt(Age::getNumber))
+				.map(Age::getName)
+				.collect(Collectors.toList()));
+	}
 }

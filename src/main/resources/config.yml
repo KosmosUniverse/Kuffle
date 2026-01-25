@@ -1,3 +1,6 @@
+system_settings:
+   start_type: NO_TYPE # The game type to use at plugin start, it can be [NO_TYPE, ITEMS, BLOCKS], Default : NO_TYPE
+   log_game_results: False # If True, it will print game results in the server console, Default : False
 game_settings:
    print_player_tab: true # If True, it will print end game tab at least for the player that finished, Default: True
    end_game_when_one_remains: false # If True, the game ends if only one player remains (do not enable if the game contains only one player), Default: False

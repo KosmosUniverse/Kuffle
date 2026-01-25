@@ -7,9 +7,13 @@ import java.util.function.Consumer;
 
 import fr.kosmosuniverse.kuffle.KuffleMain;
 import fr.kosmosuniverse.kuffle.exceptions.KuffleConfigException;
+import fr.kosmosuniverse.kuffle.type.KuffleType;
 import fr.kosmosuniverse.kuffle.utils.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * 
@@ -32,17 +36,19 @@ public class Config implements Serializable {
 	/**
 	 * Error flag
 	 */
-	private static boolean setRet;
+	public static boolean setRet;
 	
 	/**
 	 * Error message
 	 */
-	private static String error;
+	public static String error;
 
 	/**
 	 * Map of config value and set method
 	 */
 	private static Map<String, Consumer<String>> configElems = null;
+
+	private static ConfigInventories configInvs;
 
 	/**
 	 * Constructor
@@ -52,6 +58,9 @@ public class Config implements Serializable {
 	public static void setupConfig(FileConfiguration configFile) {
 		configValues = new ConfigHolder();
 		configElems = new HashMap<>();
+
+		configElems.put("LOG_RESULTS", (String b) -> setLogResults(Boolean.parseBoolean(b)));
+		configElems.put("START_TYPE", Config::setStartType);
 
 		configElems.put("TIPS", (String b) -> setTips(Boolean.parseBoolean(b)));
 		configElems.put("SATURATION", (String b) -> setSaturation(Boolean.parseBoolean(b)));
@@ -129,6 +138,7 @@ public class Config implements Serializable {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkAndSetConfig(FileConfiguration configFile) {
+		checkFileSystem(configFile);
 		checkFilePersonal(configFile);
 		checkFileSpread(configFile);
 		checkFileModes(configFile);
@@ -137,6 +147,23 @@ public class Config implements Serializable {
 		checkFileEnd(configFile);
 		
 		setValues(configFile);
+	}
+
+	private static void checkFileSystem(FileConfiguration configFile) {
+		String startTypeConfig = "system_settings.start_type";
+		String logGameResultConfig = "system_settings.log_game_results";
+
+		if (!configFile.contains(startTypeConfig) ||
+				!KuffleType.hasType(configFile.getString(startTypeConfig))) {
+			configValues.setStartType("NO_TYPE");
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "start type"));
+			configFile.set(startTypeConfig, "NO_TYPE");
+		}
+
+		if (!configFile.contains(logGameResultConfig)) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "log game results"));
+			configFile.set(logGameResultConfig, false);
+		}
 	}
 	
 	private static void checkFilePersonal(FileConfiguration configFile) {
@@ -349,12 +376,12 @@ public class Config implements Serializable {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkFileEnd(FileConfiguration configFile) {
-		String persoTabConfig = "game_settings.print_player_tab";
+		String personalTabConfig = "game_settings.print_player_tab";
 		String endOneConfig = "game_settings.end_game_when_one_remains";
 		
-		if (!configFile.contains(persoTabConfig)) {
+		if (!configFile.contains(personalTabConfig)) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling game end tab display"));
-			configFile.set(persoTabConfig, true);
+			configFile.set(personalTabConfig, true);
 		}
 		
 		if (!configFile.contains(endOneConfig)) {
@@ -369,6 +396,9 @@ public class Config implements Serializable {
 	 * @param configFile	file that contains all config values
 	 */
 	private static void setValues(FileConfiguration configFile) {
+		configValues.setStartType(configFile.getString("system_settings.start_type"));
+		configValues.setLogResults(configFile.getBoolean("system_settings.log_game_results"));
+
 		configValues.setTips(configFile.getBoolean("game_settings.personals.tips"));
 		
 		configValues.setSaturation(configFile.getBoolean("game_settings.saturation"));
@@ -401,6 +431,9 @@ public class Config implements Serializable {
 		configValues.setLastAge(AgeManager.getAgeByName(configFile.getString("game_settings.last_age")).getNumber());
 		configValues.setLevel(LevelManager.getInstance().getLevelByName(configFile.getString("game_settings.level")).getNumber());
 		configValues.setSkipAge(AgeManager.getAgeByName(configFile.getString("game_settings.skip.age")).getNumber());
+
+		configInvs = new ConfigInventories();
+		configInvs.createInventories();
 	}
 	
 	/**
@@ -456,6 +489,27 @@ public class Config implements Serializable {
 	 */
 	public static void clear() {
 		configElems.clear();
+		ConfigInvTrigger.clear();
+		configInvs.clear();
+	}
+
+	public static boolean hasInv(String invName) {
+		return configInvs.getInv(invName) != null;
+	}
+
+	public static Inventory getMainInv() {
+		return configInvs.getMainInv();
+	}
+
+	public static Inventory getInv(String invName) {
+		return configInvs.getInv(invName);
+	}
+
+	public static void invTrigger(Player player, Inventory inv, ItemStack item, String trigger) {
+		setRet = true;
+		error = "";
+
+		ConfigInvTrigger.apply(trigger, player, inv, item);
 	}
 	
 	/**
@@ -466,7 +520,19 @@ public class Config implements Serializable {
 	public static void loadConfig(ConfigHolder config) {
 		configValues = new ConfigHolder(config);
 	}
-	
+
+	public static KuffleType.Type getStartType() {
+		return KuffleType.Type.valueOf(configValues.getStartType());
+	}
+
+	public static boolean getLogGameResult() {
+		return configValues.isLogResults();
+	}
+
+	public static boolean getTips() {
+		return configValues.isTips();
+	}
+
 	/**
 	 * Get saturation enable value
 	 * 
@@ -741,6 +807,21 @@ public class Config implements Serializable {
 		return configValues.getLang();
 	}
 	
+	public static void setStartType(String startType) {
+		if (KuffleType.hasType(startType)) {
+			configValues.setStartType(startType);
+			setRet = true;
+		} else {
+			error = "This type does not exists !";
+			setRet = false;
+		}
+	}
+	
+	public static void  setLogResults(boolean logResults) {
+		configValues.setLogResults(logResults);
+		setRet = true;
+	}
+	
 	/**
 	 * Set tips value
 	 * 
@@ -756,7 +837,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configSaturation	value used to set saturation
 	 */
-	private static void setSaturation(boolean configSaturation) {
+	public static void setSaturation(boolean configSaturation) {
 		configValues.setSaturation(configSaturation);
 		setRet = true;
 	}
@@ -766,7 +847,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configSpread	value used to set spread player
 	 */
-	private static void setSpreadplayers(boolean configSpread) {
+	public static void setSpreadplayers(boolean configSpread) {
 		configValues.setSpread(configSpread);
 		setRet = true;
 	}
@@ -776,7 +857,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configRewards	value used to set reward
 	 */
-	private static void setRewards(boolean configRewards) {
+	public static void setRewards(boolean configRewards) {
 		configValues.setRewards(configRewards);
 		setRet = true;
 	}
@@ -786,7 +867,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configSkip	value used to set skip
 	 */
-	private static void setSkip(boolean configSkip) {
+	public static void setSkip(boolean configSkip) {
 		configValues.setSkip(configSkip);
 		setRet = true;
 	}
@@ -796,7 +877,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configCrafts	value used to set craft
 	 */
-	private static void setCrafts(boolean configCrafts) {
+	public static void setCrafts(boolean configCrafts) {
 		configValues.setCrafts(configCrafts);
 		setRet = true;
 	}
@@ -806,7 +887,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configTeam	value used to set team
 	 */
-	private static void setTeam(boolean configTeam) {
+	public static void setTeam(boolean configTeam) {
 		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
 			error = "Cannot set Team while game is running !";
 			setRet = false;
@@ -821,7 +902,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configTeamInv	value used to set team inv
 	 */
-	private static void setTeamInv(boolean configTeamInv) {
+	public static void setTeamInv(boolean configTeamInv) {
 		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
 			error = "Cannot set Team Inv while game is running !";
 			setRet = false;
@@ -836,7 +917,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configSame	value used to set same
 	 */
-	private static void setSame(boolean configSame) {
+	public static void setSame(boolean configSame) {
 		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
 			error = "Cannot change mode when game is running !";
 			setRet = false;
@@ -851,7 +932,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configDuoMode	value used to set double mode
 	 */
-	private static void setDoubleMode(boolean configDuoMode) {
+	public static void setDoubleMode(boolean configDuoMode) {
 		configValues.setDuoMode(configDuoMode);
 		setRet = true;
 	}
@@ -861,7 +942,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configSbttMode	value used to set sbtt
 	 */
-	private static void setSbttMode(boolean configSbttMode) {
+	public static void setSbttMode(boolean configSbttMode) {
 		configValues.setSbttMode(configSbttMode);
 		setRet = true;
 	}
@@ -871,7 +952,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configPrintTab	value used to set printTab
 	 */
-	private static void setPrintTab(boolean configPrintTab) {
+	public static void setPrintTab(boolean configPrintTab) {
 		configValues.setPrintTab(configPrintTab);
 		setRet = true;
 	}
@@ -881,7 +962,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configEndOne	value used to set end one
 	 */
-	private static void setEndOne(boolean configEndOne) {
+	public static void setEndOne(boolean configEndOne) {
 		configValues.setEndOne(configEndOne);
 		setRet = true;
 	}
@@ -891,7 +972,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configPassive	value used to set passive all
 	 */
-	private static void setPassiveAll(boolean configPassive) {
+	public static void setPassiveAll(boolean configPassive) {
 		configValues.setPassiveAll(configPassive);
 		setRet = true;
 	}
@@ -901,7 +982,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configPassive	value used to set passive team
 	 */
-	private static void setPassiveTeam(boolean configPassive) {
+	public static void setPassiveTeam(boolean configPassive) {
 		configValues.setPassiveTeam(configPassive);
 		setRet = true;
 	}
@@ -911,7 +992,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configTeamSize	value used to set team size
 	 */
- 	private static void setTeamSize(int configTeamSize) {
+	public static void setTeamSize(int configTeamSize) {
  		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
  			error = "Cannot change team size when game is running !";
 			setRet = false;
@@ -938,7 +1019,7 @@ public class Config implements Serializable {
  	 * 
  	 * @param configTeamIntSize	value used to set team inv size
  	 */
- 	private static void setTeamInvSize(int configTeamIntSize) {
+	public static void setTeamInvSize(int configTeamIntSize) {
  		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
  			error = "Cannot change team inv size when game is running !";
 			setRet = false;
@@ -960,9 +1041,17 @@ public class Config implements Serializable {
 	 * 
 	 * @param configSpreadDistance	value used to set spread distance
 	 */
-	private static void setSpreadDistance(int configSpreadDistance) {
-		configValues.setSpreadDistance(configSpreadDistance);
-		setRet = true;
+	public static void setSpreadDistance(int configSpreadDistance) {
+		if (configSpreadDistance < 100) {
+			setRet = false;
+			error = "Cannot set Spread distance less than 100";
+		} else if (configSpreadDistance > configValues.getSpreadRadius()) {
+			setRet = false;
+			error = "Cannot set Spread distance more than Spread Radius";
+		} else {
+			configValues.setSpreadDistance(configSpreadDistance);
+			setRet = true;
+		}
 	}
 
 	/**
@@ -970,7 +1059,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configSpreadRadius	value used to set spread radius
 	 */
-	private static void setSpreadRadius(int configSpreadRadius) {
+	public static void setSpreadRadius(int configSpreadRadius) {
 		if (configSpreadRadius < configValues.getSpreadDistance()) {
 			error = "Cannot set spread radius less than spread distance !";
 			setRet = false;
@@ -985,7 +1074,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configTargetPerAge	value used to set target per age
 	 */
-	private static void setTargetAge(int configTargetPerAge) {
+	public static void setTargetAge(int configTargetPerAge) {
 		if (configTargetPerAge < 1) {
 			error = "Cannot have less than one target per Age !";
 			setRet = false;
@@ -1000,7 +1089,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configStartTime	value used to set start time
 	 */
-	private static void setStartTime(int configStartTime) {
+	public static void setStartTime(int configStartTime) {
 		if (configStartTime < 1) {
 			error = "Cannot set added time less than 1";
 			setRet = false;
@@ -1015,7 +1104,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configAddedTime	value used to set added time
 	 */
-	private static void setAddedTime(int configAddedTime) {
+	public static void setAddedTime(int configAddedTime) {
 		if (configAddedTime < 1) {
 			error = "Cannot set added time less than 1";
 			setRet = false;
@@ -1030,14 +1119,14 @@ public class Config implements Serializable {
 	 * 
 	 * @param configSbttAmount	value used to set sbtt amount
 	 */
-	private static void setSbttAmount(int configSbttAmount) {
+	public static void setSbttAmount(int configSbttAmount) {
 		if (configSbttAmount < 1 || configSbttAmount > 9) {
-			error = "Cannot set out out of 1 to 9 range !";
+			error = "Cannot set out of 1 to 9 range !";
 			setRet = false;
+		} else {
+			configValues.setSbttAmount(configSbttAmount);
+			setRet = true;
 		}
-		
-		configValues.setSbttAmount(configSbttAmount);
-		setRet = true;
 	}
 	
 	/**
@@ -1045,7 +1134,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configXpEnd	value used to set xp end
 	 */
-	private static void setXpEnd(int configXpEnd) {
+	public static void setXpEnd(int configXpEnd) {
 		if (configXpEnd < 1 || configXpEnd > 10) {
 			error = "Cannot set out of 1 to 10 range !";
 			setRet = false;
@@ -1060,7 +1149,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configXpOverworld	value used to set xp overworld
 	 */
-	private static void setXpOverworld(int configXpOverworld) {
+	public static void setXpOverworld(int configXpOverworld) {
 		if (configXpOverworld < 1 || configXpOverworld > 20) {
 			error = "Cannot set out of 1 to 20 range !";
 			setRet = false;
@@ -1075,7 +1164,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configXpCoral	value used to set xp coral
 	 */
-	private static void setXpCoral(int configXpCoral) {
+	public static void setXpCoral(int configXpCoral) {
 		if (configXpCoral < 1 || configXpCoral > 30) {
 			error = "Cannot set out of 1 to 30 range !";
 			setRet = false;
@@ -1090,7 +1179,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configLastAge	value used to set last age
 	 */
-	private static void setLastAge(String configLastAge) {
+	public static void setLastAge(String configLastAge) {
 		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
 			error = "Game already started, you cannot modify last Age";
 			setRet = false;
@@ -1108,7 +1197,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configSkipAge	value used to set skip age
 	 */
-	private static void setFirstSkip(String configSkipAge) {
+	public static void setFirstSkip(String configSkipAge) {
 		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
 			error = "Game already started, you cannot modify skip Age";
 			setRet = false;
@@ -1129,7 +1218,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configLevel	value used to set level
 	 */
-	private static void setLevel(String configLevel) {
+	public static void setLevel(String configLevel) {
 		if (LevelManager.getInstance().levelNotExists(configLevel)) {
 			error = "Unknown level !";
 			setRet = false;
@@ -1144,7 +1233,7 @@ public class Config implements Serializable {
 	 * 
 	 * @param configLang	value used to set lang
 	 */
-	private static void setLang(String configLang) {
+	public static void setLang(String configLang) {
 		if (!LangManager.hasLang(configLang)) {
 			error = "Unknown lang !";
 			setRet = false;

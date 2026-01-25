@@ -32,17 +32,22 @@ public class KuffleConfig extends AKuffleCommand {
 	
 	@Override
 	public boolean runCommand() {
-		if (args.length % 2 == 1) {
-			return false;
-		}
-		
 		LogManager.getInstanceSystem().logMsg(player.getName(), LangManager.getMsgLang("CMD_PERF", Config.getLang()).replace("<#>", "<k-config>"));
 		
 		if (args.length == 0) {
-			player.sendMessage(Config.displayConfig());
+			player.openInventory(Config.getMainInv());
 			return true;
 		}
 		
+		if (args.length == 1 && args[0].equals("print")) {
+			player.sendMessage(Config.displayConfig());
+			return true;
+		}
+
+		if (args.length % 2 == 1) {
+			return false;
+		}
+
 		if (!player.hasPermission("k-op")) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
 			return true;
