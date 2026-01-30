@@ -52,17 +52,16 @@ public class KuffleConfigTab extends AKuffleTabCommand {
 	@Override
 	protected void runCommand() {
 		if (currentArgs.length == 0) {
-			ret.add("print");
 			ret.addAll(all.keySet());
 		} else if (currentArgs.length % 2 == 1) {
-			if (currentArgs[0].equals("print")) {
-				ret = new ArrayList<>();
-			} else {
-				ret.addAll(all.keySet());
+			if (currentArgs.length == 1) {
+				ret.add("print");
+			}
 
-				for (String arg : currentArgs) {
-					ret.remove(arg);
-				}
+			ret.addAll(all.keySet());
+
+			for (String arg : currentArgs) {
+				ret.remove(arg);
 			}
 		} else {
 			if (currentArgs[0].equals("print")) {

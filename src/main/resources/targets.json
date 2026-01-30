@@ -3111,6 +3111,13 @@
                         "fr": "Marguerite en Pot"
                     }
                 },
+                "brown_mushroom_block": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Brown Mushroom Block",
+                        "fr": "Bloc de Champignon Marron"
+                    }
+                },
                 "potted_blue_orchid": {
                     "Sbtt": false,
                     "Langs": {
@@ -3193,6 +3200,13 @@
                     "Langs": {
                         "en": "Purple Wall Banner",
                         "fr": "Banniere Murale Violette"
+                    }
+                },
+                "red_mushroom_block": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Red Mushroom Block",
+                        "fr": "Bloc de Champignon Rouge"
                     }
                 },
                 "red_wall_banner": {
@@ -3440,6 +3454,13 @@
                     "Langs": {
                         "en": "Pink Wall Banner",
                         "fr": "Banniere Murale Rose"
+                    }
+                },
+                "mushroom_stem": {
+                    "Sbtt": false,
+                    "Langs": {
+                        "en": "Mushroom Stem",
+                        "fr": "Tige de Champignon"
                     }
                 },
                 "potted_pink_tulip": {
@@ -5698,13 +5719,6 @@
                         "fr": "Table de Forgeron"
                     }
                 },
-                "red_mushroom_block": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Red Mushroom Block",
-                        "fr": "Bloc de Champignon Rouge"
-                    }
-                },
                 "black_banner": {
                     "Sbtt": false,
                     "Langs": {
@@ -6242,13 +6256,6 @@
                     "Langs": {
                         "en": "Spruce Stairs",
                         "fr": "Escaliers de Sapin"
-                    }
-                },
-                "brown_mushroom_block": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Brown Mushroom Block",
-                        "fr": "Bloc de Champignon Marron"
                     }
                 },
                 "gray_wool": {
@@ -7231,13 +7238,6 @@
                     "Langs": {
                         "en": "Jungle Sapling",
                         "fr": "Pousse d'acajou"
-                    }
-                },
-                "mushroom_stem": {
-                    "Sbtt": false,
-                    "Langs": {
-                        "en": "Mushroom Stem",
-                        "fr": "Tige de Champignon"
                     }
                 },
                 "jungle_button": {

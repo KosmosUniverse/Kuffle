@@ -511,6 +511,10 @@ public class Config implements Serializable {
 
 		ConfigInvTrigger.apply(trigger, player, inv, item);
 	}
+
+	public static void reloadInv(String invName) {
+		configInvs.reloadInv(invName);
+	}
 	
 	/**
 	 * Loads config

@@ -144,7 +144,7 @@ public class ConfigInvTrigger {
     }
 
     public static void skipTrigger(Player player, Inventory inv, ItemStack item) {
-        boolean isEnabled = item.getItemMeta().hasEnchants();
+        boolean isEnabled = item.getType() == Material.LIME_TERRACOTTA;
 
         Config.setSkip(!isEnabled);
 
@@ -152,11 +152,12 @@ public class ConfigInvTrigger {
     }
 
     public static void skipAgeTrigger(Player player, Inventory inv, ItemStack item) {
-        String age = item.getItemMeta().getLore().get(0).split(":")[1];
-        int idx = ages.indexOf(age);
+        String skipAge = item.getItemMeta().getLore().get(0).split(":")[1];
+        int lastAge = ages.indexOf(Config.getLastAge().getName());
+        int idx = ages.indexOf(skipAge);
         idx++;
 
-        if (idx == ages.size()) {
+        if (idx == ages.size() || idx == lastAge + 1) {
             idx = 0;
         }
 
@@ -242,13 +243,13 @@ public class ConfigInvTrigger {
     public static void minusStartTimeTrigger(Player player, Inventory inv, ItemStack item) {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        startTimeTrigger(player, inv, --amount);
+        startTimeTrigger(player, inv, amount - 1);
     }
 
     public static void plusStartTimeTrigger(Player player, Inventory inv, ItemStack item) {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        startTimeTrigger(player, inv, ++amount);
+        startTimeTrigger(player, inv, amount + 1);
     }
 
     private static void startTimeTrigger(Player player, Inventory inv, int amount) {
@@ -264,13 +265,13 @@ public class ConfigInvTrigger {
     public static void minusAddedTimeTrigger(Player player, Inventory inv, ItemStack item) {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        addedTimeTrigger(player, inv, --amount);
+        addedTimeTrigger(player, inv, amount - 1);
     }
 
     public static void plusAddedTimeTrigger(Player player, Inventory inv, ItemStack item) {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        addedTimeTrigger(player, inv, ++amount);
+        addedTimeTrigger(player, inv, amount + 1);
     }
 
     private static void addedTimeTrigger(Player player, Inventory inv, int amount) {
@@ -443,7 +444,7 @@ public class ConfigInvTrigger {
         if (!Config.setRet) {
             player.sendMessage(Config.error);
         } else {
-            inv.setItem(13, ConfigInvItems.getTeamSizeItem());
+            inv.setItem(13, ConfigInvItems.getTeamInvSizeItem());
         }
     }
 

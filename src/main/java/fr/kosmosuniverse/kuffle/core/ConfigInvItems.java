@@ -135,16 +135,11 @@ public class ConfigInvItems {
     }
 
     public static ItemStack getSkipItem() {
-        ItemMaker itemBuilder = ItemMaker.newItem(Material.LIME_TERRACOTTA).addTag("trigger", "skip");
-
         if (Config.getSkip()) {
-            itemBuilder.addName("Skip ENABLED");
-            itemBuilder.addEnchants(Collections.singletonList(new ItemEnchant(Enchantment.MENDING, 1)));
+            return ItemMaker.newItem(Material.LIME_TERRACOTTA).addName("Skip ENABLED").addTag("trigger", "skip").getItem();
         } else {
-            itemBuilder.addName("Skip DISABLED");
+            return ItemMaker.newItem(Material.RED_TERRACOTTA).addName("Skip DISABLED").addTag("trigger", "skip").getItem();
         }
-
-        return itemBuilder.getItem();
     }
 
     public static ItemStack getSkipAgeItem() {
@@ -198,7 +193,7 @@ public class ConfigInvItems {
     }
 
     public static ItemStack getAddedTimeItem() {
-        ItemMaker itemBuilder = ItemMaker.newItem(Material.EMERALD).addName("Added Time").addLore("Time (in min):" + Config.getStartTime());
+        ItemMaker itemBuilder = ItemMaker.newItem(Material.EMERALD).addName("Added Time").addLore("Time (in min):" + Config.getAddedTime());
 
         return itemBuilder.getItem();
     }

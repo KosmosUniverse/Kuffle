@@ -180,11 +180,15 @@ public class InventoryListeners implements Listener {
 
 		String invName = Objects.requireNonNull(item.getItemMeta()).getPersistentDataContainer().get(NamespacedKey.minecraft("invname"), PersistentDataType.STRING);
 		String trigger = Objects.requireNonNull(item.getItemMeta()).getPersistentDataContainer().get(NamespacedKey.minecraft("trigger"), PersistentDataType.STRING);
+		String reload = Objects.requireNonNull(item.getItemMeta()).getPersistentDataContainer().get(NamespacedKey.minecraft("reload"), PersistentDataType.STRING);
 
 		if (invName != null && Config.hasInv(invName)) {
 			player.openInventory(Config.getInv(invName));
 		} else if (trigger != null) {
 			Config.invTrigger(player, inv, item, trigger);
+		} else if (reload != null) {
+			Config.reloadInv(reload);
+			player.openInventory(Config.getInv(reload));
 		}
 	}
 }

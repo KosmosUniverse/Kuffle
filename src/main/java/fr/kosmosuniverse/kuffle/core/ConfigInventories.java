@@ -1,5 +1,6 @@
 package fr.kosmosuniverse.kuffle.core;
 
+import fr.kosmosuniverse.kuffle.utils.Function0arity;
 import fr.kosmosuniverse.kuffle.utils.ItemMaker;
 import fr.kosmosuniverse.kuffle.utils.ItemsUtils;
 import org.bukkit.Bukkit;
@@ -15,9 +16,11 @@ import java.util.Map;
  */
 public class ConfigInventories {
     private final Map<String, Inventory> invs;
+    private final Map<String, Function0arity> createInvMethods;
 
     public ConfigInventories() {
         invs = new HashMap<>();
+        createInvMethods = new HashMap<>();
     }
 
     public Inventory getMainInv() {
@@ -32,14 +35,21 @@ public class ConfigInventories {
         return null;
     }
 
-    public void clear() {
-        invs.clear();
+    public void reloadInv(String invName) {
+        createInvMethods.get(invName).apply();
     }
 
-    private void setupFirstRow(Inventory inv, String prevInv) {
+    public void clear() {
+        invs.clear();
+        createInvMethods.clear();
+    }
+
+    private void setupFirstRow(Inventory inv, String curInv, String prevInv) {
         for (int i = 0; i < 9; i++) {
             if (i == 0) {
                 inv.setItem(i, prevInv != null ? ItemMaker.newItem(ItemsUtils.getBackPane()).addTag("invname", prevInv).getItem() : ItemsUtils.getQuitPane());
+            } else if (i == 8) {
+                inv.setItem(i, ItemMaker.newItem(Material.MAGENTA_STAINED_GLASS_PANE).addName("Reload Inventory").addTag("reload", curInv).getItem());
             } else {
                 inv.setItem(i, ItemsUtils.getLimitPane());
             }
@@ -50,12 +60,16 @@ public class ConfigInventories {
         createMainInv();
         createSystemInv();
         createGameInv();
+
+        createInvMethods.put("Config Main Board", this::createMainInv);
+        createInvMethods.put("System Config Board", this::createSystemInv);
+        createInvMethods.put("Game Config Board", this::createGameInv);
     }
 
     private void createMainInv() {
         Inventory mainInv = Bukkit.createInventory(null, 18, "Config Main Board");
 
-        setupFirstRow(mainInv, null);
+        setupFirstRow(mainInv, "Config Main Board", null);
 
         mainInv.setItem(9, ItemMaker.newItem(Material.BARRIER).addName("System Config").addTag("invname", "System Config Board").getItem());
         mainInv.setItem(10, ItemMaker.newItem(Material.BELL).addName("Game Config").addTag("invname", "Game Config Board").getItem());
@@ -67,7 +81,7 @@ public class ConfigInventories {
     private void createSystemInv() {
         Inventory systemInv = Bukkit.createInventory(null, 18, "System Config Board");
 
-        setupFirstRow(systemInv, "Config Main Board");
+        setupFirstRow(systemInv, "System Config Board", "Config Main Board");
 
         systemInv.setItem(9, ConfigInvItems.getStartTypeItem());
         systemInv.setItem(10, ConfigInvItems.getLogGameResultsItem());
@@ -81,7 +95,7 @@ public class ConfigInventories {
     private void createGameInv() {
         Inventory systemInv = Bukkit.createInventory(null, 45, "Game Config Board");
 
-        setupFirstRow(systemInv, "Config Main Board");
+        setupFirstRow(systemInv, "Game Config Board", "Config Main Board");
 
         systemInv.setItem(9, ConfigInvItems.getCustomCraftItem());
         systemInv.setItem(10, ItemMaker.newItem(Material.ENDER_CHEST).addName("Skip").addTag("invname", "Skip Board").getItem());
@@ -129,12 +143,22 @@ public class ConfigInventories {
         createXpCostsInv();
         createTeamOptionInv();
         createSbttOptionInv();
+
+        createInvMethods.put("Skip Board", this::createSkipInv);
+        createInvMethods.put("Target Board", () -> createPlusMinusInv("Target", "Game Config Board", "Target", ConfigInvItems.getTargetPerAgeItem()));
+        createInvMethods.put("Spreadplayer Board", this::createSpreadplayerInv);
+        createInvMethods.put("Time Board", this::createTimeInv);
+        createInvMethods.put("Passive Board", this::createPassiveInv);
+        createInvMethods.put("Player Config Board", this::createPlayerConfigInv);
+        createInvMethods.put("XP Costs Board", this::createXpCostsInv);
+        createInvMethods.put("Team Option Board", this::createTeamOptionInv);
+        createInvMethods.put("SBTT Option Board", this::createSbttOptionInv);
     }
 
     private void createSkipInv() {
         Inventory skipInv = Bukkit.createInventory(null, 18, "Skip Board");
 
-        setupFirstRow(skipInv, "Game Config Board");
+        setupFirstRow(skipInv, "Skip Board", "Game Config Board");
 
         skipInv.setItem(11, ConfigInvItems.getSkipItem());
         skipInv.setItem(15, ConfigInvItems.getSkipAgeItem());
@@ -145,10 +169,10 @@ public class ConfigInventories {
         invs.put("Skip Board", skipInv);
     }
 
-    public void createPlusMinusInv(String invname, String previnvname, String triggerName, ItemStack countingItem) {
+    public void createPlusMinusInv(String invname, String prevInvName, String triggerName, ItemStack countingItem) {
         Inventory plusMinusInv = Bukkit.createInventory(null, 18, invname + " Board");
 
-        setupFirstRow(plusMinusInv, previnvname);
+        setupFirstRow(plusMinusInv, invname + " Board", prevInvName);
 
         plusMinusInv.setItem(11, ConfigInvItems.getMinusItem(triggerName));
         plusMinusInv.setItem(13, countingItem);
@@ -162,7 +186,7 @@ public class ConfigInventories {
     public void createSpreadplayerInv() {
         Inventory spreadInv = Bukkit.createInventory(null, 18, "Spreadplayer Board");
 
-        setupFirstRow(spreadInv, "Game Config Board");
+        setupFirstRow(spreadInv, "Spreadplayer Board", "Game Config Board");
 
         spreadInv.setItem(11, ConfigInvItems.getSpreadplayerItem());
         spreadInv.setItem(13, ItemMaker.newItem(Material.STICK).addName("Spreadplayer Distance").addTag("invname", "Spreadplayer Distance Board").getItem());
@@ -179,12 +203,15 @@ public class ConfigInventories {
         ConfigInvTrigger.addTrigger("plusSpreadDistance", ConfigInvTrigger::plusSpreadDistanceTrigger);
         ConfigInvTrigger.addTrigger("minusSpreadRadius", ConfigInvTrigger::minusSpreadRadiusTrigger);
         ConfigInvTrigger.addTrigger("plusSpreadRadius", ConfigInvTrigger::plusSpreadRadiusTrigger);
+
+        createInvMethods.put("Spreadplayer Distance Board", () -> createPlusMinusInv("Spreadplayer Distance", "Spreadplayer Board", "SpreadDistance", ConfigInvItems.getSpreadDistanceItem()));
+        createInvMethods.put("Spreadplayer Radius Board", () -> createPlusMinusInv("Spreadplayer Radius", "Spreadplayer Board", "SpreadRadius", ConfigInvItems.getSpreadRadiusItem()));
     }
 
     public void createTimeInv() {
         Inventory timeInv = Bukkit.createInventory(null, 18, "Time Board");
 
-        setupFirstRow(timeInv, "Game Config Board");
+        setupFirstRow(timeInv, "Time Board", "Game Config Board");
 
         timeInv.setItem(11, ItemMaker.newItem(Material.COMPASS).addName("Start Time").addTag("invname", "Start Time Board").getItem());
         timeInv.setItem(15, ItemMaker.newItem(Material.CLOCK).addName("Added Time").addTag("invname", "Added Time Board").getItem());
@@ -198,12 +225,15 @@ public class ConfigInventories {
         ConfigInvTrigger.addTrigger("plusStartTime", ConfigInvTrigger::plusStartTimeTrigger);
         ConfigInvTrigger.addTrigger("minusAddedTime", ConfigInvTrigger::minusAddedTimeTrigger);
         ConfigInvTrigger.addTrigger("plusAddedTime", ConfigInvTrigger::plusAddedTimeTrigger);
+
+        createInvMethods.put("Start Time Board", () -> createPlusMinusInv("Start Time", "Time Board", "StartTime", ConfigInvItems.getStartTimeItem()));
+        createInvMethods.put("Added Time Board", () -> createPlusMinusInv("Added Time", "Time Board", "AddedTime", ConfigInvItems.getAddedTimeItem()));
     }
 
     public void createPassiveInv() {
         Inventory passiveInv = Bukkit.createInventory(null, 18, "Passive Board");
 
-        setupFirstRow(passiveInv, "Game Config Board");
+        setupFirstRow(passiveInv, "Passive Board", "Game Config Board");
 
         passiveInv.setItem(11, ConfigInvItems.getPassiveAllItem());
         passiveInv.setItem(15, ConfigInvItems.getPassiveTeamItem());
@@ -217,7 +247,7 @@ public class ConfigInventories {
     public void createPlayerConfigInv() {
         Inventory playerConfigInv = Bukkit.createInventory(null, 18, "Player Config Board");
 
-        setupFirstRow(playerConfigInv, "Game Config Board");
+        setupFirstRow(playerConfigInv, "Player Config Board", "Game Config Board");
 
         playerConfigInv.setItem(11, ConfigInvItems.getPlayerTipsItem());
         playerConfigInv.setItem(15, ConfigInvItems.getPlayerLangItem());
@@ -231,7 +261,7 @@ public class ConfigInventories {
     public void createXpCostsInv() {
         Inventory xpCostsInv = Bukkit.createInventory(null, 18, "XP Costs Board");
 
-        setupFirstRow(xpCostsInv, "Game Config Board");
+        setupFirstRow(xpCostsInv, "XP Costs Board", "Game Config Board");
 
         xpCostsInv.setItem(11, ItemMaker.newItem(Material.END_PORTAL_FRAME).addName("End Teleporter").addTag("invname", "End Teleporter Board").getItem());
         xpCostsInv.setItem(13, ItemMaker.newItem(Material.GRASS_BLOCK).addName("Overworld Teleporter").addTag("invname", "Overworld Teleporter Board").getItem());
@@ -249,12 +279,16 @@ public class ConfigInventories {
         ConfigInvTrigger.addTrigger("plusOverworldTeleporter", ConfigInvTrigger::plusOverworldTeleporterTrigger);
         ConfigInvTrigger.addTrigger("minusCoralCompass", ConfigInvTrigger::minusCoralCompassTrigger);
         ConfigInvTrigger.addTrigger("plusCoralCompass", ConfigInvTrigger::plusCoralCompassTrigger);
+
+        createInvMethods.put("End Teleporter Board", () -> createPlusMinusInv("End Teleporter", "XP Costs Board", "EndTeleporter", ConfigInvItems.getEndTeleporterItem()));
+        createInvMethods.put("Overworld Teleporter Board", () -> createPlusMinusInv("Overworld Teleporter", "XP Costs Board", "OverworldTeleporter", ConfigInvItems.getOverworldTeleporterItem()));
+        createInvMethods.put("Coral Compass Board", () -> createPlusMinusInv("Coral Compass", "XP Costs Board", "CoralCompass", ConfigInvItems.getCoralCompassItem()));
     }
 
     public void createTeamOptionInv() {
         Inventory teamOptionInv = Bukkit.createInventory(null, 18, "Team Option Board");
 
-        setupFirstRow(teamOptionInv, "Game Config Board");
+        setupFirstRow(teamOptionInv, "Team Option Board", "Game Config Board");
 
         teamOptionInv.setItem(11, ConfigInvItems.getTeamItem());
         teamOptionInv.setItem(13, ItemMaker.newItem(Material.PRISMARINE_CRYSTALS).addName("Team Size").addTag("invname", "Team Size Board").getItem());
@@ -270,12 +304,15 @@ public class ConfigInventories {
         ConfigInvTrigger.addTrigger("plusTeamSize", ConfigInvTrigger::plusTeamSizeTrigger);
 
         createTeamInvInv();
+
+        createInvMethods.put("Team Size Board", () -> createPlusMinusInv("Team Size", "Team Option Board", "TeamSize", ConfigInvItems.getTeamSizeItem()));
+        createInvMethods.put("Team Inventory Board", this::createTeamInvInv);
     }
 
     public void createTeamInvInv() {
         Inventory teamInvInv = Bukkit.createInventory(null, 18, "Team Inventory Board");
 
-        setupFirstRow(teamInvInv, "Team Option Board");
+        setupFirstRow(teamInvInv, "Team Inventory Board", "Team Option Board");
 
         teamInvInv.setItem(11, ConfigInvItems.getTeamInvItem());
         teamInvInv.setItem(15, ItemMaker.newItem(Material.PRISMARINE_CRYSTALS).addName("Team Inventory Size").addTag("invname", "Team Inventory Size Board").getItem());
@@ -288,12 +325,14 @@ public class ConfigInventories {
 
         ConfigInvTrigger.addTrigger("minusTeamInvSize", ConfigInvTrigger::minusTeamInvSizeTrigger);
         ConfigInvTrigger.addTrigger("plusTeamInvSize", ConfigInvTrigger::plusTeamInvSizeTrigger);
+
+        createInvMethods.put("Team Inventory Size Board", () -> createPlusMinusInv("Team Inventory Size", "Team Inventory Board", "TeamInvSize", ConfigInvItems.getTeamInvSizeItem()));
     }
 
     public void createSbttOptionInv() {
         Inventory sbttOptionInv = Bukkit.createInventory(null, 18, "SBTT Option Board");
 
-        setupFirstRow(sbttOptionInv, "Game Config Board");
+        setupFirstRow(sbttOptionInv, "SBTT Option Board", "Game Config Board");
 
         sbttOptionInv.setItem(11, ConfigInvItems.getSbttItem());
         sbttOptionInv.setItem(15, ItemMaker.newItem(Material.PRISMARINE_CRYSTALS).addName("SBTT Size").addTag("invname", "SBTT Size Board").getItem());
@@ -306,5 +345,7 @@ public class ConfigInventories {
 
         ConfigInvTrigger.addTrigger("minusSbttSize", ConfigInvTrigger::minusSbttSizeTrigger);
         ConfigInvTrigger.addTrigger("plusSbttSize", ConfigInvTrigger::plusSbttSizeTrigger);
+
+        createInvMethods.put("SBTT Size Board", () -> createPlusMinusInv("SBTT Size", "SBTT Option Board", "SbttSize", ConfigInvItems.getSbttSizeItem()));
     }
 }
