@@ -112,31 +112,21 @@ public class PartyList {
      * Updates players heads in playersHeads inventory
      */
     public void updatePlayersHeads(Map<String, String> playerTargets) {
-        int slots = Utils.getNbInventoryRows(list.size());
-        Inventory newInv = Bukkit.createInventory(null, slots == 0 ? 9 : slots, ChatColor.BLACK + "Players");
+        clearPlayerInv();
 
-        list.forEach(name -> newInv.addItem(Utils.getHead(name, playerTargets.get(name))));
-
-        if (playerHeads != null) {
-            playerHeads.clear();
-        }
-
-        playerHeads = newInv;
+        list.forEach(name -> playerHeads.addItem(Utils.getHead(name, playerTargets.get(name))));
     }
 
-    /**
-     * Updates players heads in playersHeads inventory
-     */
-    public void updatePlayersHeads() {
+    public void createPlayersInventory() {
         int slots = Utils.getNbInventoryRows(list.size());
-        Inventory newInv = Bukkit.createInventory(null, slots == 0 ? 9 : slots, ChatColor.BLACK + "Players");
+        playerHeads = Bukkit.createInventory(null, slots == 0 ? 9 : slots, ChatColor.BLACK + "Players");
 
-        list.forEach(name -> newInv.addItem(Utils.getHead(name, null)));
+        list.forEach(name -> playerHeads.addItem(Utils.getHead(name, null)));
+    }
 
-        if (playerHeads != null) {
-            playerHeads.clear();
+    public void clearPlayerInv() {
+        for (int i = 0; i < playerHeads.getSize(); i++) {
+            playerHeads.setItem(i, null);
         }
-
-        playerHeads = newInv;
     }
 }

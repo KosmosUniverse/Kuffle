@@ -58,7 +58,8 @@ public class KuffleLoad extends AKuffleCommand {
 			Utils.logException(e);
 			throw new KuffleCommandFalseException();
 		}
-		
+
+		Party.getInstance().getPlayers().createPlayersInventory();
 		Party.getInstance().getPlayers().updatePlayersHeads(Party.getInstance().getGames().getGames().entrySet().stream()
 				.collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getCurrentTarget())));
 		

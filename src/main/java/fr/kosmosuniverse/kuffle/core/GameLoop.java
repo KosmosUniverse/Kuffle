@@ -16,6 +16,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class GameLoop {
 	private BukkitTask runnable;
+	private static boolean hasChanged = true;
 
 	/**
 	 * Starts the runnable
@@ -79,6 +80,14 @@ public class GameLoop {
 				printTimerTarget(playerName, playerData);
 			}
 		});
+
+		if (hasChanged) {
+			if (Party.getInstance().getGames().getGames().entrySet().stream().noneMatch(e -> e.getValue().getCurrentTarget() == null)) {
+				Party.getInstance().getPlayers().updatePlayersHeads(Party.getInstance().getGames().getGames().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getCurrentTarget())));
+			}
+
+			hasChanged = false;
+		}
 	}
  	
 	/**
@@ -95,12 +104,12 @@ public class GameLoop {
 			Party.getInstance().getSpectators().getList().forEach(specName -> Objects.requireNonNull(Bukkit.getPlayer(specName)).sendMessage(LangManager.getMsgLang("GAME_COMPLETE", Config.getLang()).replace("<#>", ChatColor.GOLD + String.valueOf(ChatColor.BOLD) + playerName + ChatColor.BLUE)));
 		} else if (!Config.getTeam() && playerData.getTargetCount() >= (Config.getTargetPerAge() + 1)) {
 			Party.getInstance().getGames().nextPlayerAge(playerName);
-		} else if (Config.getTeam() && playerData.getTargetCount() >= (Config.getTargetPerAge() + 1)) {
-			if (checkTeamMates(playerName, playerData)) {
-				Party.getInstance().getGames().nextPlayerAge(playerName);
-			}
+		} else if (Config.getTeam() && playerData.getTargetCount() >= (Config.getTargetPerAge() + 1) && checkTeamMates(playerName, playerData)) {
+			TeamManager.getInstance().getTeamByPlayer(playerName).getPlayers().forEach(player -> Party.getInstance().getGames().nextPlayerAge(player));
 		} else {
 			newItem(playerData);
+
+			hasChanged = true;
 		}
 	}
 	
@@ -116,6 +125,8 @@ public class GameLoop {
 			Objects.requireNonNull(Bukkit.getPlayer(playerName)).sendMessage(ChatColor.RED + LangManager.getMsgLang("TARGET_NOT_FOUND", playerData.getConfigLang()));
 			LogManager.getInstanceGame().logSystemMsg("Player : " + playerName + " did not found target : " + playerData.getCurrentTarget());
 			newItem(playerData);
+
+			hasChanged = true;
 		} else if (Config.getDouble() && !playerData.getCurrentTarget().contains("/")) {
 			String currentTmp = TargetManager.newTarget(playerData.getAlreadyGot(), AgeManager.getAgeByNumber(playerData.getAge()).getName());
 
@@ -301,10 +312,6 @@ public class GameLoop {
 			playerData.addAlreadyGot(playerData.getCurrentTarget());
 
 			playerData.setCurrentTargetDisplay(LangManager.getTargetLang(playerData.getCurrentTarget(), playerData.getConfigLang()));
-		}
-
-		if (Party.getInstance().getGames().getGames().entrySet().stream().noneMatch(e -> e.getValue().getCurrentTarget() == null)) {
-			Party.getInstance().getPlayers().updatePlayersHeads(Party.getInstance().getGames().getGames().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getCurrentTarget())));
 		}
 	}
 

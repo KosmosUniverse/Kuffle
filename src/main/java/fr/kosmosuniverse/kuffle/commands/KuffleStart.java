@@ -70,8 +70,8 @@ public class KuffleStart extends AKuffleCommand {
 		
 		TargetManager.shuffleTargets();
 		ScoreManager.setupScores(Party.getInstance().getType().getType());
-		Party.getInstance().getPlayers().updatePlayersHeads();
-		Party.getInstance().getSpectators().updatePlayersHeads();
+		Party.getInstance().getPlayers().createPlayersInventory();
+		Party.getInstance().getSpectators().createPlayersInventory();
 		Party.getInstance().getRanks().init();
 
 		Party.getInstance().getPlayers().getList().forEach(playerName -> {
