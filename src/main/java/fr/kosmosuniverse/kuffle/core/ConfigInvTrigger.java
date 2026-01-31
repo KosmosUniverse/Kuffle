@@ -34,10 +34,22 @@ public class ConfigInvTrigger {
             throw new IllegalArgumentException("no trigger for [" + triggerName + "]");
         }
 
-        triggers.get(triggerName).apply(player, inv, item);
+        try {
+            triggers.get(triggerName).apply(player, inv, item);
+        } catch (IllegalAccessException ignored) {
+            LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_ALLOWED", Config.getLang()));
+        }
     }
 
-    public static void startTypeTrigger(Player player, Inventory inv, ItemStack item) {
+    private static void playerNeedOp(Player player) throws IllegalAccessException {
+        if (!player.hasPermission("k-op")) {
+            throw new IllegalAccessException("");
+        }
+    }
+
+    public static void startTypeTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         String type = item.getItemMeta().getLore().get(0).split(":")[1];
         int idx = types.indexOf(type);
         idx++;
@@ -51,7 +63,9 @@ public class ConfigInvTrigger {
         inv.setItem(9, ConfigInvItems.getStartTypeItem());
     }
 
-    public static void logResultTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void logResultTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         boolean isEnabled = item.getItemMeta().hasEnchants();
 
         Config.setLogResults(!isEnabled);
@@ -59,7 +73,9 @@ public class ConfigInvTrigger {
         inv.setItem(10, ConfigInvItems.getLogGameResultsItem());
     }
 
-    public static void customCraftTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void customCraftTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         boolean isEnabled = item.getItemMeta().hasEnchants();
 
         Config.setCrafts(!isEnabled);
@@ -67,7 +83,9 @@ public class ConfigInvTrigger {
         inv.setItem(9, ConfigInvItems.getCustomCraftItem());
     }
 
-    public static void saturationTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void saturationTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         boolean isEnabled = item.getItemMeta().hasEnchants();
 
         Config.setSaturation(!isEnabled);
@@ -75,7 +93,9 @@ public class ConfigInvTrigger {
         inv.setItem(27, ConfigInvItems.getSaturationItem());
     }
 
-    public static void penaltyLevelTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void penaltyLevelTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         String level = item.getItemMeta().getLore().get(0).split(":")[1];
         int idx = levels.indexOf(level);
         idx++;
@@ -89,7 +109,9 @@ public class ConfigInvTrigger {
         inv.setItem(36, ConfigInvItems.getLevelItem());
     }
 
-    public static void rewardTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void rewardTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         boolean isEnabled = item.getItemMeta().hasEnchants();
 
         Config.setRewards(!isEnabled);
@@ -97,7 +119,9 @@ public class ConfigInvTrigger {
         inv.setItem(37, ConfigInvItems.getRewardItem());
     }
 
-    public static void printPlayerScoreTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void printPlayerScoreTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         boolean isEnabled = item.getItemMeta().hasEnchants();
 
         Config.setPrintTab(!isEnabled);
@@ -105,7 +129,9 @@ public class ConfigInvTrigger {
         inv.setItem(14, ConfigInvItems.getPrintPlayerItem());
     }
 
-    public static void endWhenLastTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void endWhenLastTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         boolean isEnabled = item.getItemMeta().hasEnchants();
 
         Config.setEndOne(!isEnabled);
@@ -113,7 +139,9 @@ public class ConfigInvTrigger {
         inv.setItem(23, ConfigInvItems.getEndWhenLastItem());
     }
 
-    public static void lastAgeTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void lastAgeTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         String age = item.getItemMeta().getLore().get(0).split(":")[1];
         int idx = ages.indexOf(age);
         idx++;
@@ -127,7 +155,9 @@ public class ConfigInvTrigger {
         inv.setItem(32, ConfigInvItems.getLastAgeItem());
     }
 
-    public static void sameOptionTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void sameOptionTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         boolean isEnabled = item.getItemMeta().hasEnchants();
 
         Config.setSame(!isEnabled);
@@ -135,7 +165,9 @@ public class ConfigInvTrigger {
         inv.setItem(26, ConfigInvItems.getSameOptionItem());
     }
 
-    public static void doubleOptionTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void doubleOptionTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         boolean isEnabled = item.getItemMeta().hasEnchants();
 
         Config.setDoubleMode(!isEnabled);
@@ -143,7 +175,9 @@ public class ConfigInvTrigger {
         inv.setItem(35, ConfigInvItems.getDoubleOptionItem());
     }
 
-    public static void skipTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void skipTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         boolean isEnabled = item.getType() == Material.LIME_TERRACOTTA;
 
         Config.setSkip(!isEnabled);
@@ -166,19 +200,21 @@ public class ConfigInvTrigger {
         inv.setItem(15, ConfigInvItems.getSkipAgeItem());
     }
 
-    public static void minusTargetTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void minusTargetTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        targetTrigger(player, inv, --amount);
+        target(player, inv, --amount);
     }
 
-    public static void plusTargetTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void plusTargetTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        targetTrigger(player, inv, ++amount);
+        target(player, inv, ++amount);
     }
 
-    private static void targetTrigger(Player player, Inventory inv, int amount) {
+    private static void target(Player player, Inventory inv, int amount) throws IllegalAccessException {
+        playerNeedOp(player);
+
         Config.setTargetAge(amount);
 
         if (!Config.setRet) {
@@ -188,7 +224,9 @@ public class ConfigInvTrigger {
         }
     }
 
-    public static void spreadplayerTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void spreadplayerTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         boolean isEnabled = item.getType() == Material.LIME_TERRACOTTA;
 
         Config.setSpreadplayers(!isEnabled);
@@ -196,19 +234,21 @@ public class ConfigInvTrigger {
         inv.setItem(11, ConfigInvItems.getSpreadplayerItem());
     }
 
-    public static void minusSpreadDistanceTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void minusSpreadDistanceTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        spreadDistanceTrigger(player, inv, amount - 100);
+        spreadDistance(player, inv, amount - 100);
     }
 
-    public static void plusSpreadDistanceTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void plusSpreadDistanceTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        spreadDistanceTrigger(player, inv, amount + 100);
+        spreadDistance(player, inv, amount + 100);
     }
 
-    private static void spreadDistanceTrigger(Player player, Inventory inv, int amount) {
+    private static void spreadDistance(Player player, Inventory inv, int amount) throws IllegalAccessException {
+        playerNeedOp(player);
+
         Config.setSpreadDistance(amount);
 
         if (!Config.setRet) {
@@ -218,19 +258,21 @@ public class ConfigInvTrigger {
         }
     }
 
-    public static void minusSpreadRadiusTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void minusSpreadRadiusTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        spreadRadiusTrigger(player, inv, amount - 100);
+        spreadRadius(player, inv, amount - 100);
     }
 
-    public static void plusSpreadRadiusTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void plusSpreadRadiusTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        spreadRadiusTrigger(player, inv, amount + 100);
+        spreadRadius(player, inv, amount + 100);
     }
 
-    private static void spreadRadiusTrigger(Player player, Inventory inv, int amount) {
+    private static void spreadRadius(Player player, Inventory inv, int amount) throws IllegalAccessException {
+        playerNeedOp(player);
+
         Config.setSpreadRadius(amount);
 
         if (!Config.setRet) {
@@ -240,19 +282,21 @@ public class ConfigInvTrigger {
         }
     }
 
-    public static void minusStartTimeTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void minusStartTimeTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        startTimeTrigger(player, inv, amount - 1);
+        startTime(player, inv, amount - 1);
     }
 
-    public static void plusStartTimeTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void plusStartTimeTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        startTimeTrigger(player, inv, amount + 1);
+        startTime(player, inv, amount + 1);
     }
 
-    private static void startTimeTrigger(Player player, Inventory inv, int amount) {
+    private static void startTime(Player player, Inventory inv, int amount) throws IllegalAccessException {
+        playerNeedOp(player);
+
         Config.setStartTime(amount);
 
         if (!Config.setRet) {
@@ -262,19 +306,21 @@ public class ConfigInvTrigger {
         }
     }
 
-    public static void minusAddedTimeTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void minusAddedTimeTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        addedTimeTrigger(player, inv, amount - 1);
+        addedTime(player, inv, amount - 1);
     }
 
-    public static void plusAddedTimeTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void plusAddedTimeTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        addedTimeTrigger(player, inv, amount + 1);
+        addedTime(player, inv, amount + 1);
     }
 
-    private static void addedTimeTrigger(Player player, Inventory inv, int amount) {
+    private static void addedTime(Player player, Inventory inv, int amount) throws IllegalAccessException {
+        playerNeedOp(player);
+
         Config.setAddedTime(amount);
 
         if (!Config.setRet) {
@@ -284,7 +330,9 @@ public class ConfigInvTrigger {
         }
     }
 
-    public static void passiveAllTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void passiveAllTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         boolean isEnabled = item.getType() == Material.LIME_TERRACOTTA;
 
         Config.setPassiveAll(!isEnabled);
@@ -292,7 +340,9 @@ public class ConfigInvTrigger {
         inv.setItem(11, ConfigInvItems.getPassiveAllItem());
     }
 
-    public static void passiveTeamTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void passiveTeamTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         boolean isEnabled = item.getType() == Material.LIME_TERRACOTTA;
 
         Config.setPassiveTeam(!isEnabled);
@@ -300,7 +350,9 @@ public class ConfigInvTrigger {
         inv.setItem(15, ConfigInvItems.getPassiveTeamItem());
     }
 
-    public static void playerTipsTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void playerTipsTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         boolean isEnabled = item.getType() == Material.LIME_TERRACOTTA;
 
         Config.setTips(!isEnabled);
@@ -308,7 +360,9 @@ public class ConfigInvTrigger {
         inv.setItem(11, ConfigInvItems.getPlayerTipsItem());
     }
 
-    public static void playerLangTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void playerLangTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         String age = item.getItemMeta().getLore().get(0).split(":")[1];
         int idx = langs.indexOf(age);
         idx++;
@@ -322,19 +376,21 @@ public class ConfigInvTrigger {
         inv.setItem(15, ConfigInvItems.getPlayerLangItem());
     }
 
-    public static void minusEndTeleporterTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void minusEndTeleporterTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        endTeleporterTrigger(player, inv, --amount);
+        endTeleporter(player, inv, --amount);
     }
 
-    public static void plusEndTeleporterTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void plusEndTeleporterTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        endTeleporterTrigger(player, inv, ++amount);
+        endTeleporter(player, inv, ++amount);
     }
 
-    private static void endTeleporterTrigger(Player player, Inventory inv, int amount) {
+    private static void endTeleporter(Player player, Inventory inv, int amount) throws IllegalAccessException {
+        playerNeedOp(player);
+
         Config.setXpEnd(amount);
 
         if (!Config.setRet) {
@@ -344,19 +400,21 @@ public class ConfigInvTrigger {
         }
     }
 
-    public static void minusOverworldTeleporterTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void minusOverworldTeleporterTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        overworldTeleporterTrigger(player, inv, amount - 2);
+        overworldTeleporter(player, inv, amount - 2);
     }
 
-    public static void plusOverworldTeleporterTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void plusOverworldTeleporterTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        overworldTeleporterTrigger(player, inv, amount + 2);
+        overworldTeleporter(player, inv, amount + 2);
     }
 
-    private static void overworldTeleporterTrigger(Player player, Inventory inv, int amount) {
+    private static void overworldTeleporter(Player player, Inventory inv, int amount) throws IllegalAccessException {
+        playerNeedOp(player);
+
         Config.setXpOverworld(amount);
 
         if (!Config.setRet) {
@@ -366,19 +424,21 @@ public class ConfigInvTrigger {
         }
     }
 
-    public static void minusCoralCompassTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void minusCoralCompassTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        coralCompassTrigger(player, inv, amount - 5);
+        coralCompass(player, inv, amount - 5);
     }
 
-    public static void plusCoralCompassTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void plusCoralCompassTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        coralCompassTrigger(player, inv, amount + 5);
+        coralCompass(player, inv, amount + 5);
     }
 
-    private static void coralCompassTrigger(Player player, Inventory inv, int amount) {
+    private static void coralCompass(Player player, Inventory inv, int amount) throws IllegalAccessException {
+        playerNeedOp(player);
+
         Config.setXpCoral(amount);
 
         if (!Config.setRet) {
@@ -388,7 +448,9 @@ public class ConfigInvTrigger {
         }
     }
 
-    public static void teamOptionTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void teamOptionTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         boolean isEnabled = item.getType() == Material.LIME_TERRACOTTA;
 
         Config.setTeam(!isEnabled);
@@ -396,19 +458,21 @@ public class ConfigInvTrigger {
         inv.setItem(11, ConfigInvItems.getTeamItem());
     }
 
-    public static void minusTeamSizeTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void minusTeamSizeTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        teamSizeTrigger(player, inv, --amount);
+        teamSize(player, inv, --amount);
     }
 
-    public static void plusTeamSizeTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void plusTeamSizeTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        teamSizeTrigger(player, inv, ++amount);
+        teamSize(player, inv, ++amount);
     }
 
-    private static void teamSizeTrigger(Player player, Inventory inv, int amount) {
+    private static void teamSize(Player player, Inventory inv, int amount) throws IllegalAccessException {
+        playerNeedOp(player);
+
         Config.setTeamSize(amount);
 
         if (!Config.setRet) {
@@ -418,7 +482,9 @@ public class ConfigInvTrigger {
         }
     }
 
-    public static void teamInventoryTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void teamInventoryTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         boolean isEnabled = item.getType() == Material.LIME_TERRACOTTA;
 
         Config.setTeamInv(!isEnabled);
@@ -426,19 +492,21 @@ public class ConfigInvTrigger {
         inv.setItem(11, ConfigInvItems.getTeamInvItem());
     }
 
-    public static void minusTeamInvSizeTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void minusTeamInvSizeTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        teamInvSizeTrigger(player, inv, --amount);
+        teamInvSize(player, inv, --amount);
     }
 
-    public static void plusTeamInvSizeTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void plusTeamInvSizeTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        teamInvSizeTrigger(player, inv, ++amount);
+        teamInvSize(player, inv, ++amount);
     }
 
-    private static void teamInvSizeTrigger(Player player, Inventory inv, int amount) {
+    private static void teamInvSize(Player player, Inventory inv, int amount) throws IllegalAccessException {
+        playerNeedOp(player);
+
         Config.setTeamInvSize(amount);
 
         if (!Config.setRet) {
@@ -448,7 +516,9 @@ public class ConfigInvTrigger {
         }
     }
 
-    public static void sbttTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void sbttTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
         boolean isEnabled = item.getType() == Material.LIME_TERRACOTTA;
 
         Config.setSbttMode(!isEnabled);
@@ -456,19 +526,21 @@ public class ConfigInvTrigger {
         inv.setItem(11, ConfigInvItems.getSbttItem());
     }
 
-    public static void minusSbttSizeTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void minusSbttSizeTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        sbttSizeTrigger(player, inv, --amount);
+        sbttSize(player, inv, --amount);
     }
 
-    public static void plusSbttSizeTrigger(Player player, Inventory inv, ItemStack item) {
+    public static void plusSbttSizeTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
 
-        sbttSizeTrigger(player, inv, ++amount);
+        sbttSize(player, inv, ++amount);
     }
 
-    private static void sbttSizeTrigger(Player player, Inventory inv, int amount) {
+    private static void sbttSize(Player player, Inventory inv, int amount) throws IllegalAccessException {
+        playerNeedOp(player);
+
         Config.setSbttAmount(amount);
 
         if (!Config.setRet) {

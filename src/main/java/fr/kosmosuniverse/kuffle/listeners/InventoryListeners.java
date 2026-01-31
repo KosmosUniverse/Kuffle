@@ -81,9 +81,6 @@ public class InventoryListeners implements Listener {
 			event.setCancelled(true);
 
 			resultInventory(player, item);
-		} else if (Config.hasInv(event.getView().getTitle())) {
-			event.setCancelled(true);
-			configInventory(player, event.getInventory(), item);
 		} else if (event.getView().getTitle().contains(" Targets ")) {
 			itemsInventory(event);
 		}
@@ -170,25 +167,6 @@ public class InventoryListeners implements Listener {
 		if (item.hasItemMeta() &&
 				Objects.requireNonNull(item.getItemMeta()).getPersistentDataContainer().has(NamespacedKey.minecraft("invname"), PersistentDataType.STRING)) {
 			player.openInventory(ResultManager.getInstance().getInv(item.getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("invname"), PersistentDataType.STRING)));
-		}
-	}
-
-	private void configInventory(Player player, Inventory inv, ItemStack item) {
-		if (!item.hasItemMeta()) {
-			return ;
-		}
-
-		String invName = Objects.requireNonNull(item.getItemMeta()).getPersistentDataContainer().get(NamespacedKey.minecraft("invname"), PersistentDataType.STRING);
-		String trigger = Objects.requireNonNull(item.getItemMeta()).getPersistentDataContainer().get(NamespacedKey.minecraft("trigger"), PersistentDataType.STRING);
-		String reload = Objects.requireNonNull(item.getItemMeta()).getPersistentDataContainer().get(NamespacedKey.minecraft("reload"), PersistentDataType.STRING);
-
-		if (invName != null && Config.hasInv(invName)) {
-			player.openInventory(Config.getInv(invName));
-		} else if (trigger != null) {
-			Config.invTrigger(player, inv, item, trigger);
-		} else if (reload != null) {
-			Config.reloadInv(reload);
-			player.openInventory(Config.getInv(reload));
 		}
 	}
 }

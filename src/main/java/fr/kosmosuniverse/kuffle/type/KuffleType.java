@@ -8,10 +8,7 @@ import java.util.Objects;
 import fr.kosmosuniverse.kuffle.commands.*;
 import fr.kosmosuniverse.kuffle.core.*;
 import fr.kosmosuniverse.kuffle.exceptions.KuffleFileLoadException;
-import fr.kosmosuniverse.kuffle.listeners.InventoryListeners;
-import fr.kosmosuniverse.kuffle.listeners.ItemEvent;
-import fr.kosmosuniverse.kuffle.listeners.PlayerEvents;
-import fr.kosmosuniverse.kuffle.listeners.PlayerInteract;
+import fr.kosmosuniverse.kuffle.listeners.*;
 import fr.kosmosuniverse.kuffle.tabcompleters.*;
 import fr.kosmosuniverse.kuffle.utils.FilesConformity;
 import fr.kosmosuniverse.kuffle.utils.Utils;
@@ -119,6 +116,7 @@ public abstract class KuffleType {
 		// Listeners
 		plugin.getServer().getPluginManager().registerEvents(new PlayerEvents(), plugin);
 		plugin.getServer().getPluginManager().registerEvents(new ItemEvent(), plugin);
+		plugin.getServer().getPluginManager().registerEvents(new ConfigInventoriesListener(), plugin);
 		
 		// Commands
 		Objects.requireNonNull(plugin.getCommand("k-config")).setExecutor(new KuffleConfig());

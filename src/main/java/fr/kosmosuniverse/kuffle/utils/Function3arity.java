@@ -5,5 +5,5 @@ package fr.kosmosuniverse.kuffle.utils;
  */
 @FunctionalInterface
 public interface Function3arity<A, B, C> {
-    void apply(A a, B b, C c);
+    void apply(A a, B b, C c) throws IllegalAccessException;
 }
