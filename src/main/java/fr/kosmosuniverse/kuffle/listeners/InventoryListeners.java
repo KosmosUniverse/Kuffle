@@ -45,8 +45,6 @@ public class InventoryListeners implements Listener {
 		if (item == null) {
 			return;
 		}
-
-		event.setCancelled(false);
 		
 		if (event.getView().getTitle().contains(ChatColor.BLACK + "AllCustomCrafts")) {
 			event.setCancelled(true);

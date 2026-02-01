@@ -12,7 +12,6 @@ import fr.kosmosuniverse.kuffle.listeners.*;
 import fr.kosmosuniverse.kuffle.tabcompleters.*;
 import fr.kosmosuniverse.kuffle.utils.FilesConformity;
 import fr.kosmosuniverse.kuffle.utils.Utils;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -166,7 +165,7 @@ public abstract class KuffleType {
 	 * 
 	 * @throws KuffleFileLoadException if file loading fails
 	 */
-	protected void setupType(Player player, JavaPlugin plugin) throws KuffleFileLoadException {
+	protected void setupType(JavaPlugin plugin) throws KuffleFileLoadException {
 		try {
 			TargetManager.setup(getType(), FilesConformity.getContent("targets.json"));
 		} catch (Exception e) {
@@ -189,7 +188,7 @@ public abstract class KuffleType {
 			int badCrafts = CraftManager.setupCrafts(getType(), FilesConformity.getContent("crafts.json"));
 			
 			if (badCrafts > 0) {
-				LogManager.getInstanceSystem().writeMsg(player, "[WARNING] : Some crafts could not be load, check Kuffle system logs for more information.");
+				LogManager.getInstanceSystem().logSystemMsg("[WARNING] : Some crafts could not be load, check Kuffle system logs for more information.");
 			}
 		} catch (IllegalArgumentException e) {
 			Utils.logException(e);

@@ -1,13 +1,6 @@
 package fr.kosmosuniverse.kuffle.listeners;
 
 import fr.kosmosuniverse.kuffle.core.*;
-import fr.kosmosuniverse.kuffle.crafts.ACraft;
-import fr.kosmosuniverse.kuffle.multiblock.AMultiblock;
-import fr.kosmosuniverse.kuffle.multiblock.MultiblockManager;
-import fr.kosmosuniverse.kuffle.type.KuffleType;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,7 +10,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -40,8 +32,6 @@ public class ConfigInventoriesListener implements Listener {
 		if (item == null) {
 			return;
 		}
-
-		event.setCancelled(false);
 		
 		if (Config.hasInv(event.getView().getTitle())) {
 			event.setCancelled(true);
@@ -57,6 +47,7 @@ public class ConfigInventoriesListener implements Listener {
 		String invName = Objects.requireNonNull(item.getItemMeta()).getPersistentDataContainer().get(NamespacedKey.minecraft("invname"), PersistentDataType.STRING);
 		String trigger = Objects.requireNonNull(item.getItemMeta()).getPersistentDataContainer().get(NamespacedKey.minecraft("trigger"), PersistentDataType.STRING);
 		String reload = Objects.requireNonNull(item.getItemMeta()).getPersistentDataContainer().get(NamespacedKey.minecraft("reload"), PersistentDataType.STRING);
+		String itemName = Objects.requireNonNull(item.getItemMeta()).getDisplayName();
 
 		if (invName != null && Config.hasInv(invName)) {
 			player.openInventory(Config.getInv(invName));
@@ -65,6 +56,8 @@ public class ConfigInventoriesListener implements Listener {
 		} else if (reload != null) {
 			Config.reloadInv(reload);
 			player.openInventory(Config.getInv(reload));
+		} else if ("<- Quit".equals(itemName)) {
+			player.closeInventory();
 		}
 	}
 }

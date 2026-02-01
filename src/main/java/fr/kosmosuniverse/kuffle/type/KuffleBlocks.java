@@ -7,7 +7,6 @@ import fr.kosmosuniverse.kuffle.listeners.BlocksPlayerInteract;
 import fr.kosmosuniverse.kuffle.listeners.PlayerMove;
 import fr.kosmosuniverse.kuffle.multiblock.MultiblockManager;
 import fr.kosmosuniverse.kuffle.tabcompleters.KuffleSpawnMultiBlocksTab;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
@@ -25,9 +24,9 @@ public class KuffleBlocks extends KuffleTypeDecorator {
 	 *
 	 * @throws KuffleFileLoadException if one of the resource file load fails
 	 */
-	public KuffleBlocks(Player player, KuffleType type, JavaPlugin plugin) throws KuffleFileLoadException {
+	public KuffleBlocks(KuffleType type, JavaPlugin plugin) throws KuffleFileLoadException {
 		super(type);
-		setupKuffleType(player, plugin);
+		setupKuffleType(plugin);
 	}
 
 	public void setupSbtt() {
@@ -45,8 +44,8 @@ public class KuffleBlocks extends KuffleTypeDecorator {
 	 *
 	 * @throws KuffleFileLoadException if file loading fails
 	 */
-	public void setupKuffleType(Player player, JavaPlugin plugin) throws KuffleFileLoadException {
-		setupType(player, plugin);
+	public void setupKuffleType(JavaPlugin plugin) throws KuffleFileLoadException {
+		setupType(plugin);
 
 		if (playerInteractBlocks == null) {
 			playerInteractBlocks = new BlocksPlayerInteract();

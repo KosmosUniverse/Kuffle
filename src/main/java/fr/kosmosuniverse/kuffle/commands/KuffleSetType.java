@@ -77,7 +77,7 @@ public class KuffleSetType extends AKuffleCommand {
 		confirm = null;
 
 		try {
-			Party.getInstance().setType(player, type);
+			Party.getInstance().setType(type);
 			LogManager.getInstanceSystem().writeMsg(player, "Kuffle type set as [" + type.name() + "].");
 		} catch (KuffleFileLoadException e) {
 			Utils.logException(e);

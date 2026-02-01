@@ -89,7 +89,7 @@ public class KuffleLoad extends AKuffleCommand {
 				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("WRONG_TYPE", Config.getLang()));
 				return false;
 			} else if (Party.getInstance().getType().getType() == KuffleType.Type.NO_TYPE) {
-				Party.getInstance().setType(player, type);
+				Party.getInstance().setType(type);
 			}
 			
 			Config.loadConfig(holder.getConfig());

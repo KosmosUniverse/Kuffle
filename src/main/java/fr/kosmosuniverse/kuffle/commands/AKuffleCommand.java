@@ -3,7 +3,6 @@ package fr.kosmosuniverse.kuffle.commands;
 import fr.kosmosuniverse.kuffle.core.*;
 import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 import fr.kosmosuniverse.kuffle.type.KuffleType;
-import fr.kosmosuniverse.kuffle.utils.Utils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -99,8 +98,7 @@ public abstract class AKuffleCommand implements CommandExecutor  {
 		
 		try {
 			ret = runCommand();
-		} catch (KuffleCommandFalseException e) {
-			Utils.logException(e);
+		} catch (KuffleCommandFalseException ignored) {
 		}
 		
 		player = null;

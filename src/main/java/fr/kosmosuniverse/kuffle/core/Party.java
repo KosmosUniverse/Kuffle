@@ -10,7 +10,6 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -44,6 +43,12 @@ public class Party {
         games = new Games();
         status = GameStatus.NOT_RUNNING;
         type = new KuffleNoType(KuffleMain.getInstance());
+
+        if (!Config.getStartType().equals(KuffleType.Type.NO_TYPE)) {
+            type.clearType();
+
+            setType(Config.getStartType());
+        }
     }
 
     /**
@@ -70,15 +75,15 @@ public class Party {
         games.clear();
     }
 
-    public void setType(Player player, KuffleType.Type newType) throws KuffleFileLoadException {
+    public void setType(KuffleType.Type newType) throws KuffleFileLoadException {
         type = type.clearType();
 
         switch (newType) {
             case ITEMS:
-                type = new KuffleItems(player, type, KuffleMain.getInstance());
+                type = new KuffleItems(type, KuffleMain.getInstance());
                 break;
             case BLOCKS:
-                type = new KuffleBlocks(player, type, KuffleMain.getInstance());
+                type = new KuffleBlocks(type, KuffleMain.getInstance());
                 break;
             case NO_TYPE:
             default:

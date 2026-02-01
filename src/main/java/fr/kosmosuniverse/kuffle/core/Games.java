@@ -705,15 +705,8 @@ public class Games {
         ResultManager.getInstance().saveGameResults(games);
         ResultManager.getInstance().createInventories();
 
-        games.forEach((senderName, senderData) -> {
-            games.forEach((playerName, playerData) ->
-                    Objects.requireNonNull(Bukkit.getPlayer(playerName)).sendMessage(playerString(senderName, playerData.getConfigLang())));
-
-            logString(senderName);
-        });
-
-        games.forEach((senderName, senderData) ->
-                Party.getInstance().getSpectators().getList().forEach(playerName ->
-                        Objects.requireNonNull(Bukkit.getPlayer(playerName)).sendMessage(playerString(senderName, Config.getLang()))));
+        if (Config.getLogGameResult()) {
+            games.forEach((playerName, Data) -> logString(playerName));
+        }
     }
 }
