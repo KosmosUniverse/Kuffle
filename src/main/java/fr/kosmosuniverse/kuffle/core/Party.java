@@ -109,13 +109,17 @@ public class Party {
     public void stop() {
         status = GameStatus.NOT_RUNNING;
 
-        games.getGames().forEach((playerName, playerData) -> {
-            for (PotionEffect pe : Objects.requireNonNull(Bukkit.getPlayer(playerName)).getActivePotionEffects()) {
-                Objects.requireNonNull(Bukkit.getPlayer(playerName)).removePotionEffect(pe.getType());
-            }
+        games.getGames()
+                .keySet()
+                .stream()
+                .filter(playerName -> Bukkit.getPlayer(playerName) != null)
+                .forEach(playerName -> {
+                    for (PotionEffect pe : Objects.requireNonNull(Bukkit.getPlayer(playerName)).getActivePotionEffects()) {
+                        Objects.requireNonNull(Bukkit.getPlayer(playerName)).removePotionEffect(pe.getType());
+                    }
 
-            games.resetPlayerBar(playerName);
-        });
+                    games.resetPlayerBar(playerName);
+                });
 
         if (Config.getSBTT()) {
             type.clearSbtt();

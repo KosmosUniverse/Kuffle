@@ -269,7 +269,7 @@ public class Games {
             games.get(playerName).setAge(games.get(playerName).getAge() + 1);
 
             for (int cnt = games.get(playerName).getAge(); cnt < (Config.getLastAge().getNumber() + 1); cnt++) {
-                games.get(playerName).getAgeTimes().put(AgeManager.getAgeByNumber(cnt).getName(), (long) -1);
+                games.get(playerName).getAgeTimes().put(AgeManager.getAgeByNumber(cnt).getName(), (long) 0);
             }
         }
 
@@ -306,7 +306,7 @@ public class Games {
         for (int i = 0; i < (Config.getLastAge().getNumber() + 1); i++) {
             Age tmpAge = AgeManager.getAgeByNumber(i);
 
-            if (games.get(playerName).getAgeTimes().get(tmpAge.getName()) == -1) {
+            if (games.get(playerName).getAgeTimes().get(tmpAge.getName()) == 0) {
                 sb.append(LangManager.getMsgLang("FINISH_ABANDON", receiverLang).replace("%s", tmpAge.getColor() + tmpAge.getName().replace("_Age", "") + ChatColor.BLUE)).append("\n");
                 abandon = true;
             } else if (games.get(playerName).getAgeTimes().get(tmpAge.getName()) < 0) {
@@ -350,7 +350,7 @@ public class Games {
         for (int i = 0; i < (Config.getLastAge().getNumber() + 1); i++) {
             Age tmpAge = AgeManager.getAgeByNumber(i);
 
-            if (games.get(playerName).getAgeTimes().get(tmpAge.getName()) == -1) {
+            if (games.get(playerName).getAgeTimes().get(tmpAge.getName()) == 0) {
                 sb.append(LangManager.getMsgLang("FINISH_ABANDON", lang).replace("%s", tmpAge.getName().replace("_Age", ""))).append("\n");
                 abandon = true;
             } else if (games.get(playerName).getAgeTimes().get(tmpAge.getName()) < 0) {

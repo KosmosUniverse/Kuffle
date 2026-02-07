@@ -186,8 +186,8 @@ public class PlayerData implements Serializable {
         oStream.writeLong(timeTarget);
         oStream.writeLong(interval);
 
-        oStream.writeUTF(currentTarget);
-        oStream.writeUTF(currentTargetDisplay);
+        oStream.writeUTF(currentTarget == null ? "null" : currentTarget);
+        oStream.writeUTF(currentTargetDisplay == null ? "null" : currentTargetDisplay);
         oStream.writeUTF(configLang);
 
         oStream.writeObject(spawnLoc.serialize());
@@ -238,7 +238,17 @@ public class PlayerData implements Serializable {
         interval = iStream.readLong();
 
         currentTarget = SerializeUtils.readString(iStream);
+
+        if (currentTarget.equals("null")) {
+            currentTarget = null;
+        }
+
         currentTargetDisplay = SerializeUtils.readString(iStream);
+
+        if (currentTargetDisplay.equals("null")) {
+            currentTargetDisplay = null;
+        }
+
         configLang = SerializeUtils.readString(iStream);
 
         spawnLoc = Location.deserialize((Map<String, Object>) iStream.readObject());

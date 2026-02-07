@@ -447,7 +447,10 @@ public class Config implements Serializable {
 		return ChatColor.BLUE + dash +
 				"-      Configuration Kuffle v" + KuffleMain.getInstance().getVersion() + "      -\n" +
 				dash +
-				"Saturation: " + ChatColor.GOLD + configValues.isSaturation() + "\n"
+				"System : " + "\n"
+				+ ChatColor.BLUE + "  - Start Type: " + ChatColor.GOLD + configValues.getStartType() + "\n"
+				+ ChatColor.BLUE + "  - Log Result: " + ChatColor.GOLD + configValues.isLogResults() + "\n"
+				+ ChatColor.BLUE + "Saturation: " + ChatColor.GOLD + configValues.isSaturation() + "\n"
 				+ ChatColor.BLUE + "Spreadplayers: " + ChatColor.GOLD + configValues.isSpread() + "\n"
 				+ ChatColor.BLUE + "  - Spreadplayer min distance: " + ChatColor.GOLD + configValues.getSpreadDistance() + "\n" + ChatColor.BLUE + "  - Spreadplayer min radius: " + ChatColor.GOLD + configValues.getSpreadRadius() + "\n"
 				+ ChatColor.BLUE + "Rewards: " + ChatColor.GOLD + configValues.isRewards() + "\n"

@@ -343,14 +343,50 @@ public class ResultManager {
         rd.getTeamTimes().forEach((teamName, teamTimes) -> createPersonalTimes(teamName + " Times", teamTimes, "Teams Times Board"));
     }
 
+    private String createStringTimeFromValue(long time) {
+        if (time == 0 || time / 1000 == 0) {
+            return "Abandoned";
+        } else if (time < 0) {
+            return "Abandoned after " + Utils.getTimeFromSec((time * -1) / 1000);
+        } else {
+            return Utils.getTimeFromSec(time / 1000);
+        }
+    }
+
+    static class TimeComparator implements Comparator<Map.Entry<String, Long>> {
+        @Override
+        public int compare(Map.Entry<String, Long> o1, Map.Entry<String, Long> o2) {
+            return compareValue(o1.getValue(), o2.getValue());
+        }
+
+        // Put in asc order but with neg number in desc order and after pos numbers
+        private int compareValue(Long time1, Long time2) {
+            if (time1 < 0 || time2 < 0) {
+                if (time1 < 0 && time2 < 0) {
+                    return time1.compareTo(time2);
+                } else if (time1 >= 0) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            } else if (time1 == 0 || time2 == 0) {
+                if (time1 == 0 && time2 == 0) {
+                    return 0;
+                } else if (time1 > 0) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            } else {
+                return time1.compareTo(time2);
+            }
+        }
+    }
+
     private void createPersonalTimes(String invName, Map<String, Long> times, String prevInv) {
         Inventory inv = Bukkit.createInventory(null, 18, invName);
 
         setupFirstRow(inv, prevInv);
-
-        Map<String, Long> tmp = times.entrySet()
-                .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> (e.getValue() >= 0 ? e.getValue() : Long.MAX_VALUE)));
 
         AgeManager.getAges().stream()
                 .filter(a -> a.getNumber() != -1)
@@ -358,10 +394,8 @@ public class ResultManager {
                 .filter(a -> a.getNumber() <= rd.getLastAge())
                 .forEach(a -> inv.addItem(ItemMaker.newItem(a.getBox())
                         .addName(a.getColor() + a.getName().replace("_", " "))
-                        .addLore("Time : " + (tmp.get(a.getName()) != Long.MAX_VALUE ? Utils.getTimeFromSec(tmp.get(a.getName()) / 1000) : "Abandoned"))
+                        .addLore("Time : " + createStringTimeFromValue(times.get(a.getName())))
                         .getItem()));
-
-        tmp.clear();
 
         invs.put(invName, inv);
     }
@@ -381,13 +415,15 @@ public class ResultManager {
                                     .addName(a.getColor() + a.getName().replace("_", " "))
                                     .addTag("invname", invName + " " + a.getName().replace("_", " ") + " Times")
                                     .getItem());
-                    createAgeTimes(invName, a.getName(), datas);
+                    createAgeTimes(invName, a.getName(), datas.entrySet()
+                            .stream()
+                            .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get(a.getName()))));
                 });
 
         invs.put(invName + " Ages Times Board", inv);
     }
 
-    private void createAgeTimes(String prevInvName, String ageName, Map<String, Map<String, Long>> datas) {
+    private void createAgeTimes(String prevInvName, String ageName, Map<String, Long> datas) {
         Inventory inv = Bukkit.createInventory(null, Utils.getNbInventoryRows(datas.size()) + 9, prevInvName + " " + ageName.replace("_", " ") + " Times");
 
         setupFirstRow(inv, prevInvName + " Ages Times Board");
@@ -397,16 +433,13 @@ public class ResultManager {
 
         datas.entrySet()
                 .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> (e.getValue().get(ageName) >= 0 ? e.getValue().get(ageName) : Long.MAX_VALUE)))
-                .entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByValue())
+                .sorted(new TimeComparator())
                 .forEach(e -> {
                     int tmp = e.getValue() == previousValue.get() ? rank.get() : rank.incrementAndGet();
 
                     inv.addItem(ItemMaker.newItem(Utils.getHead(Bukkit.getPlayer(e.getKey())))
                             .addName(tmp + "# : " + e.getKey())
-                            .addLore("Time : " + (e.getValue() != Long.MAX_VALUE ? Utils.getTimeFromSec(e.getValue() / 1000) : "Abandoned"))
+                            .addLore("Time : " + createStringTimeFromValue(e.getValue()))
                             .getItem());
 
                     previousValue.set(e.getValue());
@@ -430,33 +463,49 @@ public class ResultManager {
                     .addName("Teams Total Time")
                     .addTag("invname", "Teams Total Time Board")
                     .getItem());
+
+            createTotalTimeSpecificInv("Teams", rd.getTeamTimes().entrySet()
+                    .stream()
+                    .collect(Collectors.toMap(Map.Entry::getKey,
+                            e -> e.getValue()
+                                    .values()
+                                    .stream()
+                                    .mapToLong(l -> l)
+                                    .sum())));
         }
 
         invs.put("Total Time Board", inv);
 
-        createTotalTimeSpecificInv("Players", rd.getPlayersTimes());
-        createTotalTimeSpecificInv("Teams", rd.getTeamTimes());
+        createTotalTimeSpecificInv("Players", rd.getPlayersTimes().entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey,
+                        e -> e.getValue()
+                                .values()
+                                .stream()
+                                .mapToLong(l -> l)
+                                .sum())));
     }
 
-    private void createTotalTimeSpecificInv(String invName, Map<String, Map<String, Long>> datas) {
+    private void createTotalTimeSpecificInv(String invName, Map<String, Long> datas) {
         Inventory totalTimeInv = Bukkit.createInventory(null, Utils.getNbInventoryRows(datas.size()) + 9, invName + " Total Time Board");
         AtomicInteger rank = new AtomicInteger(0);
         AtomicLong previousValue = new AtomicLong(-1);
 
         setupFirstRow(totalTimeInv, "Total Time Board");
 
-        datas.forEach((name, times) -> {
-            long timeSum = times.containsValue(Long.MAX_VALUE) ? Long.MAX_VALUE : times.values().stream().mapToLong(l -> l).sum();
+        datas.entrySet()
+                .stream()
+                .sorted(new TimeComparator())
+                .forEach(e -> {
+                    int tmp = previousValue.get() == e.getValue() ? rank.get() : rank.incrementAndGet();
 
-            int tmp = previousValue.get() == timeSum ? rank.get() : rank.incrementAndGet();
+                    totalTimeInv.addItem(ItemMaker.newItem(Utils.getHead(Bukkit.getPlayer(e.getKey())))
+                            .addName(tmp + "# : " + e.getKey())
+                            .addLore("Time : " + createStringTimeFromValue(e.getValue()))
+                            .getItem());
 
-            totalTimeInv.addItem(ItemMaker.newItem(Utils.getHead(Bukkit.getPlayer(name)))
-                    .addName(tmp + "# : " + name)
-                    .addLore("Time : " + (timeSum != Long.MAX_VALUE ? Utils.getTimeFromSec(timeSum / 1000) : "Abandoned after " + Utils.getTimeFromSec(timeSum / 1000)))
-                    .getItem());
-
-            previousValue.set(timeSum);
-        });
+                    previousValue.set(e.getValue());
+                });
 
         invs.put(invName + " Total Time Board", totalTimeInv);
     }
