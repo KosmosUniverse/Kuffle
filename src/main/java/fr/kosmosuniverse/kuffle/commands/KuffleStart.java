@@ -83,11 +83,14 @@ public class KuffleStart extends AKuffleCommand {
 				}
 			}, 20 + spread);
 
-			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> ActionBar.sendRawTitle(ChatColor.BOLD + String.valueOf(ChatColor.GOLD) + "4" + ChatColor.RESET, Objects.requireNonNull(Bukkit.getPlayer(playerName))), 40 + spread);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
+				ActionBar.sendRawTitle(ChatColor.BOLD + String.valueOf(ChatColor.GOLD) + "4" + ChatColor.RESET, Objects.requireNonNull(Bukkit.getPlayer(playerName)));
+				CraftManager.enableCrafts();
+			}, 40 + spread);
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 				ActionBar.sendRawTitle(ChatColor.BOLD + String.valueOf(ChatColor.YELLOW) + "3" + ChatColor.RESET, Objects.requireNonNull(Bukkit.getPlayer(playerName)));
-				CraftManager.enableCrafts();
+				Party.getInstance().getPlayers().getList().forEach(player -> CraftManager.discoverCrafts(Objects.requireNonNull(Bukkit.getPlayer(player))));
 			}, 60 + spread);
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> ActionBar.sendRawTitle(ChatColor.BOLD + String.valueOf(ChatColor.GREEN) + "2" + ChatColor.RESET, Objects.requireNonNull(Bukkit.getPlayer(playerName))), 80 + spread);

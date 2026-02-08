@@ -1,7 +1,6 @@
 package fr.kosmosuniverse.kuffle.core;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -21,10 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.inventory.Recipe;
 import org.json.JSONObject;
-
-import static org.bukkit.Bukkit.getServer;
 
 /**
  * 
@@ -103,7 +99,12 @@ public class CraftManager {
 	public static void enableCrafts() {
 		recipes.stream()
 				.filter(craft -> craft.isMandatory() || Config.getCrafts())
-				.forEach(craft -> KuffleMain.getInstance().getServer().addRecipe(craft.getRecipe()));
+				.forEach(craft -> {
+					try {
+						KuffleMain.getInstance().getServer().addRecipe(craft.getRecipe());
+					} catch (IllegalStateException ignored) {
+					}
+				});
 	}
 	
 	/**
@@ -115,6 +116,12 @@ public class CraftManager {
 		List<NamespacedKey> keys = getGameKeyList();
 		
 		player.discoverRecipes(keys);
+	}
+
+	public static void undiscoverCrafts(Player player) {
+		List<NamespacedKey> keys = getGameKeyList();
+
+		player.undiscoverRecipes(keys);
 	}
 	
 	private static List<NamespacedKey> getGameKeyList() {
@@ -144,28 +151,7 @@ public class CraftManager {
 	 * Removes Crafts from Minecraft
 	 */
 	public static void disableCrafts() {
-		Iterator<Recipe> it = getServer().recipeIterator();
-		Recipe recipe;
-
-		while (it.hasNext()) {
-			recipe = it.next();
-
-			if (recipe != null &&
-					recipes.stream().map(ACraft::getItem).collect(Collectors.toList()).contains(recipe.getResult())) {
-				it.remove();
-			}
- 		}
-	}
-	
-	/**
-	 * Makes a player undiscovered recipes
-	 * 
-	 * @param player	The player that have to undiscovered recipe
-	 */
-	public static void undiscoverCrafts(Player player) {
-		recipes.stream()
-			.filter(craft -> craft.isMandatory() || Config.getCrafts())
-			.forEach(craft -> player.undiscoverRecipe(craft.getKey()));
+		KuffleMain.getInstance().getServer().resetRecipes();
 	}
 	
 	/**
@@ -389,10 +375,6 @@ public class CraftManager {
 		Template t = new Template(tmpName, getMaterials(tmpName.replace(TEMPLATE, "_Age")));
 
 		addCraft(t);
-
-		/*Objects.requireNonNull(GameManager.getGames()).forEach((playerName, game) ->
-			game.getPlayer().discoverRecipe(new NamespacedKey(KuffleMain.getInstance(), t.getName()))
-		);*/
 		
 		reloadInventories();
 	}

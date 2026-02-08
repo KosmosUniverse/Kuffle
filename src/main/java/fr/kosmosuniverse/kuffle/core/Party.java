@@ -119,6 +119,8 @@ public class Party {
                     }
 
                     games.resetPlayerBar(playerName);
+
+                    CraftManager.undiscoverCrafts(Objects.requireNonNull(Bukkit.getPlayer(playerName)));
                 });
 
         if (Config.getSBTT()) {

@@ -16,14 +16,13 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 /**
  * 
@@ -57,7 +56,7 @@ public class PlayerEvents implements Listener {
 			Utils.logException(e);
 			return;
 		}
-		
+
 		CraftManager.discoverCrafts(player);
 		Party.getInstance().getPlayers().getList().forEach(p -> Objects.requireNonNull(Bukkit.getPlayer(p)).sendMessage(LangManager.getMsgLang("GAME_RELOADED", Party.getInstance().getGames().getGames().get(p).getConfigLang()).replace("%s", player.getName())));
 		Party.getInstance().getSpectators().getList().forEach(p -> Objects.requireNonNull(Bukkit.getPlayer(p)).sendMessage(LangManager.getMsgLang("GAME_RELOADED", Party.getInstance().getGames().getGames().get(p).getConfigLang()).replace("%s", player.getName())));
@@ -182,10 +181,23 @@ public class PlayerEvents implements Listener {
 				player.sendMessage(ChatColor.RED + LangManager.getMsgLang("YOU_LOSE", Party.getInstance().getGames().getGames().get(player.getName()).getConfigLang()));
 			} else {
 				Party.getInstance().getGames().teleportAutoBack(player);
-				player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 1));
-				player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 999999, 10));
 			}
 		}, 20);
+	}
+
+	@EventHandler
+	public void onPlayerInvincibilityPeriod(EntityTargetLivingEntityEvent e) {
+		if (Party.getInstance().getStatus() == GameStatus.NOT_RUNNING
+				|| !(e.getTarget() instanceof Player)) {
+			return ;
+		}
+
+		Player p = (Player) e.getTarget();
+
+		if (Party.getInstance().getPlayers().has(p.getName())
+				&& Party.getInstance().getGames().getGames().get(p.getName()).isDead()) {
+			e.setCancelled(true);
+		}
 	}
 	
 	/**

@@ -89,6 +89,10 @@ public class Games {
         games.get(playerName).getScore().setScore(games.get(playerName).getTargetCount());
         updatePlayerBar(playerName);
         games.get(playerName).setCurrentTarget(null);
+
+        if (games.get(playerName).getTargetCount() >= (Config.getTargetPerAge() + 1)) {
+            games.get(playerName).getAgeTimes().put(AgeManager.getAgeByNumber(games.get(playerName).getAge()).getName(), System.currentTimeMillis() - games.get(playerName).getTimeStartAge());
+        }
     }
 
     /**
@@ -279,9 +283,8 @@ public class Games {
 
         if (Config.getPrintTab()) {
             Objects.requireNonNull(Bukkit.getPlayer(playerName)).sendMessage(playerString(playerName, games.get(playerName).getConfigLang()));
+            LogManager.getInstanceGame().logSystemMsg(logString(playerName));
         }
-
-        LogManager.getInstanceGame().logSystemMsg(logString(playerName));
     }
 
     /**
@@ -427,12 +430,7 @@ public class Games {
             }
         }
 
-        long ageDuration = System.currentTimeMillis() - playerData.getTimeStartAge();
-
-        playerData.getAgeTimes().put(AgeManager.getAgeByNumber(playerData.getAge()).getName(), ageDuration);
-        playerData.setTotalTime(playerData.getTotalTime() + (ageDuration / 1000));
-
-        Objects.requireNonNull(Bukkit.getPlayer(playerName)).sendMessage(LangManager.getMsgLang("TIME_AGE", playerData.getConfigLang()).replace("%t", Utils.getTimeFromSec(playerData.getTotalTime())));
+        Objects.requireNonNull(Bukkit.getPlayer(playerName)).sendMessage(LangManager.getMsgLang("TIME_AGE", playerData.getConfigLang()).replace("%t", Utils.getTimeFromSec((System.currentTimeMillis() - playerData.getTimeStartAge()) / 1000)));
         LogManager.getInstanceGame().logSystemMsg(LangManager.getMsgLang("AGE_VALIDATED", "en").replace("[#]", "[" + AgeManager.getAgeByNumber(playerData.getAge()).getName() + "]").replace("<#>", "<" + playerName + ">"));
 
         playerData.setTimeStartAge(System.currentTimeMillis());
@@ -505,6 +503,8 @@ public class Games {
         games.get(player).setCurrentTarget(null);
         games.get(player).getScore().setScore(games.get(player).getTargetCount());
         updatePlayerBar(player);
+
+        games.get(player).getAgeTimes().put(AgeManager.getAgeByNumber(games.get(player).getAge()).getName(), System.currentTimeMillis() - games.get(player).getTimeStartAge());
     }
 
     /**
@@ -632,11 +632,6 @@ public class Games {
             player.teleport(loc);
 
             restorePlayerInv(player);
-
-            for (PotionEffect p : player.getActivePotionEffects()) {
-                player.removePotionEffect(p.getType());
-            }
-
             reloadPlayerEffects(player.getName());
 
             for (Entity e : player.getNearbyEntities(3.0, 3.0, 3.0)) {
@@ -706,7 +701,7 @@ public class Games {
         ResultManager.getInstance().createInventories();
 
         if (Config.getLogGameResult()) {
-            games.forEach((playerName, Data) -> logString(playerName));
+            games.forEach((playerName, Data) -> LogManager.getInstanceGame().logSystemMsg(logString(playerName)));
         }
     }
 }

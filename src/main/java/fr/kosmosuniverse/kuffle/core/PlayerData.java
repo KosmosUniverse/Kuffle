@@ -62,8 +62,6 @@ public class PlayerData implements Serializable {
     @Setter
     private long timeStartAge;
     @Setter
-    private long totalTime = 0;
-    @Setter
     private long timeTarget = 0;
     @Setter
     private long interval = -1;
@@ -181,7 +179,6 @@ public class PlayerData implements Serializable {
         oStream.writeInt(sbttCount);
         oStream.writeInt(sameIdx);
 
-        oStream.writeLong(totalTime);
         oStream.writeLong(timeStartAge);
         oStream.writeLong(timeTarget);
         oStream.writeLong(interval);
@@ -232,7 +229,6 @@ public class PlayerData implements Serializable {
         sbttCount = iStream.readInt();
         sameIdx = iStream.readInt();
 
-        totalTime = iStream.readLong();
         timeStartAge = iStream.readLong();
         timeTarget = iStream.readLong();
         interval = iStream.readLong();
