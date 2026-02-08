@@ -1,6 +1,5 @@
 package fr.kosmosuniverse.kuffle.listeners;
 
-import java.util.List;
 import java.util.Objects;
 
 import fr.kosmosuniverse.kuffle.core.*;
@@ -45,7 +44,7 @@ public class InventoryListeners implements Listener {
 		if (item == null) {
 			return;
 		}
-		
+
 		if (event.getView().getTitle().contains(ChatColor.BLACK + "AllCustomCrafts")) {
 			event.setCancelled(true);
 
@@ -79,8 +78,10 @@ public class InventoryListeners implements Listener {
 			event.setCancelled(true);
 
 			resultInventory(player, item);
-		} else if (event.getView().getTitle().contains(" Targets ")) {
-			itemsInventory(event);
+		} else if (TargetManager.hasInv(event.getView().getTitle())) {
+			event.setCancelled(true);
+
+			itemsInventory(player, item);
 		}
 	}
 	
@@ -117,48 +118,20 @@ public class InventoryListeners implements Listener {
 			Party.getInstance().getGames().teleportPlayerToPlayer(player, Objects.requireNonNull(item.getItemMeta()).getDisplayName());
 		}
 	}
-	
-	/**
-	 * If player clicked on previous or next in an inventory it will open the appropriate inv
-	 * 
-	 * @param event	The InventoryCLickEvent
-	 */
-	private void itemsInventory(InventoryClickEvent event) {
-		Player player = (Player) event.getWhoClicked();
-		ItemStack item = event.getCurrentItem();
-		
-		String age = getInvAgeName(event.getView().getTitle());
-		
-		if (age != null && event.getView().getTitle().contains(age)) {
-			event.setCancelled(true);
-			
-			if (Objects.requireNonNull(Objects.requireNonNull(item).getItemMeta()).getDisplayName().equals("<- Previous")) {
-				player.openInventory(TargetManager.getAgeInv(age, event.getClickedInventory(), -1));
-			} else if (item.getItemMeta().getDisplayName().equals("Next ->")) {
-				player.openInventory(TargetManager.getAgeInv(age, event.getClickedInventory(), 1));
-			}
+
+	private void itemsInventory(Player player, ItemStack item) {
+		if (!item.hasItemMeta()) {
+			return ;
 		}
-	}
-	
-	/**
-	 * Search for the Age name that is linked to the current opened inventory
-	 * 
-	 * @param invName	The current inventory name
-	 * 
-	 * @return the actual age name, null if not found
-	 */
-	private String getInvAgeName(String invName) {
-		String name = null;
-		List<String> ageNames = AgeManager.getAgesNameList();
-		
-		for (String age : ageNames) {
-			if (invName.contains(age)) {
-				name = age;
-				break;
-			}
+
+		String invName = Objects.requireNonNull(item.getItemMeta()).getPersistentDataContainer().get(NamespacedKey.minecraft("invname"), PersistentDataType.STRING);
+		String itemName = Objects.requireNonNull(item.getItemMeta()).getDisplayName();
+
+		if (invName != null && TargetManager.hasInv(invName)) {
+			player.openInventory(TargetManager.getInv(invName));
+		}  else if ("<- Quit".equals(itemName)) {
+			player.closeInventory();
 		}
-		
-		return name;
 	}
 
 	private void resultInventory(Player player, ItemStack item) {

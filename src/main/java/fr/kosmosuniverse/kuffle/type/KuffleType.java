@@ -25,7 +25,6 @@ public abstract class KuffleType {
 	protected PlayerInteract playerInteractBlocks = null;
 	protected KuffleSetType kuffleSetType;
 	protected KuffleAbandon kuffleAbandon;
-	protected KuffleAgeTargetsTab kuffleAgeTargetsTab = null;
 	protected KuffleSetTypeTab kuffleSetTypeTab = null;
 	
 	/**
@@ -204,12 +203,7 @@ public abstract class KuffleType {
 		Objects.requireNonNull(plugin.getCommand("k-agetargets")).setExecutor(new KuffleAgeTargets());
 		Objects.requireNonNull(plugin.getCommand("k-crafts")).setExecutor(new KuffleCrafts());
 		Objects.requireNonNull(plugin.getCommand("k-give")).setExecutor(new KuffleGive());
-		
-		if (kuffleAgeTargetsTab == null) {
-			kuffleAgeTargetsTab = new KuffleAgeTargetsTab();
-		}
-		
-		Objects.requireNonNull(plugin.getCommand("k-agetargets")).setTabCompleter(kuffleAgeTargetsTab);
+
 		Objects.requireNonNull(plugin.getCommand("k-give")).setTabCompleter(new KuffleGiveTab());
 		
 		plugin.getServer().getPluginManager().registerEvents(new InventoryListeners(), plugin);
@@ -223,10 +217,6 @@ public abstract class KuffleType {
 		
 		if (xpActivables != null) {
 			xpActivables.clear();
-		}
-		
-		if (kuffleAgeTargetsTab != null) {
-			kuffleAgeTargetsTab.clear();
 		}
 		
 		if (kuffleSetTypeTab != null) {

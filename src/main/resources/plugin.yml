@@ -86,8 +86,8 @@ commands:
       usage: /<command>
       description: command to see custom crafts
    k-agetargets:
-      usage: /<command> [age name]
-      description: command to see current age targets
+      usage: /<command>
+      description: command to see targets in all ages
    k-lang:
       usage: /<command> [lang]
       description: command to see or change personal lang
@@ -172,7 +172,7 @@ permissions:
       description: command to see custom crafts
       default: true
    k-agetargets:
-      description: command to see current age targets
+      description: command to see targets of all ages
       default: true
    k-lang:
       description: command to see or change personal lang
