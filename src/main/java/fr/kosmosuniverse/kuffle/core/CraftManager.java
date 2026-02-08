@@ -56,7 +56,8 @@ public class CraftManager {
 			String kuffleType = craft.getString("KuffleType");
 			boolean mandatory = craft.getBoolean("Mandatory");
 
-			if (VersionManager.isVersionValid(version, remVersion) &&
+			if (VersionManager.isAllowedVersion(version) &&
+					(remVersion == null || VersionManager.isRemVersionNotReached(remVersion)) &&
 					(kuffleType.equals("BOTH") || gameType == KuffleType.Type.valueOf(kuffleType.toUpperCase())) &&
 					(mandatory || Config.getCrafts())) {
 				try {

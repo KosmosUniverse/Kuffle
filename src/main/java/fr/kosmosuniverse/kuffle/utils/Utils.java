@@ -13,7 +13,6 @@ import fr.kosmosuniverse.kuffle.KuffleMain;
 import fr.kosmosuniverse.kuffle.core.Config;
 import fr.kosmosuniverse.kuffle.core.LangManager;
 import fr.kosmosuniverse.kuffle.core.LogManager;
-import fr.kosmosuniverse.kuffle.core.VersionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -93,35 +92,6 @@ public final class Utils {
 		File tmp = new File(path + File.separator + fileName);
 		
 		return tmp.exists();
-	}
-
-    /**
-	 * Checks if a file exists for the current version
-	 * 
-	 * @param fileName	The file to check
-	 * 
-	 * @return The file name if found, null instead
-	 */
-	public static String findFileExistVersion(String fileName) {
-		String version = VersionManager.getVersion();
-		String file = fileName.replace("%v", version);
-		int versionNb = VersionManager.getVersionByValue(version);
-
-		if (versionNb == -1) {
-			return null;
-		}
-
-		while (KuffleMain.getInstance().getResource(file) == null && versionNb > 0) {
-			versionNb -= 1;
-			version = VersionManager.getVersionByIndex(versionNb);
-			file = fileName.replace("%v", version);
-		}
-
-		if (KuffleMain.getInstance().getResource(file)  == null) {
-			return null;
-		}
-
-		return file;
 	}
 	
 	/**

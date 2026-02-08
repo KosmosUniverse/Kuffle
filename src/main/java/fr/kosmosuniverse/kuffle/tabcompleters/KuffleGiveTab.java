@@ -44,7 +44,7 @@ public class KuffleGiveTab extends AKuffleTabCommand {
 				ret.add("OverworldTeleporter");
 			}
 			
-			if (VersionManager.isVersionValid("1.17", null)) {
+			if (VersionManager.isAllowedVersion("1.17")) {
 				ret.add("CoralCompass");
 			}
 		} else if ("reward".equals(currentArgs[1])) {

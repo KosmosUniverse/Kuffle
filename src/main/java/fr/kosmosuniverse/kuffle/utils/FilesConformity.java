@@ -41,14 +41,6 @@ public class FilesConformity {
 	 * @return the file content as String, null if file is null
 	 */
 	public static String getContent(String file) {
-		if (file.contains("%v")) {
-			file = Utils.findFileExistVersion(file);
-			
-			if (file == null) {
-				return null;
-			}
-		}
-		
 		String content = getFromFile(file);
 
 		if (content == null || !checkContent(file, content)) {
@@ -92,7 +84,7 @@ public class FilesConformity {
 	 */
 	private static String getFromFile(String file) {
 		if (fileExistsInPluginVersionDirectory(KuffleMain.getInstance().getDataFolder().getPath(), file)) {
-			try (FileReader reader = new FileReader(KuffleMain.getInstance().getDataFolder().getPath() + File.separator + KuffleMain.getInstance().getDescription().getVersion() + File.separator  + file)) {
+			try (FileReader ignored = new FileReader(KuffleMain.getInstance().getDataFolder().getPath() + File.separator + KuffleMain.getInstance().getDescription().getVersion() + File.separator  + file)) {
 				return FileUtils.readJSONFileObject(file).toString();
 			} catch (IOException e) {
 				Utils.logException(e);
@@ -321,7 +313,7 @@ public class FilesConformity {
 			JSONObject mainObj = FileUtils.readJSONObjectFromContent(content);
 			
 			for (String mainKey : mainObj.keySet()) {
-				if (!VersionManager.hasVersion(mainKey)) {
+				if (VersionManager.versionNotExists(mainKey)) {
 					LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("FC_TARGET_VERSION", Config.getLang()).replace("%s", mainKey));
 					ret = false;
 				}
@@ -496,7 +488,7 @@ public class FilesConformity {
 			JSONObject mainObj = FileUtils.readJSONObjectFromContent(content);
 			
 			for (String mainKey : mainObj.keySet()) {
-				if (!VersionManager.hasVersion(mainKey)) {
+				if (VersionManager.versionNotExists(mainKey)) {
 					ret = false;
 				}
 				

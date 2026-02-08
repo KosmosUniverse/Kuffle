@@ -87,7 +87,7 @@ public class RewardManager {
 	 */
 	private static void setupVersion(JSONObject allObj) {
 		for (String version : allObj.keySet()) {
-			if (VersionManager.isVersionValid(version, null)) {
+			if (VersionManager.isAllowedVersion(version)) {
 				JSONObject versionObj = allObj.getJSONObject(version);
 				
 				setupAges(versionObj);

@@ -1,9 +1,13 @@
 package fr.kosmosuniverse.kuffle.core;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import fr.kosmosuniverse.kuffle.utils.FileUtils;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.json.JSONObject;
 
@@ -13,7 +17,12 @@ import org.json.JSONObject;
  *
  */
 public class VersionManager {
-	private static Map<Integer, String> versions = null;
+	private static Map<String, Integer> allVersions;
+	private static List<String> allowedVersion;
+	@Getter
+	private static String mcVersion;
+	@Getter
+	private static String lastMcVersionDataVersion;
 	
 	/**
 	 * Private VersionManager constructor
@@ -28,8 +37,12 @@ public class VersionManager {
 	 * Clears the versions list
 	 */
 	public static void clear() {
-		if (versions != null) {
-			versions.clear();
+		if (allowedVersion != null) {
+			allowedVersion.clear();
+		}
+
+		if (allVersions != null) {
+			allVersions.clear();
 		}
 	}
 	
@@ -46,76 +59,57 @@ public class VersionManager {
 		}
 
 		JSONObject jsonObj = FileUtils.readJSONObjectFromContent(content);
-		versions = new HashMap<>();
+		allVersions = new HashMap<>();
+		mcVersion = Bukkit.getBukkitVersion().substring(0, Bukkit.getBukkitVersion().indexOf("-"));
 
 		for (String key : jsonObj.keySet()) {
-			versions.put(jsonObj.getInt(key), key);
+			allVersions.put(key, jsonObj.getInt(key));
 		}
-		
+
+		allowedVersion = allVersions.keySet()
+				.stream()
+				.filter(s -> checkIfV1SupportV2(mcVersion, s))
+				.collect(Collectors.toList());
+
+		lastMcVersionDataVersion = allVersions.entrySet()
+				.stream()
+				.filter(e -> checkIfV1SupportV2(mcVersion, e.getKey()))
+				.sorted(Comparator.comparingInt(Map.Entry::getValue))
+				.map(Map.Entry::getKey)
+				.findFirst().orElse(null);
+
 		jsonObj.clear();
 	}
-	
-	/**
-	 * Get the current Minecraft version
-	 * 
-	 * @return the version as a String
-	 */
-	public static String getVersion() {
-		return Bukkit.getBukkitVersion().substring(0, Bukkit.getBukkitVersion().indexOf("-"));
-	}
-	
-	/**
-	 * Checks if a specific version exists
-	 * 
-	 * @param version	The version to check
-	 * 
-	 * @return True if the version exists, False instead
-	 */
-	public static boolean hasVersion(String version) {
-		return versions.entrySet().stream().anyMatch(entry -> entry.getValue().equals(version));
-	}
-	
-	/**
-	 * Gets version key from version value
-	 * 
-	 * @param version	The version value
-	 * 
-	 * @return the key if found, -1 instead
-	 */
-	public static int getVersionByValue(String version) {
-		return versions.entrySet().stream().filter(e -> e.getValue().equals(version)).map(Map.Entry::getKey).findAny().orElse(-1);
-	}
-	
-	/**
-	 * Gets version key from version index
-	 * 
-	 * @param version	The version index
-	 * 
-	 * @return the version if found, null instead
-	 */
-	public static String getVersionByIndex(int version) {
-		return versions.get(version);
-	}
-	
-	/**
-	 * Checks if the actual version is greater or equals than the given @version and, if there is one, lower or equals than the given @remVersion
-	 * 
-	 * @param version		The version to check
-	 * @param remVersion	The remove version to check
-	 * 
-	 * @return True if @version is greater or equals to server version and, if there is one, lower than @remVersion, False instead
-	 */
-	public static boolean isVersionValid(String version, String remVersion) {
-		int versionIdx = getVersionByValue(version);
-		int remVersionIdx = remVersion == null ? -1 : getVersionByValue(remVersion);
-		int currentIdx = getVersionByValue(getVersion());
-		if (currentIdx == -1) {
-			currentIdx = getVersionByValue(getVersion().substring(0, 4));
+
+	private static boolean checkIfV1SupportV2(String v1, String v2) {
+		String[] rawV1Number = v1.split("\\.");
+		String[] rawV2Number = v2.split("\\.");
+
+		int length = Integer.min(rawV1Number.length, rawV2Number.length);
+
+		for (int i = 0; i < length; i++) {
+			int v1Number = Integer.parseInt(rawV1Number[i]);
+			int v2Number = Integer.parseInt(rawV2Number[i]);
+
+			if (v1Number < v2Number) {
+				return false;
+			} else if (v1Number > v2Number) {
+				return true;
+			}
 		}
-		if (currentIdx < versionIdx) {
-			return false;
-		}
-		
-		return !(remVersionIdx != -1 && currentIdx >= remVersionIdx);
+
+		return true;
+	}
+
+	public static boolean isAllowedVersion(String version) {
+		return allowedVersion.contains(version);
+	}
+
+	public static boolean isRemVersionNotReached(String remVersion) {
+		return !allowedVersion.contains(remVersion);
+	}
+
+	public static boolean versionNotExists(String version) {
+		return !allVersions.containsKey(version);
 	}
 }

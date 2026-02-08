@@ -51,26 +51,26 @@ public class TargetManager {
 	
 	private static void setupVersions(KuffleType.Type type, JSONObject allObj) {
 		for (String version : allObj.keySet()) {
-			if (VersionManager.isVersionValid(version, null)) {
+			if (VersionManager.isAllowedVersion(version)) {
 				JSONObject versionObj = (JSONObject) allObj.get(version);
 				
-				setupTypes(type, version, versionObj);
+				setupTypes(type, versionObj);
 			}
 		}
 	}
 	
-	private static void setupTypes(KuffleType.Type type, String version, JSONObject versionObj) {
+	private static void setupTypes(KuffleType.Type type, JSONObject versionObj) {
 		for (String kuffleType : versionObj.keySet()) {
 			if ("BOTH".equalsIgnoreCase(kuffleType) ||
 					type == KuffleType.Type.valueOf(kuffleType.toUpperCase())) {
 				JSONObject typeObj = (JSONObject) versionObj.get(kuffleType);
 				
-				setupAges(version, typeObj);
+				setupAges(typeObj);
 			}
 		}
 	}
 	
-	private static void setupAges(String version, JSONObject typeObj) {
+	private static void setupAges(JSONObject typeObj) {
 		for (String age : typeObj.keySet()) {
 			JSONObject ageObj = (JSONObject) typeObj.get(age);
 			
@@ -82,17 +82,17 @@ public class TargetManager {
 				sbtts.put(age, new ArrayList<>());
 			}
 			
-			setupTargets(version, age, ageObj);
+			setupTargets(age, ageObj);
 		}
 	}
 	
-	private static void setupTargets(String version, String age, JSONObject ageObj) {
+	private static void setupTargets(String age, JSONObject ageObj) {
 		for (String target : ageObj.keySet()) {
 			JSONObject targetObj = (JSONObject) ageObj.get(target);
 			boolean sbtt = Boolean.parseBoolean(targetObj.get("Sbtt").toString().toLowerCase());
 			
 			if (!targetObj.has("remVersion") ||
-					VersionManager.isVersionValid(version, targetObj.get("remVersion").toString())) {
+					VersionManager.isRemVersionNotReached(targetObj.getString("remVersion"))) {
 				targets.get(age).add(target);
 				
 				if (sbtt) {

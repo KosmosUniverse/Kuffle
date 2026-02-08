@@ -94,7 +94,8 @@ public class PlayerInteract implements Listener  {
 		
 		ItemStack item = event.getItem();
 		
-		if (VersionManager.isVersionValid("1.17", null) && ItemsUtils.itemComparison(item, CraftManager.findItemByName(CORAL_COMPASS))) {
+		if (VersionManager.isAllowedVersion("1.17") &&
+				ItemsUtils.itemComparison(item, CraftManager.findItemByName(CORAL_COMPASS))) {
 			if (!Boolean.parseBoolean((Class.forName(COMPASS_CLASS).getMethod("hasLodestone").invoke(Class.forName(COMPASS_CLASS).cast(item.getItemMeta())).toString()))) {
 				coralCompass(player, item);
 				
