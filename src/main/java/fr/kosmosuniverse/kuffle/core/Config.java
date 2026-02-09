@@ -1,5 +1,6 @@
 package fr.kosmosuniverse.kuffle.core;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -138,6 +139,8 @@ public class Config implements Serializable {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkAndSetConfig(FileConfiguration configFile) {
+		setRet = false;
+
 		checkFileSystem(configFile);
 		checkFilePersonal(configFile);
 		checkFileSpread(configFile);
@@ -145,43 +148,45 @@ public class Config implements Serializable {
 		checkFileStart(configFile);
 		checkFileOther(configFile);
 		checkFileEnd(configFile);
-		
+
+		if (setRet) {
+			KuffleMain.getInstance().saveConfig();
+		}
+
 		setValues(configFile);
 	}
 
 	private static void checkFileSystem(FileConfiguration configFile) {
-		String startTypeConfig = "system_settings.start_type";
-		String logGameResultConfig = "system_settings.log_game_results";
-
-		if (!configFile.contains(startTypeConfig) ||
-				!KuffleType.hasType(configFile.getString(startTypeConfig))) {
+		if (!configFile.contains(ConfigPaths.SYS_START_TYPE.getPath()) ||
+				!KuffleType.hasType(configFile.getString(ConfigPaths.SYS_START_TYPE.getPath()))) {
 			configValues.setStartType("NO_TYPE");
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "start type"));
-			configFile.set(startTypeConfig, "NO_TYPE");
+			configFile.set(ConfigPaths.SYS_START_TYPE.getPath(), "NO_TYPE");
+			setRet = true;
 		}
 
-		if (!configFile.contains(logGameResultConfig)) {
+		if (!configFile.contains(ConfigPaths.SYS_LOG_RESULT.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "log game results"));
-			configFile.set(logGameResultConfig, false);
+			configFile.set(ConfigPaths.SYS_LOG_RESULT.getPath(), false);
+			setRet = true;
 		}
 	}
 	
 	private static void checkFilePersonal(FileConfiguration configFile) {
-		String langConfig = "game_settings.personals.lang";
-		String tipsConfig = "game_settings.personals.tips";
-		
-		if (!configFile.contains(langConfig)
-				|| !LangManager.hasLang(configFile.getString(langConfig))) {
+		if (!configFile.contains(ConfigPaths.GAME_PERS_LANG.getPath())
+				|| !LangManager.hasLang(configFile.getString(ConfigPaths.GAME_PERS_LANG.getPath()))) {
 			configValues.setLang("en");
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "lang"));
-			configFile.set(langConfig, "en");
+			configFile.set(ConfigPaths.GAME_PERS_LANG.getPath(), "en");
+			setRet = true;
 		} else {
-			configValues.setLang(configFile.getString(langConfig));
+			configValues.setLang(configFile.getString(ConfigPaths.GAME_PERS_LANG.getPath()));
 		}
 		
-		if (!configFile.contains(tipsConfig)) {
+		if (!configFile.contains(ConfigPaths.GAME_PERS_TIPS.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling tips"));
-			configFile.set(tipsConfig, false);
+			configFile.set(ConfigPaths.GAME_PERS_TIPS.getPath(), false);
+			setRet = true;
 		}
 	}
 	
@@ -191,26 +196,24 @@ public class Config implements Serializable {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkFileSpread(FileConfiguration configFile) {
-		String spreadConfig = "game_settings.spreadplayers.enable";
-		String spreadMinConfig = "game_settings.spreadplayers.minimum_distance";
-		String spreadMaxConfig = "game_settings.spreadplayers.minimum_radius";
-		
-		if (!configFile.contains(spreadConfig)) {
+		if (!configFile.contains(ConfigPaths.GAME_SPREAD.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling spreadplayers"));
-			configFile.set(spreadConfig, false);
+			configFile.set(ConfigPaths.GAME_SPREAD.getPath(), false);
+			setRet = true;
 		}
 		
-		if (!configFile.contains(spreadMinConfig)
-				|| configFile.getInt(spreadMinConfig) < 1) {
+		if (!configFile.contains(ConfigPaths.GAME_SPREAD_DIST.getPath())
+				|| configFile.getInt(ConfigPaths.GAME_SPREAD_DIST.getPath()) < 1) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "spreadplayers minimum distance"));
-			configFile.set(spreadMinConfig, 500);
+			configFile.set(ConfigPaths.GAME_SPREAD_DIST.getPath(), 500);
+			setRet = true;
 		}
 
-		if (!configFile.contains(spreadMaxConfig)
-				|| configFile.getInt(spreadMaxConfig) < configFile
-						.getInt(spreadMinConfig)) {
+		if (!configFile.contains(ConfigPaths.GAME_SPREAD_RAD.getPath())
+				|| configFile.getInt(ConfigPaths.GAME_SPREAD_RAD.getPath()) < configFile.getInt(ConfigPaths.GAME_SPREAD_DIST.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "spreadplayers minimum radius"));
-			configFile.set(spreadMaxConfig, 1000);
+			configFile.set(ConfigPaths.GAME_SPREAD_RAD.getPath(), 1000);
+			setRet = true;
 		}
 	}
 	
@@ -220,69 +223,68 @@ public class Config implements Serializable {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkFileModes(FileConfiguration configFile) {
-		String teamConfig = "game_settings.team.enable";
-		String teamSizeConfig = "game_settings.team.size";
-		String teamInvConfig = "game_settings.team.inv.enable";
-		String teamInvSizeConfig = "game_settings.team.inv.size";
-		String sameConfig = "game_settings.modes.same";
-		String sbttConfig = "game_settings.modes.sbtt.enable";
-		String sbttAmountConfig = "game_settings.modes.sbtt.amount";
-		String doubleConfig = "game_settings.modes.double";
-		String passiveAllConfig = "game_settings.passive.all";
-		String passiveTeamConfig = "game_settings.passive.team";
-		
-		if (!configFile.contains(teamConfig)) {
+		if (!configFile.contains(ConfigPaths.GAME_TEAM.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling team"));
-			configFile.set(teamConfig, false);
+			configFile.set(ConfigPaths.GAME_TEAM.getPath(), false);
+			setRet = true;
 		}
 
-		if (!configFile.contains(teamSizeConfig) || configFile.getInt(teamSizeConfig) < 2
-				|| configFile.getInt(teamSizeConfig) > 10) {
+		if (!configFile.contains(ConfigPaths.GAME_TEAM_SIZE.getPath()) || configFile.getInt(ConfigPaths.GAME_TEAM_SIZE.getPath()) < 2
+				|| configFile.getInt(ConfigPaths.GAME_TEAM_SIZE.getPath()) > 10) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "max team size"));
-			configFile.set(teamSizeConfig, 2);
+			configFile.set(ConfigPaths.GAME_TEAM_SIZE.getPath(), 2);
+			setRet = true;
 		}
 		
-		if (!configFile.contains(teamInvConfig)) {
+		if (!configFile.contains(ConfigPaths.GAME_TEAM_INV.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling team inv"));
-			configFile.set(teamConfig, false);
+			configFile.set(ConfigPaths.GAME_TEAM_INV.getPath(), false);
+			setRet = true;
 		}
 		
-		if (!configFile.contains(teamInvSizeConfig) || configFile.getInt(teamInvSizeConfig) < 1
-				|| configFile.getInt(teamInvSizeConfig) > 6) {
+		if (!configFile.contains(ConfigPaths.GAME_TEAM_INV_SIZE.getPath()) || configFile.getInt(ConfigPaths.GAME_TEAM_INV_SIZE.getPath()) < 1
+				|| configFile.getInt(ConfigPaths.GAME_TEAM_INV_SIZE.getPath()) > 6) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "team inv size"));
-			configFile.set(teamSizeConfig, 1);
+			configFile.set(ConfigPaths.GAME_TEAM_INV_SIZE.getPath(), 1);
+			setRet = true;
 		}
 		
-		if (!configFile.contains(sameConfig)) {
+		if (!configFile.contains(ConfigPaths.GAME_MODE_SAME.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling same mode"));
-			configFile.set(sameConfig, false);
+			configFile.set(ConfigPaths.GAME_MODE_SAME.getPath(), false);
+			setRet = true;
 		}
 		
-		if (!configFile.contains(sbttConfig)) {
+		if (!configFile.contains(ConfigPaths.GAME_MODE_SBTT.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "SBTT mode"));
-			configFile.set(sbttConfig, false);
+			configFile.set(ConfigPaths.GAME_MODE_SBTT.getPath(), false);
+			setRet = true;
 		}
 		
-		if (!configFile.contains(sbttAmountConfig) ||
-				configFile.getInt(sbttAmountConfig) < 1 ||
-				configFile.getInt(sbttAmountConfig) > 9) {
+		if (!configFile.contains(ConfigPaths.GAME_MODE_SBTT_AMNT.getPath()) ||
+				configFile.getInt(ConfigPaths.GAME_MODE_SBTT_AMNT.getPath()) < 1 ||
+				configFile.getInt(ConfigPaths.GAME_MODE_SBTT_AMNT.getPath()) > 9) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "SBTT amount"));
-			configFile.set(sbttAmountConfig, 4);
+			configFile.set(ConfigPaths.GAME_MODE_SBTT_AMNT.getPath(), 4);
+			setRet = true;
 		}
 		
-		if (!configFile.contains(doubleConfig)) {
+		if (!configFile.contains(ConfigPaths.GAME_MODE_DOUBLE.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "Double mode"));
-			configFile.set(doubleConfig, false);
+			configFile.set(ConfigPaths.GAME_MODE_DOUBLE.getPath(), false);
+			setRet = true;
 		}
 		
-		if (!configFile.contains(passiveAllConfig)) {
+		if (!configFile.contains(ConfigPaths.GAME_PASS_ALL.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "Passive mode"));
-			configFile.set(passiveAllConfig, false);
+			configFile.set(ConfigPaths.GAME_PASS_ALL.getPath(), false);
+			setRet = true;
 		}
 		
-		if (!configFile.contains(passiveTeamConfig)) {
+		if (!configFile.contains(ConfigPaths.GAME_PASS_TEAM.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "Passive mode"));
-			configFile.set(passiveTeamConfig, false);
+			configFile.set(ConfigPaths.GAME_PASS_TEAM.getPath(), false);
+			setRet = true;
 		}
 	}
 	
@@ -292,37 +294,38 @@ public class Config implements Serializable {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkFileStart(FileConfiguration configFile) {
-		String targetConfig = "game_settings.target_per_age";
-		String timeStartConfig = "game_settings.time.start";
-		String timeAddConfig = "game_settings.time.added";
-		String lastAgeConfig = "game_settings.last_age";
-		String levelConfig = "game_settings.level";
-		
-		if (!configFile.contains(targetConfig)
-				|| configFile.getInt(targetConfig) < 1) {
+		if (!configFile.contains(ConfigPaths.GAME_NB_TARGET.getPath())
+				|| configFile.getInt(ConfigPaths.GAME_NB_TARGET.getPath()) < 1) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "item per age"));
-			configFile.set(targetConfig, 5);
+			configFile.set(ConfigPaths.GAME_NB_TARGET.getPath(), 5);
+			setRet = true;
 		}
 		
-		if (!configFile.contains(timeStartConfig) || configFile.getInt(timeStartConfig) < 1) {
+		if (!configFile.contains(ConfigPaths.GAME_TIME_START.getPath()) || configFile.getInt(ConfigPaths.GAME_TIME_START.getPath()) < 1) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "start time"));
-			configFile.set(timeStartConfig, 4);
+			configFile.set(ConfigPaths.GAME_TIME_START.getPath(), 4);
+			setRet = true;
 		}
 
-		if (!configFile.contains(timeAddConfig) || configFile.getInt(timeAddConfig) < 1) {
+		if (!configFile.contains(ConfigPaths.GAME_TIME_ADD.getPath()) || configFile.getInt(ConfigPaths.GAME_TIME_ADD.getPath()) < 1) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "time added"));
-			configFile.set(timeAddConfig, 2);
+			configFile.set(ConfigPaths.GAME_TIME_ADD.getPath(), 2);
+			setRet = true;
 		}
 
-		if (!configFile.contains(lastAgeConfig) || AgeManager.getAgeByName(configFile.getString(lastAgeConfig)) == null || AgeManager.getAgeByName(configFile.getString(lastAgeConfig)).getNumber() == -1) {
+		if (!configFile.contains(ConfigPaths.GAME_LAST_AGE.getPath()) ||
+				AgeManager.getAgeByName(configFile.getString(ConfigPaths.GAME_LAST_AGE.getPath())) == null ||
+				AgeManager.getAgeByName(configFile.getString(ConfigPaths.GAME_LAST_AGE.getPath())).getNumber() == -1) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "max ages"));
-			configFile.set(lastAgeConfig, AgeManager.getLastAge().getName());
+			configFile.set(ConfigPaths.GAME_LAST_AGE.getPath(), AgeManager.getLastAge().getName());
+			setRet = true;
 		}
 
-		if (!configFile.contains(levelConfig) ||
-				LevelManager.getInstance().levelNotExists(configFile.getString(levelConfig))) {
+		if (!configFile.contains(ConfigPaths.GAME_LEVEL.getPath()) ||
+				LevelManager.getInstance().levelNotExists(configFile.getString(ConfigPaths.GAME_LEVEL.getPath()))) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "levels"));
-			configFile.set(levelConfig, LevelManager.getInstance().getFirstLevel().getName());
+			configFile.set(ConfigPaths.GAME_LEVEL.getPath(), LevelManager.getInstance().getFirstLevel().getName());
+			setRet = true;
 		}
 	}
 	
@@ -332,41 +335,41 @@ public class Config implements Serializable {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkFileOther(FileConfiguration configFile) {
-		String skipConfig = "game_settings.skip.enable";
-		String skipAgeConfig = "game_settings.skip.age";
-		String craftConfig = "game_settings.custom_crafts";
-		String xpEndConfig = "game_settings.xp_max.end_teleporter";
-		String xpOverConfig = "game_settings.xp_max.overworld_teleporter";
-		String xpCoralConfig = "game_settings.xp_max.coral_compass";
-		
-		if (!configFile.contains(skipConfig)) {
+		if (!configFile.contains(ConfigPaths.GAME_SKIP.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling skip"));
-			configFile.set(skipConfig, true);
+			configFile.set(ConfigPaths.GAME_SKIP.getPath(), true);
+			setRet = true;
 		}
 
-		if (!configFile.contains(skipAgeConfig) || AgeManager.getAgeByName(configFile.getString(skipAgeConfig)) == null || AgeManager.getAgeByName(configFile.getString(skipAgeConfig)).getNumber() == -1) {
+		if (!configFile.contains(ConfigPaths.GAME_SKIP_AGE.getPath()) ||
+				AgeManager.getAgeByName(configFile.getString(ConfigPaths.GAME_SKIP_AGE.getPath())) == null ||
+				AgeManager.getAgeByName(configFile.getString(ConfigPaths.GAME_SKIP_AGE.getPath())).getNumber() == -1) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "skip age"));
-			configFile.set(skipAgeConfig, AgeManager.getFirstAge().getName());
+			configFile.set(ConfigPaths.GAME_SKIP_AGE.getPath(), AgeManager.getFirstAge().getName());
+			setRet = true;
 		}
 
-		if (!configFile.contains(craftConfig)) {
+		if (!configFile.contains(ConfigPaths.GAME_CRAFTS.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling custom crafts"));
-			configFile.set(craftConfig, true);
+			configFile.set(ConfigPaths.GAME_CRAFTS.getPath(), true);
+			setRet = true;
 		}
 		
-		if (!configFile.contains(xpEndConfig)) {
+		if (!configFile.contains(ConfigPaths.GAME_XP_END.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "xp max EndTeleporter"));
-			configFile.set(xpEndConfig, 5);
+			configFile.set(ConfigPaths.GAME_XP_END.getPath(), 5);
+			setRet = true;
 		}
 		
-		if (!configFile.contains(xpOverConfig)) {
+		if (!configFile.contains(ConfigPaths.GAME_XP_OVERWORLD.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "xp max OverworldTeleporter"));
-			configFile.set(xpOverConfig, 10);
+			configFile.set(ConfigPaths.GAME_XP_OVERWORLD.getPath(), 10);
 		}
 		
-		if (!configFile.contains(xpCoralConfig)) {
+		if (!configFile.contains(ConfigPaths.GAME_XP_CORAL.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "xp max CoralCompass"));
-			configFile.set(xpCoralConfig, 20);
+			configFile.set(ConfigPaths.GAME_XP_CORAL.getPath(), 20);
+			setRet = true;
 		}
 	}
 	
@@ -376,17 +379,16 @@ public class Config implements Serializable {
 	 * @param configFile	configuration file used to setup config values
 	 */
 	private static void checkFileEnd(FileConfiguration configFile) {
-		String personalTabConfig = "game_settings.print_player_tab";
-		String endOneConfig = "game_settings.end_game_when_one_remains";
-		
-		if (!configFile.contains(personalTabConfig)) {
+		if (!configFile.contains(ConfigPaths.GAME_PRINT.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling game end tab display"));
-			configFile.set(personalTabConfig, true);
+			configFile.set(ConfigPaths.GAME_PRINT.getPath(), true);
+			setRet = true;
 		}
 		
-		if (!configFile.contains(endOneConfig)) {
+		if (!configFile.contains(ConfigPaths.GAME_END_ONE.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "game end when one"));
-			configFile.set(endOneConfig, false);
+			configFile.set(ConfigPaths.GAME_END_ONE.getPath(), false);
+			setRet = true;
 		}
 	}
 
@@ -396,43 +398,93 @@ public class Config implements Serializable {
 	 * @param configFile	file that contains all config values
 	 */
 	private static void setValues(FileConfiguration configFile) {
-		configValues.setStartType(configFile.getString("system_settings.start_type"));
-		configValues.setLogResults(configFile.getBoolean("system_settings.log_game_results"));
+		configValues.setStartType(configFile.getString(ConfigPaths.SYS_START_TYPE.getPath()));
+		configValues.setLogResults(configFile.getBoolean(ConfigPaths.SYS_LOG_RESULT.getPath()));
 
-		configValues.setTips(configFile.getBoolean("game_settings.personals.tips"));
+		configValues.setTips(configFile.getBoolean(ConfigPaths.GAME_PERS_TIPS.getPath()));
 		
-		configValues.setSaturation(configFile.getBoolean("game_settings.saturation"));
-		configValues.setSpread(configFile.getBoolean("game_settings.spreadplayers.enable"));
-		configValues.setRewards(configFile.getBoolean("game_settings.rewards"));
-		configValues.setSkip(configFile.getBoolean("game_settings.skip.enable"));
-		configValues.setCrafts(configFile.getBoolean("game_settings.custom_crafts"));
-		configValues.setTeam(configFile.getBoolean("game_settings.team.enable"));
-		configValues.setTeamInv(configFile.getBoolean("game_settings.team.inv.enable"));
-		configValues.setSame(configFile.getBoolean("game_settings.modes.same"));
-		configValues.setPrintTab(configFile.getBoolean("game_settings.print_player_tab"));
-		configValues.setEndOne(configFile.getBoolean("game_settings.end_game_when_one_remains"));
-		configValues.setDuoMode(configFile.getBoolean("game_settings.modes.double"));
-		configValues.setSbttMode(configFile.getBoolean("game_settings.modes.sbtt.enable"));
-		configValues.setPassiveAll(configFile.getBoolean("game_settings.passive.all"));
-		configValues.setPassiveTeam(configFile.getBoolean("game_settings.passive.team"));
+		configValues.setSaturation(configFile.getBoolean(ConfigPaths.GAME_SAT.getPath()));
+		configValues.setSpread(configFile.getBoolean(ConfigPaths.GAME_SPREAD.getPath()));
+		configValues.setRewards(configFile.getBoolean(ConfigPaths.GAME_REWARD.getPath()));
+		configValues.setSkip(configFile.getBoolean(ConfigPaths.GAME_SKIP.getPath()));
+		configValues.setCrafts(configFile.getBoolean(ConfigPaths.GAME_CRAFTS.getPath()));
+		configValues.setTeam(configFile.getBoolean(ConfigPaths.GAME_TEAM.getPath()));
+		configValues.setTeamInv(configFile.getBoolean(ConfigPaths.GAME_TEAM_INV.getPath()));
+		configValues.setSame(configFile.getBoolean(ConfigPaths.GAME_MODE_SAME.getPath()));
+		configValues.setPrintTab(configFile.getBoolean(ConfigPaths.GAME_PRINT.getPath()));
+		configValues.setEndOne(configFile.getBoolean(ConfigPaths.GAME_END_ONE.getPath()));
+		configValues.setDuoMode(configFile.getBoolean(ConfigPaths.GAME_MODE_DOUBLE.getPath()));
+		configValues.setSbttMode(configFile.getBoolean(ConfigPaths.GAME_MODE_SBTT.getPath()));
+		configValues.setPassiveAll(configFile.getBoolean(ConfigPaths.GAME_PASS_ALL.getPath()));
+		configValues.setPassiveTeam(configFile.getBoolean(ConfigPaths.GAME_PASS_TEAM.getPath()));
 		
-		configValues.setSpreadDistance(configFile.getInt("game_settings.spreadplayers.minimum_distance"));
-		configValues.setSpreadRadius(configFile.getInt("game_settings.spreadplayers.minimum_radius"));
-		configValues.setTargetPerAge(configFile.getInt("game_settings.target_per_age"));
-		configValues.setStartTime(configFile.getInt("game_settings.time.start"));
-		configValues.setAddedTime(configFile.getInt("game_settings.time.added"));
-		configValues.setTeamSize(configFile.getInt("game_settings.team.size"));
-		configValues.setTeamInvSize(configFile.getInt("game_settings.team.inv.size"));
-		configValues.setSbttAmount(configFile.getInt("game_settings.modes.sbtt.amount"));
-		configValues.setXpEnd(configFile.getInt("game_settings.xp_max.end_teleporter"));
-		configValues.setXpOverworld(configFile.getInt("game_settings.xp_max.overworld_teleporter"));
-		configValues.setXpCoral(configFile.getInt("game_settings.xp_max.coral_compass"));
+		configValues.setSpreadDistance(configFile.getInt(ConfigPaths.GAME_SPREAD_DIST.getPath()));
+		configValues.setSpreadRadius(configFile.getInt(ConfigPaths.GAME_SPREAD_RAD.getPath()));
+		configValues.setTargetPerAge(configFile.getInt(ConfigPaths.GAME_NB_TARGET.getPath()));
+		configValues.setStartTime(configFile.getInt(ConfigPaths.GAME_TIME_START.getPath()));
+		configValues.setAddedTime(configFile.getInt(ConfigPaths.GAME_TIME_ADD.getPath()));
+		configValues.setTeamSize(configFile.getInt(ConfigPaths.GAME_TEAM_SIZE.getPath()));
+		configValues.setTeamInvSize(configFile.getInt(ConfigPaths.GAME_TEAM_INV_SIZE.getPath()));
+		configValues.setSbttAmount(configFile.getInt(ConfigPaths.GAME_MODE_SBTT_AMNT.getPath()));
+		configValues.setXpEnd(configFile.getInt(ConfigPaths.GAME_XP_END.getPath()));
+		configValues.setXpOverworld(configFile.getInt(ConfigPaths.GAME_XP_OVERWORLD.getPath()));
+		configValues.setXpCoral(configFile.getInt(ConfigPaths.GAME_XP_CORAL.getPath()));
 		
-		configValues.setLastAge(AgeManager.getAgeByName(configFile.getString("game_settings.last_age")).getNumber());
-		configValues.setLevel(LevelManager.getInstance().getLevelByName(configFile.getString("game_settings.level")).getNumber());
-		configValues.setSkipAge(AgeManager.getAgeByName(configFile.getString("game_settings.skip.age")).getNumber());
+		configValues.setLastAge(AgeManager.getAgeByName(configFile.getString(ConfigPaths.GAME_LAST_AGE.getPath())).getNumber());
+		configValues.setLevel(LevelManager.getInstance().getLevelByName(configFile.getString(ConfigPaths.GAME_LEVEL.getPath())).getNumber());
+		configValues.setSkipAge(AgeManager.getAgeByName(configFile.getString(ConfigPaths.GAME_SKIP_AGE.getPath())).getNumber());
 
 		configInvs = new ConfigInventories();
+		configInvs.createInventories();
+	}
+
+	public static void saveValues() {
+		FileConfiguration config = KuffleMain.getInstance().getConfig();
+		
+		config.set(ConfigPaths.SYS_START_TYPE.getPath(), configValues.getStartType());
+		config.set(ConfigPaths.SYS_LOG_RESULT.getPath(), configValues.isLogResults());
+		config.set(ConfigPaths.GAME_PRINT.getPath(), configValues.isPrintTab());
+		config.set(ConfigPaths.GAME_END_ONE.getPath(), configValues.isEndOne());
+		config.set(ConfigPaths.GAME_SPREAD.getPath(), configValues.isSpread());
+		config.set(ConfigPaths.GAME_SPREAD_DIST.getPath(), configValues.getSpreadDistance());
+		config.set(ConfigPaths.GAME_SPREAD_RAD.getPath(), configValues.getSpreadRadius());
+		config.set(ConfigPaths.GAME_SAT.getPath(), configValues.isSaturation());
+		config.set(ConfigPaths.GAME_REWARD.getPath(), configValues.isRewards());
+		config.set(ConfigPaths.GAME_PASS_ALL.getPath(), configValues.isPassiveAll());
+		config.set(ConfigPaths.GAME_PASS_TEAM.getPath(), configValues.isPassiveTeam());
+		config.set(ConfigPaths.GAME_TIME_START.getPath(), configValues.getStartTime());
+		config.set(ConfigPaths.GAME_TIME_ADD.getPath(), configValues.getAddedTime());
+		config.set(ConfigPaths.GAME_LAST_AGE.getPath(), AgeManager.getAgeByNumber(configValues.getLastAge()).getName());
+		config.set(ConfigPaths.GAME_NB_TARGET.getPath(), configValues.getTargetPerAge());
+		config.set(ConfigPaths.GAME_PERS_LANG.getPath(), configValues.getLang());
+		config.set(ConfigPaths.GAME_PERS_TIPS.getPath(), configValues.isTips());
+		config.set(ConfigPaths.GAME_LEVEL.getPath(), LevelManager.getInstance().getLevelByNumber(configValues.getLevel()).getName());
+		config.set(ConfigPaths.GAME_SKIP.getPath(), configValues.isSkip());
+		config.set(ConfigPaths.GAME_SKIP_AGE.getPath(), AgeManager.getAgeByNumber(configValues.getSkipAge()).getName());
+		config.set(ConfigPaths.GAME_CRAFTS.getPath(), configValues.isCrafts());
+		config.set(ConfigPaths.GAME_TEAM.getPath(), configValues.isTeam());
+		config.set(ConfigPaths.GAME_TEAM_SIZE.getPath(), configValues.getTeamSize());
+		config.set(ConfigPaths.GAME_TEAM_INV.getPath(), configValues.isTeamInv());
+		config.set(ConfigPaths.GAME_TEAM_INV_SIZE.getPath(), configValues.getTeamInvSize());
+		config.set(ConfigPaths.GAME_MODE_SAME.getPath(), configValues.isSame());
+		config.set(ConfigPaths.GAME_MODE_DOUBLE.getPath(), configValues.isDuoMode());
+		config.set(ConfigPaths.GAME_MODE_SBTT.getPath(), configValues.isSbttMode());
+		config.set(ConfigPaths.GAME_MODE_SBTT_AMNT.getPath(), configValues.getSbttAmount());
+		config.set(ConfigPaths.GAME_XP_END.getPath(), configValues.getXpEnd());
+		config.set(ConfigPaths.GAME_XP_OVERWORLD.getPath(), configValues.getXpOverworld());
+		config.set(ConfigPaths.GAME_XP_CORAL.getPath(), configValues.getXpCoral());
+
+		KuffleMain.getInstance().saveConfig();
+	}
+
+	public static void resetConfig() {
+		File configFile = new File(KuffleMain.getInstance().getDataFolder(), "config.yml");
+
+		configFile.delete();
+		KuffleMain.getInstance().saveDefaultConfig();
+		KuffleMain.getInstance().reloadConfig();
+		setValues(KuffleMain.getInstance().getConfig());
+		configInvs.clear();
 		configInvs.createInventories();
 	}
 	

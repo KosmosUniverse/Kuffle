@@ -73,7 +73,11 @@ public class ConfigInventories {
 
         mainInv.setItem(9, ItemMaker.newItem(Material.BARRIER).addName("System Config").addTag("invname", "System Config Board").getItem());
         mainInv.setItem(10, ItemMaker.newItem(Material.BELL).addName("Game Config").addTag("invname", "Game Config Board").getItem());
-        mainInv.setItem(17, ItemMaker.newItem(Material.CHEST).addName("Save Config").getItem());
+        mainInv.setItem(15, ConfigInvItems.getSaveItem());
+        mainInv.setItem(17, ConfigInvItems.getResetItem());
+
+        ConfigInvTrigger.addTrigger("saveConfig", ConfigInvTrigger::saveConfig);
+        ConfigInvTrigger.addTrigger("resetConfig", ConfigInvTrigger::resetConfig);
 
         invs.put("Config Main Board", mainInv);
     }

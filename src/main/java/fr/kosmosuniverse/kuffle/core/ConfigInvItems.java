@@ -12,6 +12,18 @@ import java.util.Collections;
  * @author KosmosUniverse
  */
 public class ConfigInvItems {
+    public static ItemStack getSaveItem() {
+        ItemMaker itemBuilder = ItemMaker.newItem(Material.CHEST).addName("Save Config").addTag("trigger", "saveConfig");
+
+        return itemBuilder.getItem();
+    }
+
+    public static ItemStack getResetItem() {
+        ItemMaker itemBuilder = ItemMaker.newItem(Material.CLOCK).addName("Reset Config").addTag("trigger", "resetConfig");
+
+        return itemBuilder.getItem();
+    }
+
     public static ItemStack getStartTypeItem() {
         ItemMaker itemBuilder = ItemMaker.newItem(Material.BOOK).addName("Start Type").addLore("Type:" + Config.getStartType()).addTag("trigger", "startType");
 

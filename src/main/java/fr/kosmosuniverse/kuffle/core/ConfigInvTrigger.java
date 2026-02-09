@@ -47,6 +47,20 @@ public class ConfigInvTrigger {
         }
     }
 
+    public static void saveConfig(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
+        Config.saveValues();
+        player.sendMessage("Config Saved.");
+    }
+
+    public static void resetConfig(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
+        Config.resetConfig();
+        player.sendMessage("Config Reset.");
+    }
+
     public static void startTypeTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         playerNeedOp(player);
 
