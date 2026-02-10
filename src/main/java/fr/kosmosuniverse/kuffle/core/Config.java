@@ -381,7 +381,7 @@ public class Config implements Serializable {
 	private static void checkFileEnd(FileConfiguration configFile) {
 		if (!configFile.contains(ConfigPaths.GAME_PRINT.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling game end tab display"));
-			configFile.set(ConfigPaths.GAME_PRINT.getPath(), true);
+			configFile.set(ConfigPaths.GAME_PRINT.getPath(), false);
 			setRet = true;
 		}
 		
@@ -480,7 +480,10 @@ public class Config implements Serializable {
 	public static void resetConfig() {
 		File configFile = new File(KuffleMain.getInstance().getDataFolder(), "config.yml");
 
-		configFile.delete();
+		if (!configFile.delete()) {
+			LogManager.getInstanceSystem().logSystemMsg("Cannot delete config file");
+		}
+
 		KuffleMain.getInstance().saveDefaultConfig();
 		KuffleMain.getInstance().reloadConfig();
 		setValues(KuffleMain.getInstance().getConfig());
@@ -1057,13 +1060,13 @@ public class Config implements Serializable {
 			setRet = false;
 		}
  		
- 		if (setRet && configTeamSize < 1) {
+ 		if (setRet && configTeamSize <= 1) {
  			error = "Cannot set team size under 1 !";
  			setRet = false;
  		}
  		
 		if (setRet && configValues.isTeam() && !TeamManager.getInstance().getTeams().isEmpty() && TeamManager.getInstance().getMaxTeamSize() > configTeamSize) {
-			error = "Cannot set team size less than a current team size !";
+			error = "Cannot set team size less than a current min team size !";
 			setRet = false;
 		}
 

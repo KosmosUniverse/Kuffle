@@ -1,8 +1,8 @@
 system_settings:
    start_type: NO_TYPE # The game type to use at plugin start, it can be [NO_TYPE, ITEMS, BLOCKS], Default : NO_TYPE
-   log_game_results: False # If True, it will print game results in the server console, Default : False
+   log_game_results: false # If True, it will print game results in the server console, Default : False
 game_settings:
-   print_player_tab: true # If True, it will print end game tab at least for the player that finished, Default: True
+   print_player_tab: false # If True, it will print end game tab at least for the player that finished, Default: False
    end_game_when_one_remains: false # If True, the game ends if only one player remains (do not enable if the game contains only one player), Default: False
    spreadplayers:
       enable: false # True: when start the game, spread players., Default: False
@@ -28,7 +28,7 @@ game_settings:
    custom_crafts: true # If True, allow players to use not mandatory custom crafts, Default: True
    team:
       enable: false # Define if team are allowed or not, Default: False
-      size: 2 # Size of a team, Default: 2
+      size: 2 # Size of a team greater than 1, Default: 2
       inv:
          enable: false # Define if team has access to a common inventory, Default: False
          size: 1 # Amount of rows in common inventory (between 1 and 6 included), Default: 1 
