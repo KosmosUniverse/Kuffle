@@ -252,6 +252,9 @@ public class Games {
                 .updatePlayersHeads(games.entrySet()
                         .stream()
                         .collect(Collectors.toMap(Map.Entry::getKey, e -> (e.getValue().getCurrentTarget() != null ? e.getValue().getCurrentTarget() : "null"))));
+
+        Party.getInstance().getGames().getGames().forEach((receiverName, receiverData) -> Objects.requireNonNull(Bukkit.getPlayer(receiverName)).sendMessage(LangManager.getMsgLang("GAME_ABANDONED", receiverData.getConfigLang()).replace("<#>", org.bukkit.ChatColor.GOLD + String.valueOf(org.bukkit.ChatColor.BOLD) + playerName + org.bukkit.ChatColor.BLUE)));
+        Party.getInstance().getSpectators().getList().forEach(specName -> Objects.requireNonNull(Bukkit.getPlayer(specName)).sendMessage(LangManager.getMsgLang("GAME_ABANDONED", Config.getLang()).replace("<#>", org.bukkit.ChatColor.GOLD + String.valueOf(org.bukkit.ChatColor.BOLD) + playerName + org.bukkit.ChatColor.BLUE)));
     }
     public void playerFinish(String playerName) {
         Party.getInstance().getRanks().finishRank(playerName);
