@@ -4,7 +4,6 @@ import java.util.Objects;
 
 import fr.kosmosuniverse.kuffle.core.*;
 import fr.kosmosuniverse.kuffle.crafts.ACraft;
-import fr.kosmosuniverse.kuffle.multiblock.AMultiblock;
 import fr.kosmosuniverse.kuffle.multiblock.MultiblockManager;
 import fr.kosmosuniverse.kuffle.type.KuffleType;
 import org.bukkit.GameMode;
@@ -38,8 +37,6 @@ public class InventoryListeners implements Listener {
 		ItemStack item = event.getCurrentItem();
 		Inventory current = event.getClickedInventory();
 		ACraft craft;
-		AMultiblock multiblock;
-		Inventory inv;
 		
 		if (item == null) {
 			return;
@@ -49,25 +46,16 @@ public class InventoryListeners implements Listener {
 			event.setCancelled(true);
 
 			openAllCrafts(current, item, player);
-		} else if (event.getView().getTitle().equals(ChatColor.BLACK + "AllMultiBlocks")) {
+		} else if (Party.getInstance().getType().getType() == KuffleType.Type.BLOCKS &&
+			MultiblockManager.hasInv(event.getView().getTitle())) {
 			event.setCancelled(true);
-			
-			if ((multiblock = MultiblockManager.searchMultiBlockByItem(item)) != null &&
-					(inv = multiblock.getInventory(current, item, MultiblockManager.getMultiblocksInventories(), true)) != null) {
-				player.openInventory(inv);
-			}
+
+			multiblockInventory(player, item);
 		} else if ((craft = CraftManager.getCraftByInventoryName(event.getView().getTitle())) != null) {
 			event.setCancelled(true);
 			
 			if (Objects.requireNonNull(item.getItemMeta()).getDisplayName().equals("<- Back")) {
 				player.openInventory(CraftManager.getCraftsInventory(craft));
-			}
-		} else if (Party.getInstance().getType().getType() == KuffleType.Type.BLOCKS &&
-				(multiblock = MultiblockManager.searchMultiBlockByInventoryName(event.getView().getTitle())) != null) {
-			event.setCancelled(true);
-			
-			if ((inv = multiblock.getInventory(current, item, MultiblockManager.getMultiblocksInventories(), false)) != null) {
-				player.openInventory(inv);
 			}
 		} else if (event.getView().getTitle().equals(ChatColor.BLACK + "Players")) {
 			event.setCancelled(true);
@@ -101,7 +89,22 @@ public class InventoryListeners implements Listener {
 			player.openInventory(inv);
 		}
 	}
-	
+
+	private void multiblockInventory(Player player, ItemStack item) {
+		if (!item.hasItemMeta()) {
+			return ;
+		}
+
+		String invName = Objects.requireNonNull(item.getItemMeta()).getPersistentDataContainer().get(NamespacedKey.minecraft("invname"), PersistentDataType.STRING);
+		String itemName = Objects.requireNonNull(item.getItemMeta()).getDisplayName();
+
+		if (invName != null && MultiblockManager.hasInv(invName)) {
+			player.openInventory(MultiblockManager.getInv(invName));
+		}  else if ("<- Quit".equals(itemName)) {
+			player.closeInventory();
+		}
+	}
+
 	/**
 	 * Teleports a player that has finished its game to another player 
 	 * 

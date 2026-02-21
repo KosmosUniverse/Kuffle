@@ -1,6 +1,8 @@
 package fr.kosmosuniverse.kuffle.multiblock;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import fr.kosmosuniverse.kuffle.core.AgeManager;
@@ -13,7 +15,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * 
@@ -33,8 +34,6 @@ public class Template extends AMultiblock {
 		for (int i = 0; i < compose.size(); i++) {
 			multiblock.addLevel(new Level(i - (compose.size() - 1), squareSize, new Pattern(compose.get(i), 0, i - (compose.size() - 1), 0)));
 		}
-		
-		createInventories();
 	}
 	
 	@Override
@@ -57,34 +56,36 @@ public class Template extends AMultiblock {
 	}
 
 	@Override
-	public void createInventories() {
-		for (int cnt = 0; cnt < compose.size(); cnt++) {
-			invs.add(setupLayer(cnt));
+	public Map<String, Inventory> createInventories(String mainInv) {
+		Map<String, Inventory> invs = new HashMap<>();
+
+		for (int counter = 0; counter < compose.size(); counter++) {
+			invs.put(name + " Layer " + (counter + 1), createInventory(mainInv, counter));
 		}
+
+		return invs;
 	}
-	
-	/**
-	 * Create template layer
-	 * 
-	 * @param cnt	compose counter
-	 * 
-	 * @return the layer inventory
-	 */
-	private Inventory setupLayer(int cnt) {
-		Inventory inv = Bukkit.createInventory(null, 27, ChatColor.BLACK + name + " Layer " + (cnt + 1));
-		
-		for (int i = 0; i < 27; i++) {
-			if (i == 0) {
-				inv.setItem(i, new ItemStack(cnt == 0 ? ItemsUtils.getBackPane() : ItemsUtils.getPreviousPane()));
-			} else if (i == 8) {
-				inv.setItem(i, new ItemStack(cnt == (compose.size() - 1) ? ItemsUtils.getLimitPane() : ItemsUtils.getNextPane()));
-			} else if (i == 13) {
-				inv.setItem(i, new ItemStack(compose.get(cnt)));
+
+	private Inventory createInventory(String mainInv, int counter) {
+		Inventory inv = Bukkit.createInventory(null, 36, name + " Layer " + (counter + 1));
+
+		setupFirstRow(inv,
+				mainInv,
+				counter == 0 ? null : name + " Layer " + counter,
+				counter == compose.size() - 1 ? null : name + " Layer " + (counter + 2));
+
+		for (int i = 9; i < 36; i++) {
+			if ((i >= 12 && i <= 14) ||
+					(i >= 21 && i <= 23) ||
+					(i >= 30 && i <= 32)) {
+				if (i == 22) {
+					inv.setItem(i, ItemMaker.newItem(compose.get(counter)).getItem());
+				}
 			} else {
-				inv.setItem(i, new ItemStack(ItemsUtils.getLimitPane()));
+				inv.setItem(i, ItemMaker.newItem(ItemsUtils.getLimitPane()).getItem());
 			}
 		}
-		
+
 		return inv;
 	}
 

@@ -14,7 +14,7 @@ public class KuffleMultiBlocks extends AKuffleCommand {
 
 	@Override
 	public boolean runCommand() {
-		player.openInventory(MultiblockManager.getMultiblocksInventories());
+		player.openInventory(MultiblockManager.getMainInv());
 		
 		return true;
 	}

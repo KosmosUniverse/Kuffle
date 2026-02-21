@@ -66,8 +66,7 @@ public class OverWorldTeleporter extends AMultiblock {
 				new Pattern(Material.AIR, -1, 2, 1),
 				new Pattern(Material.AIR, 0, 2, 1),
 				new Pattern(Material.AIR, 1, 2, 1)));
-		
-		createInventories();
+
 		findNormalWorld();
 	}
 

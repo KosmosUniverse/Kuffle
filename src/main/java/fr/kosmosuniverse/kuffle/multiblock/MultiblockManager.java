@@ -1,22 +1,17 @@
 package fr.kosmosuniverse.kuffle.multiblock;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import fr.kosmosuniverse.kuffle.core.Age;
 import fr.kosmosuniverse.kuffle.core.AgeManager;
 import fr.kosmosuniverse.kuffle.core.Config;
 import fr.kosmosuniverse.kuffle.core.TargetManager;
+import fr.kosmosuniverse.kuffle.utils.ItemMaker;
 import fr.kosmosuniverse.kuffle.utils.ItemsUtils;
 import fr.kosmosuniverse.kuffle.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-
-import net.md_5.bungee.api.ChatColor;
 
 /**
  * 
@@ -25,6 +20,8 @@ import net.md_5.bungee.api.ChatColor;
  */
 public class MultiblockManager {
 	private static List<AMultiblock> multiblocks = null;
+	private static final String MAIN_INV = "AllMultiBlocks";
+	private static final Map<String, Inventory> invs = new HashMap<>();
 	
 	/**
 	 * Private default constructor
@@ -38,6 +35,13 @@ public class MultiblockManager {
 		
 		multiblocks.add(new EndTeleporter());
 		multiblocks.add(new OverWorldTeleporter());
+
+		createInventories();
+	}
+
+	public static void clear() {
+		multiblocks.clear();
+		invs.clear();
 	}
 	
 	/**
@@ -72,6 +76,16 @@ public class MultiblockManager {
 			tmp.clear();
 			done.clear();
 		}
+
+		multiblocks.stream()
+				.filter(multiblock -> multiblock instanceof Template)
+				.forEach(template -> {
+					invs.putAll(template.createInventories(MAIN_INV));
+					invs.get(MAIN_INV).addItem(ItemMaker.newItem(template.getCore())
+							.addName(template.getName())
+							.addTag("invname", template.getName() + " Layer 1")
+							.getItem());
+				});
 	}
 	
 	/**
@@ -85,8 +99,10 @@ public class MultiblockManager {
 		}
 		
 		Optional<AMultiblock> tmp = multiblocks.stream().filter(m -> name.equals(m.getName())).findFirst();
-		
+
 		if (tmp.isPresent()) {
+			invs.get(MAIN_INV).remove(tmp.get().getCore());
+			invs.entrySet().removeIf(e -> e.getKey().contains(tmp.get().getName()));
 			tmp.get().clear();
 			multiblocks.remove(tmp.get());
 		}
@@ -109,6 +125,17 @@ public class MultiblockManager {
 		
 		multiblocks.add(new Template(age, compose));
 
+		multiblocks.stream()
+				.filter(multiblock -> multiblock instanceof Template)
+				.filter(template -> template.getName().equals(age))
+				.forEach(template -> {
+					invs.putAll(template.createInventories(MAIN_INV));
+					invs.get(MAIN_INV).addItem(ItemMaker.newItem(template.getCore())
+							.addName(template.getName())
+							.addTag("invname", template.getName() + " Layer 1")
+							.getItem());
+				});
+
 		done.clear();
 		compose.clear();
 	}
@@ -126,24 +153,48 @@ public class MultiblockManager {
 			removeTemplate(age.getName());
 		}
 	}
-	
-	/**
-	 * Gets an inventory containing all multiblocks items
-	 * 
-	 * @return the inventory
-	 */
-	public static Inventory getMultiblocksInventories() {
-		Inventory inv = Bukkit.createInventory(null, Utils.getNbInventoryRows(multiblocks.size()), ChatColor.BLACK + "AllMultiBlocks");
-		int i = 0;
-		
-		for (AMultiblock mb : multiblocks) {
-			inv.setItem(i, mb.getItem());
-			i++;
-		}
-		
-		return (inv);
+
+	public static Inventory getMainInv() {
+		return getInv(MAIN_INV);
 	}
-	
+
+	public static Inventory getInv(String invName) {
+		return invs.get(invName);
+	}
+
+	public static boolean hasInv(String invName) {
+		return getInv(invName) != null;
+	}
+
+	private static void createInventories() {
+		createMainInventory();
+
+		multiblocks.forEach(multiblock -> invs.putAll(multiblock.createInventories(MAIN_INV)));
+	}
+
+	private static void createMainInventory() {
+		Inventory inv = Bukkit.createInventory(null, Utils.getNbInventoryRows(multiblocks.size()) + 9, MAIN_INV);
+
+		setupFirstRow(inv);
+
+		multiblocks.forEach(multiblock -> inv.addItem(ItemMaker.newItem(multiblock.getCore())
+				.addName(multiblock.getName())
+				.addTag("invname", multiblock.getName() + " Layer 1")
+				.getItem()));
+
+		invs.put("AllMultiBlocks", inv);
+	}
+
+	private static void setupFirstRow(Inventory inv) {
+		for (int i = 0; i < 9; i++) {
+			if (i == 0) {
+				inv.setItem(i, ItemMaker.newItem(ItemsUtils.getQuitPane()).getItem());
+			} else {
+				inv.setItem(i, ItemMaker.newItem(ItemsUtils.getLimitPane()).getItem());
+			}
+		}
+	}
+
 	/**
 	 * Searches a multiblock by its core
 	 * 
@@ -164,27 +215,5 @@ public class MultiblockManager {
 	 */
 	public static AMultiblock searchMultiBlockByName(String name) {
 		return multiblocks.stream().filter(m -> name.contains(m.getName())).findFirst().orElse(null);
-	}
-	
-	/**
-	 * Searches a multiblock by its inventory name
-	 * 
-	 * @param invName	The inventory name to search for
-	 * 
-	 * @return The Multiblock
-	 */
-	public static AMultiblock searchMultiBlockByInventoryName(String invName) {
-		return multiblocks.stream().filter(m -> invName.contains(m.getName())).findFirst().orElse(null);
-	}
-
-	/**
-	 * Searches a multiblock by its item
-	 * 
-	 * @param item	The item to search for
-	 * 
-	 * @return The Multiblock
-	 */
-	public static AMultiblock searchMultiBlockByItem(ItemStack item) {
-		return multiblocks.stream().filter(m -> ItemsUtils.itemComparison(item, m.getItem())).findFirst().orElse(null);
 	}
 }
