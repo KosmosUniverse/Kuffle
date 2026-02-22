@@ -99,6 +99,7 @@ public class Party {
         status = GameStatus.RUNNING;
 
         games.getGameLoop().startRunnable();
+        games.startGlobalTimer();
 
         spectators.getList().forEach(spec -> {
             Objects.requireNonNull(Bukkit.getPlayer(spec)).setGameMode(GameMode.SPECTATOR);
@@ -169,5 +170,17 @@ public class Party {
                 }, 80);
             });
          }
+    }
+
+    public void sendAll(String msg) {
+        players.getList().stream()
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .forEach(player -> player.sendMessage(msg));
+
+        spectators.getList().stream()
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .forEach(player -> player.sendMessage(msg));
     }
 }

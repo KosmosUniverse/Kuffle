@@ -56,7 +56,8 @@ public class CommandUtils {
 				Party.getInstance().getType().getType().toString(),
 				Party.getInstance().getType().getXpMap(), Party.getInstance().getRanks().getPlayerRanks(),
 				Config.getTeam() ? Party.getInstance().getRanks().getTeamRanks() : null,
-				Party.getInstance().getRanks().getNextRanks());
+				Party.getInstance().getRanks().getNextRanks(),
+				Config.getCoop() ? Party.getInstance().getGames().getTimer() : -1);
 		
 		try (FileOutputStream fos = new FileOutputStream(KuffleMain.getInstance().getDataFolder().getPath() + File.separator + "Game.k")) {
 			ObjectOutputStream oos = new ObjectOutputStream(fos);

@@ -31,8 +31,13 @@ game_settings:
       size: 2 # Size of a team greater than 1, Default: 2
       inv:
          enable: false # Define if team has access to a common inventory, Default: False
-         size: 1 # Amount of rows in common inventory (between 1 and 6 included), Default: 1 
+         size: 1 # Amount of rows in common inventory (between 1 and 6 included), Default: 1
    modes:
+      coop:
+         enable: false # If True, Global timer have to be kept above 0, Default: False
+         baseValue: 15 # Time amount in mins before game lost, Default: 15
+         timeUpdated: 1 # Time (in mins) added/removed to/from the global timer at each target validated, Default : 1
+         skipCost: false # If True, skip a target will also cost global timer, Default : False
       same: false # If true, players will have same target, Default: False
       double: false # If true, players will be able to choose between two target instead of one, Default: false
       sbtt:

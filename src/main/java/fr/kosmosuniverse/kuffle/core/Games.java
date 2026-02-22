@@ -3,6 +3,7 @@ package fr.kosmosuniverse.kuffle.core;
 import fr.kosmosuniverse.kuffle.KuffleMain;
 import fr.kosmosuniverse.kuffle.utils.Utils;
 import lombok.Getter;
+import lombok.Setter;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -27,6 +28,8 @@ import java.util.stream.Collectors;
 public class Games {
     private final Map<String, PlayerData> games;
     private GameLoop gameLoop;
+    @Setter
+    private long timer;
 
     /**
      * Constructor
@@ -60,6 +63,11 @@ public class Games {
         gameLoop = new GameLoop();
     }
 
+    public void startGlobalTimer() {
+        timer = 15 * 60000L;
+        timer = System.currentTimeMillis() + timer;
+    }
+
     /**
      * Gives effects to a player depending on his current Age
      */
@@ -75,6 +83,10 @@ public class Games {
 
     public void playerFoundTarget(String playerName) {
         playerFound(playerName);
+
+        if (Config.getCoop()) {
+           timer = timer + (Config.getCoopUpdated() * 60000L);
+        }
     }
 
     public void playerFoundSbtt(String playerName) {
@@ -87,7 +99,6 @@ public class Games {
         games.get(playerName).incrementTarget();
         Objects.requireNonNull(Bukkit.getPlayer(playerName)).playSound(Objects.requireNonNull(Bukkit.getPlayer(playerName)).getLocation(), Sound.BLOCK_BELL_USE, 1f, 1f);
         games.get(playerName).getScore().setScore(games.get(playerName).getTargetCount());
-        updatePlayerBar(playerName);
         games.get(playerName).setCurrentTarget(null);
 
         if (games.get(playerName).getTargetCount() >= (Config.getTargetPerAge() + 1)) {
@@ -161,22 +172,51 @@ public class Games {
     public void updatePlayerBar(String playerName) {
         if (games.get(playerName).isLose()) {
             games.get(playerName).getAgeDisplay().setProgress(0.0);
-            games.get(playerName).getAgeDisplay().setTitle(LangManager.getMsgLang("GAME_DONE", games.get(playerName).getConfigLang()).replace("%i", String.valueOf(Party.getInstance().getRanks().getRank(playerName) + 1)));
+            games.get(playerName).getAgeDisplay().setTitle(definePlayerBarString(LangManager.getMsgLang("GAME_DONE", games.get(playerName).getConfigLang()).replace("%i", String.valueOf(Party.getInstance().getRanks().getRank(playerName) + 1))));
 
             return ;
         }
 
         if (games.get(playerName).isFinished()) {
             games.get(playerName).getAgeDisplay().setProgress(1.0);
-            games.get(playerName).getAgeDisplay().setTitle(LangManager.getMsgLang("GAME_DONE", games.get(playerName).getConfigLang()).replace("%i", String.valueOf(Party.getInstance().getRanks().getRank(playerName) + 1)));
+            games.get(playerName).getAgeDisplay().setTitle(definePlayerBarString(LangManager.getMsgLang("GAME_DONE", games.get(playerName).getConfigLang()).replace("%i", String.valueOf(Party.getInstance().getRanks().getRank(playerName) + 1))));
 
             return ;
         }
 
         double calc = ((double) games.get(playerName).getTargetCount()) / Config.getTargetPerAge();
+
         calc = Math.min(calc, 1.0);
         games.get(playerName).getAgeDisplay().setProgress(calc);
-        games.get(playerName).getAgeDisplay().setTitle(AgeManager.getAgeByNumber(games.get(playerName).getAge()).getName().replace("_", " ") + ": " + games.get(playerName).getTargetCount());
+        games.get(playerName).getAgeDisplay().setTitle(definePlayerBarString(AgeManager.getAgeByNumber(games.get(playerName).getAge()).getName().replace("_", " ") + ": " + games.get(playerName).getTargetCount()));
+    }
+
+    private String definePlayerBarString(String base) {
+        String ret = "";
+
+        if (Config.getCoop()) {
+            long rest = timer - System.currentTimeMillis();
+            rest = rest <= 0 ? 0 : rest;
+            ret = getColor(rest / 60000L) + Utils.getTimeFromSec(rest / 1000L) + ChatColor.RESET + " - ";
+        }
+
+        ret = ret + base;
+
+        return ret;
+    }
+
+    private ChatColor getColor(long count) {
+       ChatColor color;
+
+        if (count < (15 * 15 / 100)) {
+            color = ChatColor.RED;
+        } else if (count < (15 * 50 / 100)) {
+            color = ChatColor.YELLOW;
+        } else {
+            color = ChatColor.GREEN;
+        }
+
+        return color;
     }
 
     /**
@@ -201,7 +241,8 @@ public class Games {
      * Fore finish for last player
      */
     public void finishLast() {
-        if (getNbPlayerStillPlaying() == 1) {
+        if (getNbPlayerStillPlaying() == 1 ||
+                (Config.getCoop() && (timer - System.currentTimeMillis() <= 0))) {
             games.entrySet().stream()
                     .filter(entry -> !entry.getValue().isFinished())
                     .forEach(entry -> Party.getInstance().getGames().playerLose(entry.getKey()));
@@ -450,7 +491,6 @@ public class Games {
         }
 
         updatePlayerListName(playerName);
-        updatePlayerBar(playerName);
     }
 
     /**
@@ -488,11 +528,13 @@ public class Games {
                 LogManager.getInstanceGame().writeMsg(Objects.requireNonNull(Bukkit.getPlayer(playerName)), LangManager.getMsgLang("ITEM_SKIP", games.get(playerName).getConfigLang()).replace("[#]", "[" + games.get(playerName).getCurrentTarget() + "]"));
             }
 
+            if (Config.getCoop() && Config.getCoopSkip()) {
+                timer = timer - (Config.getCoopUpdated() * 60000L);
+            }
         }
 
         games.get(playerName).getScore().setScore(games.get(playerName).getTargetCount());
         games.get(playerName).setCurrentTarget(null);
-        updatePlayerBar(playerName);
 
     }
 
@@ -505,7 +547,7 @@ public class Games {
         games.get(player).setTargetCount(Config.getTargetPerAge() + 1);
         games.get(player).setCurrentTarget(null);
         games.get(player).getScore().setScore(games.get(player).getTargetCount());
-        updatePlayerBar(player);
+        //updatePlayerBar(player);
 
         games.get(player).getAgeTimes().put(AgeManager.getAgeByNumber(games.get(player).getAge()).getName(), System.currentTimeMillis() - games.get(player).getTimeStartAge());
     }
@@ -592,7 +634,6 @@ public class Games {
             teleportAutoBack(player);
         }
 
-        updatePlayerBar(player.getName());
         reloadPlayerEffects(player.getName());
         updatePlayerListName(player.getName());
     }

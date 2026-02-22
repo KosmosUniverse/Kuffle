@@ -120,7 +120,7 @@ public class ConfigInvTrigger {
 
         Config.setLevel(levels.get(idx));
 
-        inv.setItem(36, ConfigInvItems.getLevelItem());
+        inv.setItem(12, ConfigInvItems.getLevelItem());
     }
 
     public static void rewardTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
@@ -130,7 +130,7 @@ public class ConfigInvTrigger {
 
         Config.setRewards(!isEnabled);
 
-        inv.setItem(37, ConfigInvItems.getRewardItem());
+        inv.setItem(21, ConfigInvItems.getRewardItem());
     }
 
     public static void printPlayerScoreTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
@@ -167,6 +167,74 @@ public class ConfigInvTrigger {
         Config.setLastAge(ages.get(idx));
 
         inv.setItem(32, ConfigInvItems.getLastAgeItem());
+    }
+
+    public static void coopOptionTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
+        boolean isEnabled = item.getType() == Material.LIME_TERRACOTTA;
+
+        Config.setCoop(!isEnabled);
+
+        inv.setItem(10,  ConfigInvItems.getCoopOptionItem());
+    }
+
+    public static void coopSkipTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        playerNeedOp(player);
+
+        boolean isEnabled = item.getType() == Material.LIME_TERRACOTTA;
+
+        Config.setCoopSkip(!isEnabled);
+
+        inv.setItem(16,  ConfigInvItems.getCoopSkipItem());
+    }
+
+    public static void minusCoopBaseTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
+
+        coopBase(player, inv, amount - 5);
+    }
+
+    public static void plusCoopBaseTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
+
+        coopBase(player, inv, amount + 5);
+    }
+
+    private static void coopBase(Player player, Inventory inv, int amount) throws IllegalAccessException {
+        playerNeedOp(player);
+
+        Config.setCoopBase(amount);
+
+        if (!Config.setRet) {
+            player.sendMessage(Config.error);
+        } else {
+            inv.setItem(13, ConfigInvItems.getCoopBaseItem());
+        }
+    }
+
+    public static void minusCoopUpdatedTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
+
+        coopUpdated(player, inv, amount - 1);
+    }
+
+    public static void plusCoopUpdatedTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+        int amount = Integer.parseInt(inv.getItem(13).getItemMeta().getLore().get(0).split(":")[1]);
+
+        coopUpdated(player, inv, amount + 1);
+    }
+
+    private static void coopUpdated(Player player, Inventory inv, int amount) throws IllegalAccessException {
+        playerNeedOp(player);
+
+        Config.setCoopUpdated(amount);
+
+        if (!Config.setRet) {
+            player.sendMessage(Config.error);
+        } else {
+            inv.setItem(13, ConfigInvItems.getCoopUpdatedItem());
+        }
     }
 
     public static void sameOptionTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {

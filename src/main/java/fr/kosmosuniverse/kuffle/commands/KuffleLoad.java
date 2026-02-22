@@ -95,6 +95,7 @@ public class KuffleLoad extends AKuffleCommand {
 			Config.loadConfig(holder.getConfig());
 			Party.getInstance().getRanks().loadRanks(holder.getPlayerRanks(), holder.getPlayerRanks(), holder.getNextRanks());
 			Party.getInstance().getType().loadXpMax(holder.getXpMap());
+			Party.getInstance().getGames().setTimer(holder.getGlobalTimerInterval());
 			
 			holder.clear();
 		} catch (IOException | ClassNotFoundException | KuffleFileLoadException e) {
@@ -136,6 +137,7 @@ public class KuffleLoad extends AKuffleCommand {
 
 				if (Party.getInstance().getGames().getGameLoop() == null) {
 					Party.getInstance().getGames().init();
+					Party.getInstance().getGames().setTimer(System.currentTimeMillis() + Party.getInstance().getGames().getTimer());
 				}
 
 				Party.getInstance().launch();

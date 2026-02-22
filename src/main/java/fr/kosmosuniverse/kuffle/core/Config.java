@@ -71,6 +71,8 @@ public class Config implements Serializable {
 		configElems.put("CUSTOM_CRAFTS", (String b) -> setCrafts(Boolean.parseBoolean(b)));
 		configElems.put("TEAM", (String b) -> setTeam(Boolean.parseBoolean(b)));
 		configElems.put("TEAM_INV", (String b) -> setTeamInv(Boolean.parseBoolean(b)));
+		configElems.put("COOP", (String b) -> setCoop(Boolean.parseBoolean(b)));
+		configElems.put("COOP_SKIP", (String b) -> setCoopSkip(Boolean.parseBoolean(b)));
 		configElems.put("SAME_MODE", (String b) -> setSame(Boolean.parseBoolean(b)));
 		configElems.put("DOUBLE_MODE", (String b) -> setDoubleMode(Boolean.parseBoolean(b)));
 		configElems.put("SBTT_MODE", (String b) -> setSbttMode(Boolean.parseBoolean(b)));
@@ -85,6 +87,8 @@ public class Config implements Serializable {
 		configElems.put("ADDED_DURATION", (String i) -> setAddedTime(Integer.parseInt(i)));
 		configElems.put("TEAM_SIZE", (String i) -> setTeamSize(Integer.parseInt(i)));
 		configElems.put("TEAM_INV_SIZE", (String i) -> setTeamInvSize(Integer.parseInt(i)));
+		configElems.put("COOP_BASE", (String i) -> setCoopBase(Integer.parseInt(i)));
+		configElems.put("COOP_UPDATED", (String i) -> setCoopUpdated(Integer.parseInt(i)));
 		configElems.put("SBTT_AMOUNT", (String i) -> setSbttAmount(Integer.parseInt(i)));
 		configElems.put("XP_END_TELEPORTER", (String i) -> setXpEnd(Integer.parseInt(i)));
 		configElems.put("XP_OVERWORLD_TELEPORTER", (String i) -> setXpOverworld(Integer.parseInt(i)));
@@ -226,6 +230,32 @@ public class Config implements Serializable {
 		if (!configFile.contains(ConfigPaths.GAME_TEAM.getPath())) {
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling team"));
 			configFile.set(ConfigPaths.GAME_TEAM.getPath(), false);
+			setRet = true;
+		}
+
+		if (!configFile.contains(ConfigPaths.GAME_MODE_COOP.getPath())) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling coop"));
+			configFile.set(ConfigPaths.GAME_MODE_COOP.getPath(), false);
+			setRet = true;
+		}
+
+		if (!configFile.contains(ConfigPaths.GAME_MODE_COOP_SKIP.getPath())) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "enabling coop skip"));
+			configFile.set(ConfigPaths.GAME_MODE_COOP_SKIP.getPath(), false);
+			setRet = true;
+		}
+
+		if (!configFile.contains(ConfigPaths.GAME_MODE_COOP_BASE.getPath()) &&
+				configFile.getInt(ConfigPaths.GAME_MODE_COOP_BASE.getPath()) < 1) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "coop base time"));
+			configFile.set(ConfigPaths.GAME_MODE_COOP_BASE.getPath(), 15);
+			setRet = true;
+		}
+
+		if (!configFile.contains(ConfigPaths.GAME_MODE_COOP_ADDED.getPath()) &&
+				configFile.getInt(ConfigPaths.GAME_MODE_COOP_ADDED.getPath()) < 1) {
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "coop updated time"));
+			configFile.set(ConfigPaths.GAME_MODE_COOP_ADDED.getPath(), 1);
 			setRet = true;
 		}
 
@@ -409,6 +439,8 @@ public class Config implements Serializable {
 		configValues.setSkip(configFile.getBoolean(ConfigPaths.GAME_SKIP.getPath()));
 		configValues.setCrafts(configFile.getBoolean(ConfigPaths.GAME_CRAFTS.getPath()));
 		configValues.setTeam(configFile.getBoolean(ConfigPaths.GAME_TEAM.getPath()));
+		configValues.setCoop(configFile.getBoolean(ConfigPaths.GAME_MODE_COOP.getPath()));
+		configValues.setCoopSkip(configFile.getBoolean(ConfigPaths.GAME_MODE_COOP_SKIP.getPath()));
 		configValues.setTeamInv(configFile.getBoolean(ConfigPaths.GAME_TEAM_INV.getPath()));
 		configValues.setSame(configFile.getBoolean(ConfigPaths.GAME_MODE_SAME.getPath()));
 		configValues.setPrintTab(configFile.getBoolean(ConfigPaths.GAME_PRINT.getPath()));
@@ -425,6 +457,8 @@ public class Config implements Serializable {
 		configValues.setAddedTime(configFile.getInt(ConfigPaths.GAME_TIME_ADD.getPath()));
 		configValues.setTeamSize(configFile.getInt(ConfigPaths.GAME_TEAM_SIZE.getPath()));
 		configValues.setTeamInvSize(configFile.getInt(ConfigPaths.GAME_TEAM_INV_SIZE.getPath()));
+		configValues.setCoopBase(configFile.getInt(ConfigPaths.GAME_MODE_COOP_BASE.getPath()));
+		configValues.setCoopUpdate(configFile.getInt(ConfigPaths.GAME_MODE_COOP_ADDED.getPath()));
 		configValues.setSbttAmount(configFile.getInt(ConfigPaths.GAME_MODE_SBTT_AMNT.getPath()));
 		configValues.setXpEnd(configFile.getInt(ConfigPaths.GAME_XP_END.getPath()));
 		configValues.setXpOverworld(configFile.getInt(ConfigPaths.GAME_XP_OVERWORLD.getPath()));
@@ -463,6 +497,10 @@ public class Config implements Serializable {
 		config.set(ConfigPaths.GAME_SKIP_AGE.getPath(), AgeManager.getAgeByNumber(configValues.getSkipAge()).getName());
 		config.set(ConfigPaths.GAME_CRAFTS.getPath(), configValues.isCrafts());
 		config.set(ConfigPaths.GAME_TEAM.getPath(), configValues.isTeam());
+		config.set(ConfigPaths.GAME_MODE_COOP.getPath(), configValues.isCoop());
+		config.set(ConfigPaths.GAME_MODE_COOP_SKIP.getPath(), configValues.isCoopSkip());
+		config.set(ConfigPaths.GAME_MODE_COOP_BASE.getPath(), configValues.getCoopBase());
+		config.set(ConfigPaths.GAME_MODE_COOP_ADDED.getPath(), configValues.getCoopUpdate());
 		config.set(ConfigPaths.GAME_TEAM_SIZE.getPath(), configValues.getTeamSize());
 		config.set(ConfigPaths.GAME_TEAM_INV.getPath(), configValues.isTeamInv());
 		config.set(ConfigPaths.GAME_TEAM_INV_SIZE.getPath(), configValues.getTeamInvSize());
@@ -530,6 +568,10 @@ public class Config implements Serializable {
 				+ ChatColor.BLUE + "  - Team Inv: " + ChatColor.GOLD + configValues.isTeamInv() + "\n"
 				+ ChatColor.BLUE + "    - Team Inv Size: " + ChatColor.GOLD + configValues.getTeamInvSize() + "\n"
 				+ ChatColor.BLUE + "Modes: " + "\n"
+				+ ChatColor.BLUE + "  - Coop: " + ChatColor.GOLD + configValues.isCoop() + "\n"
+				+ ChatColor.BLUE + "    - base: " + ChatColor.GOLD + configValues.getCoopBase() + "\n"
+				+ ChatColor.BLUE + "    - updated: " + ChatColor.GOLD + configValues.getCoopUpdate() + "\n"
+				+ ChatColor.BLUE + "    - skip: " + ChatColor.GOLD + configValues.isCoopSkip() + "\n"
 				+ ChatColor.BLUE + "  - Same: " + ChatColor.GOLD + configValues.isSame() + "\n"
 				+ ChatColor.BLUE + "  - Double: " + ChatColor.GOLD + configValues.isDuoMode() + "\n"
 				+ ChatColor.BLUE + "  - SBTT: " + ChatColor.GOLD + configValues.isSbttMode() + "\n"
@@ -648,7 +690,43 @@ public class Config implements Serializable {
 	public static boolean getTeam() {
 		return configValues.isTeam();
 	}
-	
+
+	/**
+	 * Get coop enable value
+	 *
+	 * @return if coop mode is enabled
+	 */
+	public static boolean getCoop() {
+		return configValues.isCoop();
+	}
+
+	/**
+	 * Get coop enable value
+	 *
+	 * @return if coop mode is enabled
+	 */
+	public static int getCoopBase() {
+		return configValues.getCoopBase();
+	}
+
+	/**
+	 * Get coop enable value
+	 *
+	 * @return if coop mode is enabled
+	 */
+	public static int getCoopUpdated() {
+		return configValues.getCoopUpdate();
+	}
+
+	/**
+	 * Get coop enable value
+	 *
+	 * @return if coop mode is enabled
+	 */
+	public static boolean getCoopSkip() {
+		return configValues.isCoopSkip();
+	}
+
 	/**
 	 * Get team inventory enable value
 	 * 
@@ -958,6 +1036,36 @@ public class Config implements Serializable {
 			setRet = true;			
 		}
 	}
+
+	/**
+	 * Set Coop value
+	 *
+	 * @param configCoop	value used to set coop
+	 */
+	public static void setCoop(boolean configCoop) {
+		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
+			error = "Cannot set Coop while game is running !";
+			setRet = false;
+		} else {
+			configValues.setCoop(configCoop);
+			setRet = true;
+		}
+	}
+
+	/**
+	 * Set Coop skip value
+	 *
+	 * @param configCoop	value used to set coop skip
+	 */
+	public static void setCoopSkip(boolean configCoop) {
+		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
+			error = "Cannot set Coop Skip while game is running !";
+			setRet = false;
+		} else {
+			configValues.setCoopSkip(configCoop);
+			setRet = true;
+		}
+	}
 	
 	/**
 	 * Set team inv value
@@ -1097,6 +1205,50 @@ public class Config implements Serializable {
 			setRet = true;
 		}
  	}
+
+	/**
+	 * Set Coop base time (in mins)
+	 *
+	 * @param configCoopBase value used to set coop base time
+	 */
+	public static void setCoopBase(int configCoopBase) {
+		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
+			error = "Cannot change coop base when game is running !";
+			setRet = false;
+		}
+
+		if (setRet && configCoopBase < 1) {
+			error = "Cannot set coop base time below 1!";
+			setRet = false;
+		}
+
+		if (setRet) {
+			configValues.setCoopBase(configCoopBase);
+			setRet = true;
+		}
+	}
+
+	/**
+	 * Set Coop updating time (in mins)
+	 *
+	 * @param configCoopUpdate value used to set coop updating time
+	 */
+	public static void setCoopUpdated(int configCoopUpdate) {
+		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
+			error = "Cannot change coop updating when game is running !";
+			setRet = false;
+		}
+
+		if (setRet && configCoopUpdate < 1) {
+			error = "Cannot set coop updating time below 1!";
+			setRet = false;
+		}
+
+		if (setRet) {
+			configValues.setCoopUpdate(configCoopUpdate);
+			setRet = true;
+		}
+	}
 
  	/**
 	 * Set spread distance value

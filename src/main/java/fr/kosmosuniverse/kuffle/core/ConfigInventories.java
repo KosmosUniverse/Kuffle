@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author KosmosUniverse
@@ -17,6 +18,7 @@ import java.util.Map;
 public class ConfigInventories {
     private final Map<String, Inventory> invs;
     private final Map<String, Function0arity> createInvMethods;
+    private static final String MAIN_INV = "Config Main Board";
 
     public ConfigInventories() {
         invs = new HashMap<>();
@@ -24,7 +26,7 @@ public class ConfigInventories {
     }
 
     public Inventory getMainInv() {
-        return getInv("Config Main Board");
+        return getInv(MAIN_INV);
     }
 
     public Inventory getInv(String invname) {
@@ -48,6 +50,8 @@ public class ConfigInventories {
         for (int i = 0; i < 9; i++) {
             if (i == 0) {
                 inv.setItem(i, prevInv != null ? ItemMaker.newItem(ItemsUtils.getBackPane()).addTag("invname", prevInv).getItem() : ItemsUtils.getQuitPane());
+            } else if (i == 4 && !Objects.equals(curInv, MAIN_INV)) {
+                inv.setItem(i, ItemMaker.newItem(Material.PURPLE_STAINED_GLASS_PANE).addName("Back to Main Menu").addTag("invname", MAIN_INV).getItem());
             } else if (i == 8) {
                 inv.setItem(i, ItemMaker.newItem(Material.MAGENTA_STAINED_GLASS_PANE).addName("Reload Inventory").addTag("reload", curInv).getItem());
             } else {
@@ -61,15 +65,15 @@ public class ConfigInventories {
         createSystemInv();
         createGameInv();
 
-        createInvMethods.put("Config Main Board", this::createMainInv);
+        createInvMethods.put(MAIN_INV, this::createMainInv);
         createInvMethods.put("System Config Board", this::createSystemInv);
         createInvMethods.put("Game Config Board", this::createGameInv);
     }
 
     private void createMainInv() {
-        Inventory mainInv = Bukkit.createInventory(null, 18, "Config Main Board");
+        Inventory mainInv = Bukkit.createInventory(null, 18, MAIN_INV);
 
-        setupFirstRow(mainInv, "Config Main Board", null);
+        setupFirstRow(mainInv, MAIN_INV, null);
 
         mainInv.setItem(9, ItemMaker.newItem(Material.BARRIER).addName("System Config").addTag("invname", "System Config Board").getItem());
         mainInv.setItem(10, ItemMaker.newItem(Material.BELL).addName("Game Config").addTag("invname", "Game Config Board").getItem());
@@ -79,13 +83,13 @@ public class ConfigInventories {
         ConfigInvTrigger.addTrigger("saveConfig", ConfigInvTrigger::saveConfig);
         ConfigInvTrigger.addTrigger("resetConfig", ConfigInvTrigger::resetConfig);
 
-        invs.put("Config Main Board", mainInv);
+        invs.put(MAIN_INV, mainInv);
     }
 
     private void createSystemInv() {
         Inventory systemInv = Bukkit.createInventory(null, 18, "System Config Board");
 
-        setupFirstRow(systemInv, "System Config Board", "Config Main Board");
+        setupFirstRow(systemInv, "System Config Board", MAIN_INV);
 
         systemInv.setItem(9, ConfigInvItems.getStartTypeItem());
         systemInv.setItem(10, ConfigInvItems.getLogGameResultsItem());
@@ -97,30 +101,31 @@ public class ConfigInventories {
     }
 
     private void createGameInv() {
-        Inventory systemInv = Bukkit.createInventory(null, 45, "Game Config Board");
+        Inventory systemInv = Bukkit.createInventory(null, 36, "Game Config Board");
 
-        setupFirstRow(systemInv, "Game Config Board", "Config Main Board");
+        setupFirstRow(systemInv, "Game Config Board", MAIN_INV);
 
         systemInv.setItem(9, ConfigInvItems.getCustomCraftItem());
         systemInv.setItem(10, ItemMaker.newItem(Material.ENDER_CHEST).addName("Skip").addTag("invname", "Skip Board").getItem());
         systemInv.setItem(11, ItemMaker.newItem(Material.COBBLESTONE).addName("Targets per Age").addTag("invname", "Target Board").getItem());
+        systemInv.setItem(12, ConfigInvItems.getLevelItem());
         systemInv.setItem(18, ItemMaker.newItem(Material.ENDER_PEARL).addName("Spreadplayers").addTag("invname", "Spreadplayer Board").getItem());
         systemInv.setItem(19, ItemMaker.newItem(Material.CLOCK).addName("Time").addTag("invname", "Time Board").getItem());
         systemInv.setItem(20, ItemMaker.newItem(Material.WHITE_BANNER).addName("Passive").addTag("invname", "Passive Board").getItem());
+        systemInv.setItem(21, ConfigInvItems.getRewardItem());
         systemInv.setItem(27, ConfigInvItems.getSaturationItem());
         systemInv.setItem(28, ItemMaker.newItem(Material.PLAYER_HEAD).addName("Player Config").addTag("invname", "Player Config Board").getItem());
         systemInv.setItem(29, ItemMaker.newItem(Material.EXPERIENCE_BOTTLE).addName("XP Costs").addTag("invname", "XP Costs Board").getItem());
-        systemInv.setItem(36, ConfigInvItems.getLevelItem());
-        systemInv.setItem(37, ConfigInvItems.getRewardItem());
 
         systemInv.setItem(14, ConfigInvItems.getPrintPlayerItem());
         systemInv.setItem(23, ConfigInvItems.getEndWhenLastItem());
         systemInv.setItem(32, ConfigInvItems.getLastAgeItem());
 
+        systemInv.setItem(16, ItemMaker.newItem(Material.BONE).addName("SBTT Option").addTag("invname", "SBTT Option Board").getItem());
         systemInv.setItem(17, ItemMaker.newItem(Material.NETHER_STAR).addName("Team Option").addTag("invname", "Team Option Board").getItem());
+        systemInv.setItem(25, ItemMaker.newItem(Material.COMPASS).addName("Coop Option").addTag("invname", "Coop Option Board").getItem());
         systemInv.setItem(26, ConfigInvItems.getSameOptionItem());
         systemInv.setItem(35, ConfigInvItems.getDoubleOptionItem());
-        systemInv.setItem(44, ItemMaker.newItem(Material.BONE).addName("SBTT Option").addTag("invname", "SBTT Option Board").getItem());
 
         ConfigInvTrigger.addTrigger("customCrafts", ConfigInvTrigger::customCraftTrigger);
         ConfigInvTrigger.addTrigger("saturation", ConfigInvTrigger::saturationTrigger);
@@ -147,6 +152,7 @@ public class ConfigInventories {
         createXpCostsInv();
         createTeamOptionInv();
         createSbttOptionInv();
+        createCoopOptionInv();
 
         createInvMethods.put("Skip Board", this::createSkipInv);
         createInvMethods.put("Target Board", () -> createPlusMinusInv("Target", "Game Config Board", "Target", ConfigInvItems.getTargetPerAgeItem()));
@@ -157,6 +163,7 @@ public class ConfigInventories {
         createInvMethods.put("XP Costs Board", this::createXpCostsInv);
         createInvMethods.put("Team Option Board", this::createTeamOptionInv);
         createInvMethods.put("SBTT Option Board", this::createSbttOptionInv);
+        createInvMethods.put("Coop Option Board", this::createCoopOptionInv);
     }
 
     private void createSkipInv() {
@@ -351,5 +358,32 @@ public class ConfigInventories {
         ConfigInvTrigger.addTrigger("plusSbttSize", ConfigInvTrigger::plusSbttSizeTrigger);
 
         createInvMethods.put("SBTT Size Board", () -> createPlusMinusInv("SBTT Size", "SBTT Option Board", "SbttSize", ConfigInvItems.getSbttSizeItem()));
+    }
+
+    public void createCoopOptionInv() {
+        Inventory coopOptionInv = Bukkit.createInventory(null, 18, "Coop Option Board");
+
+        setupFirstRow(coopOptionInv, "Coop Option Board", "Game Config Board");
+
+        coopOptionInv.setItem(10, ConfigInvItems.getCoopOptionItem());
+        coopOptionInv.setItem(12, ItemMaker.newItem(Material.COMPASS).addName("Coop Base Time").addTag("invname", "Coop Base Time Board").getItem());
+        coopOptionInv.setItem(14, ItemMaker.newItem(Material.CLOCK).addName("Coop Updating Time").addTag("invname", "Coop Updating Time Board").getItem());
+        coopOptionInv.setItem(16, ConfigInvItems.getCoopSkipItem());
+
+        ConfigInvTrigger.addTrigger("coopOption", ConfigInvTrigger::coopOptionTrigger);
+        ConfigInvTrigger.addTrigger("coopSkip", ConfigInvTrigger::coopSkipTrigger);
+
+        invs.put("Coop Option Board", coopOptionInv);
+
+        createPlusMinusInv("Coop Base Time", "Coop Option Board", "CoopBase", ConfigInvItems.getCoopBaseItem());
+        createPlusMinusInv("Coop Updating Time", "Coop Option Board", "CoopUpdated", ConfigInvItems.getCoopUpdatedItem());
+
+        ConfigInvTrigger.addTrigger("minusCoopBase", ConfigInvTrigger::minusCoopBaseTrigger);
+        ConfigInvTrigger.addTrigger("plusCoopBase", ConfigInvTrigger::plusCoopBaseTrigger);
+        ConfigInvTrigger.addTrigger("minusCoopUpdated", ConfigInvTrigger::minusCoopUpdatedTrigger);
+        ConfigInvTrigger.addTrigger("plusCoopUpdated", ConfigInvTrigger::plusCoopUpdatedTrigger);
+
+        createInvMethods.put("Coop Base Time Board", () -> createPlusMinusInv("Coop Base Time", "Coop Option Board", "CoopBase", ConfigInvItems.getCoopBaseItem()));
+        createInvMethods.put("Coop Updating Time Board", () -> createPlusMinusInv("Coop Updating Time", "Coop Option Board", "CoopUpdated", ConfigInvItems.getCoopUpdatedItem()));
     }
 }

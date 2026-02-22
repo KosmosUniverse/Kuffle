@@ -28,6 +28,8 @@ public class ConfigHolder implements Serializable {
 	private boolean crafts;
 	private boolean team;
 	private boolean teamInv;
+	private boolean coop;
+	private boolean coopSkip;
 	private boolean same;
 	private boolean duoMode;
 	private boolean sbttMode;
@@ -38,6 +40,8 @@ public class ConfigHolder implements Serializable {
 	private int sbttAmount;
 	private int teamSize;
 	private int teamInvSize;
+	private int coopBase;
+	private int coopUpdate;
 	private int spreadDistance;
 	private int spreadRadius;
 	private int targetPerAge;
@@ -74,6 +78,8 @@ public class ConfigHolder implements Serializable {
 		crafts = config.crafts;
 		team = config.team;
 		teamInv = config.teamInv;
+		coop = config.coop;
+		coopSkip = config.coopSkip;
 		same = config.same;
 		duoMode = config.duoMode;
 		sbttMode = config.sbttMode;
@@ -84,6 +90,8 @@ public class ConfigHolder implements Serializable {
 		sbttAmount = config.sbttAmount;
 		teamSize = config.teamSize;
 		teamInvSize = config.teamInvSize;
+		coopBase = config.coopBase;
+		coopUpdate = config.coopUpdate;
 		spreadDistance = config.spreadDistance;
 		spreadRadius = config.spreadRadius;
 		targetPerAge = config.targetPerAge;

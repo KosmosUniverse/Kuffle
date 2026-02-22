@@ -34,7 +34,12 @@ public class GameLoop {
 				if (!checkFinished()) {
 					runLoop(random);
 				} else {
-					if (Config.getEndOne()) {
+					if (Config.getEndOne() ||
+							(Config.getCoop() && Party.getInstance().getGames().getTimer() - System.currentTimeMillis() <= 0)) {
+						if (Config.getCoop() && Party.getInstance().getGames().getTimer() - System.currentTimeMillis() <= 0) {
+							Party.getInstance().sendAll("Coop Timer hit 0 ! All remaining players are forced abandon. Game is finished.");
+						}
+
 						Party.getInstance().getGames().finishLast();
 					}
 
@@ -54,7 +59,9 @@ public class GameLoop {
 	private boolean checkFinished() {
 		int nb = Party.getInstance().getGames().getNbPlayerStillPlaying();
 
-		return nb == 0 || (nb == 1 && Config.getEndOne());
+		return nb == 0 ||
+				(nb == 1 && Config.getEndOne()) ||
+				(Party.getInstance().getGames().getTimer() - System.currentTimeMillis() <= 0);
 	}
 	
 	/**
@@ -197,6 +204,8 @@ public class GameLoop {
 			ActionBar.sendMessage(ChatColor.LIGHT_PURPLE + LangManager.getMsgLang("TEAM_WAIT", playerData.getConfigLang()), Objects.requireNonNull(Bukkit.getPlayer(playerName)));
 			return ;
 		}
+
+		Party.getInstance().getGames().updatePlayerBar(playerName);
 
 		long count = getTime(playerData) * 60000L;
 		String dspCurItem;

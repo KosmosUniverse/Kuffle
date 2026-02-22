@@ -26,6 +26,7 @@ public final class GameHolder implements Serializable {
 	private Map<String, Integer> playerRanks;
 	private Map<String, Integer> teamRanks;
 	private Map<String, Integer> nextRanks;
+	private long globalTimerInterval;
 
 	/**
 	 * Constructor
@@ -35,14 +36,14 @@ public final class GameHolder implements Serializable {
 	 * @param playerRanksMap	Players Ranks
 	 * @param xps				Xp max
 	 */
-	public GameHolder(ConfigHolder conf, String type, Map<String, Integer> xps, Map<String, Integer> playerRanksMap, Map<String, Integer> teamRanksMap, Map<String, Integer> nextRanks) {
+	public GameHolder(ConfigHolder conf, String type, Map<String, Integer> xps, Map<String, Integer> playerRanksMap, Map<String, Integer> teamRanksMap, Map<String, Integer> nextRanks, long interval) {
 		config = conf;
 		kuffleType = type;
 		xpMap = xps;
 		playerRanks = playerRanksMap;
 		teamRanks = teamRanksMap;
 		this.nextRanks = nextRanks;
-
+		this.globalTimerInterval = interval;
 	}
 
 	/**
@@ -68,11 +69,15 @@ public final class GameHolder implements Serializable {
 		oStream.writeObject(xpMap);
 		oStream.writeObject(playerRanks);
 
-		if (Config.getTeam()) {
+		if (config.isTeam()) {
 			oStream.writeObject(teamRanks);
 		}
 
 		oStream.writeObject(nextRanks);
+
+		if (config.isCoop()) {
+			oStream.writeObject(globalTimerInterval);
+		}
 	}
 
 	/**
@@ -95,5 +100,9 @@ public final class GameHolder implements Serializable {
 		}
 
 		nextRanks = (Map<String, Integer>) iStream.readObject();
+
+		if (config.isCoop()) {
+			globalTimerInterval = iStream.readLong();
+		}
 	}
 }

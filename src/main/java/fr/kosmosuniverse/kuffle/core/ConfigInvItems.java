@@ -180,6 +180,53 @@ public class ConfigInvItems {
         return itemBuilder.getItem();
     }
 
+    public static ItemStack getCoopOptionItem() {
+        ItemMaker itemBuilder = Config.getCoop() ? ItemMaker.newItem(Material.LIME_TERRACOTTA).addName("Coop ENABLED") : ItemMaker.newItem(Material.RED_TERRACOTTA).addName("Coop DISABLED");
+
+        itemBuilder.addTag("trigger", "coopOption")
+                .addLores("Defines if game will have the \"Coop\" option enabled.",
+                        "Values : true, false.",
+                        "Default : false");
+
+        return itemBuilder.getItem();
+    }
+
+    public static ItemStack getCoopSkipItem() {
+        ItemMaker itemBuilder = Config.getCoopSkip() ? ItemMaker.newItem(Material.LIME_TERRACOTTA).addName("Coop Skip ENABLED") : ItemMaker.newItem(Material.RED_TERRACOTTA).addName("Coop Skip DISABLED");
+
+        itemBuilder.addTag("trigger", "coopSkip")
+                .addLores("Defines if skip will impact \"Coop\" Option timer.",
+                        "Values : true, false.",
+                        "Default : false");
+
+        return itemBuilder.getItem();
+    }
+
+    public static ItemStack getCoopBaseItem() {
+        ItemMaker itemBuilder = ItemMaker.newItem(Material.EMERALD)
+                .addName("Coop Base Time")
+                .addLores("Time (in mins):" + Config.getCoopBase(),
+                        "Represent the amount of time the game will start with.",
+                        "Increase or Decreased by 5.",
+                        "Values : greater or equal to 1.",
+                        "Default : 15");
+
+        return itemBuilder.getItem();
+    }
+
+    public static ItemStack getCoopUpdatedItem() {
+        ItemMaker itemBuilder = ItemMaker.newItem(Material.EMERALD)
+                .addName("Coop Updated Time")
+                .addLores("Time (in mins):" + Config.getCoopUpdated(),
+                        "Represent the amount of time added to the timer wen a target is validated.",
+                        "Same amount of time will decrease the timer if coop skip is enabled.",
+                        "Increase or Decreased by 1.",
+                        "Values : greater or equal to 1.",
+                        "Default : 1");
+
+        return itemBuilder.getItem();
+    }
+
     public static ItemStack getSameOptionItem() {
         ItemMaker itemBuilder = ItemMaker.newItem(Material.SLIME_BALL)
                 .addTag("trigger", "sameOption")
