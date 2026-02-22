@@ -32,6 +32,7 @@ public class Party {
     private GameStatus status;
     @Getter
     private KuffleType type;
+    private long interval;
 
     /**
      * Constructor
@@ -146,6 +147,10 @@ public class Party {
                 Objects.requireNonNull(Bukkit.getPlayer(player)).addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 10, false, false, false));
                 games.getGames().get(player).setInterval(System.currentTimeMillis() - games.getGames().get(player).getTimeTarget());
             });
+
+            if (Config.getCoop()) {
+                interval = games.getTimer() - System.currentTimeMillis();
+            }
         }
     }
 
@@ -169,6 +174,10 @@ public class Party {
                     games.getGames().get(player).setInterval(-1);
                 }, 80);
             });
+
+            if (Config.getCoop()) {
+                games.setTimer(System.currentTimeMillis() + interval);
+            }
          }
     }
 
