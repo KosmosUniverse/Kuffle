@@ -61,7 +61,7 @@ public class GameLoop {
 
 		return nb == 0 ||
 				(nb == 1 && Config.getEndOne()) ||
-				(Party.getInstance().getGames().getTimer() - System.currentTimeMillis() <= 0);
+				(Config.getCoop() && Party.getInstance().getGames().getTimer() - System.currentTimeMillis() <= 0);
 	}
 	
 	/**
