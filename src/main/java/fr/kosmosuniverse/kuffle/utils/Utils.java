@@ -11,7 +11,7 @@ import java.util.Objects;
 
 import fr.kosmosuniverse.kuffle.KuffleMain;
 import fr.kosmosuniverse.kuffle.core.Config;
-import fr.kosmosuniverse.kuffle.core.LangManager;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
 import fr.kosmosuniverse.kuffle.core.LogManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

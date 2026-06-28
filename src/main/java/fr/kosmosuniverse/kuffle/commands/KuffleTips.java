@@ -1,9 +1,9 @@
 package fr.kosmosuniverse.kuffle.commands;
 
 import fr.kosmosuniverse.kuffle.core.Config;
-import fr.kosmosuniverse.kuffle.core.LangManager;
+import fr.kosmosuniverse.kuffle.core.PartyTmp;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
 import fr.kosmosuniverse.kuffle.core.LogManager;
-import fr.kosmosuniverse.kuffle.core.Party;
 
 /**
  * 
@@ -17,7 +17,7 @@ public class KuffleTips extends AKuffleCommand {
 
 	@Override
 	public boolean runCommand() {
-		if (!Party.getInstance().getPlayers().has(player.getName())) {
+		if (!PartyTmp.getInstance().getPlayers().has(player.getName())) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("PLAYER_NOT_IN_LIST", Config.getLang()));
 		}
 		
@@ -33,7 +33,7 @@ public class KuffleTips extends AKuffleCommand {
 
 		boolean tips = "true".equals(sTips);
 
-		Party.getInstance().getGames().getGames().get(player.getName()).setTips(tips);
+		PartyTmp.getInstance().getGameManager().setPlayerTipsState(player.getName(), tips);
 
 		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("TIPS_SET", Config.getLang()).replace("[#]", " [" + tips + "]"));
 

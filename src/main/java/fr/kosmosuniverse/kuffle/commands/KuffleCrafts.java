@@ -1,6 +1,6 @@
 package fr.kosmosuniverse.kuffle.commands;
 
-import fr.kosmosuniverse.kuffle.core.CraftManager;
+import fr.kosmosuniverse.kuffle.datamanagers.crafts.CraftManager;
 
 /**
  * 

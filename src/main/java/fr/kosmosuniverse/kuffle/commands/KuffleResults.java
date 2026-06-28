@@ -1,6 +1,7 @@
 package fr.kosmosuniverse.kuffle.commands;
 
 import fr.kosmosuniverse.kuffle.core.*;
+import fr.kosmosuniverse.kuffle.datamanagers.results.ResultManager;
 
 /**
  * 

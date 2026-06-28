@@ -1,5 +1,10 @@
 package fr.kosmosuniverse.kuffle.core;
 
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
+import fr.kosmosuniverse.kuffle.datamanagers.age.AgeManager;
+import fr.kosmosuniverse.kuffle.datamanagers.level.Level;
+import fr.kosmosuniverse.kuffle.datamanagers.level.LevelManager;
+import fr.kosmosuniverse.kuffle.mode.Mode;
 import fr.kosmosuniverse.kuffle.utils.Function3arity;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public class ConfigInvTrigger {
     private static final Map<String, Function3arity<Player, Inventory, ItemStack>> triggers = new HashMap<>();
-    private static final List<String> types = Arrays.asList("NO_TYPE", "ITEMS", "BLOCKS");
+    private static final List<String> modes = Arrays.asList(Mode.NO_MODE.name(), Mode.ITEMS.name(), Mode.BLOCKS.name());
     private static final List<String> levels = LevelManager.getInstance().getLevels().stream().sorted(Comparator.comparingInt(Level::getNumber)).map(Level::getName).collect(Collectors.toList());
     private static final List<String> ages = AgeManager.getOrderedAgesNameList();
     private static final List<String> langs = LangManager.getLangs();
@@ -61,20 +66,20 @@ public class ConfigInvTrigger {
         player.sendMessage("Config Reset.");
     }
 
-    public static void startTypeTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
+    public static void startModeTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {
         playerNeedOp(player);
 
-        String type = item.getItemMeta().getLore().get(0).split(":")[1];
-        int idx = types.indexOf(type);
+        String mode = item.getItemMeta().getLore().get(0).split(":")[1];
+        int idx = modes.indexOf(mode);
         idx++;
 
-        if (idx == types.size()) {
+        if (idx == modes.size()) {
             idx = 0;
         }
 
-        Config.setStartType(types.get(idx));
+        Config.setStartMode(modes.get(idx));
 
-        inv.setItem(9, ConfigInvItems.getStartTypeItem());
+        inv.setItem(9, ConfigInvItems.getStartModeItem());
     }
 
     public static void logResultTrigger(Player player, Inventory inv, ItemStack item) throws IllegalAccessException {

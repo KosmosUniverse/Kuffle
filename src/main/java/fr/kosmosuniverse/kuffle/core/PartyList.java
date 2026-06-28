@@ -34,7 +34,9 @@ public class PartyList {
      * @return True if the player have been added, False instead
      */
     public boolean addPlayer(String playerName) {
-        boolean ret = Bukkit.getOnlinePlayers().stream().anyMatch(p -> p.getName().equals(playerName));
+        boolean ret = Bukkit.getOnlinePlayers()
+                .stream()
+                .anyMatch(p -> p.getName().equals(playerName));
 
         if (ret) {
             list.add(playerName);

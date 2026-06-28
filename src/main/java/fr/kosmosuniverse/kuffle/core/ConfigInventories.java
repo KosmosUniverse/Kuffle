@@ -91,10 +91,10 @@ public class ConfigInventories {
 
         setupFirstRow(systemInv, "System Config Board", MAIN_INV);
 
-        systemInv.setItem(9, ConfigInvItems.getStartTypeItem());
+        systemInv.setItem(9, ConfigInvItems.getStartModeItem());
         systemInv.setItem(10, ConfigInvItems.getLogGameResultsItem());
 
-        ConfigInvTrigger.addTrigger("startType", ConfigInvTrigger::startTypeTrigger);
+        ConfigInvTrigger.addTrigger("startType", ConfigInvTrigger::startModeTrigger);
         ConfigInvTrigger.addTrigger("logResult", ConfigInvTrigger::logResultTrigger);
 
         invs.put("System Config Board", systemInv);

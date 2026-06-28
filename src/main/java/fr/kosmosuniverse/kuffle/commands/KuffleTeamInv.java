@@ -1,7 +1,7 @@
 package fr.kosmosuniverse.kuffle.commands;
 
 import fr.kosmosuniverse.kuffle.core.Config;
-import fr.kosmosuniverse.kuffle.core.LangManager;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
 import fr.kosmosuniverse.kuffle.core.LogManager;
 import fr.kosmosuniverse.kuffle.core.TeamManager;
 

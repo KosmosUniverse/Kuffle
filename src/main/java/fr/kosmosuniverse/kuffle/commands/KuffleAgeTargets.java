@@ -1,6 +1,6 @@
 package fr.kosmosuniverse.kuffle.commands;
 
-import fr.kosmosuniverse.kuffle.core.TargetManager;
+import fr.kosmosuniverse.kuffle.datamanagers.targets.TargetManager;
 
 /**
  * 

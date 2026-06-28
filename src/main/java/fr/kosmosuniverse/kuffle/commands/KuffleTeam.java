@@ -2,6 +2,7 @@ package fr.kosmosuniverse.kuffle.commands;
 
 import fr.kosmosuniverse.kuffle.KuffleMain;
 import fr.kosmosuniverse.kuffle.core.*;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
 import fr.kosmosuniverse.kuffle.utils.CommandUtils;
 import fr.kosmosuniverse.kuffle.utils.Utils;
 import org.bukkit.Bukkit;
@@ -147,12 +148,12 @@ public class KuffleTeam extends AKuffleCommand {
             return false;
         }
 
-        if (Party.getInstance().getPlayers().getList().isEmpty()) {
+        if (PartyTmp.getInstance().getPlayers().getList().isEmpty()) {
             error = LangManager.getMsgLang("LIST_EMPTY", Config.getLang());
             return false;
         }
 
-        if (calcMaxPlayers() < Party.getInstance().getPlayers().getList().size()) {
+        if (calcMaxPlayers() < PartyTmp.getInstance().getPlayers().getList().size()) {
             error = LangManager.getMsgLang("TEAM_TOO_MANY_PLAYERS", Config.getLang());
             return false;
         }
@@ -163,7 +164,7 @@ public class KuffleTeam extends AKuffleCommand {
         }
 
         int cnt = 0;
-        List<String> players = new ArrayList<>(Party.getInstance().getPlayers().getList());
+        List<String> players = new ArrayList<>(PartyTmp.getInstance().getPlayers().getList());
 
         final SecureRandom random = new SecureRandom();
 
@@ -181,7 +182,7 @@ public class KuffleTeam extends AKuffleCommand {
             }
         }
 
-        LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("RANDOM", Config.getLang()).replace("%i", String.valueOf(Party.getInstance().getPlayers().getList().size())).replace("%j", String.valueOf(TeamManager.getInstance().getTeams().size())));
+        LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("RANDOM", Config.getLang()).replace("%i", String.valueOf(PartyTmp.getInstance().getPlayers().getList().size())).replace("%j", String.valueOf(TeamManager.getInstance().getTeams().size())));
 
         return true;
     }
@@ -331,7 +332,7 @@ public class KuffleTeam extends AKuffleCommand {
             return false;
         }
 
-        if (!Party.getInstance().getPlayers().has(args[3])) {
+        if (!PartyTmp.getInstance().getPlayers().has(args[3])) {
             error = LangManager.getMsgLang("PLAYER_NOT_IN_GAME", Config.getLang());
             return false;
         }

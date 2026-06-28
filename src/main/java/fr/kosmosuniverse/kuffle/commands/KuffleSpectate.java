@@ -1,9 +1,9 @@
 package fr.kosmosuniverse.kuffle.commands;
 
 import fr.kosmosuniverse.kuffle.core.Config;
-import fr.kosmosuniverse.kuffle.core.LangManager;
+import fr.kosmosuniverse.kuffle.core.PartyTmp;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
 import fr.kosmosuniverse.kuffle.core.LogManager;
-import fr.kosmosuniverse.kuffle.core.Party;
 
 /**
  * 
@@ -21,10 +21,10 @@ public class KuffleSpectate extends AKuffleCommand {
 	@Override
 	public boolean runCommand() {
 		if (args.length == 0) {
-			if (Party.getInstance().getSpectators().has(player.getName())) {
-				Party.getInstance().getSpectators().addPlayer(player.getName());
+			if (PartyTmp.getInstance().getSpectators().has(player.getName())) {
+				PartyTmp.getInstance().getSpectators().addPlayer(player.getName());
 			} else {
-				Party.getInstance().getSpectators().removePlayer(player.getName());
+				PartyTmp.getInstance().getSpectators().removePlayer(player.getName());
 			}
 		} else if (args.length == 1) {
 			return doOneArg(args[0]);
@@ -42,7 +42,7 @@ public class KuffleSpectate extends AKuffleCommand {
 	 */
 	private boolean doOneArg(String firstArg) {
 		if ("display".equals(firstArg)) {
-			String str = Party.getInstance().getSpectators().getDisplayString();
+			String str = PartyTmp.getInstance().getSpectators().getDisplayString();
 
 			if (str.isEmpty()) {
 				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NO_SPEC", Config.getLang()));
@@ -57,7 +57,7 @@ public class KuffleSpectate extends AKuffleCommand {
 				return true;
 			}
 
-			Party.getInstance().getSpectators().clear();
+			PartyTmp.getInstance().getSpectators().clear();
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("SPEC_LIST_RESET", Config.getLang()));
 			
 			return true;

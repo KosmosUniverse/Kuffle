@@ -7,8 +7,13 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import fr.kosmosuniverse.kuffle.KuffleMain;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
+import fr.kosmosuniverse.kuffle.datamanagers.age.Age;
+import fr.kosmosuniverse.kuffle.datamanagers.age.AgeManager;
+import fr.kosmosuniverse.kuffle.datamanagers.level.Level;
+import fr.kosmosuniverse.kuffle.datamanagers.level.LevelManager;
 import fr.kosmosuniverse.kuffle.exceptions.KuffleConfigException;
-import fr.kosmosuniverse.kuffle.type.KuffleType;
+import fr.kosmosuniverse.kuffle.mode.Mode;
 import fr.kosmosuniverse.kuffle.utils.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -54,14 +59,14 @@ public class Config implements Serializable {
 	/**
 	 * Constructor
 	 * 
-	 * @param configFile	configuration file used to setup config values
+	 * @param configFile	configuration file used to set up config values
 	 */
 	public static void setupConfig(FileConfiguration configFile) {
 		configValues = new ConfigHolder();
 		configElems = new HashMap<>();
 
 		configElems.put("LOG_RESULTS", (String b) -> setLogResults(Boolean.parseBoolean(b)));
-		configElems.put("START_TYPE", Config::setStartType);
+		configElems.put("START_MODE", Config::setStartMode);
 
 		configElems.put("TIPS", (String b) -> setTips(Boolean.parseBoolean(b)));
 		configElems.put("SATURATION", (String b) -> setSaturation(Boolean.parseBoolean(b)));
@@ -140,7 +145,7 @@ public class Config implements Serializable {
 	/**
 	 * Setup all config values
 	 * 
-	 * @param configFile	configuration file used to setup config values
+	 * @param configFile	configuration file used to set up config values
 	 */
 	private static void checkAndSetConfig(FileConfiguration configFile) {
 		setRet = false;
@@ -161,11 +166,11 @@ public class Config implements Serializable {
 	}
 
 	private static void checkFileSystem(FileConfiguration configFile) {
-		if (!configFile.contains(ConfigPaths.SYS_START_TYPE.getPath()) ||
-				!KuffleType.hasType(configFile.getString(ConfigPaths.SYS_START_TYPE.getPath()))) {
-			configValues.setStartType("NO_TYPE");
-			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "start type"));
-			configFile.set(ConfigPaths.SYS_START_TYPE.getPath(), "NO_TYPE");
+		if (!configFile.contains(ConfigPaths.SYS_START_MODE.getPath()) ||
+				!Mode.hasMode(configFile.getString(ConfigPaths.SYS_START_MODE.getPath()))) {
+			configValues.setStartMode("NO_MODE");
+			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang(CONFIG_DEFAULT, configValues.getLang()).replace("<#>", "start mode"));
+			configFile.set(ConfigPaths.SYS_START_MODE.getPath(), "NO_MODE");
 			setRet = true;
 		}
 
@@ -197,7 +202,7 @@ public class Config implements Serializable {
 	/**
 	 * Check spread values in config file to ensure they exist and are conform
 	 * 
-	 * @param configFile	configuration file used to setup config values
+	 * @param configFile	configuration file used to set up config values
 	 */
 	private static void checkFileSpread(FileConfiguration configFile) {
 		if (!configFile.contains(ConfigPaths.GAME_SPREAD.getPath())) {
@@ -224,7 +229,7 @@ public class Config implements Serializable {
 	/**
 	 * Check modes values in config file to ensure they exist and are conform
 	 * 
-	 * @param configFile	configuration file used to setup config values
+	 * @param configFile	configuration file used to set up config values
 	 */
 	private static void checkFileModes(FileConfiguration configFile) {
 		if (!configFile.contains(ConfigPaths.GAME_TEAM.getPath())) {
@@ -321,7 +326,7 @@ public class Config implements Serializable {
 	/**
 	 * Check basic values in config file to ensure they exist and are conform
 	 * 
-	 * @param configFile	configuration file used to setup config values
+	 * @param configFile	configuration file used to set up config values
 	 */
 	private static void checkFileStart(FileConfiguration configFile) {
 		if (!configFile.contains(ConfigPaths.GAME_NB_TARGET.getPath())
@@ -362,7 +367,7 @@ public class Config implements Serializable {
 	/**
 	 * Check other values in config file to ensure they exist and are conform
 	 * 
-	 * @param configFile	configuration file used to setup config values
+	 * @param configFile	configuration file used to set up config values
 	 */
 	private static void checkFileOther(FileConfiguration configFile) {
 		if (!configFile.contains(ConfigPaths.GAME_SKIP.getPath())) {
@@ -406,7 +411,7 @@ public class Config implements Serializable {
 	/**
 	 * Check end values in config file to ensure they exist and are conform
 	 * 
-	 * @param configFile	configuration file used to setup config values
+	 * @param configFile	configuration file used to set up config values
 	 */
 	private static void checkFileEnd(FileConfiguration configFile) {
 		if (!configFile.contains(ConfigPaths.GAME_PRINT.getPath())) {
@@ -428,7 +433,7 @@ public class Config implements Serializable {
 	 * @param configFile	file that contains all config values
 	 */
 	private static void setValues(FileConfiguration configFile) {
-		configValues.setStartType(configFile.getString(ConfigPaths.SYS_START_TYPE.getPath()));
+		configValues.setStartMode(configFile.getString(ConfigPaths.SYS_START_MODE.getPath()));
 		configValues.setLogResults(configFile.getBoolean(ConfigPaths.SYS_LOG_RESULT.getPath()));
 
 		configValues.setTips(configFile.getBoolean(ConfigPaths.GAME_PERS_TIPS.getPath()));
@@ -475,7 +480,7 @@ public class Config implements Serializable {
 	public static void saveValues() {
 		FileConfiguration config = KuffleMain.getInstance().getConfig();
 		
-		config.set(ConfigPaths.SYS_START_TYPE.getPath(), configValues.getStartType());
+		config.set(ConfigPaths.SYS_START_MODE.getPath(), configValues.getStartMode());
 		config.set(ConfigPaths.SYS_LOG_RESULT.getPath(), configValues.isLogResults());
 		config.set(ConfigPaths.GAME_PRINT.getPath(), configValues.isPrintTab());
 		config.set(ConfigPaths.GAME_END_ONE.getPath(), configValues.isEndOne());
@@ -541,7 +546,7 @@ public class Config implements Serializable {
 				"-      Configuration Kuffle v" + KuffleMain.getInstance().getVersion() + "      -\n" +
 				dash +
 				"System : " + "\n"
-				+ ChatColor.BLUE + "  - Start Type: " + ChatColor.GOLD + configValues.getStartType() + "\n"
+				+ ChatColor.BLUE + "  - Start Mode: " + ChatColor.GOLD + configValues.getStartMode() + "\n"
 				+ ChatColor.BLUE + "  - Log Result: " + ChatColor.GOLD + configValues.isLogResults() + "\n"
 				+ ChatColor.BLUE + "Saturation: " + ChatColor.GOLD + configValues.isSaturation() + "\n"
 				+ ChatColor.BLUE + "Spreadplayers: " + ChatColor.GOLD + configValues.isSpread() + "\n"
@@ -625,8 +630,8 @@ public class Config implements Serializable {
 		configValues = new ConfigHolder(config);
 	}
 
-	public static KuffleType.Type getStartType() {
-		return KuffleType.Type.valueOf(configValues.getStartType());
+	public static Mode getStartMode() {
+		return Mode.valueOf(configValues.getStartMode());
 	}
 
 	public static boolean getLogGameResult() {
@@ -947,12 +952,12 @@ public class Config implements Serializable {
 		return configValues.getLang();
 	}
 	
-	public static void setStartType(String startType) {
-		if (KuffleType.hasType(startType)) {
-			configValues.setStartType(startType);
+	public static void setStartMode(String startMode) {
+		if (Mode.hasMode(startMode)) {
+			configValues.setStartMode(startMode);
 			setRet = true;
 		} else {
-			error = "This type does not exists !";
+			error = "This mode does not exists !";
 			setRet = false;
 		}
 	}
@@ -1028,7 +1033,7 @@ public class Config implements Serializable {
 	 * @param configTeam	value used to set team
 	 */
 	public static void setTeam(boolean configTeam) {
-		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
+		if (PartyTmp.getInstance().checkConfigUpdatability()) {
 			error = "Cannot set Team while game is running !";
 			setRet = false;
 		} else {
@@ -1043,7 +1048,7 @@ public class Config implements Serializable {
 	 * @param configCoop	value used to set coop
 	 */
 	public static void setCoop(boolean configCoop) {
-		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
+		if (PartyTmp.getInstance().checkConfigUpdatability()) {
 			error = "Cannot set Coop while game is running !";
 			setRet = false;
 		} else {
@@ -1058,7 +1063,7 @@ public class Config implements Serializable {
 	 * @param configCoop	value used to set coop skip
 	 */
 	public static void setCoopSkip(boolean configCoop) {
-		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
+		if (PartyTmp.getInstance().checkConfigUpdatability()) {
 			error = "Cannot set Coop Skip while game is running !";
 			setRet = false;
 		} else {
@@ -1073,7 +1078,7 @@ public class Config implements Serializable {
 	 * @param configTeamInv	value used to set team inv
 	 */
 	public static void setTeamInv(boolean configTeamInv) {
-		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
+		if (PartyTmp.getInstance().checkConfigUpdatability()) {
 			error = "Cannot set Team Inv while game is running !";
 			setRet = false;
 		} else {
@@ -1088,7 +1093,7 @@ public class Config implements Serializable {
 	 * @param configSame	value used to set same
 	 */
 	public static void setSame(boolean configSame) {
-		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
+		if (PartyTmp.getInstance().checkConfigUpdatability()) {
 			error = "Cannot change mode when game is running !";
 			setRet = false;
 		} else {		
@@ -1163,7 +1168,7 @@ public class Config implements Serializable {
 	 * @param configTeamSize	value used to set team size
 	 */
 	public static void setTeamSize(int configTeamSize) {
- 		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
+		if (PartyTmp.getInstance().checkConfigUpdatability()) {
  			error = "Cannot change team size when game is running !";
 			setRet = false;
 		}
@@ -1190,7 +1195,7 @@ public class Config implements Serializable {
  	 * @param configTeamIntSize	value used to set team inv size
  	 */
 	public static void setTeamInvSize(int configTeamIntSize) {
- 		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
+		if (PartyTmp.getInstance().checkConfigUpdatability()) {
  			error = "Cannot change team inv size when game is running !";
 			setRet = false;
 		}
@@ -1212,7 +1217,7 @@ public class Config implements Serializable {
 	 * @param configCoopBase value used to set coop base time
 	 */
 	public static void setCoopBase(int configCoopBase) {
-		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
+		if (PartyTmp.getInstance().checkConfigUpdatability()) {
 			error = "Cannot change coop base when game is running !";
 			setRet = false;
 		}
@@ -1234,7 +1239,7 @@ public class Config implements Serializable {
 	 * @param configCoopUpdate value used to set coop updating time
 	 */
 	public static void setCoopUpdated(int configCoopUpdate) {
-		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
+		if (PartyTmp.getInstance().checkConfigUpdatability()) {
 			error = "Cannot change coop updating when game is running !";
 			setRet = false;
 		}
@@ -1394,7 +1399,7 @@ public class Config implements Serializable {
 	 * @param configLastAge	value used to set last age
 	 */
 	public static void setLastAge(String configLastAge) {
-		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
+		if (PartyTmp.getInstance().checkConfigUpdatability()) {
 			error = "Game already started, you cannot modify last Age";
 			setRet = false;
 		} else if (!AgeManager.ageExists(configLastAge)) {
@@ -1412,7 +1417,7 @@ public class Config implements Serializable {
 	 * @param configSkipAge	value used to set skip age
 	 */
 	public static void setFirstSkip(String configSkipAge) {
-		if (Party.getInstance().getStatus() != GameStatus.NOT_RUNNING) {
+		if (PartyTmp.getInstance().checkConfigUpdatability()) {
 			error = "Game already started, you cannot modify skip Age";
 			setRet = false;
 		} else if (!AgeManager.ageExists(configSkipAge)) {

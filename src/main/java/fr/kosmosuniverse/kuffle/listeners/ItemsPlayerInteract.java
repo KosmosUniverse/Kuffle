@@ -5,8 +5,10 @@ import java.util.Objects;
 
 import fr.kosmosuniverse.kuffle.KuffleMain;
 import fr.kosmosuniverse.kuffle.core.*;
+import fr.kosmosuniverse.kuffle.datamanagers.crafts.CraftManager;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
+import fr.kosmosuniverse.kuffle.event.TargetFoundEvent;
 import fr.kosmosuniverse.kuffle.exceptions.KuffleEventNotUsableException;
-import fr.kosmosuniverse.kuffle.type.KuffleType;
 import fr.kosmosuniverse.kuffle.utils.ItemsUtils;
 import fr.kosmosuniverse.kuffle.utils.Utils;
 import org.bukkit.Bukkit;
@@ -43,10 +45,6 @@ public class ItemsPlayerInteract extends PlayerInteract {
 	 */
 	@EventHandler
 	public void onLeftClick(PlayerInteractEvent event) {
-		if (Party.getInstance().getType().getType() != KuffleType.Type.ITEMS) {
-			return ;
-		}
-		
 		try {
 			if (onRightClickGeneric(event)) {
 				return ;
@@ -68,7 +66,7 @@ public class ItemsPlayerInteract extends PlayerInteract {
 		}
 		
 		if (ItemsUtils.itemComparison(item, CraftManager.findItemByName(END_TELEPORTER)) &&
-				checkXp(player, Party.getInstance().getType().getXpActivable(END_TELEPORTER))) {
+				checkXp(player, PartyTmp.getInstance().getGameManager().getXpActivables().get(END_TELEPORTER))) {
 			endTeleporter(player);
 			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> consumeItem(player, item), 40);
 			
@@ -76,7 +74,7 @@ public class ItemsPlayerInteract extends PlayerInteract {
 		}
 		
 		if (ItemsUtils.itemComparison(item, CraftManager.findItemByName(OVER_TELEPORTER)) &&
-				checkXp(player, Party.getInstance().getType().getXpActivable(OVER_TELEPORTER))) {
+				checkXp(player, PartyTmp.getInstance().getGameManager().getXpActivables().get(OVER_TELEPORTER))) {
 			overworldTeleporter(player);
 			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> consumeItem(player, item), 40);
 			
@@ -85,16 +83,16 @@ public class ItemsPlayerInteract extends PlayerInteract {
 				
 		if (CraftManager.isTemplate(item)) {
 			event.setCancelled(true);
-			Party.getInstance().getGames().playerFoundSbtt(player.getName());
+			PartyTmp.getInstance().sbttFound(player);
 			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> consumeItem(player, item), 40);
 			CraftManager.reloadTemplate(Objects.requireNonNull(Objects.requireNonNull(item).getItemMeta()).getDisplayName());
 			LogManager.getInstanceGame().writeMsg(player, "just used " + item.getItemMeta().getDisplayName() + " !");
 			
 			return ;
 		}
-		
-		if (Party.getInstance().getGames().checkPlayerTarget(player.getName(), item)) {
-			Party.getInstance().getGames().playerFoundTarget(player.getName());
+
+		if (item != null && PartyTmp.getInstance().checkPlayerTarget(player, item.getType().name())) {
+			Bukkit.getPluginManager().callEvent(new TargetFoundEvent(player, item.getType().name()));
 		}
 	}
 	
@@ -109,7 +107,7 @@ public class ItemsPlayerInteract extends PlayerInteract {
 	private boolean checkXp(Player player, int xpMin) {
 		boolean ret = false;
 		if (player.getLevel() < xpMin) {
-			player.sendMessage(LangManager.getMsgLang("XP_NEEDED", Party.getInstance().getGames().getGames().get(player.getName()).getConfigLang()).replace("<#>", String.valueOf(xpMin)));
+			player.sendMessage(LangManager.getMsgLang("XP_NEEDED", PartyTmp.getInstance().getGameManager().getPlayerLang(player.getName())).replace("<#>", String.valueOf(xpMin)));
 		} else {
 			ret = true;
 			player.setLevel(player.getLevel() - xpMin);
@@ -130,11 +128,11 @@ public class ItemsPlayerInteract extends PlayerInteract {
 			tmp.add(10, 0, 10);
 		}
 		
-		teleport(tmp, player, LangManager.getMsgLang("TP_END", Party.getInstance().getGames().getGames().get(player.getName()).getConfigLang()));
+		teleport(tmp, player, LangManager.getMsgLang("TP_END", PartyTmp.getInstance().getGameManager().getPlayerLang(player.getName())));
 		
-		int xpAmount = Party.getInstance().getType().getXpActivable(END_TELEPORTER);
+		int xpAmount = PartyTmp.getInstance().getGameManager().getXpActivables().get(END_TELEPORTER);
 		xpAmount = Math.max((xpAmount - 1), 1);
-		Party.getInstance().getType().setXpActivable(END_TELEPORTER, xpAmount);
+		PartyTmp.getInstance().getGameManager().getXpActivables().put(END_TELEPORTER, xpAmount);
 	}
 
 	/**
@@ -145,11 +143,11 @@ public class ItemsPlayerInteract extends PlayerInteract {
 	private void overworldTeleporter(Player player) {
 		Location tmp = new Location(Bukkit.getWorld(Objects.requireNonNull(Utils.findNormalWorld()).getName()), player.getLocation().getX() - 1000, 80.0, player.getLocation().getZ() - 1000);
 		
-		teleport(tmp, player, LangManager.getMsgLang("TP_OVERWORLD", Party.getInstance().getGames().getGames().get(player.getName()).getConfigLang()));
+		teleport(tmp, player, LangManager.getMsgLang("TP_OVERWORLD", PartyTmp.getInstance().getGameManager().getPlayerLang(player.getName())));
 		
-		int xpAmount = Party.getInstance().getType().getXpActivable(OVER_TELEPORTER);
+		int xpAmount = PartyTmp.getInstance().getGameManager().getXpActivables().get(OVER_TELEPORTER);
 		xpAmount = Math.max((xpAmount - 2), 2);
-		Party.getInstance().getType().setXpActivable(OVER_TELEPORTER, xpAmount);
+		PartyTmp.getInstance().getGameManager().getXpActivables().put(OVER_TELEPORTER, xpAmount);
 	}
 	
 	/**

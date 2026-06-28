@@ -1,6 +1,6 @@
 package fr.kosmosuniverse.kuffle.tabcompleters;
 
-import fr.kosmosuniverse.kuffle.core.LangManager;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
 
 /**
  * 

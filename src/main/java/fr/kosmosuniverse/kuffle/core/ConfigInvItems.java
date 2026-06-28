@@ -1,5 +1,10 @@
 package fr.kosmosuniverse.kuffle.core;
 
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
+import fr.kosmosuniverse.kuffle.datamanagers.age.Age;
+import fr.kosmosuniverse.kuffle.datamanagers.age.AgeManager;
+import fr.kosmosuniverse.kuffle.datamanagers.level.Level;
+import fr.kosmosuniverse.kuffle.datamanagers.level.LevelManager;
 import fr.kosmosuniverse.kuffle.utils.ItemEnchant;
 import fr.kosmosuniverse.kuffle.utils.ItemMaker;
 import org.bukkit.ChatColor;
@@ -33,14 +38,14 @@ public class ConfigInvItems {
         return itemBuilder.getItem();
     }
 
-    public static ItemStack getStartTypeItem() {
+    public static ItemStack getStartModeItem() {
         ItemMaker itemBuilder = ItemMaker.newItem(Material.BOOK)
-                .addName("Start Type")
-                .addTag("trigger", "startType")
-                .addLores("Type:" + Config.getStartType(),
-                        "Game type loaded at plugin start.",
-                        "Values : NO_TYPE, ITEMS, BLOCKS.",
-                        "Default : NO_TYPE");
+                .addName("Start Mode")
+                .addTag("trigger", "startMode")
+                .addLores("Mode:" + Config.getStartMode(),
+                        "Game Mode loaded at plugin start.",
+                        "Values : NO_MODE, ITEMS, BLOCKS.",
+                        "Default : NO_MODE");
 
         return itemBuilder.getItem();
     }

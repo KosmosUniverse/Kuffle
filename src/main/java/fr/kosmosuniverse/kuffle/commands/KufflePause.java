@@ -15,12 +15,7 @@ public class KufflePause extends AKuffleCommand {
 
 	@Override
 	public boolean runCommand() {
-		if (Party.getInstance().getStatus() == GameStatus.PAUSED) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_ALREADY_PAUSED", Config.getLang()));
-			return false;
-		}
-
-		Party.getInstance().pause();
+		PartyTmp.getInstance().pause();
 		
 		return true;
 	}

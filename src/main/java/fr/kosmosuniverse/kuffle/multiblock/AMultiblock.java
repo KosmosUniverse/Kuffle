@@ -2,8 +2,8 @@ package fr.kosmosuniverse.kuffle.multiblock;
 
 import java.util.*;
 
-import fr.kosmosuniverse.kuffle.core.LangManager;
-import fr.kosmosuniverse.kuffle.core.Party;
+import fr.kosmosuniverse.kuffle.core.PartyTmp;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
 import fr.kosmosuniverse.kuffle.utils.ItemMaker;
 import fr.kosmosuniverse.kuffle.utils.ItemsUtils;
 import lombok.Getter;
@@ -105,7 +105,7 @@ public abstract class AMultiblock {
 	 */
 	public void onActivate(Player player, ActivationType type) {
 		if (type == ActivationType.ASSEMBLE) {
-			player.sendMessage(LangManager.getMsgLang("CONSTRUCTED", Party.getInstance().getGames().getGames().get(player.getName()).getConfigLang()).replace("%s", name));
+			player.sendMessage(LangManager.getMsgLang("CONSTRUCTED", PartyTmp.getInstance().getGameManager().getPlayerLang(player.getName())).replace("%s", name));
 		} else if (type == ActivationType.ACTIVATE && world != null) {
 			Location tmp = createLocation(player);
 			

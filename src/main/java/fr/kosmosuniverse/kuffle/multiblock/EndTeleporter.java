@@ -1,7 +1,7 @@
 package fr.kosmosuniverse.kuffle.multiblock;
 
-import fr.kosmosuniverse.kuffle.core.LangManager;
-import fr.kosmosuniverse.kuffle.core.Party;
+import fr.kosmosuniverse.kuffle.core.PartyTmp;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -71,7 +71,7 @@ public class EndTeleporter extends AMultiblock {
 	}
 
 	public Location createLocation(Player player) {
-		player.sendMessage(LangManager.getMsgLang("ACTIVATED", Party.getInstance().getGames().getGames().get(player.getName()).getConfigLang()).replace("%s", name));
+		player.sendMessage(LangManager.getMsgLang("ACTIVATED", PartyTmp.getInstance().getGameManager().getPlayerLang(player.getName())).replace("%s", name));
 		player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 50, false, false, false));
 		Location tmp = new Location(Bukkit.getWorld(world.getName() + "_the_end"), player.getLocation().getX() + 1000, 60.0, player.getLocation().getZ() + 1000);
 		

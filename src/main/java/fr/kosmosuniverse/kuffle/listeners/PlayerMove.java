@@ -3,14 +3,14 @@ package fr.kosmosuniverse.kuffle.listeners;
 import java.util.HashMap;
 import java.util.Map;
 
-import fr.kosmosuniverse.kuffle.core.GameStatus;
-import fr.kosmosuniverse.kuffle.core.LangManager;
+import fr.kosmosuniverse.kuffle.core.PartyTmp;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
 import fr.kosmosuniverse.kuffle.core.LogManager;
-import fr.kosmosuniverse.kuffle.core.Party;
+import fr.kosmosuniverse.kuffle.mode.Mode;
 import fr.kosmosuniverse.kuffle.multiblock.AMultiblock;
 import fr.kosmosuniverse.kuffle.multiblock.ActivationType;
 import fr.kosmosuniverse.kuffle.multiblock.MultiblockManager;
-import fr.kosmosuniverse.kuffle.type.KuffleType;
+import fr.kosmosuniverse.kuffle.states.States;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,8 +26,8 @@ public class PlayerMove implements Listener {
 	
 	@EventHandler
 	public void onActivateMultiBlockEvent(PlayerMoveEvent event) {
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING ||
-				Party.getInstance().getType().getType() != KuffleType.Type.BLOCKS) {
+		if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING ||
+				PartyTmp.getInstance().getGameMode().getMode() != Mode.BLOCKS) {
 			return ;
 		}
 		
@@ -58,33 +58,33 @@ public class PlayerMove implements Listener {
 	}
 	
 	private void activateOverworldTeleporter(Player player, AMultiblock multiblock) {
-		int xpAmount = Party.getInstance().getType().getXpActivable(OVER_TELEPORTER);
+		int xpAmount = PartyTmp.getInstance().getGameManager().getXpActivables().get(OVER_TELEPORTER);
 		
 		if (player.getLevel() >= xpAmount) {
 			player.setLevel(player.getLevel() - xpAmount);
 			xpAmount = Math.max((xpAmount - 2), 2);
-			Party.getInstance().getType().setXpActivable(OVER_TELEPORTER, xpAmount);
+			PartyTmp.getInstance().getGameManager().getXpActivables().put(OVER_TELEPORTER, xpAmount);
 			multiblock.onActivate(player, ActivationType.ACTIVATE);	
 		} else {
 			if (!sendMessage.containsKey(player.getName()) ||
 					((sendMessage.get(player.getName()) - System.currentTimeMillis()) / 1000) > 3) {
-				LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("XP_NEEDED", Party.getInstance().getGames().getGames().get(player.getName()).getConfigLang()).replace("<#>", String.valueOf(xpAmount)));
+				LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("XP_NEEDED", PartyTmp.getInstance().getGameManager().getPlayerLang(player.getName())).replace("<#>", String.valueOf(xpAmount)));
 				sendMessage.put(player.getName(), System.currentTimeMillis());
 			}
 		}
 	}
 	
 	private void activateEndTeleporter(Player player, AMultiblock multiblock) {
-		int xpAmount = Party.getInstance().getType().getXpActivable(END_TELEPORTER);
+		int xpAmount = PartyTmp.getInstance().getGameManager().getXpActivables().get(END_TELEPORTER);
 		
 		if (player.getLevel() >= xpAmount) {
 			player.setLevel(player.getLevel() - xpAmount);
 			xpAmount = Math.max((xpAmount - 1), 1);
-			Party.getInstance().getType().setXpActivable(END_TELEPORTER, xpAmount);
+			PartyTmp.getInstance().getGameManager().getXpActivables().put(END_TELEPORTER, xpAmount);
 			multiblock.onActivate(player, ActivationType.ACTIVATE);	
 		} else {
 			if (!sendMessage.containsKey(player.getName()) || ((System.currentTimeMillis() - sendMessage.get(player.getName())) / 1000) > 3) {
-				LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("XP_NEEDED", Party.getInstance().getGames().getGames().get(player.getName()).getConfigLang()).replace("<#>", String.valueOf(xpAmount)));
+				LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("XP_NEEDED", PartyTmp.getInstance().getGameManager().getPlayerLang(player.getName())).replace("<#>", String.valueOf(xpAmount)));
 				sendMessage.put(player.getName(), System.currentTimeMillis());
 			}
 		}
@@ -92,8 +92,8 @@ public class PlayerMove implements Listener {
 	
 	@EventHandler
 	public void onCorePlacedEvent(BlockPlaceEvent event) {
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING ||
-				Party.getInstance().getType().getType() != KuffleType.Type.BLOCKS) {
+		if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING ||
+				PartyTmp.getInstance().getGameMode().getMode() != Mode.BLOCKS) {
 			return ;
 		}
 		

@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
 import fr.kosmosuniverse.kuffle.utils.SerializeUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -182,7 +183,7 @@ public class Team implements Serializable {
 
 		for (String name : names) {
 			if (playersName.contains(name) &&
-					Party.getInstance().getPlayers().has(name)) {
+					PartyTmp.getInstance().getPlayers().has(name)) {
 				players.add(name);
 			} else {
 				LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("PLAYER_NOT_EXISTS", Config.getLang()).replace("<#>", "<" + name + ">"));

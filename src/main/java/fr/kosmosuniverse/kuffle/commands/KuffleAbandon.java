@@ -4,6 +4,7 @@ import java.util.*;
 
 import fr.kosmosuniverse.kuffle.KuffleMain;
 import fr.kosmosuniverse.kuffle.core.*;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -28,8 +29,8 @@ public class KuffleAbandon extends AKuffleCommand {
 
 	@Override
 	public boolean runCommand() {
-		if (!Party.getInstance().getPlayers().has(player.getName())) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_PLAYING", Party.getInstance().getGames().getGames().get(player.getName()).getConfigLang()));
+		if (!PartyTmp.getInstance().getPlayers().has(player.getName())) {
+			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NOT_PLAYING", PartyTmp.getInstance().getGameManager().getPlayerLang(player.getName())));
 		} else {
 			if (abandonToConfirm.contains(player.getUniqueId())) {
 				abandonConfirmed();
@@ -78,12 +79,12 @@ public class KuffleAbandon extends AKuffleCommand {
 			abandoned.put(team.getName(), players);
 			
 			if (checkTeam(team)) {
-				Party.getInstance().getGames().teamLose(team.getName());
+				PartyTmp.getInstance().getGameManager().teamLose(team.getName());
 			} else {
 				LogManager.getInstanceSystem().writeMsg(player, "All players of the team have to abandon for this to be effective.");
 			}
 		} else {
-			Party.getInstance().getGames().playerLose(player.getName());
+			PartyTmp.getInstance().getGameManager().playerLose(player.getName());
 		}
 	}
 	

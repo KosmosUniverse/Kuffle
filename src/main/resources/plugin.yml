@@ -55,9 +55,9 @@ commands:
       usage: /<command> <Player name>
       description: command to validate an age
       permission: inferno.flagrate
-   k-set-type:
-      usage: /<command> <Kuffle Type>
-      description: command to set the plugin game type
+   k-set-mode:
+      usage: /<command> <Kuffle mode>
+      description: command to set the plugin game mode
       permission: inferno.flagrate
    k-restoreinv:
       usage: /<command> <PlayerName>
@@ -141,8 +141,8 @@ permissions:
    k-add-during-game:
       description: command to add a player during the game
       default: op
-   k-set-type:
-      description: command to set the plugin game type
+   k-set-mode:
+      description: command to set the plugin game mode
       default: op
    k-restoreinv:
       description: command to access player death inv

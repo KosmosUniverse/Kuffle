@@ -11,6 +11,10 @@ import java.util.Objects;
 
 import fr.kosmosuniverse.kuffle.KuffleMain;
 import fr.kosmosuniverse.kuffle.core.*;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
+import fr.kosmosuniverse.kuffle.datamanagers.VersionManager;
+import fr.kosmosuniverse.kuffle.datamanagers.age.AgeManager;
+import fr.kosmosuniverse.kuffle.datamanagers.reward.RewardManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.json.JSONObject;

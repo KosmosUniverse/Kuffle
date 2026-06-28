@@ -2,6 +2,7 @@ package fr.kosmosuniverse.kuffle.commands;
 
 import fr.kosmosuniverse.kuffle.KuffleMain;
 import fr.kosmosuniverse.kuffle.core.*;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
 import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
 import fr.kosmosuniverse.kuffle.utils.Utils;
 import org.bukkit.Material;
@@ -89,7 +90,7 @@ public class KuffleAddDuringGame extends AKuffleCommand {
 
 		GameManager.setupPlayer(player.getName());
 		
-		ScoreManager.setupPlayerScore(player.getName());
+		GameManager.setupPlayerScores(player.getName());
 		GameManager.updatePlayersHeads();
 
 		KuffleMain.getInstance().setPaused(false);

@@ -1,6 +1,6 @@
 package fr.kosmosuniverse.kuffle.commands;
 
-import fr.kosmosuniverse.kuffle.core.Party;
+import fr.kosmosuniverse.kuffle.core.PartyTmp;
 
 /**
  * 
@@ -14,7 +14,7 @@ public class KufflePlayers extends AKuffleCommand {
 	
 	@Override
 	public boolean runCommand() {
-		player.openInventory(Party.getInstance().getPlayers().getPlayerHeads());
+		player.openInventory(PartyTmp.getInstance().getPlayers().getPlayerHeads());
 		
 		return true;
 	}

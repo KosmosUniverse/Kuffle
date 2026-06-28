@@ -3,9 +3,9 @@ package fr.kosmosuniverse.kuffle.commands;
 import java.util.stream.Collectors;
 
 import fr.kosmosuniverse.kuffle.core.Config;
-import fr.kosmosuniverse.kuffle.core.LangManager;
+import fr.kosmosuniverse.kuffle.core.PartyTmp;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
 import fr.kosmosuniverse.kuffle.core.LogManager;
-import fr.kosmosuniverse.kuffle.core.Party;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -17,7 +17,7 @@ public class KuffleList extends AKuffleCommand {
 	@Override
 	public boolean runCommand() {
 		if (args.length == 0) {
-			String str = Party.getInstance().getPlayers().getDisplayString();
+			String str = PartyTmp.getInstance().getPlayers().getDisplayString();
 
 			if (str.isEmpty()) {
 				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("NO_PLAYERS", Config.getLang()));
@@ -47,7 +47,7 @@ public class KuffleList extends AKuffleCommand {
 
 	private boolean resetList(Player player, String firstArg) {
 		if (firstArg.equals("reset")) {
-			Party.getInstance().getPlayers().clear();
+			PartyTmp.getInstance().getPlayers().clear();
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("LIST_RESET", Config.getLang()));
 			
 			return true;
@@ -57,15 +57,15 @@ public class KuffleList extends AKuffleCommand {
 	}
 	
 	private void addAllList(Player player) {
-		int cnt = Party.getInstance().getPlayers().addPlayers(Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList()));
+		int cnt = PartyTmp.getInstance().getPlayers().addPlayers(Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList()));
 		
 		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("ADDED_LIST", Config.getLang()).replace("%i", String.valueOf(cnt)));
 	}
 	
 	private void addOneList(Player player, String playerName) {
-		if (Party.getInstance().getPlayers().has(playerName)) {
+		if (PartyTmp.getInstance().getPlayers().has(playerName)) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("PLAYER_ALREADY_LIST", Config.getLang()));
-		} else if (Party.getInstance().getPlayers().addPlayer(playerName)) {
+		} else if (PartyTmp.getInstance().getPlayers().addPlayer(playerName)) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("ADDED_ONE_LIST", Config.getLang()));
 		} else {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("PLAYER_NOT_EXISTS", Config.getLang()).replace("<#>", playerName));
@@ -73,7 +73,7 @@ public class KuffleList extends AKuffleCommand {
 	}
 	
 	private void removeList(Player player, String playerName) {
-		if (Party.getInstance().getPlayers().removePlayer(playerName)) {
+		if (PartyTmp.getInstance().getPlayers().removePlayer(playerName)) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("REMOVED_LIST", Config.getLang()));
 		} else {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("PLAYER_NOT_IN_GAME", Config.getLang()));		

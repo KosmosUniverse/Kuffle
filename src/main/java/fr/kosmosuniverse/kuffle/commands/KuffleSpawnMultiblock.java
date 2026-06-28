@@ -1,9 +1,9 @@
 package fr.kosmosuniverse.kuffle.commands;
 
-import fr.kosmosuniverse.kuffle.core.Party;
+import fr.kosmosuniverse.kuffle.core.PartyTmp;
+import fr.kosmosuniverse.kuffle.mode.Mode;
 import fr.kosmosuniverse.kuffle.multiblock.AMultiblock;
 import fr.kosmosuniverse.kuffle.multiblock.MultiblockManager;
-import fr.kosmosuniverse.kuffle.type.KuffleType;
 
 /**
  * 
@@ -17,7 +17,8 @@ public class KuffleSpawnMultiblock extends AKuffleCommand {
 
 	@Override
 	public boolean runCommand() {
-		if (Party.getInstance().getType().getType() != KuffleType.Type.BLOCKS || args.length != 1) {
+		if (PartyTmp.getInstance().getGameMode().getMode() != Mode.BLOCKS ||
+				args.length != 1) {
 			return false;
 		}
 		

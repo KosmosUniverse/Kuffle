@@ -6,7 +6,7 @@
 
     <groupId>fr.kosmosuniverse</groupId>
     <artifactId>Kuffle</artifactId>
-    <version>2.12</version>
+    <version>3.0</version>
     <packaging>jar</packaging>
 
     <name>Kuffle</name>

@@ -1,8 +1,8 @@
 package fr.kosmosuniverse.kuffle.commands;
 
-import fr.kosmosuniverse.kuffle.core.AgeManager;
-import fr.kosmosuniverse.kuffle.core.CraftManager;
-import fr.kosmosuniverse.kuffle.core.RewardManager;
+import fr.kosmosuniverse.kuffle.datamanagers.age.AgeManager;
+import fr.kosmosuniverse.kuffle.datamanagers.crafts.CraftManager;
+import fr.kosmosuniverse.kuffle.datamanagers.reward.RewardManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

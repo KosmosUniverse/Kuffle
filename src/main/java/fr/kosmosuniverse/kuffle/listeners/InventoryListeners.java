@@ -3,9 +3,12 @@ package fr.kosmosuniverse.kuffle.listeners;
 import java.util.Objects;
 
 import fr.kosmosuniverse.kuffle.core.*;
-import fr.kosmosuniverse.kuffle.crafts.ACraft;
+import fr.kosmosuniverse.kuffle.datamanagers.crafts.ACraft;
+import fr.kosmosuniverse.kuffle.datamanagers.crafts.CraftManager;
+import fr.kosmosuniverse.kuffle.datamanagers.results.ResultManager;
+import fr.kosmosuniverse.kuffle.datamanagers.targets.TargetManager;
+import fr.kosmosuniverse.kuffle.mode.Mode;
 import fr.kosmosuniverse.kuffle.multiblock.MultiblockManager;
-import fr.kosmosuniverse.kuffle.type.KuffleType;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -46,7 +49,7 @@ public class InventoryListeners implements Listener {
 			event.setCancelled(true);
 
 			openAllCrafts(current, item, player);
-		} else if (Party.getInstance().getType().getType() == KuffleType.Type.BLOCKS &&
+		} else if (PartyTmp.getInstance().getGameMode().getMode() == Mode.BLOCKS &&
 			MultiblockManager.hasInv(event.getView().getTitle())) {
 			event.setCancelled(true);
 
@@ -112,13 +115,13 @@ public class InventoryListeners implements Listener {
 	 * @param item		The clicked item to determine if he clicked on another player head or not
 	 */
 	private void playersInventory(Player player, ItemStack item) {
-		if (Party.getInstance().getSpectators().has(player.getName()) ||
-				(Party.getInstance().getPlayers().has(player.getName()) &&
-						Party.getInstance().getGames().hasPlayerFinished(player.getName()) &&
+		if (PartyTmp.getInstance().getSpectators().has(player.getName()) ||
+				(PartyTmp.getInstance().getPlayers().has(player.getName()) &&
+						PartyTmp.getInstance().getGameManager().getPlayerData(player.getName()).isFinished() &&
 				item.getType() == Material.PLAYER_HEAD && item.hasItemMeta() &&
 				!Objects.requireNonNull(item.getItemMeta()).getDisplayName().equals(player.getName()))) {
 			player.setGameMode(GameMode.SPECTATOR);
-			Party.getInstance().getGames().teleportPlayerToPlayer(player, Objects.requireNonNull(item.getItemMeta()).getDisplayName());
+			PartyTmp.getInstance().getGameManager().teleportPlayerToPlayer(player, Objects.requireNonNull(item.getItemMeta()).getDisplayName());
 		}
 	}
 

@@ -5,8 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import fr.kosmosuniverse.kuffle.core.AgeManager;
-import fr.kosmosuniverse.kuffle.core.Party;
+import fr.kosmosuniverse.kuffle.core.PartyTmp;
 import fr.kosmosuniverse.kuffle.utils.ItemMaker;
 import fr.kosmosuniverse.kuffle.utils.ItemsUtils;
 import org.bukkit.Bukkit;
@@ -42,15 +41,15 @@ public class Template extends AMultiblock {
 			return;
 		}
 
-		String age = AgeManager.getAgeByNumber(Party.getInstance().getGames().getGames().get(player.getName()).getAge()).getName();
+		String age = PartyTmp.getInstance().getGameManager().getPlayerAge(player.getName()).getName();
 	
 		if (!name.contains(age)) {
 			return ;
 		}
 
-		Party.getInstance().getGames().playerFoundSbtt(player.getName());
-		Party.getInstance().getPlayers().getList().forEach(playerName -> Objects.requireNonNull(Bukkit.getPlayer(playerName)).sendMessage(ChatColor.GOLD + String.valueOf(ChatColor.BOLD) + player.getName() + ChatColor.RESET + ChatColor.BLUE + " just used Template !"));
-		Party.getInstance().getSpectators().getList().forEach(playerName -> Objects.requireNonNull(Bukkit.getPlayer(playerName)).sendMessage(ChatColor.GOLD + String.valueOf(ChatColor.BOLD) + player.getName() + ChatColor.RESET + ChatColor.BLUE + " just used Template !"));
+		PartyTmp.getInstance().sbttFound(player);
+		PartyTmp.getInstance().getPlayers().getList().forEach(playerName -> Objects.requireNonNull(Bukkit.getPlayer(playerName)).sendMessage(ChatColor.GOLD + String.valueOf(ChatColor.BOLD) + player.getName() + ChatColor.RESET + ChatColor.BLUE + " just used Template !"));
+		PartyTmp.getInstance().getSpectators().getList().forEach(playerName -> Objects.requireNonNull(Bukkit.getPlayer(playerName)).sendMessage(ChatColor.GOLD + String.valueOf(ChatColor.BOLD) + player.getName() + ChatColor.RESET + ChatColor.BLUE + " just used Template !"));
 
 		MultiblockManager.reloadTemplate(age);
 	}

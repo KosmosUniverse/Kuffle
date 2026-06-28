@@ -2,9 +2,9 @@ package fr.kosmosuniverse.kuffle.listeners;
 
 import java.lang.reflect.InvocationTargetException;
 
-import fr.kosmosuniverse.kuffle.core.Party;
+import fr.kosmosuniverse.kuffle.core.PartyTmp;
 import fr.kosmosuniverse.kuffle.exceptions.KuffleEventNotUsableException;
-import fr.kosmosuniverse.kuffle.type.KuffleType;
+import fr.kosmosuniverse.kuffle.mode.Mode;
 import fr.kosmosuniverse.kuffle.utils.Utils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,7 +31,7 @@ public class BlocksPlayerInteract extends PlayerInteract implements Listener {
 	 */
 	@EventHandler
 	public void onLeftClick(PlayerInteractEvent event) {
-		if (Party.getInstance().getType().getType() != KuffleType.Type.BLOCKS) {
+		if (PartyTmp.getInstance().getGameMode().getMode() != Mode.BLOCKS) {
 			return ;
 		}
 		

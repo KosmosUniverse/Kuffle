@@ -14,12 +14,7 @@ public class KuffleResume extends AKuffleCommand {
 
 	@Override
 	public boolean runCommand() {
-		if (Party.getInstance().getStatus() != GameStatus.PAUSED) {
-			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_ALREADY_RUNNING", Config.getLang()));
-			return false;
-		}
-		
-		Party.getInstance().resume();
+		PartyTmp.getInstance().resume();
 
 		return true;
 	}

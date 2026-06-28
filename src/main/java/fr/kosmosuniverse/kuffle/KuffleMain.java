@@ -1,7 +1,9 @@
 package fr.kosmosuniverse.kuffle;
 
 import fr.kosmosuniverse.kuffle.core.*;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -23,11 +25,14 @@ public class KuffleMain extends JavaPlugin {
 		
 		instance = this;
 		version = this.getDescription().getVersion();
-		loaded = true;
 
-		Party.getInstance();
+		loaded = PartyTmp.createParty(this);
 
-		LogManager.getInstanceSystem().logMsg(this.getName(), LangManager.getMsgLang("ON", Config.getLang()));
+		if (loaded) {
+			LogManager.getInstanceSystem().logMsg(this.getName(), LangManager.getMsgLang("ON", Config.getLang()));
+		} else {
+			Bukkit.getPluginManager().disablePlugin(this);
+		}
 	}
 
 	@Override
@@ -35,7 +40,7 @@ public class KuffleMain extends JavaPlugin {
 		if (loaded) {
 			LogManager.getInstanceSystem().logMsg(this.getName(), LangManager.getMsgLang("OFF", Config.getLang()));
 			
-			Party.getInstance().getType().clear();
+			PartyTmp.getInstance().clear();
 		}
 	}
 

@@ -2,10 +2,10 @@ package fr.kosmosuniverse.kuffle.multiblock;
 
 import java.util.*;
 
-import fr.kosmosuniverse.kuffle.core.Age;
-import fr.kosmosuniverse.kuffle.core.AgeManager;
+import fr.kosmosuniverse.kuffle.datamanagers.age.Age;
+import fr.kosmosuniverse.kuffle.datamanagers.age.AgeManager;
 import fr.kosmosuniverse.kuffle.core.Config;
-import fr.kosmosuniverse.kuffle.core.TargetManager;
+import fr.kosmosuniverse.kuffle.datamanagers.targets.TargetManager;
 import fr.kosmosuniverse.kuffle.utils.ItemMaker;
 import fr.kosmosuniverse.kuffle.utils.ItemsUtils;
 import fr.kosmosuniverse.kuffle.utils.Utils;

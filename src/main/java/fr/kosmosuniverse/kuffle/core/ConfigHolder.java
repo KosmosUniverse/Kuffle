@@ -17,7 +17,7 @@ public class ConfigHolder implements Serializable {
 
 	// System config
 	private boolean logResults;
-	private String startType;
+	private String startMode;
 
 	// Game config
 	private boolean tips;
@@ -68,7 +68,7 @@ public class ConfigHolder implements Serializable {
 	 */
 	public ConfigHolder(ConfigHolder config) {
 		logResults = config.logResults;
-		startType = config.startType;
+		startMode = config.startMode;
 
 		tips = config.tips;
 		saturation = config.saturation;

@@ -10,6 +10,10 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import fr.kosmosuniverse.kuffle.KuffleMain;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
+import fr.kosmosuniverse.kuffle.storage.Load;
+import fr.kosmosuniverse.kuffle.storage.Save;
 import fr.kosmosuniverse.kuffle.utils.CommandUtils;
 import fr.kosmosuniverse.kuffle.utils.Utils;
 import lombok.Getter;
@@ -171,7 +175,7 @@ public class TeamManager {
 	}
 
 	public boolean checkPlayerInTeams() {
-		return Party.getInstance().getPlayers().getList().stream().allMatch(this::isInTeam);
+		return PartyTmp.getInstance().getPlayers().getList().stream().allMatch(this::isInTeam);
 	}
 
 	/**
@@ -293,58 +297,39 @@ public class TeamManager {
 		
 		return sb.toString();
 	}
-	
-	/**
-	 * Gets JSON string of all teams
-	 * 
-	 * @param path	The path to the Kuffle plugin folder
-	 */
-	public void saveTeams(String path) {
-		try (FileOutputStream fos = new FileOutputStream(path + File.separator + "Teams.k")) {
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			
-			oos.writeInt(teams.size());
-			
-			for (Team team : teams) {
-				oos.writeObject(team);
-			}
-			
-			oos.flush();
-			oos.close();
-		} catch (IOException e) {
-			Utils.logException(e);
-		}
+
+	public void saveTeams() {
+		Save.saveTeams(KuffleMain.getInstance().getDataFolder().getPath(), teams);
 	}
 	
 	/**
 	 * Loads Teams from JSONObject
-	 * 
-	 * @param path	The path to the Kuffle plugin folder
-	 * 
-	 * @throws IOException 				classic stream exception
-	 * @throws FileNotFoundException 	no team file found
-	 * @throws ClassNotFoundException   read cast exception
 	 */
-	public void loadTeams(String path) throws IOException, ClassNotFoundException {
-		try (FileInputStream fos = new FileInputStream(path + File.separator + "Teams.k")) {
-			ObjectInputStream ois = new ObjectInputStream(fos);
-			
-			if (teams == null) {
-				teams = new ArrayList<>();
-			}
-			
-			if (!teams.isEmpty()) {
-				clear();
-			}
-			
-			int size = ois.readInt();
-			
-			for (int i = 0; i < size; i++) {
-				teams.add((Team) ois.readObject());
-			}
-
-			ois.close();
+	public boolean loadTeams() {
+		if (teams == null) {
+			teams = new ArrayList<>();
 		}
+
+		if (!teams.isEmpty()) {
+			TeamManager.getInstance().clear();
+		}
+
+		try {
+			Load.loadTeams(KuffleMain.getInstance().getDataFolder().getPath());
+		} catch (Exception ignored) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Add a team
+	 *
+	 * @param team The team to add
+	 */
+	public void addTeam(Team team) {
+		teams.add(team);
 	}
 
     /**
@@ -358,6 +343,12 @@ public class TeamManager {
 		return teams.stream()
 				.filter(team -> team.getName().equals(name))
 				.findFirst().orElse(null);
+	}
+
+	public long getNbTeamsStillPlaying() {
+		return teams.size() - teams.stream()
+				.filter(team -> PartyTmp.getInstance().getGameManager().checkTeamFinished(team))
+				.count();
 	}
 	
 	/**
@@ -413,7 +404,7 @@ public class TeamManager {
 					String playerName = playersObj.getString(i.get());
 
 					if (Bukkit.getOnlinePlayers().stream().anyMatch(p -> p.getName().equals(playerName))) {
-						if (Party.getInstance().getPlayers().has(playerName)) {
+						if (PartyTmp.getInstance().getPlayers().has(playerName)) {
 							affectPlayer(teamName, playerName);
 						} else {
 							LogManager.getInstanceSystem().writeMsg(player, "Player " + playerName + " is not in the list. Team loading continue without this player.");

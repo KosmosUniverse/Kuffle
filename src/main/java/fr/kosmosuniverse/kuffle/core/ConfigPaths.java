@@ -6,7 +6,7 @@ import lombok.Getter;
  * @author KosmosUniverse
  */
 public enum ConfigPaths {
-    SYS_START_TYPE("system_settings.start_type"),
+    SYS_START_MODE("system_settings.start_mode"),
     SYS_LOG_RESULT("system_settings.log_game_results"),
     GAME_PRINT("game_settings.print_player_tab"),
     GAME_END_ONE("game_settings.end_game_when_one_remains"),

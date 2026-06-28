@@ -1,14 +1,9 @@
 package fr.kosmosuniverse.kuffle.listeners;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import fr.kosmosuniverse.kuffle.KuffleMain;
 import fr.kosmosuniverse.kuffle.core.*;
-import fr.kosmosuniverse.kuffle.utils.CommandUtils;
-import fr.kosmosuniverse.kuffle.utils.Utils;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
+import fr.kosmosuniverse.kuffle.states.States;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -39,7 +34,7 @@ public class PlayerEvents implements Listener {
 	public void onPlayerConnectEvent(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 	
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING) {
+		/*if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING) {
 			return;
 		}
 		
@@ -47,10 +42,10 @@ public class PlayerEvents implements Listener {
 			return;
 		}
 
-		Party.getInstance().getPlayers().addPlayer(player.getName());
+		PartyTmp.getInstance().getPlayers().addPlayer(player.getName());
 
 		try {
-			Party.getInstance().getGames().loadPlayerGame(KuffleMain.getInstance().getDataFolder().getPath(), player);
+			PartyTmp.getInstance().getGameManager().loadPlayerGame(KuffleMain.getInstance().getDataFolder().getPath(), player);
 		} catch (IOException | ClassNotFoundException e) {
 			LogManager.getInstanceSystem().writeMsg(player, "Cannot reload your game, please contact an administrator.");
 			Utils.logException(e);
@@ -58,9 +53,9 @@ public class PlayerEvents implements Listener {
 		}
 
 		CraftManager.discoverCrafts(player);
-		Party.getInstance().getPlayers().getList().forEach(p -> Objects.requireNonNull(Bukkit.getPlayer(p)).sendMessage(LangManager.getMsgLang("GAME_RELOADED", Party.getInstance().getGames().getGames().get(p).getConfigLang()).replace("%s", player.getName())));
-		Party.getInstance().getSpectators().getList().forEach(p -> Objects.requireNonNull(Bukkit.getPlayer(p)).sendMessage(LangManager.getMsgLang("GAME_RELOADED", Party.getInstance().getGames().getGames().get(p).getConfigLang()).replace("%s", player.getName())));
-		LogManager.getInstanceSystem().logMsg(KuffleMain.getInstance().getName(), "<" + player.getName() + "> game is reloaded !");
+		PartyTmp.getInstance().getPlayers().getList().forEach(p -> Objects.requireNonNull(Bukkit.getPlayer(p)).sendMessage(LangManager.getMsgLang("GAME_RELOADED", PartyTmp.getInstance().getGameManager().getPlayerLang(p)).replace("%s", player.getName())));
+		PartyTmp.getInstance().getSpectators().getList().forEach(p -> Objects.requireNonNull(Bukkit.getPlayer(p)).sendMessage(LangManager.getMsgLang("GAME_RELOADED", PartyTmp.getInstance().getGameManager().getPlayerLang(p)).replace("%s", player.getName())));
+		LogManager.getInstanceSystem().logMsg(KuffleMain.getInstance().getName(), "<" + player.getName() + "> game is reloaded !");*/
 	}
 
 	/**
@@ -72,38 +67,38 @@ public class PlayerEvents implements Listener {
 	public void onPlayerDisconnectEvent(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 
-		if (Party.getInstance().getPlayers().has(player.getName())) {
-			Party.getInstance().getPlayers().removePlayer(player.getName());
+		/*if (PartyTmp.getInstance().getPlayers().has(player.getName())) {
+			PartyTmp.getInstance().getPlayers().removePlayer(player.getName());
 		}
 
-		if (Party.getInstance().getSpectators().has(player.getName())) {
-			Party.getInstance().getSpectators().removePlayer(player.getName());
+		if (PartyTmp.getInstance().getSpectators().has(player.getName())) {
+			PartyTmp.getInstance().getSpectators().removePlayer(player.getName());
 		}
 
-		if (Party.getInstance().getStatus() == GameStatus.NOT_RUNNING) {
+		if (PartyTmp.getInstance().getGameState().getState() == States.NOT_RUNNING) {
 			return ;
 		}
 
 		CraftManager.undiscoverCrafts(player);
-		Party.getInstance().getGames().savePlayer(KuffleMain.getInstance().getDataFolder().getPath(), player.getName(), Party.getInstance().getGames().getGames().get(player.getName()));
-		Party.getInstance().getGames().stopPlayer(player.getName(), Party.getInstance().getGames().getGames().get(player.getName()));
-		Party.getInstance().getGames().getGames().remove(player.getName());
-		Party.getInstance().getPlayers().updatePlayersHeads(Party.getInstance().getGames().getGames().entrySet()
+		Save.savePlayer(KuffleMain.getInstance().getDataFolder().getPath(), PartyTmp.getInstance().getGameManager().getPlayerData(player.getName()));
+		PartyTmp.getInstance().getGameManager().stopPlayer(player.getName(), PartyTmp.getInstance().getGameManager().getPlayerData(player.getName()));
+		PartyTmp.getInstance().getGameManager().getPlayersData().remove(player.getName());
+		PartyTmp.getInstance().getPlayers().updatePlayersHeads(PartyTmp.getInstance().getGameManager().getPlayersData().entrySet()
 				.stream()
 				.collect(Collectors.toMap(Map.Entry::getKey, e -> (e.getValue().getCurrentTarget() != null ? e.getValue().getCurrentTarget() : "null"))));
-		Party.getInstance().getPlayers().getList().forEach(p -> Objects.requireNonNull(Bukkit.getPlayer(p)).sendMessage(LangManager.getMsgLang("PLAYER_GAME_SAVED", Party.getInstance().getGames().getGames().get(p).getConfigLang()).replace("%s", player.getName())));
-		Party.getInstance().getSpectators().getList().forEach(p -> Objects.requireNonNull(Bukkit.getPlayer(p)).sendMessage(LangManager.getMsgLang("PLAYER_GAME_SAVED", Party.getInstance().getGames().getGames().get(p).getConfigLang()).replace("%s", player.getName())));
+		PartyTmp.getInstance().getPlayers().getList().forEach(p -> Objects.requireNonNull(Bukkit.getPlayer(p)).sendMessage(LangManager.getMsgLang("PLAYER_GAME_SAVED", PartyTmp.getInstance().getGameManager().getPlayerLang(p)).replace("%s", player.getName())));
+		PartyTmp.getInstance().getSpectators().getList().forEach(p -> Objects.requireNonNull(Bukkit.getPlayer(p)).sendMessage(LangManager.getMsgLang("PLAYER_GAME_SAVED", PartyTmp.getInstance().getGameManager().getPlayerLang(p)).replace("%s", player.getName())));
 
-		if (Party.getInstance().getPlayers().getList().isEmpty()) {
+		if (PartyTmp.getInstance().getPlayers().getList().isEmpty()) {
 			if (Config.getTeam()) {
-				TeamManager.getInstance().saveTeams(KuffleMain.getInstance().getDataFolder().getPath());
+				TeamManager.getInstance().saveTeams();
 			}
 			
-			CommandUtils.saveParty();
+			//CommandUtils.savePartyTmp();
 			
 			LogManager.getInstanceSystem().logSystemMsg(LangManager.getMsgLang("ALL_DISCONNECTED", Config.getLang()));
 			LogManager.getInstanceGame().logSystemMsg(LangManager.getMsgLang("ALL_DISCONNECTED", Config.getLang()));
-		}
+		}*/
 	}
 	
 	/**
@@ -113,14 +108,14 @@ public class PlayerEvents implements Listener {
 	 */
 	@EventHandler
 	public void onGameModeChangeEvent(PlayerGameModeChangeEvent event) {
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING) {
+		if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING) {
 			return ;
 		}
 		
 		Player player = event.getPlayer();
 		GameMode gm = event.getNewGameMode();
 		
-		if (Party.getInstance().getSpectators().has(player.getName()) && gm != GameMode.SPECTATOR) {
+		if (PartyTmp.getInstance().getSpectators().has(player.getName()) && gm != GameMode.SPECTATOR) {
 			event.setCancelled(true);
 			player.sendMessage(LangManager.getMsgLang("NOT_CHANGE_GM", Config.getLang()));
 		}
@@ -133,13 +128,13 @@ public class PlayerEvents implements Listener {
 	 */
 	@EventHandler
 	public void onPlayerDeathEvent(PlayerDeathEvent event) {
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING) {
+		if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING) {
 			return ;
 		}
 		
 		Player player = event.getEntity();
 		
-		if (!Party.getInstance().getPlayers().has(player.getName())) {
+		if (!PartyTmp.getInstance().getPlayers().has(player.getName())) {
 			return ;
 		}
 		
@@ -152,7 +147,7 @@ public class PlayerEvents implements Listener {
 		
 		LogManager.getInstanceGame().logMsg(player.getName(), "just died.");
 
-		Party.getInstance().getGames().playerDied(player.getName(), deathLoc);
+		PartyTmp.getInstance().getGameManager().playerDied(player.getName(), deathLoc);
 	}
 	
 	/**
@@ -162,40 +157,40 @@ public class PlayerEvents implements Listener {
 	 */
 	@EventHandler
 	public void onPlayerRespawnEvent(PlayerRespawnEvent event) {
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING) {
+		if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING) {
 			return ;
 		}
 		
 		Player player = event.getPlayer();
 		
-		if (!Party.getInstance().getPlayers().has(player.getName())) {
+		if (!PartyTmp.getInstance().getPlayers().has(player.getName())) {
 			return ;
 		}
 		
 		LogManager.getInstanceGame().logMsg(player.getName(), "just respawned.");
 
-		event.setRespawnLocation(Party.getInstance().getGames().getGames().get(player.getName()).getSpawnLoc());
+		event.setRespawnLocation(PartyTmp.getInstance().getGameManager().getPlayerSpawnLoc(player.getName()));
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () -> {
 			if (Config.getLevel().isLosable()) {
-				player.sendMessage(ChatColor.RED + LangManager.getMsgLang("YOU_LOSE", Party.getInstance().getGames().getGames().get(player.getName()).getConfigLang()));
+				PartyTmp.getInstance().getGameManager().sendMsgToPlayer(player.getName(), (receiverLang) -> ChatColor.RED + LangManager.getMsgLang("YOU_LOSE", receiverLang));
 			} else {
-				Party.getInstance().getGames().teleportAutoBack(player);
+				PartyTmp.getInstance().getGameManager().teleportAutoBack(player);
 			}
 		}, 20);
 	}
 
 	@EventHandler
 	public void onPlayerInvincibilityPeriod(EntityTargetLivingEntityEvent e) {
-		if (Party.getInstance().getStatus() == GameStatus.NOT_RUNNING
+		if (PartyTmp.getInstance().getGameState().getState() == States.NOT_RUNNING
 				|| !(e.getTarget() instanceof Player)) {
 			return ;
 		}
 
 		Player p = (Player) e.getTarget();
 
-		if (Party.getInstance().getPlayers().has(p.getName())
-				&& Party.getInstance().getGames().getGames().get(p.getName()).isDead()) {
+		if (PartyTmp.getInstance().getPlayers().has(p.getName())
+				&& PartyTmp.getInstance().getGameManager().isPlayerDead(p.getName())) {
 			e.setCancelled(true);
 		}
 	}
@@ -207,7 +202,7 @@ public class PlayerEvents implements Listener {
 	 */
 	@EventHandler
 	public void onPauseEvent(PlayerMoveEvent event) {
-		if (Party.getInstance().getStatus() != GameStatus.PAUSED) {
+		if (PartyTmp.getInstance().getGameState().getState() != States.PAUSED) {
 			return ;
 		}
 

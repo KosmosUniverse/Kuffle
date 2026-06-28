@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import fr.kosmosuniverse.kuffle.core.AgeManager;
-import fr.kosmosuniverse.kuffle.core.Party;
-import fr.kosmosuniverse.kuffle.core.VersionManager;
-import fr.kosmosuniverse.kuffle.type.KuffleType;
+import fr.kosmosuniverse.kuffle.core.PartyTmp;
+import fr.kosmosuniverse.kuffle.datamanagers.age.AgeManager;
+import fr.kosmosuniverse.kuffle.datamanagers.VersionManager;
+import fr.kosmosuniverse.kuffle.mode.Mode;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -24,7 +24,12 @@ public class KuffleGiveTab extends AKuffleTabCommand {
 	@Override
 	protected void runCommand() {
 		if (currentArgs.length == 1) {
-			ret.addAll(Bukkit.getOnlinePlayers().stream().filter(p -> !Party.getInstance().getPlayers().has(p.getName()) && Party.getInstance().getSpectators().has(p.getName())).map(Player::getName).collect(Collectors.toList()));
+			ret.addAll(Bukkit.getOnlinePlayers()
+					.stream()
+					.filter(p -> !PartyTmp.getInstance().getPlayers().has(p.getName()) &&
+							PartyTmp.getInstance().getSpectators().has(p.getName()))
+					.map(Player::getName)
+					.collect(Collectors.toList()));
 		} else if (currentArgs.length == 2) {
 			ret.addAll(list);
 		} else if (currentArgs.length == 3) {
@@ -39,7 +44,7 @@ public class KuffleGiveTab extends AKuffleTabCommand {
 		if ("item".equals(currentArgs[1])) {
 			ret.addAll(AgeManager.getAgesNameList());
 			
-			if (Party.getInstance().getType().getType() == KuffleType.Type.ITEMS) {
+			if (PartyTmp.getInstance().getGameMode().getMode() == Mode.ITEMS) {
 				ret.add("EndTeleporter");
 				ret.add("OverworldTeleporter");
 			}

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import fr.kosmosuniverse.kuffle.core.Party;
+import fr.kosmosuniverse.kuffle.core.PartyTmp;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -43,9 +43,14 @@ public class KuffleListTab extends AKuffleTabCommand {
 		if (currentArgs[0].equals("add")) {
 			ret.add("@a");
 
-			ret.addAll(Bukkit.getOnlinePlayers().stream().filter(p -> !Party.getInstance().getPlayers().has(p.getName()) && !Party.getInstance().getSpectators().has(p.getName())).map(Player::getName).collect(Collectors.toList()));
+			ret.addAll(Bukkit.getOnlinePlayers()
+					.stream()
+					.filter(p -> !PartyTmp.getInstance().getPlayers().has(p.getName()) &&
+							!PartyTmp.getInstance().getSpectators().has(p.getName()))
+					.map(Player::getName)
+					.collect(Collectors.toList()));
 		} else if (currentArgs[0].equals("remove")) {
-			ret.addAll(Party.getInstance().getPlayers().getList());
+			ret.addAll(PartyTmp.getInstance().getPlayers().getList());
 		}
 	}
 }

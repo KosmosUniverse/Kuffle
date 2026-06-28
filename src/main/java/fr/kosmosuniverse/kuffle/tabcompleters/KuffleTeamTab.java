@@ -1,6 +1,6 @@
 package fr.kosmosuniverse.kuffle.tabcompleters;
 
-import fr.kosmosuniverse.kuffle.core.Party;
+import fr.kosmosuniverse.kuffle.core.PartyTmp;
 import fr.kosmosuniverse.kuffle.core.Team;
 import fr.kosmosuniverse.kuffle.core.TeamManager;
 import org.bukkit.ChatColor;
@@ -78,7 +78,12 @@ public class KuffleTeamTab extends AKuffleTabCommand {
     }
 
     private List<String> addPlayer() {
-        return Party.getInstance().getPlayers().getList().stream().filter(p -> !TeamManager.getInstance().isInTeam(p)).collect(Collectors.toList());
+        return PartyTmp.getInstance()
+                .getPlayers()
+                .getList()
+                .stream()
+                .filter(p -> !TeamManager.getInstance().isInTeam(p))
+                .collect(Collectors.toList());
     }
 
     private List<String> removePlayer() {

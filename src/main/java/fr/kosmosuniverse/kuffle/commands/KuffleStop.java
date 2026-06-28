@@ -1,9 +1,9 @@
 package fr.kosmosuniverse.kuffle.commands;
 
 import fr.kosmosuniverse.kuffle.core.Config;
-import fr.kosmosuniverse.kuffle.core.LangManager;
+import fr.kosmosuniverse.kuffle.core.PartyTmp;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
 import fr.kosmosuniverse.kuffle.core.LogManager;
-import fr.kosmosuniverse.kuffle.core.Party;
 
 public class KuffleStop extends AKuffleCommand {
 	public KuffleStop() {
@@ -12,7 +12,7 @@ public class KuffleStop extends AKuffleCommand {
 
 	@Override
 	public boolean runCommand() {
-		Party.getInstance().stop();
+		PartyTmp.getInstance().stop();
 		LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_STOPPED", Config.getLang()));
 		
 		return true;

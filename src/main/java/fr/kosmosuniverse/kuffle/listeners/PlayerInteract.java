@@ -5,7 +5,11 @@ import java.util.Objects;
 
 import fr.kosmosuniverse.kuffle.KuffleMain;
 import fr.kosmosuniverse.kuffle.core.*;
+import fr.kosmosuniverse.kuffle.datamanagers.crafts.CraftManager;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
+import fr.kosmosuniverse.kuffle.datamanagers.VersionManager;
 import fr.kosmosuniverse.kuffle.exceptions.KuffleEventNotUsableException;
+import fr.kosmosuniverse.kuffle.states.States;
 import fr.kosmosuniverse.kuffle.utils.ItemsUtils;
 import fr.kosmosuniverse.kuffle.utils.Utils;
 import org.bukkit.Bukkit;
@@ -66,19 +70,19 @@ public class PlayerInteract implements Listener  {
 	protected boolean onRightClickGeneric(PlayerInteractEvent event) throws KuffleEventNotUsableException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
 		boolean ret = true;
 		
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING) {
+		if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING) {
 			throw new KuffleEventNotUsableException("Not a good event type to use here.");
 		}
 		
 		Player player = event.getPlayer();
 		
-		if (!Party.getInstance().getPlayers().has(player.getName())) {
+		if (!PartyTmp.getInstance().getPlayers().has(player.getName())) {
 			ret = false;
 		}
 		
 		Action action = event.getAction();
 		
-		if (ret && action != Action.RIGHT_CLICK_AIR) {
+		if (ret && action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) {
 			ret = false;
 		}
 		
@@ -100,7 +104,7 @@ public class PlayerInteract implements Listener  {
 				coralCompass(player, item);
 				
 			} else {
-				LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("COMPASS_PAIRED", Party.getInstance().getGames().getGames().get(player.getName()).getConfigLang()));
+				LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("COMPASS_PAIRED", PartyTmp.getInstance().getGameManager().getPlayerLang(player.getName())));
 			}
 			
 			ret = true;
@@ -116,16 +120,16 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onDrinkMilk(PlayerItemConsumeEvent event) {
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING) {
+		if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING) {
 			return ;
 		}
 		
 		Player player = event.getPlayer();
 		
-		if (Party.getInstance().getPlayers().has(player.getName()) &&
+		if (PartyTmp.getInstance().getPlayers().has(player.getName()) &&
 				event.getItem().getType() == Material.MILK_BUCKET) {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(KuffleMain.getInstance(), () ->
-				Party.getInstance().getGames().reloadPlayerEffects(player.getName())
+				PartyTmp.getInstance().getGameManager().reloadPlayerEffects(player.getName())
 			, 20);
 		}
 	}
@@ -137,7 +141,7 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onPlaceShulkerGeneric(BlockPlaceEvent event) {
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING ||
+		if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING ||
 				(!Config.getPassiveAll() && !Config.getPassiveTeam())) {
 			return ;
 		}
@@ -145,7 +149,7 @@ public class PlayerInteract implements Listener  {
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 
-		if (!Party.getInstance().getPlayers().has(player.getName())) {
+		if (!PartyTmp.getInstance().getPlayers().has(player.getName())) {
 			return ;
 		}
 
@@ -159,7 +163,7 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onInteractShulkerGeneric(PlayerInteractEvent event) {
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING ||
+		if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING ||
 				(!Config.getPassiveAll() && !Config.getPassiveTeam())) {
 			return ;
 		}
@@ -177,7 +181,7 @@ public class PlayerInteract implements Listener  {
 
 		String placer = block.getState().getMetadata("placedbyplayer").get(0).asString();
 
-		if (!Party.getInstance().getSpectators().has(placer) &&
+		if (!PartyTmp.getInstance().getSpectators().has(placer) &&
 				!placer.equals(player.getName()) &&
 				(Config.getPassiveAll() ||
 						(Config.getTeam() && Config.getPassiveTeam() && TeamManager.getInstance().notSameTeam(placer, player.getName())))) {
@@ -192,7 +196,7 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onBreakShulkerGeneric(BlockBreakEvent event) {
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING ||
+		if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING ||
 				(!Config.getPassiveAll() && !Config.getPassiveTeam())) {
 			return ;
 		}
@@ -207,7 +211,7 @@ public class PlayerInteract implements Listener  {
 
 		String placer = block.getState().getMetadata("placedbyplayer").get(0).asString();
 
-		if (!Party.getInstance().getSpectators().has(placer) &&
+		if (!PartyTmp.getInstance().getSpectators().has(placer) &&
 				!placer.equals(player.getName()) &&
 				(Config.getPassiveAll() ||
 						(Config.getTeam() && Config.getPassiveTeam() && TeamManager.getInstance().notSameTeam(placer, player.getName())))) {
@@ -222,7 +226,7 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onBreakSignGeneric(BlockBreakEvent event) {
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING) {
+		if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING) {
 			return ;
 		}
 		
@@ -240,7 +244,7 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onCraftGeneric(CraftItemEvent event) {
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING) {
+		if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING) {
 			return ;
 		}
 		
@@ -248,7 +252,7 @@ public class PlayerInteract implements Listener  {
 		Player player = (Player) event.getWhoClicked();
 
 		if (ItemsUtils.itemComparison(item, CraftManager.findItemByName(CORAL_COMPASS))) {
-			int xpAmount = Party.getInstance().getType().getXpActivable(CORAL_COMPASS);
+			int xpAmount = PartyTmp.getInstance().getGameManager().getXpActivables().get(CORAL_COMPASS);
 			
 			if (player.getLevel() < xpAmount) {
 				event.setCancelled(true);
@@ -256,7 +260,7 @@ public class PlayerInteract implements Listener  {
 			} else {
 				player.setLevel(player.getLevel() - xpAmount);
 				xpAmount = Math.max((xpAmount - 5), 5);
-				Party.getInstance().getType().setXpActivable(CORAL_COMPASS, xpAmount);
+				PartyTmp.getInstance().getGameManager().getXpActivables().put(CORAL_COMPASS, xpAmount);
 				
 				LogManager.getInstanceGame().logMsg(player.getName(), "Crafted CoralCompass.");
 			}
@@ -270,7 +274,7 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onPlayerHitPlayerGeneric(EntityDamageByEntityEvent event) {
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING && !Config.getPassiveAll()) {
+		if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING && !Config.getPassiveAll()) {
 			return ;
 		}
 		
@@ -284,8 +288,8 @@ public class PlayerInteract implements Listener  {
 		Player damager = (Player) tmpDamager;
 		Player damagee = (Player) tmpDamagee;
 		
-		if (!Party.getInstance().getPlayers().has(damager.getName()) ||
-				!Party.getInstance().getPlayers().has(damagee.getName())) {
+		if (!PartyTmp.getInstance().getPlayers().has(damager.getName()) ||
+				!PartyTmp.getInstance().getPlayers().has(damagee.getName())) {
 			return ;
 		}
 		
@@ -302,7 +306,7 @@ public class PlayerInteract implements Listener  {
 	 */
 	@EventHandler
 	public void onFireWorkThrowGeneric(PlayerInteractEvent event) {
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING) {
+		if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING) {
 			return ;
 		}
 		
@@ -310,7 +314,7 @@ public class PlayerInteract implements Listener  {
 		Action action = event.getAction();
 		Player player = event.getPlayer();
 
-		if (!Party.getInstance().getPlayers().has(player.getName())) {
+		if (!PartyTmp.getInstance().getPlayers().has(player.getName())) {
 			return ;
 		}
 		
@@ -354,9 +358,9 @@ public class PlayerInteract implements Listener  {
 		Location tmp = player.getLocation();
 		
 		if (findCoralBiome(tmp, compass)) {
-			LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("WARM_FOUND", Party.getInstance().getGames().getGames().get(player.getName()).getConfigLang()));
+			LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("WARM_FOUND", PartyTmp.getInstance().getGameManager().getPlayerLang(player.getName())));
 		} else {
-			LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("WARM_NOT_FOUND", Party.getInstance().getGames().getGames().get(player.getName()).getConfigLang()));
+			LogManager.getInstanceGame().writeMsg(player, LangManager.getMsgLang("WARM_NOT_FOUND", PartyTmp.getInstance().getGameManager().getPlayerLang(player.getName())));
 		}
 	}
 	

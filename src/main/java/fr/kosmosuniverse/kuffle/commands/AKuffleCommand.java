@@ -1,8 +1,10 @@
 package fr.kosmosuniverse.kuffle.commands;
 
 import fr.kosmosuniverse.kuffle.core.*;
+import fr.kosmosuniverse.kuffle.datamanagers.LangManager;
 import fr.kosmosuniverse.kuffle.exceptions.KuffleCommandFalseException;
-import fr.kosmosuniverse.kuffle.type.KuffleType;
+import fr.kosmosuniverse.kuffle.mode.Mode;
+import fr.kosmosuniverse.kuffle.states.States;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,11 +18,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AKuffleCommand implements CommandExecutor  {
 	protected final String name;
-	protected final boolean checkType;
+	protected final boolean checkMode;
 	protected final boolean checkStarted;
 	protected final boolean checkArgs;
 	protected final boolean checkTeamEnable;
-	protected boolean isTyped = false;
+	protected boolean hasMode = false;
 	protected boolean isStarted = false;
 	protected int argsMin = -1;
 	protected int argsMax = -1;
@@ -34,13 +36,13 @@ public abstract class AKuffleCommand implements CommandExecutor  {
 			Boolean started, Integer aMin,
 			Integer aMax, boolean team) {
 		name = cmdName;
-		checkType = typed != null;
+		checkMode = typed != null;
 		checkStarted = started != null;
 		checkArgs = aMin != null && aMax != null;
 		checkTeamEnable = team;
 		
-		if (checkType) {
-			isTyped = typed;
+		if (checkMode) {
+			hasMode = typed;
 		}
 		
 		if (checkStarted) {
@@ -69,14 +71,14 @@ public abstract class AKuffleCommand implements CommandExecutor  {
 			return true;
 		}
 		
-		if (checkType && isTyped && Party.getInstance().getType().getType() == KuffleType.Type.NO_TYPE) {
+		if (checkMode && hasMode && PartyTmp.getInstance().getGameMode().getMode() == Mode.NO_MODE) {
 			LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("KUFFLE_TYPE_NOT_CONFIG", Config.getLang()));
 			return true;
 		}
 		
 		if (checkStarted &&
-				((isStarted && Party.getInstance().getStatus() == GameStatus.NOT_RUNNING) ||
-						(!isStarted && Party.getInstance().getStatus() != GameStatus.NOT_RUNNING))) {
+				((isStarted && PartyTmp.getInstance().getGameState().getState() == States.NOT_RUNNING) ||
+						(!isStarted && PartyTmp.getInstance().getGameState().getState() != States.NOT_RUNNING))) {
 			if (!isStarted)
 				LogManager.getInstanceSystem().writeMsg(player, LangManager.getMsgLang("GAME_LAUNCHED", Config.getLang()));
 			else

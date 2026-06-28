@@ -1,5 +1,5 @@
 system_settings:
-   start_type: NO_TYPE # The game type to use at plugin start, it can be [NO_TYPE, ITEMS, BLOCKS], Default : NO_TYPE
+   start_mode: NO_MODE # The game type to use at plugin start, it can be [NO_TYPE, ITEMS, BLOCKS], Default : NO_TYPE
    log_game_results: false # If True, it will print game results in the server console, Default : False
 game_settings:
    print_player_tab: false # If True, it will print end game tab at least for the player that finished, Default: False

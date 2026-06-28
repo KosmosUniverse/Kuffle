@@ -3,8 +3,8 @@ package fr.kosmosuniverse.kuffle.listeners;
 import java.util.List;
 import java.util.Objects;
 
-import fr.kosmosuniverse.kuffle.core.GameStatus;
-import fr.kosmosuniverse.kuffle.core.Party;
+import fr.kosmosuniverse.kuffle.core.PartyTmp;
+import fr.kosmosuniverse.kuffle.states.States;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -31,14 +31,14 @@ public class ItemEvent implements Listener {
 	 */
 	@EventHandler
 	public void onItemDrop(PlayerDropItemEvent event) {
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING) {
+		if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING) {
 			return ;
 		}
 		
 		Item item = event.getItemDrop();
 		Player player = event.getPlayer();
 		
-		if (!Party.getInstance().getPlayers().has(player.getName())) {
+		if (!PartyTmp.getInstance().getPlayers().has(player.getName())) {
 			return ;
 		}
 		
@@ -58,7 +58,7 @@ public class ItemEvent implements Listener {
 	 */
 	@EventHandler
 	public void onBlockBreak(BlockDropItemEvent event) {
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING) {
+		if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING) {
 			return ;
 		}
 		
@@ -83,7 +83,7 @@ public class ItemEvent implements Listener {
 	 */
 	@EventHandler
 	public void onItemDespawn(ItemDespawnEvent event) {
-		if (Party.getInstance().getStatus() != GameStatus.RUNNING) {
+		if (PartyTmp.getInstance().getGameState().getState() != States.RUNNING) {
 			return ;
 		}
 		
@@ -99,7 +99,7 @@ public class ItemEvent implements Listener {
 			}
 		}
 		
-		if (player == null || !Party.getInstance().getPlayers().has(player.getName())) {
+		if (player == null || !PartyTmp.getInstance().getPlayers().has(player.getName())) {
 			return ;
 		}
 		

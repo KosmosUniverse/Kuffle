@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Map;
 
+import fr.kosmosuniverse.kuffle.ranks.Ranks;
 import fr.kosmosuniverse.kuffle.utils.SerializeUtils;
 import lombok.Getter;
 
@@ -23,27 +24,24 @@ public final class GameHolder implements Serializable {
 	private ConfigHolder config;
 	private String kuffleType;
 	private Map<String, Integer> xpMap;
-	private Map<String, Integer> playerRanks;
-	private Map<String, Integer> teamRanks;
-	private Map<String, Integer> nextRanks;
+	private Ranks ranks;
 	private long globalTimerInterval;
 
 	/**
 	 * Constructor
 	 *
-	 * @param conf				Config
-	 * @param type				Kuffle Type
-	 * @param playerRanksMap	Players Ranks
-	 * @param xps				Xp max
+	 * @param conf					Config
+	 * @param type					Kuffle Type
+	 * @param xps					Xp max
+	 * @param ranks					Ranks
+	 * @param globalTimerInterval	Global timer in case of Coop Option
 	 */
-	public GameHolder(ConfigHolder conf, String type, Map<String, Integer> xps, Map<String, Integer> playerRanksMap, Map<String, Integer> teamRanksMap, Map<String, Integer> nextRanks, long interval) {
+	public GameHolder(ConfigHolder conf, String type, Map<String, Integer> xps, Ranks ranks, long globalTimerInterval) {
 		config = conf;
 		kuffleType = type;
 		xpMap = xps;
-		playerRanks = playerRanksMap;
-		teamRanks = teamRanksMap;
-		this.nextRanks = nextRanks;
-		this.globalTimerInterval = interval;
+		this.ranks = ranks;
+		this.globalTimerInterval = globalTimerInterval;
 	}
 
 	/**
@@ -51,9 +49,7 @@ public final class GameHolder implements Serializable {
 	 */
 	public void clear() {
 		xpMap.clear();
-		playerRanks.clear();
-		teamRanks.clear();
-		nextRanks.clear();
+		ranks.clear();
 	}
 
 	/**
@@ -67,13 +63,7 @@ public final class GameHolder implements Serializable {
 		oStream.writeUTF(kuffleType);
 		oStream.writeObject(config);
 		oStream.writeObject(xpMap);
-		oStream.writeObject(playerRanks);
-
-		if (config.isTeam()) {
-			oStream.writeObject(teamRanks);
-		}
-
-		oStream.writeObject(nextRanks);
+		oStream.writeObject(ranks);
 
 		if (config.isCoop()) {
 			oStream.writeObject(globalTimerInterval);
@@ -88,18 +78,11 @@ public final class GameHolder implements Serializable {
 	 * @throws ClassNotFoundException 	Raised at read fail
 	 * @throws IOException				Raised at read fail
 	 */
-    @SuppressWarnings("unchecked")
 	private void readObject(ObjectInputStream iStream) throws ClassNotFoundException, IOException  {
 		kuffleType = SerializeUtils.readString(iStream);
 		config = (ConfigHolder) iStream.readObject();
 		xpMap = (Map<String, Integer>) iStream.readObject();
-		playerRanks = (Map<String, Integer>) iStream.readObject();
-
-		if (config.isTeam()) {
-			teamRanks = (Map<String, Integer>) iStream.readObject();
-		}
-
-		nextRanks = (Map<String, Integer>) iStream.readObject();
+		ranks = (Ranks) iStream.readObject();
 
 		if (config.isCoop()) {
 			globalTimerInterval = iStream.readLong();
